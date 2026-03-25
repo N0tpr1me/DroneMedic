@@ -1,0 +1,8 @@
+airsim>=1.8.1
+ortools>=9.7.0
+anthropic>=0.7.0
+folium>=0.14.0
+streamlit>=1.28.0
+streamlit-folium>=0.17.0
+numpy>=1.24.0
+python-dotenv>=1.0.0
