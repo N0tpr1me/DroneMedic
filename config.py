@@ -58,3 +58,38 @@ PRIORITY_NORMAL = "normal"
 # --- Priority Weight Multiplier ---
 # Lower = solver treats high-priority destinations as "closer" (visited earlier)
 PRIORITY_WEIGHT = 0.3
+
+# --- Weather ---
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY", "")
+WEATHER_ENABLED = os.getenv("WEATHER_ENABLED", "false").lower() == "true"
+MAX_WIND_SPEED = 15        # m/s — abort flight above this
+MAX_PRECIPITATION = 5      # mm/h — reroute above this
+
+# --- Battery ---
+BATTERY_CAPACITY = 100     # percent
+BATTERY_DRAIN_RATE = 0.08  # percent per meter traveled
+BATTERY_MIN_RESERVE = 20   # must retain this % to return to depot
+
+# --- No-Fly Zones (simplified polygons using AirSim x,y coords + lat/lon for map) ---
+NO_FLY_ZONES = [
+    {
+        "name": "Military Zone Alpha",
+        "polygon": [(-20, 80), (-20, 120), (30, 120), (30, 80)],
+        "lat_lon": [
+            (51.513, -0.132), (51.516, -0.132),
+            (51.516, -0.126), (51.513, -0.126),
+        ],
+    },
+    {
+        "name": "Airport Exclusion",
+        "polygon": [(120, -60), (120, -20), (180, -20), (180, -60)],
+        "lat_lon": [
+            (51.503, -0.115), (51.506, -0.115),
+            (51.506, -0.108), (51.503, -0.108),
+        ],
+    },
+]
+
+# --- Multi-Drone ---
+NUM_DRONES = 1
+DRONE_NAMES = ["Drone1"]

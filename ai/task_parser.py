@@ -15,12 +15,17 @@ Convert the user's delivery request into a JSON object with exactly these fields
 - "locations": list of location names to deliver to (choose from: {', '.join(VALID_LOCATIONS)})
 - "priorities": dict mapping location names to "high" or "normal" (only include locations with explicit urgency as "high")
 - "supplies": dict mapping location names to the supply type being delivered
+- "constraints": dict with optional fields:
+  - "avoid_zones": list of zone/area descriptions to avoid (e.g. "military area", "storm zone")
+  - "weather_concern": string describing any weather concern mentioned (e.g. "storm approaching", "high winds")
+  - "time_sensitive": boolean, true if the request mentions time pressure
 
 Rules:
 - Only use location names from the valid list above
 - If a location is described as "urgent", "emergency", or "critical", set its priority to "high"
 - If no specific supply is mentioned for a location, use "medical supplies" as default
 - Always include all mentioned delivery destinations in the locations list
+- If no constraints are mentioned, use empty values: "avoid_zones": [], "weather_concern": "", "time_sensitive": false
 - Respond with ONLY valid JSON, no markdown, no explanation, no other text
 """
 
@@ -80,6 +85,7 @@ def parse_delivery_request(user_input: str) -> dict:
     # Set defaults
     task.setdefault("priorities", {})
     task.setdefault("supplies", {})
+    task.setdefault("constraints", {"avoid_zones": [], "weather_concern": "", "time_sensitive": False})
 
     # Validate location names
     for loc in task["locations"]:
