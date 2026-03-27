@@ -10,6 +10,7 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { signIn } = useAuth();
   const navigate = useNavigate();
 
@@ -39,23 +40,22 @@ export function Login() {
         <div className="absolute inset-0 bg-gradient-to-tr from-bg via-bg/60 to-transparent" />
       </div>
 
-      {/* Top Right: Flight Zone Badge */}
+      {/* Top Left: Back to Landing */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8 }}
-        className="fixed top-8 right-8 z-20 flex flex-col items-end gap-2"
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.5 }}
+        className="fixed top-8 left-8 z-20"
       >
-        <div className="glass-panel px-4 py-2 rounded-lg border border-outline-variant/10 flex items-center gap-3">
-          <div className="flex flex-col items-end">
-            <span className="text-[9px] uppercase tracking-widest text-outline">Flight Zone</span>
-            <span className="text-[11px] font-headline font-bold text-on-surface">LONDON_METRO_01</span>
-          </div>
-          <div className="w-8 h-8 rounded-md bg-surface-container-high flex items-center justify-center">
-            <span className="material-symbols-outlined text-tertiary text-sm">satellite_alt</span>
-          </div>
-        </div>
+        <button
+          onClick={() => navigate('/')}
+          className="glass-panel px-4 py-2.5 rounded-lg border border-outline-variant/10 flex items-center gap-2 cursor-pointer hover:bg-surface-container-high/60 transition-all duration-200 group"
+        >
+          <span className="material-symbols-outlined text-primary text-lg group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+          <span className="font-label text-[11px] uppercase tracking-widest text-on-surface-variant group-hover:text-on-surface transition-colors">Back to Home</span>
+        </button>
       </motion.div>
+
 
       {/* Content */}
       <main className="relative z-10 w-full max-w-[1200px] px-6 flex flex-col md:flex-row items-center gap-12 lg:gap-24">
@@ -68,11 +68,11 @@ export function Login() {
         >
           <div className="space-y-4">
             <div className="flex items-center justify-center md:justify-start gap-3">
-              <span className="material-symbols-outlined text-primary text-4xl">medical_services</span>
+              <span className="material-symbols-outlined text-[#b3c5ff] text-4xl">medical_services</span>
               <h1 className="font-headline font-black text-3xl tracking-widest uppercase text-on-surface">DroneMedic</h1>
             </div>
             <h2 className="font-headline text-5xl lg:text-7xl font-bold tracking-tight leading-none text-on-surface">
-              AI MEDICAL <br /><span className="text-primary">DELIVERY</span>
+              AI MEDICAL <br /><span className="text-[#b3c5ff]">DELIVERY</span>
             </h2>
             <p className="text-on-surface-variant text-lg max-w-md mx-auto md:mx-0 font-light leading-relaxed">
               Secure gateway for AeroRescue Control. Precision logistics for life-critical medical supplies and emergency drone deployment.
@@ -104,7 +104,7 @@ export function Login() {
             <div className="absolute top-0 left-0 w-full h-1 btn-primary-gradient" />
 
             <div className="mb-10 text-center md:text-left">
-              <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">Mission Control Login</h3>
+              <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">Dashboard Login</h3>
               <p className="text-on-surface-variant text-sm">Enter your credentials to access the flight deck.</p>
             </div>
 
@@ -131,14 +131,25 @@ export function Login() {
                   <span className="material-symbols-outlined text-sm">lock</span>
                   Secure Password
                 </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  required
-                  className="w-full bg-surface-container-lowest border-none text-on-surface placeholder:text-outline-variant/50 px-4 py-4 rounded-md focus:outline-none focus:ring-0 focus:bg-surface-bright transition-all duration-200 border-b-2 border-transparent focus:border-b-primary"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    required
+                    className="w-full bg-surface-container-lowest border-none text-on-surface placeholder:text-outline-variant/50 px-4 py-4 pr-12 rounded-md focus:outline-none focus:ring-0 focus:bg-surface-bright transition-all duration-200 border-b-2 border-transparent focus:border-b-primary"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">
+                      {showPassword ? 'visibility_off' : 'visibility'}
+                    </span>
+                  </button>
+                </div>
               </div>
 
               {/* Options */}
@@ -181,7 +192,7 @@ export function Login() {
 
             {/* Skip for demo */}
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => { sessionStorage.setItem('dronemedic-demo', 'true'); navigate('/dashboard'); }}
               className="w-full mt-3 text-[10px] uppercase tracking-widest text-on-surface-variant/50 hover:text-on-surface-variant text-center cursor-pointer transition-colors"
             >
               Skip login (demo mode)

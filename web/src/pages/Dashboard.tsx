@@ -104,7 +104,7 @@ export function Dashboard() {
       {/* ═══ LEFT NAV — Floating Liquid Glass Buttons with Labels ═══ */}
       <div style={{position:'fixed',left:16,top:'50%',transform:'translateY(-50%)',zIndex:40,display:'flex',flexDirection:'column',gap:6}}>
         {[
-          {icon:'monitor_heart',label:'Live Ops',active:true,onClick:undefined},
+          {icon:'monitor_heart',label:'Dashboard',active:true,onClick:undefined},
           {icon:'flight_takeoff',label:'Deploy',active:false,onClick:()=>navigate('/deploy')},
           {icon:'assignment',label:'Logs',active:false,onClick:undefined},
           {icon:'analytics',label:'Analytics',active:false,onClick:undefined},
@@ -115,7 +115,7 @@ export function Dashboard() {
           </LiquidButton>
         ))}
         <div style={{height:4}} />
-        <LiquidButton size="sm" style={{color:'#c3c6d6',display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'10px 14px',height:'auto',minWidth:64}}>
+        <LiquidButton size="sm" onClick={()=>navigate('/settings')} style={{color:'#c3c6d6',display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'10px 14px',height:'auto',minWidth:64}}>
           <span className="material-symbols-outlined" style={{fontSize:22}}>settings</span>
           <span style={{fontSize:9,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em',opacity:0.7}}>Settings</span>
         </LiquidButton>
@@ -171,23 +171,23 @@ export function Dashboard() {
         </div>
 
         {/* ── BOTTOM LEFT CARDS ── */}
-        <div style={{position:'fixed',bottom:16,left:16,zIndex:20,display:'flex',gap:10}}>
-          <div style={{background:'rgba(15,20,24,0.50)',backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',padding:'8px 12px',borderRadius:8,border:'1px solid rgba(67,70,84,0.1)',display:'flex',alignItems:'center',gap:10}}>
-            <div style={{padding:6,background:'#a40213',borderRadius:6}}>
-              <span className="material-symbols-outlined" style={{color:'#ffaea6',fontSize:16}}>emergency</span>
+        <div style={{position:'fixed',bottom:16,left:16,zIndex:20,display:'flex',gap:12}}>
+          <div style={{background:'rgba(15,20,24,0.50)',backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',padding:'14px 20px',borderRadius:10,border:'1px solid rgba(67,70,84,0.1)',display:'flex',alignItems:'center',gap:14}}>
+            <div style={{padding:10,background:'#a40213',borderRadius:8}}>
+              <span className="material-symbols-outlined" style={{color:'#ffaea6',fontSize:22}}>emergency</span>
             </div>
             <div>
-              <p style={{fontSize:8,textTransform:'uppercase',fontWeight:800,color:'#ffb3ac',letterSpacing:'0.08em',margin:'0 0 2px'}}>Emergency Payload</p>
-              <p style={{fontFamily:'Space Grotesk',fontSize:13,fontWeight:700,margin:0}}>O- Negative Plasma (2U)</p>
+              <p style={{fontSize:11,textTransform:'uppercase',fontWeight:800,color:'#ffb3ac',letterSpacing:'0.08em',margin:'0 0 4px'}}>Emergency Payload</p>
+              <p style={{fontFamily:'Space Grotesk',fontSize:17,fontWeight:700,margin:0}}>O- Negative Plasma (2U)</p>
             </div>
           </div>
-          <div style={{background:'rgba(15,20,24,0.50)',backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',padding:'8px 12px',borderRadius:8,border:'1px solid rgba(67,70,84,0.1)',display:'flex',alignItems:'center',gap:10}}>
-            <div style={{padding:6,background:'rgba(48,53,58,0.6)',borderRadius:6}}>
-              <span className="material-symbols-outlined" style={{color:'#b3c5ff',fontSize:16}}>thermostat</span>
+          <div style={{background:'rgba(15,20,24,0.50)',backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',padding:'14px 20px',borderRadius:10,border:'1px solid rgba(67,70,84,0.1)',display:'flex',alignItems:'center',gap:14}}>
+            <div style={{padding:10,background:'rgba(48,53,58,0.6)',borderRadius:8}}>
+              <span className="material-symbols-outlined" style={{color:'#b3c5ff',fontSize:22}}>thermostat</span>
             </div>
             <div>
-              <p style={{fontSize:8,textTransform:'uppercase',fontWeight:800,color:'#c3c6d6',letterSpacing:'0.08em',margin:'0 0 2px'}}>Internal Temp</p>
-              <p style={{fontFamily:'Space Grotesk',fontSize:13,fontWeight:700,margin:0}}>4.2°C <span style={{color:'#00daf3',fontSize:10}}>STABLE</span></p>
+              <p style={{fontSize:11,textTransform:'uppercase',fontWeight:800,color:'#c3c6d6',letterSpacing:'0.08em',margin:'0 0 4px'}}>Internal Temp</p>
+              <p style={{fontFamily:'Space Grotesk',fontSize:17,fontWeight:700,margin:0}}>4.2°C <span style={{color:'#00daf3',fontSize:13}}>STABLE</span></p>
             </div>
           </div>
         </div>

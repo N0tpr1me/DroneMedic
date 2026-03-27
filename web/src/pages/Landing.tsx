@@ -24,7 +24,7 @@ export function Landing() {
       <header className="fixed top-0 z-50 w-full border-b border-outline-variant/15 bg-bg/80 backdrop-blur-md px-6 lg:px-20 py-4">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="text-primary">{DRONE_ICON_SVG}</div>
+            <div className="text-blue-300">{DRONE_ICON_SVG}</div>
             <h2 className="font-headline text-xl font-bold tracking-tight text-on-surface">DroneMedic</h2>
           </div>
           <nav className="hidden items-center gap-10 md:flex">
@@ -37,15 +37,14 @@ export function Landing() {
             onClick={goToDashboard}
             className="btn-primary-gradient flex h-11 items-center justify-center rounded px-6 text-sm font-bold tracking-wide text-white transition-transform hover:scale-105 active:scale-95 cursor-pointer"
           >
-            Launch Mission Control
+            Launch Dashboard
           </button>
         </div>
       </header>
 
       <main className="flex-1">
-        {/* ── Hero Section ── */}
-        <section className="relative flex min-h-screen flex-col items-center justify-center pt-20">
-          {/* Background image */}
+        {/* ── Hero ── */}
+        <section className="relative flex min-h-screen flex-col items-center justify-center pb-40 pt-20">
           <div className="absolute inset-0 z-0 overflow-hidden">
             <img
               alt="Earth from space with glowing city lights"
@@ -55,7 +54,6 @@ export function Landing() {
             <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(180deg, rgba(15,20,24,0) 0%, rgba(15,20,24,0.95) 100%)' }} />
           </div>
 
-          {/* SVG flight paths */}
           <svg className="absolute inset-0 z-20 h-full w-full opacity-40 pointer-events-none" fill="none" viewBox="0 0 1440 800">
             <path d="M-100 600 C 300 400, 800 500, 1540 100" stroke="#00DAF3" strokeDasharray="10 5" strokeWidth="2" />
             <path d="M-200 400 C 400 600, 900 200, 1640 500" stroke="#b3c5ff" strokeOpacity="0.6" strokeWidth="1.5" />
@@ -64,36 +62,29 @@ export function Landing() {
             <circle cx="1100" cy="280" fill="#b3c5ff" r="3" className="animate-pulse" style={{ animationDelay: '1s' }} />
           </svg>
 
-          {/* Hero content */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="container relative z-30 mx-auto px-6 text-center lg:px-20"
+            className="relative z-30 mx-auto max-w-[1440px] px-6 text-center lg:px-20"
           >
-            <div className="mx-auto max-w-4xl space-y-8">
-              <div className="inline-flex items-center gap-2 rounded-full border border-tertiary/20 bg-tertiary/5 px-4 py-1 text-xs font-bold uppercase tracking-widest text-tertiary">
+            <div className="mx-auto max-w-4xl space-y-7">
+              <div className="inline-flex items-center gap-2 rounded-full border border-tertiary/20 bg-tertiary/5 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-tertiary">
                 <span className="flex h-2 w-2 rounded-full bg-tertiary animate-pulse" />
                 AeroRescue Control: Online
               </div>
-              <h1 className="font-headline text-5xl font-black leading-[1.1] tracking-tight text-on-surface md:text-7xl lg:text-8xl">
-                The Future of <span className="text-primary">Medical</span> Logistics
+              <h1 className="font-headline text-5xl font-black leading-[1.1] tracking-tight text-on-surface md:text-6xl lg:text-7xl">
+                The Future of<br /> <span className="text-blue-300">Medical</span> Logistics
               </h1>
-              <p className="mx-auto max-w-2xl text-lg leading-relaxed text-on-surface-variant md:text-xl">
+              <p className="mx-auto max-w-xl text-base leading-relaxed text-on-surface-variant md:text-lg">
                 Autonomous UAV delivery systems for life-critical medical supplies. Engineered for precision, built for urgency.
               </p>
-              <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row">
+              <div className="flex justify-center pt-2">
                 <button
                   onClick={goToDashboard}
-                  className="btn-primary-gradient h-14 min-w-[240px] rounded-lg text-base font-bold text-white transition-all hover:shadow-[0_0_30px_rgba(0,81,206,0.4)] cursor-pointer"
+                  className="btn-primary-gradient h-12 px-8 rounded-lg text-sm font-bold text-white transition-all hover:shadow-[0_0_30px_rgba(0,81,206,0.4)] cursor-pointer"
                 >
-                  Launch Mission Control
-                </button>
-                <button
-                  onClick={() => document.getElementById('capabilities')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="h-14 min-w-[240px] rounded-lg border border-outline-variant bg-surface-container-high/40 text-base font-bold text-on-surface backdrop-blur-sm transition-all hover:bg-surface-container-high cursor-pointer"
-                >
-                  Explore Fleet
+                  Launch Dashboard
                 </button>
               </div>
             </div>
@@ -101,26 +92,26 @@ export function Landing() {
 
           {/* Stats bar */}
           <div className="absolute bottom-0 z-30 w-full bg-surface-container-low/80 py-8 backdrop-blur-xl border-t border-outline-variant/10">
-            <div className="container mx-auto px-6 lg:px-20">
+            <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
                 <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
                   <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Flight Stability</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="font-headline text-4xl font-bold text-primary">99.9%</span>
+                    <span className="font-headline text-4xl font-bold text-blue-300">99.9%</span>
                     <span className="text-xs font-medium text-tertiary">&#9650; 0.1%</span>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
                   <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Avg. Response Time</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="font-headline text-4xl font-bold text-primary">12m</span>
-                    <span className="text-xs font-medium text-secondary">&#9660; 2m</span>
+                    <span className="font-headline text-4xl font-bold text-blue-300">12m</span>
+                    <span className="text-xs font-bold text-red-500">&#9660; 2m</span>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
                   <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Global Fleet</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="font-headline text-4xl font-bold text-primary">Ready</span>
+                    <span className="font-headline text-4xl font-bold text-blue-300">Ready</span>
                     <span className="text-xs font-medium text-tertiary">Active 24/7</span>
                   </div>
                 </div>
@@ -131,7 +122,7 @@ export function Landing() {
 
         {/* ── Core Mission Capabilities ── */}
         <section id="capabilities" className="bg-surface py-24 lg:py-40">
-          <div className="container mx-auto px-6 lg:px-20">
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
             <div className="mb-16 max-w-2xl lg:mb-24">
               <h2 className="mb-6 font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl">Core Mission Capabilities</h2>
               <p className="text-lg text-on-surface-variant">Advanced AI-driven logistics for life-critical operations. Our platform integrates state-of-the-art UAV technology with proprietary AI orchestration.</p>
@@ -164,21 +155,29 @@ export function Landing() {
                 },
               ].map((card) => (
                 <div key={card.title} className="group relative flex flex-col justify-between overflow-hidden rounded-xl bg-surface-container-low p-8 transition-all hover:bg-surface-container-high">
-                  <div className={`absolute -right-4 -top-4 text-${card.accentColor}/10 transition-transform duration-500 group-hover:scale-110 group-hover:text-${card.accentColor}/20`}>
+                  <div className={`absolute -right-4 -top-4 transition-transform duration-500 group-hover:scale-110 ${
+                    card.accentColor === 'primary' ? 'text-primary/15 group-hover:text-primary/25' :
+                    card.accentColor === 'tertiary' ? 'text-tertiary/15 group-hover:text-tertiary/25' :
+                    'text-red-500/20 group-hover:text-red-500/35'
+                  }`}>
                     <span className="material-symbols-outlined" style={{ fontSize: '120px' }}>{card.bgIcon}</span>
                   </div>
                   <div className="relative z-10 space-y-4">
                     <div className={`inline-flex h-12 w-12 items-center justify-center rounded-lg ${
                       card.accentColor === 'primary' ? 'bg-primary-container text-primary' :
                       card.accentColor === 'tertiary' ? 'bg-tertiary-container text-tertiary' :
-                      'bg-secondary-container text-secondary'
+                      'bg-red-900/50 text-red-400'
                     }`}>
                       <span className="material-symbols-outlined">{card.icon}</span>
                     </div>
                     <h3 className="font-headline text-2xl font-bold text-on-surface">{card.title}</h3>
                     <p className="text-on-surface-variant">{card.desc}</p>
                   </div>
-                  <div className={`mt-8 flex items-center text-sm font-bold text-${card.accentColor}`}>
+                  <div className={`mt-8 flex items-center text-sm font-bold ${
+                    card.accentColor === 'primary' ? 'text-primary' :
+                    card.accentColor === 'tertiary' ? 'text-tertiary' :
+                    'text-red-400'
+                  }`}>
                     <span>{card.linkText}</span>
                     <span className="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
                   </div>
@@ -190,7 +189,7 @@ export function Landing() {
 
         {/* ── Drone Showcase ── */}
         <section id="drone" className="relative bg-surface-container-low py-32 overflow-visible">
-          <div className="container mx-auto px-6 lg:px-20">
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-24">
               <div className="order-2 lg:order-1">
                 <div className="relative overflow-hidden rounded-xl border border-outline-variant/20 shadow-2xl shadow-primary/10">
@@ -203,7 +202,7 @@ export function Landing() {
               </div>
               <div className="order-1 space-y-8 lg:order-2">
                 <div>
-                  <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1 text-xs font-bold uppercase tracking-widest text-primary">
+                  <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#b3c5ff]/20 bg-[#b3c5ff]/5 px-4 py-1 text-xs font-bold uppercase tracking-widest text-[#b3c5ff]">
                     Technological Excellence
                   </div>
                   <h2 className="font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl lg:text-6xl">
@@ -215,11 +214,11 @@ export function Landing() {
                 </p>
                 <div className="grid grid-cols-2 gap-8">
                   <div className="space-y-1">
-                    <div className="font-headline text-4xl font-bold text-primary">15kg</div>
+                    <div className="font-headline text-4xl font-bold text-blue-300">15kg</div>
                     <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">Payload Capacity</div>
                   </div>
                   <div className="space-y-1">
-                    <div className="font-headline text-4xl font-bold text-primary">120km</div>
+                    <div className="font-headline text-4xl font-bold text-blue-300">120km</div>
                     <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">Mission Range</div>
                   </div>
                 </div>
@@ -235,9 +234,9 @@ export function Landing() {
 
         {/* ── CTA Section ── */}
         <section id="cta" className="relative overflow-hidden bg-bg py-32">
-          <div className="container mx-auto px-6 lg:px-20">
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
             <div className="glass-panel flex flex-col items-center rounded-2xl border border-outline-variant/15 p-12 text-center md:p-24">
-              <div className="mb-8 rounded-full bg-primary/10 p-4 text-primary">
+              <div className="mb-8 rounded-full bg-[#b3c5ff]/10 p-4 text-[#b3c5ff]">
                 <span className="material-symbols-outlined" style={{ fontSize: '36px' }}>rocket_launch</span>
               </div>
               <h2 className="mb-6 font-headline text-4xl font-black tracking-tight text-on-surface md:text-6xl">
@@ -264,7 +263,7 @@ export function Landing() {
 
       {/* ── Footer ── */}
       <footer id="footer" className="border-t border-outline-variant/15 bg-surface-container-lowest py-16">
-        <div className="container mx-auto px-6 lg:px-20">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-4">
             <div className="space-y-6">
               <div className="flex items-center gap-3">
