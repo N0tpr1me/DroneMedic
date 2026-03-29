@@ -91,5 +91,5 @@ NO_FLY_ZONES = [
 ]
 
 # --- Multi-Drone ---
-NUM_DRONES = 1
-DRONE_NAMES = ["Drone1"]
+NUM_DRONES = 2
+DRONE_NAMES = ["Drone1", "Drone2"]
