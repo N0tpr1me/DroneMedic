@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#1b2024",
+              "on-background": "#dfe3e9",
+              "primary-fixed-dim": "#b3c5ff",
+              "on-primary-fixed-variant": "#003fa4",
+              "outline": "#8d90a0",
+              "outline-variant": "#434654",
+              "surface-container-low": "#171c20",
+              "tertiary-fixed-dim": "#00daf3",
+              "secondary-fixed-dim": "#ffb3ac",
+              "on-error": "#690005",
+              "surface-container-highest": "#30353a",
+              "on-secondary-fixed-variant": "#930010",
+              "on-primary-fixed": "#001849",
+              "inverse-on-surface": "#2c3135",
+              "background": "#0f1418",
+              "tertiary-container": "#006470",
+              "surface-dim": "#0f1418",
+              "primary-container": "#0051ce",
+              "on-tertiary-container": "#33e6ff",
+              "secondary": "#ffb3ac",
+              "on-tertiary-fixed": "#001f24",
+              "surface": "#0f1418",
+              "on-secondary-container": "#ffaea6",
+              "secondary-fixed": "#ffdad6",
+              "on-primary-container": "#c5d2ff",
+              "primary-fixed": "#dae1ff",
+              "inverse-primary": "#0054d6",
+              "surface-variant": "#30353a",
+              "surface-tint": "#b3c5ff",
+              "primary": "#b3c5ff",
+              "surface-container-high": "#262b2f",
+              "surface-bright": "#353a3e",
+              "error-container": "#93000a",
+              "on-surface-variant": "#c3c6d6",
+              "tertiary": "#00daf3",
+              "error": "#ffb4ab",
+              "surface-container-lowest": "#0a0f13",
+              "on-tertiary-fixed-variant": "#004f58",
+              "on-secondary-fixed": "#410003",
+              "on-secondary": "#680008",
+              "on-surface": "#dfe3e9",
+              "inverse-surface": "#dfe3e9",
+              "on-tertiary": "#00363d",
+              "on-primary": "#002b75",
+              "on-error-container": "#ffdad6",
+              "secondary-container": "#a40213",
+              "tertiary-fixed": "#9cf0ff"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>.glass-panel {
+    background: rgba(23, 28, 32, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(141, 144, 160, 0.1)
+    }
+.text-gradient {
+    background: linear-gradient(135deg, #b3c5ff 0%, #0051ce 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent
+    }
+.btn-primary-gradient {
+    background: linear-gradient(135deg, #b3c5ff 0%, #0051ce 100%)
+    }
+.blueprint-grid {
+    background-size: 40px 40px;
+    background-image: radial-gradient(circle, #434654 1px, transparent 1px);
+    opacity: 0.1
+    }
+@keyframes rotate-slow {
+    from {
+        transform: translateX(0);
+        } to {
+        transform: translateX(-50%);
+        }
+    }
+@keyframes pulse-soft {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(1);
+        } 50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+        }
+    }
+.immersion-globe-container {
+    position: absolute;
+    right: -10%;
+    top: 50%;
+    transform: translatey(-50%);
+    width: 850px;
+    height: 850px;
+    pointer-events: none;
+    z-index: 1
+    }
+.realistic-earth {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #000;
+    box-shadow: inset -50px -50px 120px rgba(0, 0, 0, 0.9), inset 20px 20px 80px rgba(0, 81, 206, 0.2);
+    mask-image: radial-gradient(circle, black 50%, transparent 100%)
+    }
+/* Earth Texture Animation using two repeating maps for rotation */
+.earth-texture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 200%;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAvfscOutbgMnT0yf5PnRRB-bKqctvovnHXxaFQDSHzJjsEYN7fxitwU-va87Bul2nLTO-Oty2BU321cNG4drhFAi8ztkAwhLzTuDQldRgudrYt2NQW3cRk76_DSl95jIdIh-S4DGqT_xmejLX01uPkCQzhWZUpj2o4bjam5BDEn4sN6pPWMkBdSje0OtYx7xZFe5_eqW8kdR9J1IlupeleUKia8qu6feRoP2TIVQwg5UfZ-Z-QIpNHtbQEHG5rhZVCSFH4w9A-MBhP);
+    background-size: 50% 100%;
+    background-repeat: repeat-x;
+    opacity: 0.85;
+    filter: contrast(1.1) brightness(0.8) saturate(1.2);
+    animation: rotate-slow 60s linear infinite
+    }
+/* Cloud Layer */
+.earth-clouds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 200%;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDdCTj7X0DTJS_gtlkKPP5S3pGOkq73vCW0V_ZrId_uLocAysO8OnOR4V3TtBtuZTxqgvAruvw5dUSGQXzpfo-1Q-0dcou5mOAPJPJlTl9N-v7-rIQHcffgBj1Z3JME__JkGte0pBmBn4ZhWkPE9Z6Vofpld9oz9rL00SFHsM3n0TgWNc5DPqa19iz8kQnrLV1HmNRo5laNmWd6fh0bFD026_tnpYuCCR07kC4pgEu91ptLWI0KvcR2sRHwIzEvcSBiCsV4_GLe_PqN);
+    background-size: 50% 100%;
+    background-repeat: repeat-x;
+    opacity: 0.25;
+    mix-blend-mode: screen;
+    animation: rotate-slow 45s linear infinite;
+    filter: blur(1px)
+    }
+.atmosphere-glow {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    box-shadow: 0 0 60px rgba(0, 81, 206, 0.3), inset 0 0 40px rgba(0, 218, 243, 0.15);
+    border: 1px solid rgba(0, 218, 243, 0.15);
+    z-index: 2
+    }
+.data-arc {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 35%;
+    border-top: 1.5px solid rgba(0, 218, 243, 0.3);
+    border-radius: 50%;
+    transform-origin: center;
+    filter: drop-shadow(0 0 5px rgba(0, 218, 243, 0.4));
+    z-index: 3
+    }
+.marker-point {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 800;
+    color: white;
+    box-shadow: 0 0 15px currentColor;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 5
+    }
+.heat-point {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    filter: blur(14px);
+    animation: pulse-soft 4s ease-in-out infinite;
+    z-index: 4
+    }</style>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen flex items-center justify-center overflow-hidden">
+<!-- Background Layer -->
+<div class="fixed inset-0 z-0 bg-background">
+<div class="absolute inset-0 bg-gradient-to-tr from-background via-background/60 to-transparent"></div>
+<!-- Detailed 3D-Look Earth -->
+<div class="fixed inset-0 z-0 bg-background">
+<img alt="Globe Background" class="w-full h-full object-cover opacity-80 brightness-75 contrast-125" src="https://lh3.googleusercontent.com/aida/ADBb0uhRImx4ZVOz7N-v1O23xYUe8N3YbyQTqFyDM3vaTdipZzSKSOT47ysk4aBNEGDa4BWb0eXCmSb7CEcgM81t0iPfUWuT9ZN886GXN626-4wd38awb5zxczuIm57WLtRdeGSgFWnM4Ixbj_yPvBoHjWnQpaD-RgrH9oA09uLog1V1F3Oq9h1Nl8Hn6Z_Ac9G77F8xXCQT_qr63jEc184_UWgQMSL3_qDqQ0wHhuTL04ys7VnVMvjaRgblgMXjuR4-rdLpSOx-T-HVkQ"/>
+<div class="absolute inset-0 bg-gradient-to-tr from-background via-background/60 to-transparent"></div>
+</div>
+</div>
+<!-- Main Content Shell -->
+<main class="relative z-10 w-full max-w-[1200px] px-6 flex flex-col md:flex-row items-center gap-12 lg:gap-24">
+<!-- Branding Section -->
+<div class="w-full md:w-1/2 space-y-8 text-center md:text-left">
+<div class="space-y-4">
+<div class="flex items-center justify-center md:justify-start gap-3">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="medical_services">medical_services</span>
+<h1 class="font-headline font-black text-3xl tracking-widest uppercase text-on-surface">DroneMedic</h1>
+</div>
+<h2 class="font-headline text-5xl lg:text-7xl font-bold tracking-tight leading-none text-on-surface">
+                    AI MEDICAL <br/> <span class="text-primary">DELIVERY</span>
+</h2>
+<p class="text-on-surface-variant text-lg max-w-md mx-auto md:mx-0 font-light leading-relaxed">
+                    Secure gateway for AeroRescue Control. Precision logistics for life-critical medical supplies and emergency drone deployment.
+                </p>
+</div>
+<!-- Status Pulsars -->
+<div class="flex items-center justify-center md:justify-start gap-6 pt-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_#00daf3]"></div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">System Live</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_#00daf3]"></div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Fleet Secure</span>
+</div>
+</div>
+</div>
+<!-- Login Form Card -->
+<div class="w-full md:w-[440px]">
+<div class="glass-panel p-8 lg:p-10 rounded-xl shadow-2xl relative overflow-hidden">
+<!-- Top Accent Line -->
+<div class="absolute top-0 left-0 w-full h-1 btn-primary-gradient"></div>
+<div class="mb-10 text-center md:text-left">
+<h3 class="font-headline text-2xl font-bold text-on-surface mb-2">Mission Control Login</h3>
+<p class="text-on-surface-variant text-sm">Enter your credentials to access the flight deck.</p>
+</div>
+<form class="space-y-6">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="font-label text-[11px] uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="alternate_email">alternate_email</span>
+                            Email Address
+                        </label>
+<div class="relative group">
+<input class="w-full bg-surface-container-lowest border-none text-on-surface placeholder:text-outline-variant/50 px-4 py-4 rounded-md focus:ring-0 focus:bg-surface-bright transition-all duration-200 border-b-2 border-transparent focus:border-primary" placeholder="coordinator@dronemedic.ai" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<label class="font-label text-[11px] uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+                            Secure Password
+                        </label>
+<div class="relative group">
+<input class="w-full bg-surface-container-lowest border-none text-on-surface placeholder:text-outline-variant/50 px-4 py-4 rounded-md focus:ring-0 focus:bg-surface-bright transition-all duration-200 border-b-2 border-transparent focus:border-primary" placeholder="••••••••••••" type="password"/>
+</div>
+</div>
+<!-- Options -->
+<div class="flex items-center justify-between text-xs">
+<label class="flex items-center gap-2 cursor-pointer group">
+<div class="relative w-4 h-4 border border-outline-variant rounded-sm group-hover:border-primary transition-colors">
+<input class="absolute inset-0 opacity-0 cursor-pointer" type="checkbox"/>
+<div class="hidden check-icon absolute inset-0 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[12px] font-bold" data-icon="check">check</span>
+</div>
+</div>
+<span class="text-on-surface-variant group-hover:text-on-surface transition-colors">Remember me</span>
+</label>
+<a class="text-primary hover:text-primary-fixed-dim transition-colors font-medium" href="#">Forgot password?</a>
+</div>
+<!-- Login Button -->
+<button class="w-full btn-primary-gradient py-4 rounded-md font-headline font-bold text-on-primary-fixed uppercase tracking-widest flex items-center justify-center gap-3 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-primary/20" type="submit">
+                        Secure Login
+                        <span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Support/Legal -->
+<div class="mt-8 pt-8 border-t border-outline-variant/15 flex items-center justify-between">
+<div class="flex items-center gap-2 text-[10px] uppercase tracking-widest text-on-surface-variant/60">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user">verified_user</span>
+                        AES-256 Encrypted
+                    </div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant/40 hover:text-on-surface cursor-pointer text-lg" data-icon="help_center">help_center</span>
+<span class="material-symbols-outlined text-on-surface-variant/40 hover:text-on-surface cursor-pointer text-lg" data-icon="info">info</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- UI Telemetry Overlays -->
+<div class="hidden lg:block fixed bottom-8 left-8 z-20 space-y-1">
+<div class="flex items-center gap-4 text-[10px] font-label tracking-[0.2em] text-on-surface-variant/40">
+<span>LATENCY: 14MS</span>
+<span class="w-1 h-1 bg-outline-variant/30 rounded-full"></span>
+<span>NODE: LHR-04</span>
+<span class="w-1 h-1 bg-outline-variant/30 rounded-full"></span>
+<span>VER: 4.2.0-STABLE</span>
+</div>
+</div>
+<div class="fixed top-8 right-8 z-20 flex flex-col items-end gap-2">
+<div class="glass-panel px-4 py-2 rounded-lg border border-outline-variant/10 flex items-center gap-3">
+<div class="flex flex-col items-end">
+<span class="text-[9px] uppercase tracking-widest text-outline">Flight Zone</span>
+<span class="text-[11px] font-headline font-bold text-on-surface">LONDON_METRO_01</span>
+</div>
+<div class="w-8 h-8 rounded-md bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="satellite_alt">satellite_alt</span>
+</div>
+</div>
+</div>
+</body></html>

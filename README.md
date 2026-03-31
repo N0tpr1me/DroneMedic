@@ -123,7 +123,7 @@ DroneMedic/
 ## Authors
 
 - **Zain Ali** -- Author
-- **Haseeb Januja** -- Co-Author
+- **Haseeb Janjua** -- Co-Author
 - **Usman Hakimi** -- Co-Author
 - **Karim Khalifa** -- Co-Author
 
