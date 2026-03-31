@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { MessageSquare, Brain, Globe, ShieldCheck, Shield, ArrowRight, Rocket, AtSign, Share2, Radio } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import RotatingGlobe from '../components/ui/wireframe-dotted-globe';
+import Starfield from '../components/ui/starfield';
 
-const HERO_BG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDegnE09p9oEZn3jk_r-968fNEJSU9oB3irERyD0QzUIVPnetenp_ABerwN3ktEYtGfL6n1zTimCd-zLbUk_PsCsW7UMb-vo6z1ODapAAARskr8mmvsQ1UkZ70aGgUV7W9qS4q6JQSOs4QGB4PkEt3FzRDvDw0mVwPxEzDDcBnL4jetuUPVMJEo5sCyiR8bv3f_C00hWXASKzAqPfNnr97u9-YNtNbxdPEPhV96agJGUDlyPq0Bt52WkbZENdHuxpGyirGakL6X7Rbd';
 const DRONE_IMG = '/drone-photo.png';
 
 const DRONE_ICON_SVG = (
@@ -21,146 +23,139 @@ export function Landing() {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-bg text-on-surface font-body">
       {/* ── Header ── */}
-      <header className="fixed top-0 z-50 w-full border-b border-outline-variant/15 bg-bg/80 backdrop-blur-md px-6 lg:px-20 py-4">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between">
+      <header className="fixed top-0 z-50 w-full border-b border-outline-variant/15 bg-bg/80 backdrop-blur-md px-6 lg:px-20 2xl:px-28 py-4 2xl:py-5">
+        <div className="mx-auto flex max-w-[1440px] 2xl:max-w-[1800px] items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="text-blue-300">{DRONE_ICON_SVG}</div>
-            <h2 className="font-headline text-xl font-bold tracking-tight text-on-surface">DroneMedic</h2>
+            <h2 className="font-headline text-xl 2xl:text-2xl font-bold tracking-tight text-on-surface">DroneMedic</h2>
           </div>
-          <nav className="hidden items-center gap-10 md:flex">
-            <a className="text-sm font-medium text-on-surface-variant transition-colors hover:text-primary" href="#capabilities">Missions</a>
-            <a className="text-sm font-medium text-on-surface-variant transition-colors hover:text-primary" href="#drone">Fleet</a>
-            <a className="text-sm font-medium text-on-surface-variant transition-colors hover:text-primary" href="#cta">Telemetry</a>
-            <a className="text-sm font-medium text-on-surface-variant transition-colors hover:text-primary" href="#footer">Safety</a>
+          <nav className="hidden items-center gap-10 2xl:gap-14 md:flex">
+            <a className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" href="#capabilities">Missions</a>
+            <a className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" href="#drone">Fleet</a>
+            <a className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" href="#how-it-works">How It Works</a>
+            <a className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" href="#footer">Safety</a>
           </nav>
           <button
             onClick={goToDashboard}
-            className="btn-primary-gradient flex h-11 items-center justify-center rounded px-6 text-sm font-bold tracking-wide text-white transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+            className="btn-primary-gradient flex h-11 2xl:h-13 items-center justify-center rounded px-6 2xl:px-8 text-sm 2xl:text-base font-bold tracking-wide text-white transition-transform hover:scale-105 active:scale-95 cursor-pointer"
           >
-            Launch Dashboard
+            Start Your First Mission
           </button>
         </div>
       </header>
 
       <main className="flex-1">
         {/* ── Hero ── */}
-        <section className="relative flex min-h-screen flex-col items-center justify-center pb-40 pt-20">
-          <div className="absolute inset-0 z-0 overflow-hidden">
-            <img
-              alt="Earth from space with glowing city lights"
-              className="h-full w-full object-cover opacity-80"
-              src={HERO_BG}
-            />
-            <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(180deg, rgba(15,20,24,0) 0%, rgba(15,20,24,0.95) 100%)' }} />
-          </div>
-
-          <svg className="absolute inset-0 z-20 h-full w-full opacity-40 pointer-events-none" fill="none" viewBox="0 0 1440 800">
-            <path d="M-100 600 C 300 400, 800 500, 1540 100" stroke="#00DAF3" strokeDasharray="10 5" strokeWidth="2" />
-            <path d="M-200 400 C 400 600, 900 200, 1640 500" stroke="#b3c5ff" strokeOpacity="0.6" strokeWidth="1.5" />
-            <path d="M200 800 C 600 300, 1100 600, 1440 200" stroke="#00DAF3" strokeDasharray="20 10" strokeWidth="1" />
-            <circle cx="800" cy="450" fill="#00DAF3" r="4" className="animate-pulse" />
-            <circle cx="1100" cy="280" fill="#b3c5ff" r="3" className="animate-pulse" style={{ animationDelay: '1s' }} />
-          </svg>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative z-30 mx-auto max-w-[1440px] px-6 text-center lg:px-20"
-          >
-            <div className="mx-auto max-w-4xl space-y-7">
-              <div className="inline-flex items-center gap-2 rounded-full border border-tertiary/20 bg-tertiary/5 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-tertiary">
-                <span className="flex h-2 w-2 rounded-full bg-tertiary animate-pulse" />
+        <section className="relative flex min-h-screen items-center pt-20 overflow-hidden">
+          <Starfield />
+          <div className="relative z-10 mx-auto flex max-w-[1440px] 2xl:max-w-[1800px] w-full items-center px-6 lg:px-20 2xl:px-28">
+            {/* Text — left half */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="w-full lg:w-1/2 shrink-0 space-y-7 2xl:space-y-9"
+            >
+              <div className="inline-flex items-center gap-2 rounded-full border border-tertiary/20 bg-tertiary/5 px-4 py-1.5 2xl:px-5 2xl:py-2 text-[11px] 2xl:text-[13px] font-bold uppercase tracking-[0.15em] text-tertiary">
+                <span className="flex h-2 w-2 2xl:h-2.5 2xl:w-2.5 rounded-full bg-tertiary animate-pulse" />
                 AeroRescue Control: Online
               </div>
-              <h1 className="font-headline text-5xl font-black leading-[1.1] tracking-tight text-on-surface md:text-6xl lg:text-7xl">
+              <h1 className="font-headline text-5xl font-black leading-[1.1] tracking-tight text-on-surface md:text-6xl lg:text-7xl 2xl:text-8xl">
                 The Future of<br /> <span className="text-blue-300">Medical</span> Logistics
               </h1>
-              <p className="mx-auto max-w-xl text-base leading-relaxed text-on-surface-variant md:text-lg">
+              <p className="max-w-xl 2xl:max-w-2xl text-base leading-relaxed text-on-surface-variant md:text-lg 2xl:text-xl">
                 Autonomous UAV delivery systems for life-critical medical supplies. Engineered for precision, built for urgency.
               </p>
-              <div className="flex justify-center pt-2">
+              <div className="flex pt-2 2xl:pt-4">
                 <button
                   onClick={goToDashboard}
-                  className="btn-primary-gradient h-12 px-8 rounded-lg text-sm font-bold text-white transition-all hover:shadow-[0_0_30px_rgba(0,81,206,0.4)] cursor-pointer"
+                  className="btn-primary-gradient h-12 lg:h-14 2xl:h-16 px-8 lg:px-10 2xl:px-12 rounded-lg text-sm lg:text-base 2xl:text-lg font-bold text-white transition-all hover:shadow-[0_0_30px_rgba(0,81,206,0.4)] cursor-pointer"
                 >
-                  Launch Dashboard
+                  Start Your First Mission
                 </button>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Stats bar */}
-          <div className="absolute bottom-0 z-30 w-full bg-surface-container-low/80 py-8 backdrop-blur-xl border-t border-outline-variant/10">
-            <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-                <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
-                  <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Flight Stability</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-headline text-4xl font-bold text-blue-300">99.9%</span>
-                    <span className="text-xs font-medium text-tertiary">&#9650; 0.1%</span>
-                  </div>
-                </div>
-                <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
-                  <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Avg. Response Time</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-headline text-4xl font-bold text-blue-300">12m</span>
-                    <span className="text-xs font-bold text-red-500">&#9660; 2m</span>
-                  </div>
-                </div>
-                <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
-                  <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Global Fleet</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-headline text-4xl font-bold text-blue-300">Ready</span>
-                    <span className="text-xs font-medium text-tertiary">Active 24/7</span>
-                  </div>
-                </div>
-              </div>
+            {/* Globe — right half, never overlaps text */}
+            <div className="hidden lg:block w-1/2 h-[500px] xl:h-[650px] 2xl:h-[900px]">
+              <RotatingGlobe />
             </div>
           </div>
         </section>
 
-        {/* ── Core Mission Capabilities ── */}
-        <section id="capabilities" className="bg-surface py-24 lg:py-40">
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
-            <div className="mb-16 max-w-2xl lg:mb-24">
-              <h2 className="mb-6 font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl">Core Mission Capabilities</h2>
-              <p className="text-lg text-on-surface-variant">Advanced AI-driven logistics for life-critical operations. Our platform integrates state-of-the-art UAV technology with proprietary AI orchestration.</p>
+        {/* ── Stats Bar — visible on scroll ── */}
+        <div className="z-30 w-full bg-surface-container-low/80 py-8 2xl:py-12 backdrop-blur-xl border-t border-outline-variant/10">
+          <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+              <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
+                <span className="text-xs 2xl:text-sm font-bold uppercase tracking-widest text-on-surface-variant">Flight Stability</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300">99.9%</span>
+                  <span className="text-xs 2xl:text-sm font-medium text-tertiary">&#9650; 0.1%</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
+                <span className="text-xs 2xl:text-sm font-bold uppercase tracking-widest text-on-surface-variant">Avg. Response Time</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300">12m</span>
+                  <span className="text-xs 2xl:text-sm font-bold text-red-500">&#9660; 2m</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
+                <span className="text-xs 2xl:text-sm font-bold uppercase tracking-widest text-on-surface-variant">Global Fleet</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300">Ready</span>
+                  <span className="text-xs 2xl:text-sm font-medium text-tertiary">Active 24/7</span>
+                </div>
+              </div>
             </div>
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          </div>
+        </div>
+
+        {/* ── Core Mission Capabilities ── */}
+        <section id="capabilities" className="bg-surface py-24 lg:py-40 2xl:py-48">
+          <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
+            <div className="mb-16 max-w-2xl 2xl:max-w-3xl lg:mb-24 2xl:mb-32">
+              <h2 className="mb-6 font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl 2xl:text-6xl">Core Mission Capabilities</h2>
+              <p className="text-lg 2xl:text-xl text-on-surface-variant">Advanced AI-driven logistics for life-critical operations. Our platform integrates state-of-the-art UAV technology with proprietary AI orchestration.</p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 2xl:gap-8 lg:grid-cols-3">
               {[
                 {
-                  icon: 'chat',
-                  bgIcon: 'smart_toy',
+                  icon: <MessageSquare size={24} />,
+                  bgIcon: <Brain size={120} />,
                   title: 'AI Mission Coordinator',
                   desc: 'Interpreting natural language tasks for seamless mission planning. Our LLM-integrated core allows medical staff to initiate deliveries with simple verbal or text instructions.',
                   linkText: 'Learn More',
+                  linkHref: '#how-it-works',
                   accentColor: 'primary',
                 },
                 {
-                  icon: 'public',
-                  bgIcon: 'public',
+                  icon: <Globe size={24} />,
+                  bgIcon: <Globe size={120} />,
                   title: 'Real-time Telemetry',
                   desc: 'Dynamic day and night mapping with active flight path tracking. Monitor every vector of your fleet\'s journey with millisecond latency and high-fidelity 3D visualization.',
                   linkText: 'Live Dashboard',
+                  linkHref: '#drone',
                   accentColor: 'tertiary',
                 },
                 {
-                  icon: 'verified_user',
-                  bgIcon: 'security',
+                  icon: <ShieldCheck size={24} />,
+                  bgIcon: <Shield size={120} />,
                   title: 'Autonomous Detection',
                   desc: 'Computer vision-powered safety systems for complex environments. Our UAVs utilize neural networks to navigate dense urban areas and unpredictable weather patterns.',
                   linkText: 'Safety Protocols',
+                  linkHref: '#cta',
                   accentColor: 'secondary',
                 },
               ].map((card) => (
-                <div key={card.title} className="group relative flex flex-col justify-between overflow-hidden rounded-xl bg-surface-container-low p-8 transition-all hover:bg-surface-container-high">
+                <div key={card.title} className="group relative flex flex-col justify-between overflow-hidden rounded-xl bg-surface-container-low p-8 2xl:p-10 transition-all hover:bg-surface-container-high">
                   <div className={`absolute -right-4 -top-4 transition-transform duration-500 group-hover:scale-110 ${
                     card.accentColor === 'primary' ? 'text-primary/15 group-hover:text-primary/25' :
                     card.accentColor === 'tertiary' ? 'text-tertiary/15 group-hover:text-tertiary/25' :
                     'text-red-500/20 group-hover:text-red-500/35'
                   }`}>
-                    <span className="material-symbols-outlined" style={{ fontSize: '120px' }}>{card.bgIcon}</span>
+                    {card.bgIcon}
                   </div>
                   <div className="relative z-10 space-y-4">
                     <div className={`inline-flex h-12 w-12 items-center justify-center rounded-lg ${
@@ -168,29 +163,63 @@ export function Landing() {
                       card.accentColor === 'tertiary' ? 'bg-tertiary-container text-tertiary' :
                       'bg-red-900/50 text-red-400'
                     }`}>
-                      <span className="material-symbols-outlined">{card.icon}</span>
+                      {card.icon}
                     </div>
-                    <h3 className="font-headline text-2xl font-bold text-on-surface">{card.title}</h3>
-                    <p className="text-on-surface-variant">{card.desc}</p>
+                    <h3 className="font-headline text-2xl 2xl:text-3xl font-bold text-on-surface">{card.title}</h3>
+                    <p className="text-on-surface-variant 2xl:text-lg">{card.desc}</p>
                   </div>
-                  <div className={`mt-8 flex items-center text-sm font-bold ${
+                  <a href={card.linkHref} className={`mt-8 flex items-center text-sm 2xl:text-base font-bold ${
                     card.accentColor === 'primary' ? 'text-primary' :
                     card.accentColor === 'tertiary' ? 'text-tertiary' :
                     'text-red-400'
                   }`}>
                     <span>{card.linkText}</span>
-                    <span className="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
-                  </div>
+                    <ArrowRight size={14} className="ml-2" />
+                  </a>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
+        {/* ── How It Works ── */}
+        <section id="how-it-works" className="bg-bg py-24 lg:py-32 2xl:py-40">
+          <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
+            <div className="mb-16 2xl:mb-20 text-center">
+              <h2 className="mb-4 font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl 2xl:text-6xl">How It Works</h2>
+              <p className="text-lg 2xl:text-xl text-on-surface-variant">From request to delivery in four steps</p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 2xl:gap-8 md:grid-cols-2 lg:grid-cols-4">
+              {[
+                { step: '01', name: 'Describe', desc: 'Tell us what you need in plain language. Our AI parses locations, supplies, and urgency.' },
+                { step: '02', name: 'Plan', desc: 'AI optimizes the route in seconds, accounting for weather, no-fly zones, and priorities.' },
+                { step: '03', name: 'Deploy', desc: 'Drone launches autonomously from the nearest depot with your medical payload.' },
+                { step: '04', name: 'Monitor', desc: 'Track every meter in real-time. Live telemetry, ETA, and delivery confirmation.' },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.step}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="relative rounded-xl bg-surface-container-low p-8 2xl:p-10 border border-outline-variant/10"
+                >
+                  <div className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300 mb-3">{item.step}</div>
+                  <h3 className="text-lg 2xl:text-xl font-bold text-on-surface uppercase tracking-wide mb-2">{item.name}</h3>
+                  <p className="text-sm 2xl:text-base text-on-surface-variant leading-relaxed">{item.desc}</p>
+                  {i < 3 && (
+                    <div className="hidden lg:block absolute -right-4 top-1/2 -translate-y-1/2 text-2xl text-outline-variant/30 z-10">&rarr;</div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── Drone Showcase ── */}
-        <section id="drone" className="relative bg-surface-container-low py-32 overflow-visible">
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
-            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-24">
+        <section id="drone" className="relative bg-surface-container-low py-32 2xl:py-40 overflow-visible">
+          <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
+            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-24 2xl:gap-32">
               <div className="order-2 lg:order-1">
                 <div className="relative overflow-hidden rounded-xl border border-outline-variant/20 shadow-2xl shadow-primary/10">
                   <img
@@ -200,30 +229,30 @@ export function Landing() {
                   />
                 </div>
               </div>
-              <div className="order-1 space-y-8 lg:order-2">
+              <div className="order-1 space-y-8 2xl:space-y-10 lg:order-2">
                 <div>
-                  <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#b3c5ff]/20 bg-[#b3c5ff]/5 px-4 py-1 text-xs font-bold uppercase tracking-widest text-[#b3c5ff]">
+                  <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#b3c5ff]/20 bg-[#b3c5ff]/5 px-4 py-1 2xl:px-5 2xl:py-1.5 text-xs 2xl:text-sm font-bold uppercase tracking-widest text-[#b3c5ff]">
                     Technological Excellence
                   </div>
-                  <h2 className="font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl lg:text-6xl">
+                  <h2 className="font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl lg:text-6xl 2xl:text-7xl">
                     Engineered for the Unpredictable
                   </h2>
                 </div>
-                <p className="text-lg leading-relaxed text-on-surface-variant">
+                <p className="text-lg 2xl:text-xl leading-relaxed text-on-surface-variant">
                   Our flagship AeroRescue UAV is the pinnacle of medical logistics. Featuring multi-redundant flight controllers and a carbon-fiber airframe, it maintains operational integrity in extreme wind and thermal conditions.
                 </p>
                 <div className="grid grid-cols-2 gap-8">
                   <div className="space-y-1">
-                    <div className="font-headline text-4xl font-bold text-blue-300">15kg</div>
-                    <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">Payload Capacity</div>
+                    <div className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300">15kg</div>
+                    <div className="text-[10px] 2xl:text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant">Payload Capacity</div>
                   </div>
                   <div className="space-y-1">
-                    <div className="font-headline text-4xl font-bold text-blue-300">120km</div>
-                    <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">Mission Range</div>
+                    <div className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300">120km</div>
+                    <div className="text-[10px] 2xl:text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant">Mission Range</div>
                   </div>
                 </div>
                 <div className="pt-4">
-                  <button className="h-12 border border-outline-variant bg-transparent px-8 text-sm font-bold tracking-wide text-on-surface transition-colors hover:bg-surface-container-high cursor-pointer">
+                  <button className="h-12 2xl:h-14 border border-outline-variant bg-transparent px-8 2xl:px-10 text-sm 2xl:text-base font-bold tracking-wide text-on-surface transition-colors hover:bg-surface-container-high cursor-pointer">
                     View Fleet Specifications
                   </button>
                 </div>
@@ -233,26 +262,26 @@ export function Landing() {
         </section>
 
         {/* ── CTA Section ── */}
-        <section id="cta" className="relative overflow-hidden bg-bg py-32">
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
-            <div className="glass-panel flex flex-col items-center rounded-2xl border border-outline-variant/15 p-12 text-center md:p-24">
-              <div className="mb-8 rounded-full bg-[#b3c5ff]/10 p-4 text-[#b3c5ff]">
-                <span className="material-symbols-outlined" style={{ fontSize: '36px' }}>rocket_launch</span>
+        <section id="cta" className="relative overflow-hidden bg-bg py-32 2xl:py-40">
+          <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
+            <div className="glass-panel flex flex-col items-center rounded-2xl border border-outline-variant/15 p-12 text-center md:p-24 2xl:p-32">
+              <div className="mb-8 rounded-full bg-[#b3c5ff]/10 p-4 2xl:p-5 text-[#b3c5ff]">
+                <Rocket size={36} />
               </div>
-              <h2 className="mb-6 font-headline text-4xl font-black tracking-tight text-on-surface md:text-6xl">
+              <h2 className="mb-6 font-headline text-4xl font-black tracking-tight text-on-surface md:text-6xl 2xl:text-7xl">
                 Ready to revolutionize your medical logistics?
               </h2>
-              <p className="mb-10 max-w-2xl text-lg text-on-surface-variant">
+              <p className="mb-10 max-w-2xl 2xl:max-w-3xl text-lg 2xl:text-xl text-on-surface-variant">
                 Join the global network of autonomous UAV delivery. Start your first mission in under 15 minutes with our rapid integration kits.
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
                 <button
                   onClick={goToDashboard}
-                  className="btn-primary-gradient h-14 px-10 rounded-lg text-base font-bold text-white shadow-xl cursor-pointer"
+                  className="btn-primary-gradient h-14 2xl:h-16 px-10 2xl:px-12 rounded-lg text-base 2xl:text-lg font-bold text-white shadow-xl cursor-pointer"
                 >
                   Get Started Now
                 </button>
-                <button className="h-14 px-10 rounded-lg border border-outline-variant text-base font-bold text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer">
+                <button className="h-14 2xl:h-16 px-10 2xl:px-12 rounded-lg border border-outline-variant text-base 2xl:text-lg font-bold text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer">
                   Talk to Sales
                 </button>
               </div>
@@ -262,8 +291,8 @@ export function Landing() {
       </main>
 
       {/* ── Footer ── */}
-      <footer id="footer" className="border-t border-outline-variant/15 bg-surface-container-lowest py-16">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-20">
+      <footer id="footer" className="border-t border-outline-variant/15 bg-surface-container-lowest py-16 2xl:py-20">
+        <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-4">
             <div className="space-y-6">
               <div className="flex items-center gap-3">
@@ -272,27 +301,27 @@ export function Landing() {
                     <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor" />
                   </svg>
                 </div>
-                <h2 className="font-headline text-lg font-bold tracking-tight text-on-surface">DroneMedic</h2>
+                <h2 className="font-headline text-lg 2xl:text-xl font-bold tracking-tight text-on-surface">DroneMedic</h2>
               </div>
-              <p className="text-sm text-on-surface-variant">Leading the global transition to autonomous, zero-emission medical logistics.</p>
+              <p className="text-sm 2xl:text-base text-on-surface-variant">Leading the global transition to autonomous, zero-emission medical logistics.</p>
               <div className="flex gap-4">
-                <a className="text-on-surface-variant transition-colors hover:text-primary" href="#"><span className="material-symbols-outlined">alternate_email</span></a>
-                <a className="text-on-surface-variant transition-colors hover:text-primary" href="#"><span className="material-symbols-outlined">share</span></a>
-                <a className="text-on-surface-variant transition-colors hover:text-primary" href="#"><span className="material-symbols-outlined">podcasts</span></a>
+                <a className="text-on-surface-variant transition-colors hover:text-primary" href="#"><AtSign size={20} /></a>
+                <a className="text-on-surface-variant transition-colors hover:text-primary" href="#"><Share2 size={20} /></a>
+                <a className="text-on-surface-variant transition-colors hover:text-primary" href="#"><Radio size={20} /></a>
               </div>
             </div>
             <div>
-              <h4 className="mb-6 text-sm font-bold uppercase tracking-widest text-on-surface">Platform</h4>
-              <ul className="space-y-4 text-sm text-on-surface-variant">
-                <li><a className="hover:text-primary transition-colors" href="#">Mission Control</a></li>
-                <li><a className="hover:text-primary transition-colors" href="#">Fleet Management</a></li>
-                <li><a className="hover:text-primary transition-colors" href="#">API Reference</a></li>
-                <li><a className="hover:text-primary transition-colors" href="#">Safety Systems</a></li>
+              <h4 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Platform</h4>
+              <ul className="space-y-4 text-sm 2xl:text-base text-on-surface-variant">
+                <li><a className="hover:text-primary transition-colors" href="#capabilities">Mission Control</a></li>
+                <li><a className="hover:text-primary transition-colors" href="#drone">Fleet Management</a></li>
+                <li><a className="hover:text-primary transition-colors" href="#how-it-works">API Reference</a></li>
+                <li><a className="hover:text-primary transition-colors" href="#cta">Safety Systems</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="mb-6 text-sm font-bold uppercase tracking-widest text-on-surface">Resources</h4>
-              <ul className="space-y-4 text-sm text-on-surface-variant">
+              <h4 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Resources</h4>
+              <ul className="space-y-4 text-sm 2xl:text-base text-on-surface-variant">
                 <li><a className="hover:text-primary transition-colors" href="#">Case Studies</a></li>
                 <li><a className="hover:text-primary transition-colors" href="#">Documentation</a></li>
                 <li><a className="hover:text-primary transition-colors" href="#">Support Center</a></li>
@@ -300,16 +329,16 @@ export function Landing() {
               </ul>
             </div>
             <div>
-              <h4 className="mb-6 text-sm font-bold uppercase tracking-widest text-on-surface">Newsletter</h4>
-              <p className="mb-4 text-sm text-on-surface-variant">Get the latest mission reports and system updates.</p>
+              <h4 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Newsletter</h4>
+              <p className="mb-4 text-sm 2xl:text-base text-on-surface-variant">Get the latest mission reports and system updates.</p>
               <div className="flex flex-col gap-2">
-                <input className="h-11 rounded border-0 bg-surface-container-high text-sm text-on-surface focus:ring-2 focus:ring-primary px-4" placeholder="Email Address" type="email" />
-                <button className="btn-primary-gradient h-11 rounded text-sm font-bold text-white cursor-pointer">Subscribe</button>
+                <input className="h-11 2xl:h-13 rounded border-0 bg-surface-container-high text-sm 2xl:text-base text-on-surface focus:ring-2 focus:ring-primary px-4" placeholder="Email Address" type="email" />
+                <button className="btn-primary-gradient h-11 2xl:h-13 rounded text-sm 2xl:text-base font-bold text-white cursor-pointer">Subscribe</button>
               </div>
             </div>
           </div>
-          <div className="mt-16 border-t border-outline-variant/15 pt-8 text-center text-xs text-on-surface-variant">
-            <p>&copy; 2024 DroneMedic Aerospace. All rights reserved. Precision in flight, reliability in care.</p>
+          <div className="mt-16 border-t border-outline-variant/15 pt-8 text-center text-xs 2xl:text-sm text-on-surface-variant">
+            <p>&copy; 2025 DroneMedic Aerospace. All rights reserved. Precision in flight, reliability in care.</p>
           </div>
         </div>
       </footer>

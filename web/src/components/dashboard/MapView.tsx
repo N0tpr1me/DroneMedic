@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, Marker, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, Polygon, CircleMarker, Popup, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { Location, Weather, NoFlyZone } from '../../lib/api';
@@ -31,6 +31,27 @@ const clinicIcon = (color: string) => L.divIcon({
   iconAnchor: [6, 6],
 });
 
+// ── Hash-based wind direction (deterministic per location name) ──
+function hashStringToAngle(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash) % 360;
+}
+
+const windArrowIcon = (angle: number, flyable: boolean) => L.divIcon({
+  className: '',
+  html: `<div style="transform: rotate(${angle}deg); pointer-events: none;">
+    <svg width="16" height="16" viewBox="0 0 16 16">
+      <path d="M8 2 L12 10 L8 8 L4 10 Z" fill="${flyable ? '#4ade80' : '#ff4444'}" opacity="0.8"/>
+    </svg>
+  </div>`,
+  iconSize: [16, 16],
+  iconAnchor: [-9, 8],
+});
+
 // ── Animate drone along route ──
 interface AnimatedDroneProps {
   route: Array<[number, number]>;
@@ -41,6 +62,8 @@ interface AnimatedDroneProps {
 function AnimatedDrone({ route, progress, isFlying }: AnimatedDroneProps) {
   const map = useMap();
   const markerRef = useRef<L.Marker | null>(null);
+  const trailRef = useRef<L.Marker | null>(null);
+  const prevPosRef = useRef<[number, number] | null>(null);
 
   useEffect(() => {
     if (!isFlying || route.length < 2) {
@@ -48,11 +71,12 @@ function AnimatedDrone({ route, progress, isFlying }: AnimatedDroneProps) {
         markerRef.current.remove();
         markerRef.current = null;
       }
+      if (trailRef.current) {
+        trailRef.current.remove();
+        trailRef.current = null;
+      }
+      prevPosRef.current = null;
       return;
-    }
-
-    if (!markerRef.current) {
-      markerRef.current = L.marker(route[0], { icon: droneIcon }).addTo(map);
     }
 
     const totalSegments = route.length - 1;
@@ -64,13 +88,55 @@ function AnimatedDrone({ route, progress, isFlying }: AnimatedDroneProps) {
     const lat = from[0] + (to[0] - from[0]) * segProgress;
     const lng = from[1] + (to[1] - from[1]) * segProgress;
 
-    markerRef.current.setLatLng([lat, lng]);
+    const currentPos: [number, number] = [lat, lng];
+
+    // Trailing glow marker: lerp 90% toward current position from previous
+    const trailPos: [number, number] = prevPosRef.current
+      ? [
+          prevPosRef.current[0] + (currentPos[0] - prevPosRef.current[0]) * 0.9,
+          prevPosRef.current[1] + (currentPos[1] - prevPosRef.current[1]) * 0.9,
+        ]
+      : currentPos;
+
+    if (!markerRef.current) {
+      markerRef.current = L.marker(currentPos, { icon: droneIcon }).addTo(map);
+    } else {
+      markerRef.current.setLatLng(currentPos);
+    }
+
+    const trailIcon = L.divIcon({
+      className: '',
+      html: `<div style="
+        width: 24px; height: 24px;
+        background: rgba(179, 197, 255, 0.3);
+        transform: rotate(45deg);
+        border-radius: 2px;
+        box-shadow: 0 0 30px rgba(179, 197, 255, 0.4), 0 0 60px rgba(179, 197, 255, 0.2);
+        filter: blur(2px);
+      "></div>`,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+    });
+
+    if (!trailRef.current) {
+      trailRef.current = L.marker(trailPos, { icon: trailIcon, zIndexOffset: -1 }).addTo(map);
+    } else {
+      trailRef.current.setIcon(trailIcon);
+      trailRef.current.setLatLng(trailPos);
+    }
+
+    prevPosRef.current = currentPos;
 
     return () => {
       if (markerRef.current) {
         markerRef.current.remove();
         markerRef.current = null;
       }
+      if (trailRef.current) {
+        trailRef.current.remove();
+        trailRef.current = null;
+      }
+      prevPosRef.current = null;
     };
   }, [map, route, progress, isFlying]);
 
@@ -87,7 +153,9 @@ export type MapCommand =
   | { type: 'zoom-in' }
   | { type: 'zoom-out' }
   | { type: 'center-depot'; lat: number; lon: number }
-  | { type: 'toggle-layer' };
+  | { type: 'toggle-layer' }
+  | { type: 'fly-to'; lat: number; lon: number; zoom?: number }
+  | { type: 'zoom-out-overview' };
 
 const LEFT_NAV_WIDTH = 90;
 const RIGHT_HUD_WIDTH = 360;
@@ -153,6 +221,12 @@ function MapController({ command, onCommandHandled, depotLat, depotLon, onCenter
         break;
       case 'center-depot':
         centerWithOffset(map, command.lat, command.lon, map.getZoom());
+        break;
+      case 'fly-to':
+        centerWithOffset(map, command.lat, command.lon, command.zoom ?? map.getZoom());
+        break;
+      case 'zoom-out-overview':
+        map.flyTo(map.getCenter(), 12, { animate: true, duration: 1.5 });
         break;
     }
 
@@ -292,46 +366,105 @@ export function MapView({
         <MapController command={mapCommand} onCommandHandled={onCommandHandled} depotLat={depot?.lat} depotLon={depot?.lon} onCenteredChange={onCenteredChange} />
       )}
 
-      {/* No-fly zones — filled red at 30% opacity */}
+      {/* No-fly zones — glowing danger polygons */}
       {noFlyZones.map((zone) => {
         const positions: Array<[number, number]> = zone.lat_lon.map((ll) => [ll[0], ll[1]]);
         return (
-          <Polyline
+          <Polygon
             key={zone.name}
-            positions={[...positions, positions[0]]}
+            className="danger-zone"
+            positions={positions}
             pathOptions={{
               color: '#ff4444',
-              weight: 1,
+              weight: 2,
               opacity: 0.3,
               fillColor: '#ff4444',
-              fillOpacity: 0.3,
-              fill: true,
+              fillOpacity: 0.1,
             }}
           />
         );
       })}
 
       {/* Original route */}
-      {routeCoords.length >= 2 && (
-        <Polyline
-          positions={routeCoords}
-          pathOptions={{
-            color: reroute ? '#ffb3ac' : '#00daf3',
-            weight: reroute ? 2 : 3,
-            opacity: reroute ? 0.3 : 0.8,
-            dashArray: reroute ? '10 5' : undefined,
-          }}
-        />
-      )}
+      {routeCoords.length >= 2 && (() => {
+        const hasReroute = Boolean(reroute && rerouteCoords.length >= 2);
+        const showSplit = isFlying && droneProgress > 0 && droneProgress < 1 && !hasReroute;
+
+        if (showSplit) {
+          // Split route into completed and remaining portions
+          const totalSegments = routeCoords.length - 1;
+          const segIndex = Math.min(
+            Math.floor(droneProgress * totalSegments),
+            totalSegments - 1
+          );
+          const segProgress = (droneProgress * totalSegments) - segIndex;
+
+          const from = routeCoords[segIndex];
+          const to = routeCoords[Math.min(segIndex + 1, routeCoords.length - 1)];
+          const interpPoint: [number, number] = [
+            from[0] + (to[0] - from[0]) * segProgress,
+            from[1] + (to[1] - from[1]) * segProgress,
+          ];
+
+          const completedCoords = [...routeCoords.slice(0, segIndex + 1), interpPoint];
+          const remainingCoords = [interpPoint, ...routeCoords.slice(segIndex + 1)];
+
+          return (
+            <>
+              {/* Completed portion — solid bright cyan with glow */}
+              {completedCoords.length >= 2 && (
+                <Polyline
+                  className="route-completed"
+                  positions={completedCoords}
+                  pathOptions={{
+                    color: '#00daf3',
+                    weight: 4,
+                    opacity: 1,
+                  }}
+                />
+              )}
+              {/* Remaining portion — dimmer, dashed, animated */}
+              {remainingCoords.length >= 2 && (
+                <Polyline
+                  className="route-remaining"
+                  positions={remainingCoords}
+                  pathOptions={{
+                    color: '#00daf3',
+                    weight: 2,
+                    opacity: 0.3,
+                    dashArray: '12 8',
+                  }}
+                />
+              )}
+            </>
+          );
+        }
+
+        // Static / preview route (not flying, or progress at 0/1)
+        return (
+          <Polyline
+            className={hasReroute ? undefined : 'animated-route'}
+            positions={routeCoords}
+            pathOptions={{
+              color: hasReroute ? '#ffb3ac' : '#00daf3',
+              weight: hasReroute ? 2 : 3,
+              opacity: hasReroute ? 0.3 : 0.8,
+              dashArray: hasReroute ? '10 5' : '12 8',
+            }}
+          />
+        );
+      })()}
 
       {/* Rerouted path */}
       {rerouteCoords.length >= 2 && (
         <Polyline
+          className="animated-route"
           positions={rerouteCoords}
           pathOptions={{
             color: '#00daf3',
             weight: 3,
             opacity: 0.9,
+            dashArray: '12 8',
           }}
         />
       )}
@@ -364,21 +497,50 @@ export function MapView({
         );
       })}
 
-      {/* Pulsing rings around active delivery locations */}
-      {(route || []).filter((n) => n !== 'Depot' && locations[n]).map((name) => (
-        <CircleMarker
-          key={`ring-${name}`}
-          center={[locations[name].lat, locations[name].lon]}
-          radius={15}
-          pathOptions={{
-            color: priorities[name] === 'high' ? '#ffb3ac' : '#0051ce',
-            weight: 1,
-            opacity: 0.3,
-            fillColor: priorities[name] === 'high' ? '#ffb3ac' : '#0051ce',
-            fillOpacity: 0.08,
-          }}
-        />
-      ))}
+      {/* Wind direction arrows for locations with weather data */}
+      {Object.entries(locations).map(([name, loc]) => {
+        const locWeather = weather[name];
+        if (!locWeather) return null;
+        const angle = hashStringToAngle(name);
+        return (
+          <Marker
+            key={`wind-${name}`}
+            position={[loc.lat, loc.lon]}
+            icon={windArrowIcon(angle, locWeather.flyable)}
+            interactive={false}
+          />
+        );
+      })}
+
+      {/* Pulsing rings around active delivery locations (color-coded by weather) */}
+      {(route || []).filter((n) => n !== 'Depot' && locations[n]).map((name) => {
+        const locWeather = weather[name];
+        const isBadWeather = locWeather && !locWeather.flyable;
+        const isHighPriority = priorities[name] === 'high';
+
+        let ringColor = isHighPriority ? '#ffb3ac' : '#0051ce';
+        let ringFillOpacity = 0.08;
+        if (isBadWeather) {
+          ringColor = '#ff4444';
+          ringFillOpacity = 0.15;
+        }
+
+        return (
+          <CircleMarker
+            key={`ring-${name}`}
+            className="pulse-ring"
+            center={[locations[name].lat, locations[name].lon]}
+            radius={15}
+            pathOptions={{
+              color: ringColor,
+              weight: 1,
+              opacity: 0.3,
+              fillColor: ringColor,
+              fillOpacity: ringFillOpacity,
+            }}
+          />
+        );
+      })}
 
       {/* Animated drone */}
       <AnimatedDrone

@@ -1,3 +1,5 @@
+import { Pill } from 'lucide-react';
+
 export function DroneOverlay() {
   return (
     <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center -translate-y-12">
@@ -26,7 +28,7 @@ export function DroneOverlay() {
             <div className="w-24 h-1.5 bg-primary/50 rounded-full absolute top-4" style={{ boxShadow: '0 0 8px rgba(179,197,255,0.4)' }} />
             {/* Center icon */}
             <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center border border-primary/40" style={{ boxShadow: '0 0 15px rgba(179,197,255,0.2)' }}>
-              <span className="material-symbols-outlined text-primary text-base">medication</span>
+              <Pill size={16} className="text-primary" />
             </div>
           </div>
 

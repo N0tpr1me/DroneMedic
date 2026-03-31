@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, HeartPulse, PlaneTakeoff, ClipboardList, BarChart3, Settings, Route as RouteIcon } from 'lucide-react';
 import { PromptInputBox } from '@/components/ui/ai-prompt-box';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
+import { HudStatus } from '../components/ui/hud-status';
 import { api } from '../lib/api';
 import type { Task, Route } from '../lib/api';
 
@@ -27,7 +29,7 @@ export function Deploy() {
     {
       id: 'example',
       role: 'system',
-      content: 'Try: "Deliver insulin to Clinic A, blood packs to Clinic B urgently, and bandages to Clinic C"',
+      content: 'Try: "Deliver O- plasma to Royal London urgently, insulin to Homerton, and defibrillator pads to Whipps Cross"',
       timestamp: new Date(),
     },
   ]);
@@ -86,7 +88,7 @@ export function Deploy() {
         const demoRoute: Route = {
           ordered_route: ['Depot', ...currentTask.locations, 'Depot'],
           ordered_routes: { Drone1: ['Depot', ...currentTask.locations, 'Depot'] },
-          total_distance: 450, estimated_time: 120, battery_usage: 36, no_fly_violations: [],
+          total_distance: 8400, estimated_time: 180, battery_usage: 42, no_fly_violations: [],
         };
         setCurrentRoute(demoRoute);
         addMessage({ role: 'assistant', content: `Route computed: ${demoRoute.ordered_route.join(' → ')}\n\nDistance: 450m | Est. Time: 120s | Battery: 36%\n\nSay "deploy" to launch the drone, or describe a new mission.`, route: demoRoute });
@@ -113,28 +115,28 @@ export function Deploy() {
         const demoRoute: Route = {
           ordered_route: ['Depot', ...res.task.locations, 'Depot'],
           ordered_routes: { Drone1: ['Depot', ...res.task.locations, 'Depot'] },
-          total_distance: 450, estimated_time: 120, battery_usage: 36, no_fly_violations: [],
+          total_distance: 8400, estimated_time: 180, battery_usage: 42, no_fly_violations: [],
         };
         setCurrentRoute(demoRoute);
         addMessage({ role: 'assistant', content: `Route computed: ${demoRoute.ordered_route.join(' → ')}\n\nDistance: 450m | Est. Time: 120s | Battery: 36%\n\nSay "deploy" to launch the drone.`, route: demoRoute });
       }
     } catch {
       const demoTask: Task = {
-        locations: ['Clinic A', 'Clinic B', 'Clinic C'],
-        priorities: { 'Clinic B': 'high' },
-        supplies: { 'Clinic A': 'insulin', 'Clinic B': 'blood packs', 'Clinic C': 'bandages' },
-        constraints: { avoid_zones: [], weather_concern: '', time_sensitive: false },
+        locations: ['Royal London', 'Homerton', 'Whipps Cross'],
+        priorities: { 'Royal London': 'high' },
+        supplies: { 'Royal London': 'O- plasma (2 units)', 'Homerton': 'insulin pens (10x)', 'Whipps Cross': 'defibrillator pads' },
+        constraints: { avoid_zones: [], weather_concern: '', time_sensitive: true },
       };
       setCurrentTask(demoTask);
       const demoRoute: Route = {
-        ordered_route: ['Depot', 'Clinic B', 'Clinic A', 'Clinic C', 'Depot'],
-        ordered_routes: { Drone1: ['Depot', 'Clinic B', 'Clinic A', 'Clinic C', 'Depot'] },
-        total_distance: 450, estimated_time: 120, battery_usage: 36, no_fly_violations: [],
+        ordered_route: ['Depot', 'Royal London', 'Homerton', 'Whipps Cross', 'Depot'],
+        ordered_routes: { Drone1: ['Depot', 'Royal London', 'Homerton', 'Whipps Cross', 'Depot'] },
+        total_distance: 8400, estimated_time: 180, battery_usage: 42, no_fly_violations: [],
       };
       setCurrentRoute(demoRoute);
       addMessage({
         role: 'assistant',
-        content: `Parsed 3 delivery locations (demo mode):\n\n• Clinic B (URGENT) — blood packs\n• Clinic A — insulin\n• Clinic C — bandages\n\nRoute: Depot → Clinic B → Clinic A → Clinic C → Depot\nDistance: 450m | Time: 120s | Battery: 36%\n\nSay "deploy" to launch the drone.`,
+        content: `Parsed 3 delivery locations:\n\n• Royal London Hospital (URGENT) — O- plasma, 2 units — Dr. Osei, 3 patients waiting\n• Homerton Hospital — insulin pens, 10x — Dr. Patel, 5 diabetic patients\n• Whipps Cross Hospital — defibrillator pads — Dr. Chen, cardiac unit resupply\n\nRoute: Depot → Royal London → Homerton → Whipps Cross → Depot\nDistance: 8.4km | Est. Time: 3m 00s | Battery: 42%\n\nSay "deploy" to launch the drone.`,
         task: demoTask,
         route: demoRoute,
       });
@@ -149,39 +151,31 @@ export function Deploy() {
       {/* Header */}
       <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', height: 64, borderBottom: '1px solid rgba(67,70,84,0.15)', background: 'rgba(15,20,24,0.80)', backdropFilter: 'blur(20px)', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <LiquidButton size="sm" onClick={() => navigate('/dashboard')} style={{ color: '#c3c6d6', padding: '6px 12px', height: 'auto' }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>arrow_back</span>
-            <span style={{ fontSize: 12, fontWeight: 600 }}>Back</span>
-          </LiquidButton>
-          <div style={{ height: 16, width: 1, background: 'rgba(67,70,84,0.3)' }} />
-          <span style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 900, color: '#dfe3e9', textTransform: 'uppercase', letterSpacing: '0.1em' }}>DroneMedic</span>
+          <span onClick={() => navigate('/dashboard')} style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 900, color: '#dfe3e9', textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer' }}>DroneMedic</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span className="material-symbols-outlined" style={{ color: '#00daf3', fontSize: 20 }}>flight_takeoff</span>
+          <PlaneTakeoff size={20} style={{ color: '#00daf3' }} />
           <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700, color: '#dfe3e9', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>Mission Planning</h1>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 12px', borderRadius: 4, background: '#262b2f', border: '1px solid rgba(67,70,84,0.1)' }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#00daf3', boxShadow: '0 0 8px rgba(0,218,243,0.5)' }} />
-          <span style={{ fontSize: 10, textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.1em', color: '#00daf3' }}>System Live</span>
-        </div>
+        <HudStatus variant={currentRoute ? 'completed' : currentTask ? 'planning' : 'idle'} />
       </header>
 
       {/* ═══ LEFT NAV — Floating Liquid Glass Buttons with Labels ═══ */}
       <div style={{position:'fixed',left:16,top:'50%',transform:'translateY(-50%)',zIndex:40,display:'flex',flexDirection:'column',gap:6}}>
         {[
-          {icon:'monitor_heart',label:'Dashboard',active:false,onClick:()=>navigate('/dashboard')},
-          {icon:'flight_takeoff',label:'Deploy',active:true,onClick:undefined},
-          {icon:'assignment',label:'Logs',active:false,onClick:undefined},
-          {icon:'analytics',label:'Analytics',active:false,onClick:undefined},
+          {icon:<HeartPulse size={22} />,label:'Dashboard',active:false,onClick:()=>navigate('/dashboard')},
+          {icon:<PlaneTakeoff size={22} fill="currentColor" />,label:'Deploy',active:true,onClick:undefined},
+          {icon:<ClipboardList size={22} />,label:'Logs',active:false,onClick:undefined},
+          {icon:<BarChart3 size={22} />,label:'Analytics',active:false,onClick:undefined},
         ].map(item=>(
           <LiquidButton key={item.label} size="sm" onClick={item.onClick} style={{color:item.active?'#b3c5ff':'#c3c6d6',display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'10px 14px',height:'auto',minWidth:64}}>
-            <span className="material-symbols-outlined" style={{fontSize:22,...(item.active?{fontVariationSettings:"'FILL' 1"}:{})}}>{item.icon}</span>
+            {item.icon}
             <span style={{fontSize:9,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em',opacity:item.active?1:0.7}}>{item.label}</span>
           </LiquidButton>
         ))}
         <div style={{height:4}} />
         <LiquidButton size="sm" onClick={()=>navigate('/settings')} style={{color:'#c3c6d6',display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'10px 14px',height:'auto',minWidth:64}}>
-          <span className="material-symbols-outlined" style={{fontSize:22}}>settings</span>
+          <Settings size={22} />
           <span style={{fontSize:9,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em',opacity:0.7}}>Settings</span>
         </LiquidButton>
       </div>
@@ -219,7 +213,7 @@ export function Deploy() {
                     {/* Route visualization */}
                     {msg.route && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderRadius: 12, background: 'rgba(0,218,243,0.06)', border: '1px solid rgba(0,218,243,0.15)', fontSize: 12 }}>
-                        <span className="material-symbols-outlined" style={{ color: '#00daf3', fontSize: 16 }}>route</span>
+                        <RouteIcon size={16} style={{ color: '#00daf3' }} />
                         <span style={{ fontFamily: 'monospace', color: '#00daf3' }}>{msg.route.ordered_route.join(' → ')}</span>
                       </div>
                     )}
@@ -232,7 +226,7 @@ export function Deploy() {
                           onClick={() => handleSend('deploy')}
                           style={{ color: '#00daf3', padding: '8px 16px', height: 'auto', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}
                         >
-                          <span className="material-symbols-outlined" style={{ fontSize: 16 }}>flight_takeoff</span>
+                          <PlaneTakeoff size={16} />
                           Deploy Drone
                         </LiquidButton>
                         <LiquidButton

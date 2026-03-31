@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUp, Mic, Package, Route, CloudLightning, Plane, CheckCircle } from 'lucide-react';
+import { ArrowUp, Mic, Package, Route, CloudLightning, Plane, CheckCircle, Brain } from 'lucide-react';
 import type { Task, Route as RouteType, Metrics, FlightLogEntry } from '../../lib/api';
 
 // ── Message Types ──
@@ -145,7 +145,7 @@ export function ChatPanel({
           ],
         });
       } else {
-        addMessage({ type: 'ai', content: 'I couldn\'t parse that request. Try something like: "Deliver insulin to Clinic A, blood to Clinic B urgently"' });
+        addMessage({ type: 'ai', content: 'I couldn\'t parse that request. Try something like: "Deliver O- plasma to Royal London urgently, insulin to Homerton"' });
       }
     } catch {
       setIsTyping(false);
@@ -180,7 +180,7 @@ export function ChatPanel({
   };
 
   const handleStorm = async () => {
-    addMessage({ type: 'system', content: 'Simulating severe weather event at Clinic B...' });
+    addMessage({ type: 'system', content: 'Simulating severe weather event at Royal London Hospital...' });
     await onSimulateStorm();
   };
 
@@ -206,7 +206,7 @@ export function ChatPanel({
       {/* Header */}
       <div className="px-5 py-4 border-b border-outline-variant/10">
         <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-tertiary text-lg">psychology</span>
+          <Brain size={22} className="text-tertiary" />
           <h3 className="font-headline text-sm font-bold text-on-surface uppercase tracking-wider">Mission AI</h3>
         </div>
         <p className="text-[10px] text-on-surface-variant/60 mt-1 uppercase tracking-widest">Intelligent Delivery Coordinator</p>

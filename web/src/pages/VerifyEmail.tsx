@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { MailCheck, RefreshCw, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 const EARTH_BG = '/earth-bg.png';
@@ -29,7 +30,7 @@ export function VerifyEmail() {
         <div className="absolute top-0 left-0 w-full h-1 btn-primary-gradient" />
 
         <div className="mb-6 mx-auto w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'rgba(0,218,243,0.1)' }}>
-          <span className="material-symbols-outlined text-4xl" style={{ color: '#00daf3' }}>mark_email_read</span>
+          <MailCheck size={36} style={{ color: '#00daf3' }} />
         </div>
 
         <h2 className="font-headline text-2xl font-bold text-on-surface mb-3">Verify Your Email</h2>
@@ -49,7 +50,7 @@ export function VerifyEmail() {
             onClick={() => window.location.reload()}
             className="w-full btn-primary-gradient py-3.5 rounded-md font-headline font-bold text-on-primary-fixed uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] transition-all"
           >
-            <span className="material-symbols-outlined text-lg">refresh</span>
+            <RefreshCw size={18} />
             I've Verified — Continue
           </button>
 
@@ -64,7 +65,7 @@ export function VerifyEmail() {
 
         <div className="mt-8 pt-6 border-t border-outline-variant/15">
           <div className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest text-on-surface-variant/50">
-            <span className="material-symbols-outlined text-sm">verified_user</span>
+            <ShieldCheck size={14} />
             AES-256 Encrypted
           </div>
         </div>

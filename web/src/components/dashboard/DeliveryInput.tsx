@@ -29,7 +29,7 @@ export function DeliveryInput({ onSubmit, parsedTask, loading }: DeliveryInputPr
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Deliver insulin to Clinic A, blood to Clinic B urgently, and bandages to Clinic C..."
+        placeholder="Deliver O- plasma to Royal London urgently, insulin to Homerton, and defibrillator pads to Whipps Cross..."
         className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-text-primary placeholder-text-muted resize-none h-24 focus:outline-none focus:border-accent-cyan/50 transition-colors"
       />
 

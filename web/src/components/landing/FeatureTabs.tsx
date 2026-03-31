@@ -1,8 +1,10 @@
+import { type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Route, CloudLightning, Brain } from 'lucide-react';
 
 interface FeatureTab {
   id: string;
-  icon: string;
+  icon: ReactNode;
   label: string;
   description: string;
 }
@@ -10,19 +12,19 @@ interface FeatureTab {
 const FEATURES: FeatureTab[] = [
   {
     id: 'routes',
-    icon: 'route',
+    icon: <Route size={16} />,
     label: 'Route Optimization',
     description: 'OR-Tools VRP solver computes optimal multi-stop delivery routes for multiple drones simultaneously, minimizing delivery time.',
   },
   {
     id: 'weather',
-    icon: 'thunderstorm',
+    icon: <CloudLightning size={16} />,
     label: 'Weather Adaptation',
     description: 'Real-time weather monitoring with automatic rerouting when conditions change. Drones adapt mid-flight to storms and wind.',
   },
   {
     id: 'ai',
-    icon: 'psychology',
+    icon: <Brain size={16} />,
     label: 'AI Coordination',
     description: 'Natural language mission parsing powered by Claude AI. Describe deliveries in plain English and watch them execute.',
   },
@@ -54,7 +56,7 @@ export function FeatureTabs({ activeId, onSelect }: FeatureTabsProps) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className={`material-symbols-outlined text-lg transition-colors duration-300 ${isActive ? 'text-[#00daf3]' : 'text-white/40'}`}>
+            <span className={`transition-colors duration-300 ${isActive ? 'text-[#00daf3]' : 'text-white/40'}`}>
               {feature.icon}
             </span>
 

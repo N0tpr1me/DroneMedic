@@ -13,7 +13,7 @@ export function GlassPanel({ children, glow, className = '' }: GlassPanelProps) 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className={`glass ${glow ? 'glow-cyan' : ''} p-5 ${className}`}
+      className={`glass-panel ${glow ? 'glow-cyan' : ''} p-5 ${className}`}
     >
       {children}
     </motion.div>

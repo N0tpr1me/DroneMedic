@@ -2,6 +2,8 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
+import { HeartPulse, PlaneTakeoff, ClipboardList, BarChart3, Settings as SettingsIcon, User, MapPin, Lock, LogOut, RotateCcw, KeyRound } from 'lucide-react';
+import { HudStatus } from '../components/ui/hud-status';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { useSettings } from '../hooks/useSettings';
 import { useAuth } from '../hooks/useAuth';
@@ -136,11 +138,11 @@ const panelStyle: React.CSSProperties = {
 };
 
 const TAB_ITEMS = [
-  { icon: 'person', label: 'Profile' },
-  { icon: 'flight', label: 'Drone' },
-  { icon: 'map', label: 'Map & Display' },
-  { icon: 'location_on', label: 'Landing Zone' },
-  { icon: 'lock', label: 'Payload Security' },
+  { icon: <User size={16} />, label: 'Profile' },
+  { icon: <PlaneTakeoff size={16} />, label: 'Drone' },
+  { icon: <MapPin size={16} />, label: 'Map & Display' },
+  { icon: <MapPin size={16} />, label: 'Landing Zone' },
+  { icon: <Lock size={16} />, label: 'Payload Security' },
 ];
 
 export function Settings() {
@@ -162,34 +164,31 @@ export function Settings() {
       {/* ═══ HEADER ═══ */}
       <header style={{ position: 'fixed', top: 0, width: '100%', zIndex: 50, background: 'rgba(15,20,24,0.50)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 24px', height: 64, borderBottom: '1px solid rgba(67,70,84,0.1)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span style={{ fontSize: 18, fontWeight: 900, color: '#dfe3e9', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'Space Grotesk,sans-serif' }}>DroneMedic</span>
+          <span onClick={() => navigate('/dashboard')} style={{ fontSize: 18, fontWeight: 900, color: '#dfe3e9', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'Space Grotesk,sans-serif', cursor: 'pointer' }}>DroneMedic</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span className="material-symbols-outlined" style={{ color: '#b3c5ff', fontSize: 20 }}>settings</span>
+          <SettingsIcon size={20} style={{ color: '#b3c5ff' }} />
           <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700, color: '#dfe3e9', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>Settings</h1>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 12px', borderRadius: 4, background: '#262b2f', border: '1px solid rgba(67,70,84,0.1)' }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#00daf3', boxShadow: '0 0 8px rgba(0,218,243,0.5)' }} />
-          <span style={{ fontSize: 10, textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.1em', color: '#00daf3' }}>System Live</span>
-        </div>
+        <HudStatus variant="idle" />
       </header>
 
       {/* ═══ LEFT NAV ═══ */}
       <div style={{ position: 'fixed', left: 16, top: '50%', transform: 'translateY(-50%)', zIndex: 40, display: 'flex', flexDirection: 'column', gap: 6 }}>
         {[
-          { icon: 'monitor_heart', label: 'Dashboard', active: false, onClick: () => navigate('/dashboard') },
-          { icon: 'flight_takeoff', label: 'Deploy', active: false, onClick: () => navigate('/deploy') },
-          { icon: 'assignment', label: 'Logs', active: false, onClick: undefined },
-          { icon: 'analytics', label: 'Analytics', active: false, onClick: undefined },
+          { icon: <HeartPulse size={22} />, label: 'Dashboard', active: false, onClick: () => navigate('/dashboard') },
+          { icon: <PlaneTakeoff size={22} />, label: 'Deploy', active: false, onClick: () => navigate('/deploy') },
+          { icon: <ClipboardList size={22} />, label: 'Logs', active: false, onClick: undefined },
+          { icon: <BarChart3 size={22} />, label: 'Analytics', active: false, onClick: undefined },
         ].map(item => (
           <LiquidButton key={item.label} size="sm" onClick={item.onClick} style={{ color: item.active ? '#b3c5ff' : '#c3c6d6', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '10px 14px', height: 'auto', minWidth: 64 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 22, ...(item.active ? { fontVariationSettings: "'FILL' 1" } : {}) }}>{item.icon}</span>
+            {item.icon}
             <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: item.active ? 1 : 0.7 }}>{item.label}</span>
           </LiquidButton>
         ))}
         <div style={{ height: 4 }} />
         <LiquidButton size="sm" style={{ color: '#b3c5ff', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '10px 14px', height: 'auto', minWidth: 64 }}>
-          <span className="material-symbols-outlined" style={{ fontSize: 22, fontVariationSettings: "'FILL' 1" }}>settings</span>
+          <SettingsIcon size={22} fill="currentColor" />
           <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 1 }}>Settings</span>
         </LiquidButton>
       </div>
@@ -219,7 +218,7 @@ export function Settings() {
                   transition: 'all 0.2s',
                 }}
               >
-                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>{tab.icon}</span>
+                {tab.icon}
                 {tab.label}
               </button>
             ))}
@@ -287,7 +286,7 @@ export function Settings() {
                       opacity: (!newPassword || !confirmPassword) ? 0.4 : 1, transition: 'all 0.2s',
                     }}
                   >
-                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>lock_reset</span>
+                    <KeyRound size={14} />
                     Update Password
                   </button>
                 </div>
@@ -466,7 +465,7 @@ export function Settings() {
                 transition: 'all 0.2s',
               }}
             >
-              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>logout</span>
+              <LogOut size={16} />
               Log Out
             </button>
             <button
@@ -479,7 +478,7 @@ export function Settings() {
                 transition: 'all 0.2s',
               }}
             >
-              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>restart_alt</span>
+              <RotateCcw size={16} />
               Reset to Defaults
             </button>
           </div>

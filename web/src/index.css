@@ -44,6 +44,16 @@
   --color-error: #ffb4ab;
   --color-error-container: #93000a;
 
+  /* State colors */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+
+  /* State-specific */
+  --color-state-idle: #4ade80;
+  --color-state-flying: #00daf3;
+  --color-state-emergency: #ff4444;
+  --color-state-planning: #fbbf24;
+
   /* Fonts */
   --font-headline: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
@@ -73,6 +83,20 @@ html, body, #root {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(141, 144, 160, 0.1);
+}
+
+.glass-sm {
+  background: rgba(23, 28, 32, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(141, 144, 160, 0.1);
+}
+
+.glass-lg {
+  background: rgba(30, 35, 40, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(141, 144, 160, 0.15);
 }
 
 /* Primary gradient button */
@@ -170,6 +194,24 @@ html, body, #root {
 .mode-sunset .drone-chassis { background: linear-gradient(135deg, #4c1d95, #f59e0b); border-color: #fbbf24; }
 .mode-night .drone-chassis { background: linear-gradient(135deg, #0f172a, #1e293b); border-color: #38bdf8; }
 
+/* ── Animated route lines ── */
+
+.animated-route {
+  animation: route-flow 1.5s linear infinite;
+}
+
+@keyframes route-flow {
+  to { stroke-dashoffset: -20; }
+}
+
+.route-completed path {
+  filter: drop-shadow(0 0 6px rgba(0,218,243,0.6));
+}
+
+.route-remaining path {
+  animation: route-flow 1.5s linear infinite;
+}
+
 /* ── Leaflet z-index override — keep map below HUD overlays ── */
 
 .leaflet-container {
@@ -185,6 +227,33 @@ html, body, #root {
   z-index: 10 !important;
 }
 
+/* ── Danger zone (no-fly) pulsing glow ── */
+
+.danger-zone path {
+  animation: danger-pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(255, 68, 68, 0.4));
+}
+
+@keyframes danger-pulse {
+  0%, 100% { fill-opacity: 0.1; stroke-opacity: 0.3; }
+  50% { fill-opacity: 0.25; stroke-opacity: 0.6; }
+}
+
+/* ── Pulsing delivery rings ── */
+
+.pulse-ring path {
+  animation: ring-pulse 3s ease-in-out infinite;
+}
+
+@keyframes ring-pulse {
+  0%, 100% { opacity: 0.3; transform-origin: center; transform: scale(1); }
+  50% { opacity: 0.7; transform-origin: center; transform: scale(1.08); }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -198,9 +267,19 @@ html, body, #root {
   50% { opacity: 0.8; transform: scale(1.1); }
 }
 
+/* ── Boot sequence pulse ── */
+@keyframes boot-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ── Spin (used by Dashboard loading) ── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @theme inline {
-  --font-heading: var(--font-sans);
-  --font-sans: 'Geist Variable', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

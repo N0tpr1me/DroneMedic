@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Battery, MapPin, Navigation } from 'lucide-react';
 import { GlassPanel } from '../ui/GlassPanel';
+import { BatteryChart } from './BatteryChart';
+import { SpeedGauge } from './SpeedGauge';
 
 interface DroneStatusProps {
   battery: number;
@@ -8,6 +10,8 @@ interface DroneStatusProps {
   status: 'idle' | 'planning' | 'flying' | 'rerouting' | 'completed';
   routeStops?: string[];
   currentStopIndex?: number;
+  speed?: number;
+  batteryHistory?: Array<{ time: number; battery: number }>;
 }
 
 const statusConfig = {
@@ -18,7 +22,7 @@ const statusConfig = {
   completed: { label: 'Mission Complete', color: '#22c55e', pulse: false },
 };
 
-export function DroneStatus({ battery, currentLocation, status, routeStops, currentStopIndex }: DroneStatusProps) {
+export function DroneStatus({ battery, currentLocation, status, routeStops, currentStopIndex, speed = 0, batteryHistory = [] }: DroneStatusProps) {
   const config = statusConfig[status];
 
   return (
@@ -71,12 +75,18 @@ export function DroneStatus({ battery, currentLocation, status, routeStops, curr
             transition={{ duration: 0.5 }}
           />
         </div>
+        <BatteryChart history={batteryHistory} currentBattery={battery} />
       </div>
 
-      {/* Location */}
-      <div className="flex items-center gap-2 text-xs text-text-muted">
-        <MapPin className="w-3 h-3" />
-        <span>{currentLocation}</span>
+      {/* Speed & Location */}
+      <div className="flex items-center gap-3">
+        <SpeedGauge value={speed} />
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2 text-xs text-text-muted">
+            <MapPin className="w-3 h-3" />
+            <span>{currentLocation}</span>
+          </div>
+        </div>
       </div>
 
       {/* Route progress */}

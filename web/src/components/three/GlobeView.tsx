@@ -353,7 +353,8 @@ export function GlobeView({
         <NoFlyDome key={zone.name} zone={zone} />
       ))}
 
-      <Sparkles count={100} scale={10} size={0.8} speed={0.2} color="#ffffff" opacity={0.2} />
+      <Sparkles count={300} scale={12} size={1.5} speed={0.15} color="#ffffff" opacity={0.6} />
+      <Sparkles count={80} scale={10} size={3} speed={0.1} color="#b3c5ff" opacity={0.4} />
 
       <OrbitControls
         enableZoom

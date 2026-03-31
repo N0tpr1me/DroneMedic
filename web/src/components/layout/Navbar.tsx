@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { BatteryFull, Signal, MapPin, LogOut } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 export function Navbar() {
@@ -83,9 +84,9 @@ export function Navbar() {
               <span className="text-[10px] uppercase font-bold tracking-widest text-tertiary">System Live</span>
             </div>
             <div className="hidden md:flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary cursor-pointer">battery_charging_full</span>
-              <span className="material-symbols-outlined text-primary cursor-pointer">signal_cellular_4_bar</span>
-              <span className="material-symbols-outlined text-primary cursor-pointer">location_on</span>
+              <BatteryFull size={14} className="text-primary cursor-pointer" />
+              <Signal size={14} className="text-primary cursor-pointer" />
+              <MapPin size={14} className="text-primary cursor-pointer" />
             </div>
           </>
         )}
@@ -104,7 +105,7 @@ export function Navbar() {
             onClick={signOut}
             className="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
           >
-            <span className="material-symbols-outlined text-lg">logout</span>
+            <LogOut size={18} />
           </button>
         )}
       </div>

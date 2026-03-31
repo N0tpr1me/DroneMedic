@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { HeartPulse, Crosshair, ClipboardList, BarChart3, Send, Settings } from 'lucide-react';
 
 interface SidebarProps {
   activeNav: string;
@@ -10,11 +11,17 @@ interface SidebarProps {
   isBusy?: boolean;
 }
 
-const NAV_ITEMS = [
-  { id: 'live-ops', icon: 'monitor_heart', label: 'Live Ops' },
-  { id: 'fleet', icon: 'precision_manufacturing', label: 'Fleet Status' },
-  { id: 'logs', icon: 'assignment', label: 'Mission Logs' },
-  { id: 'analytics', icon: 'analytics', label: 'Analytics' },
+interface NavItem {
+  id: string;
+  icon: (filled: boolean) => ReactNode;
+  label: string;
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { id: 'live-ops', icon: (filled) => <HeartPulse size={22} {...(filled ? { fill: 'currentColor' } : {})} />, label: 'Live Ops' },
+  { id: 'fleet', icon: (filled) => <Crosshair size={22} {...(filled ? { fill: 'currentColor' } : {})} />, label: 'Fleet Status' },
+  { id: 'logs', icon: (filled) => <ClipboardList size={22} {...(filled ? { fill: 'currentColor' } : {})} />, label: 'Mission Logs' },
+  { id: 'analytics', icon: (filled) => <BarChart3 size={22} {...(filled ? { fill: 'currentColor' } : {})} />, label: 'Analytics' },
 ];
 
 export function Sidebar({ activeNav, onNavSelect, onDeploy, isDeployDisabled, onSendMessage, isBusy }: SidebarProps) {
@@ -50,12 +57,7 @@ export function Sidebar({ activeNav, onNavSelect, onDeploy, isDeployDisabled, on
                 }
               `}
             >
-              <span
-                className="material-symbols-outlined"
-                style={isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
-              >
-                {item.icon}
-              </span>
+              {item.icon(isActive)}
               <span className="font-label text-xs font-medium uppercase tracking-wider">
                 {item.label}
               </span>
@@ -90,13 +92,13 @@ export function Sidebar({ activeNav, onNavSelect, onDeploy, isDeployDisabled, on
               disabled={!input.trim() || isBusy}
               className="bg-surface-container-highest p-2 rounded text-primary hover:bg-surface-bright cursor-pointer disabled:opacity-30"
             >
-              <span className="material-symbols-outlined text-sm">send</span>
+              <Send size={14} />
             </button>
           </div>
         )}
 
         <div className="flex items-center gap-4 text-on-surface-variant/60 hover:opacity-100 cursor-pointer transition-opacity">
-          <span className="material-symbols-outlined text-sm">settings</span>
+          <Settings size={14} />
           <span className="font-label text-[10px] uppercase tracking-widest">System Settings</span>
         </div>
       </div>
