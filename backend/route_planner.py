@@ -99,6 +99,7 @@ def compute_route(
     priorities: dict,
     weather: dict = None,
     num_drones: int = None,
+    time_windows: dict = None,
 ) -> dict:
     """
     Compute optimal delivery route(s) using OR-Tools VRP solver.
@@ -108,6 +109,9 @@ def compute_route(
         priorities: Dict mapping location names to "high" or "normal".
         weather: Optional dict of {location_name: weather_dict} for penalties.
         num_drones: Number of drones (default: config.NUM_DRONES).
+        time_windows: Optional dict of {location_name: max_seconds}.
+                      Each value is the latest arrival time in seconds from start.
+                      E.g. {"Clinic B": 1800} means Clinic B must be reached within 30 min.
 
     Returns:
         Dict with:
@@ -172,6 +176,43 @@ def compute_route(
         True,                   # start cumul to zero
         "Distance",
     )
+
+    # Time window constraints (if any delivery has a deadline)
+    if time_windows:
+        # Build a time matrix: travel_time = distance / velocity + 10s per stop
+        velocity = 5  # m/s (from config.DRONE_VELOCITY)
+        service_time = 10  # seconds per delivery stop
+
+        def time_callback(from_index, to_index):
+            from_node = manager.IndexToNode(from_index)
+            to_node = manager.IndexToNode(to_index)
+            travel = raw_matrix[from_node][to_node]
+            travel_seconds = int(travel / velocity) + service_time if travel > 0 else 0
+            return travel_seconds
+
+        time_transit_index = routing.RegisterTransitCallback(time_callback)
+
+        # Max horizon: largest time window or 2 hours
+        max_time = max(time_windows.values()) if time_windows else 7200
+        max_time = max(max_time, 7200)
+
+        routing.AddDimension(
+            time_transit_index,
+            max_time,          # allow waiting (slack)
+            max_time,          # max cumulative time per vehicle
+            True,              # start cumul to zero
+            "Time",
+        )
+
+        time_dimension = routing.GetDimensionOrDie("Time")
+
+        # Depot has no constraint (index 0)
+        # Apply time windows to delivery locations
+        for loc_name, deadline_seconds in time_windows.items():
+            if loc_name in all_locations:
+                node_index = all_locations.index(loc_name)
+                index = manager.NodeToIndex(node_index)
+                time_dimension.CumulVar(index).SetRange(0, int(deadline_seconds))
 
     # Search strategy
     search_params = pywrapcp.DefaultRoutingSearchParameters()
