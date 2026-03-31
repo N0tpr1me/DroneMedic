@@ -12,6 +12,37 @@ from config import NO_FLY_ZONES, LOCATIONS
 
 logger = logging.getLogger("DroneMedic.Geofence")
 
+# Runtime zone list — starts with config zones, can be modified via API
+_runtime_zones: list[dict] = list(NO_FLY_ZONES)
+
+
+def _get_all_zones() -> list[dict]:
+    """Return the current active no-fly zones (config + runtime additions)."""
+    return _runtime_zones
+
+
+def add_no_fly_zone(zone: dict) -> None:
+    """Add a no-fly zone at runtime. zone must have 'name', 'polygon', 'lat_lon'."""
+    # Replace if same name exists
+    _runtime_zones[:] = [z for z in _runtime_zones if z["name"] != zone["name"]]
+    _runtime_zones.append(zone)
+    logger.info(f"[GEOFENCE] Added/updated zone: {zone['name']}")
+
+
+def remove_no_fly_zone(name: str) -> bool:
+    """Remove a no-fly zone by name. Returns True if found and removed."""
+    before = len(_runtime_zones)
+    _runtime_zones[:] = [z for z in _runtime_zones if z["name"] != name]
+    removed = len(_runtime_zones) < before
+    if removed:
+        logger.info(f"[GEOFENCE] Removed zone: {name}")
+    return removed
+
+
+def reset_no_fly_zones() -> None:
+    """Reset to config defaults."""
+    _runtime_zones[:] = list(NO_FLY_ZONES)
+
 
 def _point_in_polygon(x: float, y: float, polygon: list[tuple]) -> bool:
     """
@@ -59,7 +90,7 @@ def is_in_no_fly_zone(x: float, y: float) -> tuple[bool, str | None]:
     Returns:
         (True, "zone_name") if inside a zone, (False, None) otherwise.
     """
-    for zone in NO_FLY_ZONES:
+    for zone in _get_all_zones():
         if _point_in_polygon(x, y, zone["polygon"]):
             return True, zone["name"]
     return False, None
@@ -72,7 +103,7 @@ def segment_crosses_no_fly_zone(x1: float, y1: float, x2: float, y2: float) -> t
     Returns:
         (True, "zone_name") if the segment crosses a zone, (False, None) otherwise.
     """
-    for zone in NO_FLY_ZONES:
+    for zone in _get_all_zones():
         poly = zone["polygon"]
         # Check if either endpoint is inside
         if _point_in_polygon(x1, y1, poly) or _point_in_polygon(x2, y2, poly):
@@ -125,8 +156,8 @@ def check_route_safety(location_names: list[str]) -> list[dict]:
 
 
 def get_no_fly_zones() -> list[dict]:
-    """Return all no-fly zones (for map display)."""
-    return NO_FLY_ZONES
+    """Return all active no-fly zones (for map display)."""
+    return _get_all_zones()
 
 
 # --- Quick test ---
