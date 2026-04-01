@@ -93,10 +93,67 @@ export function useSoundEffects() {
     });
   }, [getCtx]);
 
+  /** Descending urgent tone for critical failure warning */
+  const playAlert = useCallback(() => {
+    if (mutedRef.current) return;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    [880, 440, 220].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.value = freq;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.2, now + i * 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.15 + 0.12);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + i * 0.15);
+      osc.stop(now + i * 0.15 + 0.12);
+    });
+  }, [getCtx]);
+
+  /** Sustained pulsing tone for deadline approaching */
+  const playETAWarning = useCallback(() => {
+    if (mutedRef.current) return;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = 660;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.05, now);
+    for (let i = 0; i < 4; i++) {
+      gain.gain.linearRampToValueAtTime(0.15, now + i * 0.5 + 0.25);
+      gain.gain.linearRampToValueAtTime(0.05, now + (i + 1) * 0.5);
+    }
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 2.1);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 2.2);
+  }, [getCtx]);
+
+  /** Warm ascending confirmation chord */
+  const playDeliveryConfirm = useCallback(() => {
+    if (mutedRef.current) return;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    [523.25, 659.25, 783.99].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, now + i * 0.12);
+      gain.gain.linearRampToValueAtTime(0.12, now + i * 0.12 + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.6);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + i * 0.12);
+      osc.stop(now + i * 0.12 + 0.6);
+    });
+  }, [getCtx]);
+
   const toggleMute = useCallback(() => {
     mutedRef.current = !mutedRef.current;
     return mutedRef.current;
   }, []);
 
-  return { playDeploy, playWaypoint, playComplete, toggleMute, isMuted: mutedRef };
+  return { playDeploy, playWaypoint, playComplete, playAlert, playETAWarning, playDeliveryConfirm, toggleMute, isMuted: mutedRef };
 }

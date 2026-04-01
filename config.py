@@ -11,6 +11,8 @@ load_dotenv()
 
 # --- API Keys ---
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://chat.kxsb.org/api/v1")
 AIRSIM_ENABLED = os.getenv("AIRSIM_ENABLED", "false").lower() == "true"
 
 # --- Drone Settings ---

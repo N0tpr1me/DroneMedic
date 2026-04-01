@@ -32,6 +32,7 @@ interface ChatPanelProps {
   onStartDelivery: () => Promise<void>;
   onSimulateStorm: () => Promise<void>;
   onReset: () => void;
+  onAiChat?: (message: string) => Promise<string>;
   task: Task | null;
   route: RouteType | null;
   metrics: Metrics | null;
@@ -45,6 +46,7 @@ export function ChatPanel({
   onStartDelivery,
   onSimulateStorm,
   onReset,
+  onAiChat,
   task,
   route,
   metrics,
@@ -130,6 +132,18 @@ export function ChatPanel({
 
     addMessage({ type: 'user', content: userInput });
     setIsTyping(true);
+
+    // If we have onAiChat and either flying or conversational query, use AI
+    if (onAiChat && (status === 'flying' || /^(what|how|can|is|should|why|when|where|show|tell)/i.test(userInput))) {
+      try {
+        const reply = await onAiChat(userInput);
+        addMessage({ type: 'ai', content: reply });
+      } catch {
+        addMessage({ type: 'ai', content: 'I encountered an issue processing your request. Please try again.' });
+      }
+      setIsTyping(false);
+      return;
+    }
 
     try {
       const parsedTask = await onParseTask(userInput);

@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HeartPulse, PlaneTakeoff, ClipboardList, BarChart3, Settings as SettingsIcon, Plus, Minus, LocateFixed, Layers, Siren, Thermometer } from 'lucide-react';
+import { Plus, Minus, LocateFixed, Layers, Siren, Thermometer, Brain } from 'lucide-react';
+import { ChatPanel } from '../components/dashboard/ChatPanel';
 import { MapView } from '../components/dashboard/MapView';
 import type { MapCommand } from '../components/dashboard/MapView';
 import { FlightLog } from '../components/dashboard/FlightLog';
@@ -10,6 +11,7 @@ import { MetricsPanel } from '../components/dashboard/MetricsPanel';
 import { BootSequence } from '../components/dashboard/BootSequence';
 import { HudStatus } from '../components/ui/hud-status';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
+import { SideNav } from '../components/layout/SideNav';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { api } from '../lib/api';
 import type { Task, Route, Location, Weather, NoFlyZone, Metrics, FlightLogEntry } from '../lib/api';
@@ -28,13 +30,15 @@ export function Dashboard() {
   const [flightLog, setFlightLog] = useState<FlightLogEntry[]>([]);
   const [status, setStatus] = useState<MissionStatus>('idle');
   const [battery, setBattery] = useState(85);
-  const [currentLocation, setCurrentLocation] = useState('Depot');
+  const [_currentLocation, setCurrentLocation] = useState('Depot');
   const [droneProgress, setDroneProgress] = useState(0);
   const [missionProgress, setMissionProgress] = useState(72);
   const [mapCommand, setMapCommand] = useState<MapCommand | null>(null);
   const [tileLayerIndex, setTileLayerIndex] = useState(1);
   const [isCentered, setIsCentered] = useState(true);
+  const [userLocation, setUserLocation] = useState<{lat:number;lon:number}|null>(null);
   const { playDeploy, playWaypoint, playComplete } = useSoundEffects();
+  const [showChat, setShowChat] = useState(false);
   const [bootComplete, setBootComplete] = useState(false);
   const [locationsLoaded, setLocationsLoaded] = useState(false);
   const [weatherLoaded, setWeatherLoaded] = useState(false);
@@ -88,7 +92,7 @@ export function Dashboard() {
     catch { const r:Route = { ordered_route:['Depot','Royal London','Homerton','Whipps Cross','Depot'], ordered_routes:{Drone1:['Depot','Royal London','Homerton','Whipps Cross','Depot']}, total_distance:8400,estimated_time:180,battery_usage:42,no_fly_violations:[] }; setRoute(r); setReroute(null); setStatus('idle'); return r; }
   }, [task]);
 
-  const handleStartDelivery = useCallback(async () => {
+  const _handleStartDelivery = useCallback(async () => {
     if(!route) return;
     const stops = route.ordered_route;
 
@@ -168,10 +172,35 @@ export function Dashboard() {
     }
   }, [route, task, reroute, locations]);
 
-  const handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(85);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(72); }, []);
+  const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(85);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(72); }, []);
 
   const [sidebarInput, setSidebarInput] = useState('');
-  const handleSidebarSend = async () => { if(!sidebarInput.trim()) return; const t = await handleParseTask(sidebarInput.trim()); setSidebarInput(''); if(t) await handlePlanRoute(); };
+  const _handleSidebarSend = async () => { if(!sidebarInput.trim()) return; const t = await handleParseTask(sidebarInput.trim()); setSidebarInput(''); if(t) await handlePlanRoute(); };
+
+  const handleStartDelivery = _handleStartDelivery;
+  const handleReset = _handleReset;
+  const handleSimulateStorm = useCallback(async () => {
+    if (!route) return;
+    setStatus('rerouting');
+    try {
+      await api.simulateWeather('storm', ['Royal London']);
+      const w = await api.getWeather();
+      setWeather(w.weather);
+      // Recompute route avoiding stormy location
+      const remaining = route.ordered_route.filter(s => s !== 'Royal London' && s !== 'Depot');
+      const r = await api.computeRoute(['Depot', ...remaining, 'Depot'], task?.priorities ?? {});
+      setReroute(r.route);
+      setFlightLog((prev) => [...prev, { event: 'rerouted', location: 'Royal London', position: { x: 0, y: 0, z: -30 }, battery, timestamp: Date.now() / 1000 }]);
+      setStatus('flying');
+    } catch {
+      // Demo fallback: swap two middle stops to simulate reroute
+      const rerouted = [...route.ordered_route];
+      if (rerouted.length > 3) { const tmp = rerouted[1]; rerouted[1] = rerouted[2]; rerouted[2] = tmp; }
+      setReroute({ ...route, ordered_route: rerouted });
+      setFlightLog((prev) => [...prev, { event: 'rerouted', location: 'Royal London', position: { x: 0, y: 0, z: -30 }, battery, timestamp: Date.now() / 1000 }]);
+      setStatus('flying');
+    }
+  }, [route, battery, task]);
 
   // Boot sequence overlay
   if (!bootComplete) {
@@ -209,32 +238,15 @@ export function Dashboard() {
         </div>
       </header>
 
-      {/* ═══ LEFT NAV — Floating Liquid Glass Buttons with Labels ═══ */}
-      <div style={{position:'fixed',left:16,top:'50%',transform:'translateY(-50%)',zIndex:40,display:'flex',flexDirection:'column',gap:6}}>
-        {[
-          {icon:<HeartPulse size={22} fill="currentColor" />,label:'Dashboard',active:true,onClick:undefined},
-          {icon:<PlaneTakeoff size={22} />,label:'Deploy',active:false,onClick:()=>navigate('/deploy')},
-          {icon:<ClipboardList size={22} />,label:'Logs',active:false,onClick:undefined},
-          {icon:<BarChart3 size={22} />,label:'Analytics',active:false,onClick:undefined},
-        ].map(item=>(
-          <LiquidButton key={item.label} size="sm" onClick={item.onClick} style={{color:item.active?'#b3c5ff':'#c3c6d6',display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'10px 14px',height:'auto',minWidth:64}}>
-            {item.icon}
-            <span style={{fontSize:9,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em',opacity:item.active?1:0.7}}>{item.label}</span>
-          </LiquidButton>
-        ))}
-        <div style={{height:4}} />
-        <LiquidButton size="sm" onClick={()=>navigate('/settings')} style={{color:'#c3c6d6',display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'10px 14px',height:'auto',minWidth:64}}>
-          <SettingsIcon size={22} />
-          <span style={{fontSize:9,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em',opacity:0.7}}>Settings</span>
-        </LiquidButton>
-      </div>
+      {/* ═══ LEFT NAV ═══ */}
+      <SideNav currentPage="dashboard" />
 
 
       {/* ═══ MAIN MAP AREA ═══ */}
-      <main style={{marginLeft:0,paddingTop:0,height:'100vh',width:'100vw',position:'relative',overflow:'hidden'}}>
+      <main onClick={() => { if (showChat) setShowChat(false); }} style={{marginLeft:0,paddingTop:0,height:'100vh',width:'100vw',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,zIndex:0}}>
           {Object.keys(locations).length > 0 ? (
-            <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={noFlyZones} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} />
+            <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={noFlyZones} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} />
           ) : (
             <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100%'}}>
               <div style={{width:32,height:32,border:'2px solid #b3c5ff',borderTop:'2px solid transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}} />
@@ -325,6 +337,9 @@ export function Dashboard() {
 
         {/* ── BOTTOM RIGHT CONTROLS ── */}
         <div style={{position:'fixed',bottom:24,right:24,zIndex:20,display:'flex',flexDirection:'column',gap:8}}>
+          <LiquidButton size="sm" onClick={() => setShowChat(prev => !prev)} aria-label="Toggle AI Copilot" style={{ color: showChat ? '#00daf3' : '#c3c6d6' }}>
+            <Brain size={20} />
+          </LiquidButton>
           <LiquidButton onClick={()=>setMapCommand({type:'zoom-in'})} size="icon" style={{color:'#dfe3e9'}}>
             <Plus size={20} />
           </LiquidButton>
@@ -332,7 +347,10 @@ export function Dashboard() {
             <Minus size={20} />
           </LiquidButton>
           <div style={{height:8}} />
-          <LiquidButton onClick={()=>{const d=locations['Depot'];if(d){setMapCommand({type:'center-depot',lat:d.lat,lon:d.lon});setIsCentered(true);}}} size="icon" style={{color:isCentered?'#b3c5ff':'#6b7280',transition:'color 0.3s'}}>
+          <LiquidButton onClick={()=>{
+            if(userLocation){setMapCommand({type:'center-user',lat:userLocation.lat,lon:userLocation.lon});setIsCentered(true);}
+            else{const d=locations['Depot'];if(d){setMapCommand({type:'center-depot',lat:d.lat,lon:d.lon});setIsCentered(true);}}
+          }} size="icon" style={{color:isCentered?'#b3c5ff':'#6b7280',transition:'color 0.3s'}}>
             <LocateFixed size={20} />
           </LiquidButton>
           <LiquidButton onClick={()=>setTileLayerIndex(i=>i+1)} size="icon" style={{color:'#dfe3e9'}}>
@@ -340,6 +358,26 @@ export function Dashboard() {
           </LiquidButton>
         </div>
       </main>
+
+      <motion.div
+        initial={false}
+        animate={{ x: showChat ? 0 : 380 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        style={{ position: 'fixed', right: 0, top: 64, bottom: 0, width: 380, zIndex: 30, background: 'rgba(10,15,19,0.95)', borderLeft: '1px solid rgba(67,70,84,0.2)', backdropFilter: 'blur(24px)', pointerEvents: showChat ? 'auto' : 'none' }}
+      >
+        <ChatPanel
+          onParseTask={handleParseTask}
+          onPlanRoute={handlePlanRoute}
+          onStartDelivery={handleStartDelivery}
+          onSimulateStorm={handleSimulateStorm}
+          onReset={handleReset}
+          task={task}
+          route={route}
+          metrics={metrics}
+          flightLog={flightLog}
+          status={status}
+        />
+      </motion.div>
 
     </div>
   );

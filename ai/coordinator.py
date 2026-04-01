@@ -8,9 +8,9 @@ conversation support.
 
 import json
 import re
-import anthropic
+from openai import OpenAI
 
-from config import ANTHROPIC_API_KEY
+from config import OPENAI_API_KEY, OPENAI_BASE_URL
 from ai.prompts import (
     COORDINATOR_SYSTEM_PROMPT,
     WHAT_IF_SYSTEM_PROMPT,
@@ -28,9 +28,9 @@ class MissionCoordinator:
     """
 
     def __init__(self, api_key: str = None):
-        self._client = anthropic.Anthropic(api_key=api_key or ANTHROPIC_API_KEY)
+        self._client = OpenAI(api_key=api_key or OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
         self._conversation = ConversationState()
-        self._model = "claude-sonnet-4-6"
+        self._model = "azure/gpt-5.3-chat"
 
     def parse_request(self, user_input: str) -> dict:
         """
@@ -223,15 +223,15 @@ class MissionCoordinator:
     # --- Internal methods ---
 
     def _call_llm(self, system: str, messages: list[dict]) -> str:
-        """Make an API call to Claude."""
+        """Make an API call to GPT-5.3."""
         try:
-            response = self._client.messages.create(
+            openai_messages = [{"role": "system", "content": system}] + messages
+            response = self._client.chat.completions.create(
                 model=self._model,
                 max_tokens=2048,
-                system=system,
-                messages=messages,
+                messages=openai_messages,
             )
-            return response.content[0].text.strip()
+            return response.choices[0].message.content.strip()
         except Exception as e:
             from ai.error_analysis import log_error, ErrorType
             input_text = messages[-1]["content"] if messages else ""

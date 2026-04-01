@@ -7,15 +7,19 @@ Exposes route planning, weather, geofence, drone control, and AI parsing as HTTP
 
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
 from contextlib import asynccontextmanager
+from datetime import datetime
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from openai import OpenAI
 from pydantic import BaseModel
 
-from config import LOCATIONS, VALID_LOCATIONS, NO_FLY_ZONES
+from config import LOCATIONS, VALID_LOCATIONS, NO_FLY_ZONES, OPENAI_API_KEY, OPENAI_BASE_URL
 from backend.route_planner import compute_route, recompute_route
 from backend.weather_service import (
     get_all_location_weather,
@@ -93,6 +97,61 @@ class MetricsRequest(BaseModel):
     reroute_successes: int = 0
     obstacles_avoided: int = 0
     obstacles_total: int = 0
+
+
+class ChatRequest(BaseModel):
+    message: str
+    context: dict = {}
+
+
+class GenerateReportRequest(BaseModel):
+    metrics: dict
+    mission_summary: dict = {}
+
+
+class RiskScoreRequest(BaseModel):
+    route: list[str]
+    weather: dict = {}
+    battery: float = 100.0
+    payload_priority: str = "normal"
+
+
+class NarrateRequest(BaseModel):
+    event: dict
+    context: dict = {}
+
+
+class PayloadStatusRequest(BaseModel):
+    payload_type: str = "blood"
+    elapsed_minutes: float = 0.0
+    conditions: dict = {}
+
+
+class MissionComparisonRequest(BaseModel):
+    route: dict = {}
+    locations: list[str] = []
+
+
+class ConfirmDeliveryRequest(BaseModel):
+    mission_id: str = "MISSION-001"
+    recipient: str
+    recipient_role: str
+    condition_on_arrival: str = "intact"
+
+
+# ── GPT Helper ───────────────────────────────────────────────────────
+
+def _call_gpt(system: str, user_message: str) -> str:
+    client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
+    response = client.chat.completions.create(
+        model="azure/gpt-5.3-chat",
+        max_tokens=1024,
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": user_message},
+        ],
+    )
+    return response.choices[0].message.content.strip()
 
 
 # ── Endpoints ──────────────────────────────────────────────────────
@@ -229,6 +288,189 @@ def api_naive_baseline(locations: str) -> dict:
     loc_list = [loc.strip() for loc in locations.split(",")]
     result = compute_naive_baseline(loc_list)
     return {"baseline": result}
+
+
+@app.post("/api/chat")
+def api_chat(req: ChatRequest) -> dict:
+    """Chat with the AI Mission Coordinator."""
+    try:
+        from ai.coordinator import MissionCoordinator
+        coordinator = MissionCoordinator()
+        result = coordinator.converse(req.message)
+        return {"reply": result["response"]}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Chat failed: {e}")
+
+
+@app.post("/api/generate-report")
+def api_generate_report(req: GenerateReportRequest) -> dict:
+    """Generate a post-flight mission report using GPT-5.3."""
+    try:
+        system = (
+            "You are a DroneMedic post-flight analyst for NHS hospital administrators. "
+            "Given performance metrics and mission data, write a concise 3-5 sentence "
+            "mission report covering: delivery outcome vs clinical deadline, route "
+            "efficiency, any incidents encountered, and recommendation for future "
+            "operations. Be direct and data-driven."
+        )
+        user_message = json.dumps({"metrics": req.metrics, "mission_summary": req.mission_summary})
+        report = _call_gpt(system, user_message)
+        return {"report": report}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Report generation failed: {e}")
+
+
+@app.post("/api/weather-briefing")
+def api_weather_briefing() -> dict:
+    """Generate an AI weather briefing for all locations."""
+    try:
+        weather_data = get_all_location_weather()
+        system = (
+            "You are a DroneMedic weather analyst advising hospital operations. "
+            "For each location, state: flyable or not, specific risk (wind/rain/visibility), "
+            "and recommended action. Be direct — lives depend on this."
+        )
+        user_message = json.dumps(weather_data)
+        briefing = _call_gpt(system, user_message)
+        return {"briefing": briefing}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Weather briefing failed: {e}")
+
+
+@app.post("/api/risk-score")
+def api_risk_score(req: RiskScoreRequest) -> dict:
+    """Compute an AI-generated risk score for a delivery route."""
+    try:
+        system = (
+            "You are a DroneMedic risk analyst. Given route, weather, battery, and "
+            "payload priority, return a JSON object with: score (0-100 integer), "
+            "level (low/medium/high/critical), factors (list of risk factor strings), "
+            "recommendation (string), contingency (string describing backup plan). "
+            "Return ONLY valid JSON."
+        )
+        user_message = json.dumps({
+            "route": req.route,
+            "weather": req.weather,
+            "battery": req.battery,
+            "payload_priority": req.payload_priority,
+        })
+        raw = _call_gpt(system, user_message)
+        try:
+            parsed = json.loads(raw)
+        except json.JSONDecodeError:
+            parsed = {
+                "score": 25,
+                "level": "low",
+                "factors": ["Unable to assess — using default"],
+                "recommendation": "Proceed with caution",
+                "contingency": "Backup drone on standby",
+            }
+        return {"risk": parsed}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Risk scoring failed: {e}")
+
+
+@app.post("/api/narrate")
+def api_narrate(req: NarrateRequest) -> dict:
+    """Generate live flight narration for a drone event."""
+    try:
+        system = (
+            "You are a DroneMedic flight narrator providing live mission commentary "
+            "for hospital operations staff. Given a drone flight event and mission "
+            "context, write a brief (1-2 sentences), professional narration. Include "
+            "relevant details like payload type, location names, and any weather or "
+            "obstacle factors. Be concise and informative."
+        )
+        user_message = json.dumps({"event": req.event, "context": req.context})
+        narration = _call_gpt(system, user_message)
+        return {"narration": narration}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Narration failed: {e}")
+
+
+@app.post("/api/payload-status")
+def api_payload_status(req: PayloadStatusRequest) -> dict:
+    """Simulate payload condition based on elapsed time and conditions."""
+    profiles = {
+        "blood": {"safe_min": 2.0, "safe_max": 6.0, "max_time": 240, "base_temp": 4.0, "drift": 0.005},
+        "insulin": {"safe_min": 2.0, "safe_max": 8.0, "max_time": 480, "base_temp": 5.0, "drift": 0.003},
+    }
+    default_profile = {"safe_min": 15.0, "safe_max": 25.0, "max_time": 600, "base_temp": 20.0, "drift": 0.002}
+    profile = profiles.get(req.payload_type, default_profile)
+
+    wind_speed = req.conditions.get("wind", 0)
+    wind_factor = 2.0 if wind_speed > 15 else 1.0
+
+    temp = profile["base_temp"] + (profile["drift"] * req.elapsed_minutes * wind_factor)
+
+    safe_min = profile["safe_min"]
+    safe_max = profile["safe_max"]
+    if temp < safe_min or temp > safe_max:
+        integrity = "compromised"
+    elif temp < (safe_min + 1.0) or temp > (safe_max - 1.0):
+        integrity = "warning"
+    else:
+        integrity = "nominal"
+
+    remaining = profile["max_time"] - req.elapsed_minutes
+
+    return {
+        "temperature_c": round(temp, 1),
+        "integrity": integrity,
+        "time_remaining_minutes": round(remaining, 1),
+    }
+
+
+@app.post("/api/mission-comparison")
+def api_mission_comparison(req: MissionComparisonRequest) -> dict:
+    """Compare drone delivery against helicopter and ambulance alternatives."""
+    drone_time = req.route.get("estimated_time", 180) / 60  # seconds to minutes
+    drone_cost = 340  # fixed GBP
+
+    helicopter_time = drone_time * 1.5
+    helicopter_cost = 8200
+    helicopter_available = False  # grounded by weather in demo
+
+    ambulance_time = drone_time * 5
+    ambulance_cost = 180
+
+    return {
+        "comparison": {
+            "drone": {
+                "time_minutes": round(drone_time, 1),
+                "cost_gbp": drone_cost,
+                "available": True,
+            },
+            "helicopter": {
+                "time_minutes": round(helicopter_time, 1),
+                "cost_gbp": helicopter_cost,
+                "available": helicopter_available,
+            },
+            "ambulance": {
+                "time_minutes": round(ambulance_time, 1),
+                "cost_gbp": ambulance_cost,
+                "available": True,
+            },
+        }
+    }
+
+
+@app.post("/api/confirm-delivery")
+def api_confirm_delivery(req: ConfirmDeliveryRequest) -> dict:
+    """Generate a delivery confirmation receipt."""
+    ts = datetime.utcnow().isoformat() + "Z"
+    raw = f"{req.recipient}{ts}"
+    signature_id = "SIG-" + hashlib.sha256(raw.encode()).hexdigest()[:8]
+
+    return {
+        "confirmation": {
+            "timestamp": ts,
+            "recipient": req.recipient,
+            "recipient_role": req.recipient_role,
+            "condition": req.condition_on_arrival,
+            "signature_id": signature_id,
+        }
+    }
 
 
 @app.get("/api/health")
