@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, HeartPulse, PlaneTakeoff, ClipboardList, BarChart3, Settings, Route as RouteIcon } from 'lucide-react';
+import { PlaneTakeoff, Route as RouteIcon } from 'lucide-react';
 import { PromptInputBox } from '@/components/ui/ai-prompt-box';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
-import { HudStatus } from '../components/ui/hud-status';
+import { SideNav } from '../components/layout/SideNav';
+import { PageHeader } from '../components/layout/PageHeader';
 import { api } from '../lib/api';
 import type { Task, Route } from '../lib/api';
 
@@ -149,36 +150,10 @@ export function Deploy() {
     <div style={{ height: '100vh', background: '#0a0f13', display: 'flex', flexDirection: 'column', color: '#dfe3e9', fontFamily: 'Inter, sans-serif' }}>
 
       {/* Header */}
-      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', height: 64, borderBottom: '1px solid rgba(67,70,84,0.15)', background: 'rgba(15,20,24,0.80)', backdropFilter: 'blur(20px)', flexShrink: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span onClick={() => navigate('/dashboard')} style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 900, color: '#dfe3e9', textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer' }}>DroneMedic</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <PlaneTakeoff size={20} style={{ color: '#00daf3' }} />
-          <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700, color: '#dfe3e9', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>Mission Planning</h1>
-        </div>
-        <HudStatus variant={currentRoute ? 'completed' : currentTask ? 'planning' : 'idle'} />
-      </header>
+      <PageHeader title="Mission Planning" icon={PlaneTakeoff} statusVariant={currentRoute ? 'completed' : currentTask ? 'planning' : 'idle'} />
 
-      {/* ═══ LEFT NAV — Floating Liquid Glass Buttons with Labels ═══ */}
-      <div style={{position:'fixed',left:16,top:'50%',transform:'translateY(-50%)',zIndex:40,display:'flex',flexDirection:'column',gap:6}}>
-        {[
-          {icon:<HeartPulse size={22} />,label:'Dashboard',active:false,onClick:()=>navigate('/dashboard')},
-          {icon:<PlaneTakeoff size={22} fill="currentColor" />,label:'Deploy',active:true,onClick:undefined},
-          {icon:<ClipboardList size={22} />,label:'Logs',active:false,onClick:undefined},
-          {icon:<BarChart3 size={22} />,label:'Analytics',active:false,onClick:undefined},
-        ].map(item=>(
-          <LiquidButton key={item.label} size="sm" onClick={item.onClick} style={{color:item.active?'#b3c5ff':'#c3c6d6',display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'10px 14px',height:'auto',minWidth:64}}>
-            {item.icon}
-            <span style={{fontSize:9,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em',opacity:item.active?1:0.7}}>{item.label}</span>
-          </LiquidButton>
-        ))}
-        <div style={{height:4}} />
-        <LiquidButton size="sm" onClick={()=>navigate('/settings')} style={{color:'#c3c6d6',display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'10px 14px',height:'auto',minWidth:64}}>
-          <Settings size={22} />
-          <span style={{fontSize:9,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em',opacity:0.7}}>Settings</span>
-        </LiquidButton>
-      </div>
+      {/* ═══ LEFT NAV ═══ */}
+      <SideNav currentPage="deploy" />
 
       {/* Chat Messages */}
       <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: '24px 0' }}>

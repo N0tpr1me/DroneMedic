@@ -9,8 +9,8 @@ Maintains backward-compatible API for existing callers (main.py, dashboard.py).
 """
 
 import json
-import anthropic
-from config import ANTHROPIC_API_KEY, VALID_LOCATIONS
+from openai import OpenAI
+from config import OPENAI_API_KEY, OPENAI_BASE_URL, VALID_LOCATIONS
 from ai.preprocessor import normalize_input, fuzzy_match_location
 from ai.confidence import score_confidence
 from ai.error_analysis import log_error, ErrorType
@@ -103,20 +103,22 @@ def _legacy_parse(user_input: str, include_confidence: bool = False) -> dict:
     if len(user_input) > 2000:
         user_input = user_input[:2000]
 
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
 
     try:
-        response = client.messages.create(
-            model="claude-sonnet-4-6",
+        response = client.chat.completions.create(
+            model="azure/gpt-5.3-chat",
             max_tokens=1024,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_input}],
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": user_input},
+            ],
         )
     except Exception as e:
         log_error(ErrorType.API_ERROR, str(e), user_input)
         raise
 
-    raw_text = response.content[0].text.strip()
+    raw_text = response.choices[0].message.content.strip()
 
     # Parse JSON response
     task = _parse_json_response(raw_text, user_input, client)
@@ -149,17 +151,17 @@ def _legacy_parse(user_input: str, include_confidence: bool = False) -> dict:
 
 
 def _parse_json_response(raw_text: str, user_input: str, client) -> dict:
-    """Parse JSON from Claude's response, with retry on failure."""
+    """Parse JSON from GPT response, with retry on failure."""
     try:
         return json.loads(raw_text)
     except json.JSONDecodeError:
         log_error(ErrorType.JSON_PARSE_FAILURE, "First attempt failed", user_input, raw_text, attempt_number=1)
 
-        retry_response = client.messages.create(
-            model="claude-sonnet-4-6",
+        retry_response = client.chat.completions.create(
+            model="azure/gpt-5.3-chat",
             max_tokens=1024,
-            system=SYSTEM_PROMPT,
             messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_input},
                 {"role": "assistant", "content": raw_text},
                 {
@@ -168,7 +170,7 @@ def _parse_json_response(raw_text: str, user_input: str, client) -> dict:
                 },
             ],
         )
-        retry_text = retry_response.content[0].text.strip()
+        retry_text = retry_response.choices[0].message.content.strip()
         try:
             return json.loads(retry_text)
         except json.JSONDecodeError as e:

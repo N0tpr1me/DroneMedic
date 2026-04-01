@@ -6,6 +6,8 @@ import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { Dashboard } from './pages/Dashboard';
 import { Deploy } from './pages/Deploy';
+import { Logs } from './pages/Logs';
+import { Analytics } from './pages/Analytics';
 import { Settings } from './pages/Settings';
 import { VerifyEmail } from './pages/VerifyEmail';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -16,12 +18,14 @@ function AppRoutes() {
   const isAuth = location.pathname === '/login' || location.pathname === '/signup' || location.pathname === '/verify-email';
   const isDashboard = location.pathname === '/dashboard';
   const isDeploy = location.pathname === '/deploy';
+  const isAnalytics = location.pathname === '/analytics';
+  const isLogs = location.pathname === '/logs';
   const isSettings = location.pathname === '/settings';
 
   return (
     <>
-      {/* Landing, login/signup, dashboard, deploy, and settings have their own headers */}
-      {!isLanding && !isAuth && !isDashboard && !isDeploy && !isSettings && <Navbar />}
+      {/* Landing, login/signup, dashboard, deploy, logs, and settings have their own headers */}
+      {!isLanding && !isAuth && !isDashboard && !isDeploy && !isLogs && !isAnalytics && !isSettings && <Navbar />}
       <AnimatePresence mode="wait">
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -30,6 +34,8 @@ function AppRoutes() {
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/deploy" element={<ProtectedRoute><Deploy /></ProtectedRoute>} />
+          <Route path="/logs" element={<ProtectedRoute><Logs /></ProtectedRoute>} />
+          <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         </Routes>
       </AnimatePresence>

@@ -2,9 +2,10 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
-import { HeartPulse, PlaneTakeoff, ClipboardList, BarChart3, Settings as SettingsIcon, User, MapPin, Lock, LogOut, RotateCcw, KeyRound } from 'lucide-react';
+import { Settings as SettingsIcon, User, MapPin, Lock, LogOut, RotateCcw, KeyRound, PlaneTakeoff } from 'lucide-react';
 import { HudStatus } from '../components/ui/hud-status';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
+import { SideNav } from '../components/layout/SideNav';
 import { useSettings } from '../hooks/useSettings';
 import { useAuth } from '../hooks/useAuth';
 
@@ -174,27 +175,10 @@ export function Settings() {
       </header>
 
       {/* ═══ LEFT NAV ═══ */}
-      <div style={{ position: 'fixed', left: 16, top: '50%', transform: 'translateY(-50%)', zIndex: 40, display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {[
-          { icon: <HeartPulse size={22} />, label: 'Dashboard', active: false, onClick: () => navigate('/dashboard') },
-          { icon: <PlaneTakeoff size={22} />, label: 'Deploy', active: false, onClick: () => navigate('/deploy') },
-          { icon: <ClipboardList size={22} />, label: 'Logs', active: false, onClick: undefined },
-          { icon: <BarChart3 size={22} />, label: 'Analytics', active: false, onClick: undefined },
-        ].map(item => (
-          <LiquidButton key={item.label} size="sm" onClick={item.onClick} style={{ color: item.active ? '#b3c5ff' : '#c3c6d6', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '10px 14px', height: 'auto', minWidth: 64 }}>
-            {item.icon}
-            <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: item.active ? 1 : 0.7 }}>{item.label}</span>
-          </LiquidButton>
-        ))}
-        <div style={{ height: 4 }} />
-        <LiquidButton size="sm" style={{ color: '#b3c5ff', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '10px 14px', height: 'auto', minWidth: 64 }}>
-          <SettingsIcon size={22} fill="currentColor" />
-          <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 1 }}>Settings</span>
-        </LiquidButton>
-      </div>
+      <SideNav currentPage="settings" />
 
       {/* ═══ MAIN CONTENT ═══ */}
-      <main style={{ marginLeft: 100, paddingTop: 80, height: '100vh', overflowY: 'auto', paddingBottom: 80 }}>
+      <main style={{ marginLeft: 100, paddingTop: 80, height: '100vh', overflowY: 'auto', paddingBottom: 80, position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: 780, margin: '0 auto', padding: '0 24px' }}>
 
           {/* Page title */}
