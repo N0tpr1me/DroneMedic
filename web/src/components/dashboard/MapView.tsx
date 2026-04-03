@@ -1,8 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Polyline, Polygon, CircleMarker, Popup, Marker, useMap } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { Location, Weather, NoFlyZone } from '../../lib/api';
+import hospitalsData from '../../data/hospitals.json';
+
+interface HospitalData {
+  name: string;
+  type: string;
+  address: string;
+  lat: number;
+  lon: number;
+  region: string;
+  beds: number;
+}
+
+const hospitals: HospitalData[] = hospitalsData as HospitalData[];
 
 // ── Custom drone icon ──
 const droneIcon = L.divIcon({
@@ -16,6 +30,19 @@ const droneIcon = L.divIcon({
   "></div>`,
   iconSize: [20, 20],
   iconAnchor: [10, 10],
+});
+
+const hospitalIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width: 10px; height: 10px;
+    background: #34d399;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    box-shadow: 0 0 6px rgba(52, 211, 153, 0.5);
+  "></div>`,
+  iconSize: [10, 10],
+  iconAnchor: [5, 5],
 });
 
 const clinicIcon = (color: string) => L.divIcon({
@@ -155,7 +182,8 @@ export type MapCommand =
   | { type: 'center-depot'; lat: number; lon: number }
   | { type: 'toggle-layer' }
   | { type: 'fly-to'; lat: number; lon: number; zoom?: number }
-  | { type: 'zoom-out-overview' };
+  | { type: 'zoom-out-overview' }
+  | { type: 'center-user'; lat: number; lon: number };
 
 const LEFT_NAV_WIDTH = 90;
 const RIGHT_HUD_WIDTH = 360;
@@ -225,6 +253,9 @@ function MapController({ command, onCommandHandled, depotLat, depotLon, onCenter
       case 'fly-to':
         centerWithOffset(map, command.lat, command.lon, command.zoom ?? map.getZoom());
         break;
+      case 'center-user':
+        centerWithOffset(map, command.lat, command.lon, 16);
+        break;
       case 'zoom-out-overview':
         map.flyTo(map.getCenter(), 12, { animate: true, duration: 1.5 });
         break;
@@ -237,57 +268,68 @@ function MapController({ command, onCommandHandled, depotLat, depotLon, onCenter
 }
 
 // ── User live location ──
-function UserLocation() {
+// Hardcoded override for demo — Icon Tower, 8 Portal Way, W3 6DU
+const USER_LOCATION_OVERRIDE: { lat: number; lon: number } | null = { lat: 51.5223, lon: -0.2618 };
+
+function UserLocation({ onUserLocation }: { onUserLocation?: (lat: number, lon: number) => void }) {
   const map = useMap();
   const markerRef = useRef<L.Marker | null>(null);
   const circleRef = useRef<L.Circle | null>(null);
 
   useEffect(() => {
+    const placeUser = (latitude: number, longitude: number, accuracy: number) => {
+      onUserLocation?.(latitude, longitude);
+      const latlng: L.LatLngExpression = [latitude, longitude];
+
+      if (!markerRef.current) {
+        const userIcon = L.divIcon({
+          className: '',
+          html: `<div style="
+            width: 14px; height: 14px;
+            background: #4285F4;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 10px rgba(66,133,244,0.6), 0 0 20px rgba(66,133,244,0.3);
+          "></div>`,
+          iconSize: [14, 14],
+          iconAnchor: [7, 7],
+        });
+        markerRef.current = L.marker(latlng, { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
+        markerRef.current.bindPopup(
+          `<div style="color:#dfe3e9;background:#1b2024;padding:8px 12px;border-radius:8px;font-size:12px">
+            <div style="font-family:Space Grotesk;font-weight:700;font-size:13px;margin-bottom:4px">Your Location</div>
+            <div style="opacity:0.7;font-size:11px">Accuracy: ${Math.round(accuracy)}m</div>
+          </div>`
+        );
+      } else {
+        markerRef.current.setLatLng(latlng);
+      }
+
+      if (!circleRef.current) {
+        circleRef.current = L.circle(latlng, {
+          radius: accuracy,
+          color: '#4285F4',
+          fillColor: '#4285F4',
+          fillOpacity: 0.1,
+          weight: 1,
+          opacity: 0.3,
+        }).addTo(map);
+      } else {
+        circleRef.current.setLatLng(latlng);
+        circleRef.current.setRadius(accuracy);
+      }
+    };
+
+    // Use hardcoded override if set, otherwise fall back to browser geolocation
+    if (USER_LOCATION_OVERRIDE) {
+      placeUser(USER_LOCATION_OVERRIDE.lat, USER_LOCATION_OVERRIDE.lon, 10);
+      return;
+    }
+
     if (!navigator.geolocation) return;
 
     const watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        const { latitude, longitude, accuracy } = pos.coords;
-        const latlng: L.LatLngExpression = [latitude, longitude];
-
-        if (!markerRef.current) {
-          const userIcon = L.divIcon({
-            className: '',
-            html: `<div style="
-              width: 14px; height: 14px;
-              background: #4285F4;
-              border-radius: 50%;
-              border: 3px solid white;
-              box-shadow: 0 0 10px rgba(66,133,244,0.6), 0 0 20px rgba(66,133,244,0.3);
-            "></div>`,
-            iconSize: [14, 14],
-            iconAnchor: [7, 7],
-          });
-          markerRef.current = L.marker(latlng, { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
-          markerRef.current.bindPopup(
-            `<div style="color:#dfe3e9;background:#1b2024;padding:8px 12px;border-radius:8px;font-size:12px">
-              <div style="font-family:Space Grotesk;font-weight:700;font-size:13px;margin-bottom:4px">Your Location</div>
-              <div style="opacity:0.7;font-size:11px">Accuracy: ${Math.round(accuracy)}m</div>
-            </div>`
-          );
-        } else {
-          markerRef.current.setLatLng(latlng);
-        }
-
-        if (!circleRef.current) {
-          circleRef.current = L.circle(latlng, {
-            radius: accuracy,
-            color: '#4285F4',
-            fillColor: '#4285F4',
-            fillOpacity: 0.1,
-            weight: 1,
-            opacity: 0.3,
-          }).addTo(map);
-        } else {
-          circleRef.current.setLatLng(latlng);
-          circleRef.current.setRadius(accuracy);
-        }
-      },
+      (pos) => placeUser(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy),
       () => {},
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
     );
@@ -323,6 +365,7 @@ interface MapViewProps {
   onCommandHandled?: () => void;
   tileLayerIndex?: number;
   onCenteredChange?: (centered: boolean) => void;
+  onUserLocation?: (lat: number, lon: number) => void;
 }
 
 export function MapView({
@@ -338,6 +381,7 @@ export function MapView({
   onCommandHandled,
   tileLayerIndex = 0,
   onCenteredChange,
+  onUserLocation,
 }: MapViewProps) {
   const routeCoords: Array<[number, number]> = (route || [])
     .filter((name) => locations[name])
@@ -358,6 +402,9 @@ export function MapView({
       style={{ width: '100%', height: '100%' }}
       zoomControl={false}
       attributionControl={false}
+      maxBounds={[[-85, -180], [85, 180]]}
+      maxBoundsViscosity={1.0}
+      minZoom={3}
     >
       <TileLayer url={tileUrl} />
 
@@ -550,7 +597,49 @@ export function MapView({
       />
 
       {/* User's live location */}
-      <UserLocation />
+      <UserLocation onUserLocation={onUserLocation} />
+
+      {/* Global hospital markers (clustered) */}
+      <MarkerClusterGroup
+        chunkedLoading
+        maxClusterRadius={50}
+        spiderfyOnMaxZoom
+        showCoverageOnHover={false}
+        iconCreateFunction={(cluster: L.MarkerCluster) => {
+          const count = cluster.getChildCount();
+          return L.divIcon({
+            className: '',
+            html: `<div style="
+              display: flex; align-items: center; justify-content: center;
+              width: ${count > 50 ? 36 : 28}px; height: ${count > 50 ? 36 : 28}px;
+              background: rgba(52, 211, 153, 0.25);
+              border: 1.5px solid rgba(52, 211, 153, 0.6);
+              border-radius: 50%;
+              color: #34d399;
+              font-size: 11px;
+              font-weight: 700;
+              font-family: 'Space Grotesk', sans-serif;
+              backdrop-filter: blur(4px);
+            ">${count}</div>`,
+            iconSize: [count > 50 ? 36 : 28, count > 50 ? 36 : 28],
+            iconAnchor: [count > 50 ? 18 : 14, count > 50 ? 18 : 14],
+          });
+        }}
+      >
+        {hospitals.map((h) => (
+          <Marker key={`hospital-${h.name}`} position={[h.lat, h.lon]} icon={hospitalIcon}>
+            <Popup>
+              <div style={{ color: '#dfe3e9', background: '#1b2024', padding: '8px 12px', borderRadius: '8px', fontSize: '12px', minWidth: '160px' }}>
+                <div style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '13px', marginBottom: '4px', color: '#34d399' }}>{h.name}</div>
+                <div style={{ opacity: 0.7, fontSize: '11px', marginBottom: '2px' }}>{h.address}</div>
+                <div style={{ opacity: 0.6, fontSize: '10px' }}>
+                  {h.region} {h.beds > 0 ? `· ${h.beds} beds` : ''}
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 }

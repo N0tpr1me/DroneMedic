@@ -34,7 +34,6 @@ export function SideNav({ currentPage }: SideNavProps) {
           <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: item.page === currentPage ? 1 : 0.7 }}>{item.label}</span>
         </LiquidButton>
       ))}
-      <div style={{ height: 4 }} />
       <LiquidButton
         size="sm"
         onClick={() => navigate('/settings')}

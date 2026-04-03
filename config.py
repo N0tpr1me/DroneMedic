@@ -15,6 +15,37 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://chat.kxsb.org/api/v1")
 AIRSIM_ENABLED = os.getenv("AIRSIM_ENABLED", "false").lower() == "true"
 
+# --- PX4 SITL ---
+PX4_ENABLED = os.getenv("PX4_ENABLED", "false").lower() == "true"
+PX4_CONNECTION = os.getenv("PX4_CONNECTION", "udp://:14540")
+PX4_ALTITUDE_M = 30.0
+PX4_HOME_LAT = 51.5074   # Must match Depot lat
+PX4_HOME_LON = -0.1278   # Must match Depot lon
+
+# --- Google Maps ---
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY", "")
+
+# --- Drone Specifications ---
+DRONE_EMPTY_WEIGHT_KG = 2.5
+DRONE_MAX_PAYLOAD_KG = 5.0
+DRONE_CRUISE_SPEED_MS = 15.0   # m/s (~54 km/h)
+DRONE_MAX_ALTITUDE_M = 120.0   # UK air law
+BATTERY_DRAIN_RATE_BASE = 0.08      # % per meter (empty drone)
+BATTERY_DRAIN_RATE_PER_KG = 0.015   # additional % per meter per kg payload
+
+# --- Medical Supply Weights (kg) ---
+SUPPLY_WEIGHTS = {
+    "blood_pack": 0.5,
+    "vaccine_kit": 0.3,
+    "defibrillator": 2.0,
+    "first_aid": 1.0,
+    "medication": 0.2,
+    "insulin": 0.1,
+    "antivenom": 0.4,
+    "surgical_kit": 1.5,
+    "oxygen_tank": 3.0,
+}
+
 # --- Drone Settings ---
 DRONE_VELOCITY = 5          # m/s movement speed
 DRONE_ALTITUDE = -30        # AirSim uses NED (negative = up)
