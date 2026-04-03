@@ -79,6 +79,26 @@ LOCATIONS = {
         "lat": 51.5000, "lon": -0.1400,
         "description": "Disaster relief camp",
     },
+    "Royal London": {
+        "x": 100, "y": 50, "z": -30,
+        "lat": 51.5185, "lon": -0.0590,
+        "description": "Royal London Hospital — Major trauma centre",
+    },
+    "Homerton": {
+        "x": -50, "y": 150, "z": -30,
+        "lat": 51.5468, "lon": -0.0456,
+        "description": "Homerton Hospital — Urgent care facility",
+    },
+    "Newham General": {
+        "x": 200, "y": -30, "z": -30,
+        "lat": 51.5155, "lon": 0.0285,
+        "description": "Newham General Hospital — Trauma kit resupply",
+    },
+    "Whipps Cross": {
+        "x": -100, "y": -80, "z": -30,
+        "lat": 51.5690, "lon": 0.0066,
+        "description": "Whipps Cross Hospital — Cardiac unit",
+    },
 }
 
 # --- Valid Location Names (for AI parser validation) ---
