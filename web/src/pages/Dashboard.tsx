@@ -174,6 +174,15 @@ export function Dashboard() {
 
   const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(85);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(72); }, []);
 
+  const handleAiChat = useCallback(async (message: string): Promise<string> => {
+    try {
+      const r = await api.chat(message, { task: task ?? undefined, route: route ?? undefined, weather, flightLog });
+      return r.reply;
+    } catch {
+      return 'I\'m having trouble connecting to the AI service. Please try again.';
+    }
+  }, [task, route, weather, flightLog]);
+
   const [sidebarInput, setSidebarInput] = useState('');
   const _handleSidebarSend = async () => { if(!sidebarInput.trim()) return; const t = await handleParseTask(sidebarInput.trim()); setSidebarInput(''); if(t) await handlePlanRoute(); };
 
@@ -371,6 +380,7 @@ export function Dashboard() {
           onStartDelivery={handleStartDelivery}
           onSimulateStorm={handleSimulateStorm}
           onReset={handleReset}
+          onAiChat={handleAiChat}
           task={task}
           route={route}
           metrics={metrics}

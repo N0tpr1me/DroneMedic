@@ -1,0 +1,110 @@
+[
+  {
+    "name": "St Thomas' Hospital",
+    "type": "General",
+    "address": "Westminster Bridge Rd, London SE1 7EH",
+    "lat": 51.4986,
+    "lon": -0.1187,
+    "region": "Lambeth",
+    "beds": 840
+  },
+  {
+    "name": "Guy's Hospital",
+    "type": "General",
+    "address": "Great Maze Pond, London SE1 9RT",
+    "lat": 51.5042,
+    "lon": -0.0879,
+    "region": "Southwark",
+    "beds": 600
+  },
+  {
+    "name": "King's College Hospital",
+    "type": "Teaching",
+    "address": "Denmark Hill, London SE5 9RS",
+    "lat": 51.4684,
+    "lon": -0.0941,
+    "region": "Camberwell",
+    "beds": 950
+  },
+  {
+    "name": "Royal London Hospital",
+    "type": "General",
+    "address": "Whitechapel Rd, London E1 1FR",
+    "lat": 51.5186,
+    "lon": -0.0597,
+    "region": "Whitechapel",
+    "beds": 830
+  },
+  {
+    "name": "University College Hospital",
+    "type": "Teaching",
+    "address": "235 Euston Rd, London NW1 2BU",
+    "lat": 51.5246,
+    "lon": -0.1340,
+    "region": "Bloomsbury",
+    "beds": 665
+  },
+  {
+    "name": "Chelsea and Westminster Hospital",
+    "type": "General",
+    "address": "369 Fulham Rd, London SW10 9NH",
+    "lat": 51.4842,
+    "lon": -0.1814,
+    "region": "Chelsea",
+    "beds": 500
+  },
+  {
+    "name": "Imperial College Healthcare",
+    "type": "Teaching",
+    "address": "Praed St, London W2 1NY",
+    "lat": 51.5165,
+    "lon": -0.1745,
+    "region": "Paddington",
+    "beds": 1100
+  },
+  {
+    "name": "Moorfields Eye Hospital",
+    "type": "Specialist",
+    "address": "162 City Rd, London EC1V 2PD",
+    "lat": 51.5273,
+    "lon": -0.0879,
+    "region": "Islington",
+    "beds": 120
+  },
+  {
+    "name": "Great Ormond Street Hospital",
+    "type": "Children",
+    "address": "Great Ormond St, London WC1N 3JH",
+    "lat": 51.5225,
+    "lon": -0.1198,
+    "region": "Bloomsbury",
+    "beds": 415
+  },
+  {
+    "name": "Homerton University Hospital",
+    "type": "General",
+    "address": "Homerton Row, London E9 6SR",
+    "lat": 51.5473,
+    "lon": -0.0437,
+    "region": "Hackney",
+    "beds": 500
+  },
+  {
+    "name": "Whittington Hospital",
+    "type": "General",
+    "address": "Magdala Ave, London N19 5NF",
+    "lat": 51.5657,
+    "lon": -0.1388,
+    "region": "Archway",
+    "beds": 420
+  },
+  {
+    "name": "Royal Free Hospital",
+    "type": "Teaching",
+    "address": "Pond St, London NW3 2QG",
+    "lat": 51.5535,
+    "lon": -0.1654,
+    "region": "Hampstead",
+    "beds": 830
+  }
+]

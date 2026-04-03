@@ -63,7 +63,8 @@ export function Deploy() {
           await api.startDelivery(currentRoute.ordered_route);
           addMessage({ role: 'assistant', content: 'Drone deployed successfully! Redirecting to Live Ops...' });
           setTimeout(() => navigate('/dashboard'), 2000);
-        } catch {
+        } catch (err) {
+          console.error('startDelivery failed:', err);
           addMessage({ role: 'assistant', content: 'Drone deployed in demo mode. Redirecting to Live Ops...' });
           setTimeout(() => navigate('/dashboard'), 2000);
         }
@@ -85,7 +86,8 @@ export function Deploy() {
         const res = await api.computeRoute(currentTask.locations, currentTask.priorities);
         setCurrentRoute(res.route);
         addMessage({ role: 'assistant', content: `Route optimized: ${res.route.ordered_route.join(' → ')}\n\nDistance: ${res.route.total_distance}m | Time: ${res.route.estimated_time}s | Battery: ${res.route.battery_usage}%`, route: res.route });
-      } catch {
+      } catch (err) {
+        console.error('computeRoute failed:', err);
         const demoRoute: Route = {
           ordered_route: ['Depot', ...currentTask.locations, 'Depot'],
           ordered_routes: { Drone1: ['Depot', ...currentTask.locations, 'Depot'] },
@@ -112,7 +114,8 @@ export function Deploy() {
         const routeRes = await api.computeRoute(res.task.locations, res.task.priorities);
         setCurrentRoute(routeRes.route);
         addMessage({ role: 'assistant', content: `Route optimized: ${routeRes.route.ordered_route.join(' → ')}\n\nDistance: ${routeRes.route.total_distance}m | Time: ${routeRes.route.estimated_time}s | Battery: ${routeRes.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: routeRes.route });
-      } catch {
+      } catch (err) {
+        console.error('auto computeRoute failed:', err);
         const demoRoute: Route = {
           ordered_route: ['Depot', ...res.task.locations, 'Depot'],
           ordered_routes: { Drone1: ['Depot', ...res.task.locations, 'Depot'] },
@@ -121,7 +124,8 @@ export function Deploy() {
         setCurrentRoute(demoRoute);
         addMessage({ role: 'assistant', content: `Route computed: ${demoRoute.ordered_route.join(' → ')}\n\nDistance: 450m | Est. Time: 120s | Battery: 36%\n\nSay "deploy" to launch the drone.`, route: demoRoute });
       }
-    } catch {
+    } catch (err) {
+      console.error('parseTask failed:', err);
       const demoTask: Task = {
         locations: ['Royal London', 'Homerton', 'Whipps Cross'],
         priorities: { 'Royal London': 'high' },
