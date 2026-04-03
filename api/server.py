@@ -30,6 +30,8 @@ from backend.geofence import check_route_safety, get_no_fly_zones
 from backend.metrics import compute_metrics, compute_naive_baseline
 from simulation.drone_control import DroneController
 from simulation.obstacle_detector import check_for_obstacle, reset_obstacles
+from simulation.backend.voice_command import router as voice_router
+from simulation.backend.reasoning_stream import router as reasoning_router
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("DroneMedic.API")
@@ -55,6 +57,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(voice_router)
+app.include_router(reasoning_router)
 
 
 # ── Request / Response Models ──────────────────────────────────────

@@ -1,0 +1,3 @@
+[submodule "simulation/MAVLinkMCP"]
+	path = simulation/MAVLinkMCP
+	url = https://github.com/ion-g-ion/MAVLinkMCP.git

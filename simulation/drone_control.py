@@ -1,8 +1,9 @@
 """
 DroneMedic - Drone Controller
 
-Controls the drone via AirSim API or a mock mode for development.
-Mock mode logs movements to console and simulates delays without AirSim.
+Controls the drone via AirSim API, PX4 SITL (MAVSDK), or a mock mode for
+development.  Mock mode logs movements to console and simulates delays
+without any flight controller.
 """
 
 import math
@@ -11,28 +12,53 @@ import logging
 from config import (
     LOCATIONS, DRONE_VELOCITY, MOCK_MOVE_DELAY, AIRSIM_ENABLED,
     BATTERY_CAPACITY, BATTERY_DRAIN_RATE, BATTERY_MIN_RESERVE, DRONE_NAMES,
+    PX4_ENABLED, PX4_CONNECTION, PX4_ALTITUDE_M,
+    SUPPLY_WEIGHTS, BATTERY_DRAIN_RATE_BASE, BATTERY_DRAIN_RATE_PER_KG,
 )
 
 logger = logging.getLogger("DroneMedic.Drone")
 
 
+class DroneMode:
+    """Constants for supported flight-controller backends."""
+    MOCK = "mock"
+    AIRSIM = "airsim"
+    PX4 = "px4"
+
+
 class DroneController:
     """
-    Unified drone controller with AirSim and mock mode support.
+    Unified drone controller with AirSim, PX4 SITL, and mock mode support.
 
     Usage:
-        drone = DroneController(use_airsim=False)
+        drone = DroneController(mode=DroneMode.MOCK)
         drone.connect()
         drone.takeoff()
         drone.move_to("Clinic A")
+        drone.release_payload()
         drone.land()
     """
 
-    def __init__(self, use_airsim: bool = None):
-        if use_airsim is None:
-            use_airsim = AIRSIM_ENABLED
-        self.use_airsim = use_airsim
-        self.client = None
+    def __init__(self, use_airsim: bool = None, mode: str = None):
+        # --- Resolve backend mode -----------------------------------------
+        # Explicit *mode* param takes priority.  Fall back to *use_airsim*
+        # for backward compatibility.  Final fallback: auto-detect from env.
+        if mode is not None:
+            self.mode = mode
+        elif use_airsim is not None:
+            self.mode = DroneMode.AIRSIM if use_airsim else DroneMode.MOCK
+        elif PX4_ENABLED:
+            self.mode = DroneMode.PX4
+        elif AIRSIM_ENABLED:
+            self.mode = DroneMode.AIRSIM
+        else:
+            self.mode = DroneMode.MOCK
+
+        # Keep legacy flag in sync so existing code paths still work
+        self.use_airsim = self.mode == DroneMode.AIRSIM
+
+        self.client = None       # AirSim client (if applicable)
+        self._px4 = None         # PX4Adapter instance (if applicable)
         self.connected = False
         self.is_flying = False
         self.paused = False
@@ -40,10 +66,28 @@ class DroneController:
         self.position = {"x": 0.0, "y": 0.0, "z": 0.0}
         self.battery = BATTERY_CAPACITY   # percentage
         self.flight_log = []  # Track all movements
+        self._payload_kg = 0.0   # current payload weight
+
+        # Eagerly create PX4 adapter so connect() can use it
+        if self.mode == DroneMode.PX4:
+            try:
+                from simulation.px4_adapter import PX4Adapter
+                self._px4 = PX4Adapter(connection_url=PX4_CONNECTION)
+            except ImportError:
+                logger.warning("mavsdk not installed — falling back to mock mode")
+                self.mode = DroneMode.MOCK
 
     def connect(self):
-        """Establish connection to AirSim or initialize mock mode."""
-        if self.use_airsim:
+        """Establish connection to PX4, AirSim, or initialize mock mode."""
+        if self.mode == DroneMode.PX4:
+            try:
+                self._px4.connect_sync()
+                logger.info("Connected to PX4 SITL via MAVSDK")
+            except Exception as e:
+                logger.warning(f"PX4 connection failed ({e}), falling back to mock mode")
+                self.mode = DroneMode.MOCK
+                self._px4 = None
+        elif self.use_airsim:
             try:
                 import airsim
                 self.client = airsim.MultirotorClient()
@@ -58,7 +102,7 @@ class DroneController:
                 logger.warning(f"AirSim connection failed ({e}), falling back to mock mode")
                 self.use_airsim = False
 
-        if not self.use_airsim:
+        if self.mode != DroneMode.PX4 and not self.use_airsim:
             logger.info("[MOCK] Drone controller initialized (mock mode)")
 
         self.connected = True
@@ -69,7 +113,9 @@ class DroneController:
         if not self.connected:
             raise RuntimeError("Drone not connected. Call connect() first.")
 
-        if self.use_airsim:
+        if self.mode == DroneMode.PX4:
+            self._px4.takeoff_sync(PX4_ALTITUDE_M)
+        elif self.use_airsim:
             self.client.takeoffAsync().join()
         else:
             logger.info("[MOCK] Taking off...")
@@ -111,7 +157,12 @@ class DroneController:
             (target["y"] - self.position["y"]) ** 2
         )
 
-        if self.use_airsim:
+        if self.mode == DroneMode.PX4:
+            self._px4.goto_gps_sync(target["lat"], target["lon"], PX4_ALTITUDE_M)
+            # Get actual position from PX4 telemetry
+            pos = self._px4.get_position_sync()
+            self.position = {"x": target["x"], "y": target["y"], "z": target["z"]}
+        elif self.use_airsim:
             self.client.moveToPositionAsync(
                 target["x"], target["y"], target["z"],
                 DRONE_VELOCITY,
@@ -133,7 +184,9 @@ class DroneController:
 
     def get_position(self) -> dict:
         """Get current drone position."""
-        if self.use_airsim and self.client:
+        if self.mode == DroneMode.PX4 and self._px4:
+            return self._px4.get_position_sync()
+        elif self.use_airsim and self.client:
             state = self.client.getMultirotorState()
             pos = state.kinematics_estimated.position
             return {"x": pos.x_val, "y": pos.y_val, "z": pos.z_val}
@@ -146,7 +199,9 @@ class DroneController:
     def pause(self):
         """Pause drone (hover in place). Used for re-routing."""
         self.paused = True
-        if self.use_airsim and self.client:
+        if self.mode == DroneMode.PX4 and self._px4:
+            self._px4.hold_sync()
+        elif self.use_airsim and self.client:
             self.client.hoverAsync().join()
         logger.info("[PAUSED] Drone hovering - awaiting new route")
         self._log_event("paused")
@@ -159,7 +214,9 @@ class DroneController:
 
     def land(self):
         """Land the drone."""
-        if self.use_airsim and self.client:
+        if self.mode == DroneMode.PX4 and self._px4:
+            self._px4.land_sync()
+        elif self.use_airsim and self.client:
             self.client.landAsync().join()
             self.client.armDisarm(False)
             self.client.enableApiControl(False)
@@ -173,11 +230,44 @@ class DroneController:
 
     def get_battery(self) -> float:
         """Get current battery level (percentage)."""
+        if self.mode == DroneMode.PX4 and self._px4:
+            return self._px4.get_battery_sync()
         return self.battery
 
+    def release_payload(self):
+        """Release the current payload at the delivery location."""
+        if self.mode == DroneMode.PX4 and self._px4:
+            self._px4.release_payload_sync()
+        self._log_event("payload_released")
+        logger.info("Payload released")
+
+    def load_payload(self, supplies: list[str]) -> float:
+        """
+        Load supplies onto the drone and calculate total payload weight.
+
+        Args:
+            supplies: List of supply names to load.
+
+        Returns:
+            Total payload weight in kg.
+
+        Raises:
+            ValueError: If total weight exceeds DRONE_MAX_PAYLOAD_KG.
+        """
+        from config import DRONE_MAX_PAYLOAD_KG
+        total_kg = sum(SUPPLY_WEIGHTS.get(s, 0.5) for s in supplies)
+        if total_kg > DRONE_MAX_PAYLOAD_KG:
+            raise ValueError(f"Payload {total_kg:.1f}kg exceeds max {DRONE_MAX_PAYLOAD_KG}kg")
+        self._payload_kg = total_kg
+        self._log_event(f"payload_loaded:{total_kg:.1f}kg")
+        logger.info(f"Loaded payload: {supplies} ({total_kg:.1f}kg)")
+        return total_kg
+
     def _drain_battery(self, distance: float):
-        """Drain battery based on distance traveled."""
-        drain = distance * BATTERY_DRAIN_RATE
+        """Drain battery based on distance traveled, accounting for payload weight."""
+        payload = getattr(self, '_payload_kg', 0.0)
+        rate = BATTERY_DRAIN_RATE_BASE + (payload * BATTERY_DRAIN_RATE_PER_KG)
+        drain = distance * rate
         self.battery = max(0.0, self.battery - drain)
         if self.battery <= BATTERY_MIN_RESERVE:
             logger.warning(
@@ -219,11 +309,11 @@ class FleetController:
         fleet.execute_routes({"Drone1": [...], "Drone2": [...]})
     """
 
-    def __init__(self, num_drones: int = 1, use_airsim: bool = False):
+    def __init__(self, num_drones: int = 1, use_airsim: bool = False, mode: str = None):
         self.drones = {}
         for i in range(num_drones):
             name = DRONE_NAMES[i] if i < len(DRONE_NAMES) else f"Drone{i + 1}"
-            self.drones[name] = DroneController(use_airsim=use_airsim)
+            self.drones[name] = DroneController(use_airsim=use_airsim, mode=mode)
 
     def connect_all(self):
         """Connect all drones."""

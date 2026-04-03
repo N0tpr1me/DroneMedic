@@ -210,3 +210,4 @@ __marimo__/
 node_modules/
 web/dist/
 web/.env
+.mcp.json

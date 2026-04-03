@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import { Cloud, Wind, Droplets, Eye, AlertTriangle, CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Cloud, Wind, Droplets, Eye, AlertTriangle, CheckCircle, ChevronDown } from 'lucide-react';
 import { GlassPanel } from '../ui/GlassPanel';
 import type { Weather } from '../../lib/api';
 
@@ -8,14 +9,34 @@ interface WeatherPanelProps {
 }
 
 export function WeatherPanel({ weather }: WeatherPanelProps) {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
     <GlassPanel className="flex flex-col gap-3">
-      <div className="flex items-center gap-2 text-accent-blue">
-        <Cloud className="w-4 h-4" />
-        <span className="text-sm font-medium">Weather Status</span>
-      </div>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full cursor-pointer bg-transparent border-none p-0"
+      >
+        <div className="flex items-center gap-2 text-accent-blue">
+          <Cloud className="w-4 h-4" />
+          <span className="text-sm font-medium">Weather Status</span>
+        </div>
+        <ChevronDown
+          className="w-4 h-4 text-text-muted transition-transform duration-200"
+          style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)' }}
+        />
+      </button>
 
-      <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
         {Object.entries(weather).map(([name, w]) => (
           <motion.div
             key={name}
@@ -55,6 +76,9 @@ export function WeatherPanel({ weather }: WeatherPanelProps) {
           </motion.div>
         ))}
       </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </GlassPanel>
   );
 }

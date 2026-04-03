@@ -33,7 +33,7 @@ export function DeliveryInput({ onSubmit, parsedTask, loading }: DeliveryInputPr
         className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-text-primary placeholder-text-muted resize-none h-24 focus:outline-none focus:border-accent-cyan/50 transition-colors"
       />
 
-      <Button onClick={handleSubmit} loading={loading} disabled={!input.trim()}>
+      <Button onClick={handleSubmit} disabled={loading || !input.trim()}>
         <Send className="w-4 h-4" />
         Parse with AI
       </Button>
