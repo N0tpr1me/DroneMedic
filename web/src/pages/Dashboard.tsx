@@ -13,6 +13,7 @@ import { HudStatus } from '../components/ui/hud-status';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { SideNav } from '../components/layout/SideNav';
 import { useSoundEffects } from '../hooks/useSoundEffects';
+import { useLiveMission } from '../hooks/useLiveMission';
 import { usePX4Telemetry } from '../hooks/usePX4Telemetry';
 import { DroneScene } from '../components/three/DroneScene';
 import { api } from '../lib/api';
@@ -40,6 +41,7 @@ export function Dashboard() {
   const [isCentered, setIsCentered] = useState(true);
   const [userLocation, setUserLocation] = useState<{lat:number;lon:number}|null>(null);
   const { playDeploy, playWaypoint, playComplete } = useSoundEffects();
+  const live = useLiveMission(route?.ordered_route);
   const { telemetry: px4Telemetry, connected: px4Connected, sendCommand: px4Command, source: telemetrySource } = usePX4Telemetry();
   const [show3D, setShow3D] = useState(false);
   const [showChat, setShowChat] = useState(false);
@@ -47,6 +49,26 @@ export function Dashboard() {
   const [locationsLoaded, setLocationsLoaded] = useState(false);
   const [weatherLoaded, setWeatherLoaded] = useState(false);
   const [noFlyLoaded, setNoFlyLoaded] = useState(false);
+
+  // Sync live WebSocket state into dashboard state
+  useEffect(() => {
+    if (live.missionStatus === 'flying' || live.missionStatus === 'completed' || live.missionStatus === 'paused') {
+      setStatus(live.missionStatus === 'flying' ? 'flying' : live.missionStatus as MissionStatus);
+      setDroneProgress(live.droneProgress);
+      setMissionProgress(live.missionProgress);
+      if (live.flightLog.length > 0) {
+        setFlightLog(live.flightLog);
+        const lastEntry = live.flightLog[live.flightLog.length - 1];
+        setBattery(Math.round(lastEntry.battery));
+        setCurrentLocation(lastEntry.location);
+      }
+      if (live.flightLog.length > 0) {
+        const last = live.flightLog[live.flightLog.length - 1];
+        if (last.event.startsWith('arrived:')) playWaypoint();
+        if (last.event === 'landed') playComplete();
+      }
+    }
+  }, [live.missionStatus, live.droneProgress, live.missionProgress, live.flightLog]);
 
   // Sync PX4/Unity telemetry into dashboard state (overrides live mission when connected)
   useEffect(() => {
@@ -107,86 +129,66 @@ export function Dashboard() {
   }, [task]);
 
   const _handleStartDelivery = useCallback(async () => {
-    if(!route) return;
+    if(!route || !task) return;
     const stops = route.ordered_route;
-
-    // ── CINEMATIC DEPLOY CHOREOGRAPHY ──
 
     // 1. Zoom to depot
     const depot = locations['Depot'];
     if(depot) setMapCommand({type:'fly-to', lat:depot.lat, lon:depot.lon, zoom:15});
-    await new Promise(r=>setTimeout(r,1200));
+    await new Promise(r=>setTimeout(r,800));
 
-    // 2. Start flying — deploy sound
+    // 2. Connect WebSocket for live updates
+    live.reset();
+    live.connect();
     playDeploy();
     setStatus('flying'); setDroneProgress(0); setMissionProgress(0);
+    setFlightLog([{event:'takeoff',location:'Depot',position:{x:0,y:0,z:-30},battery:100,timestamp:Date.now()/1000}]);
 
+    // 3. Deploy via backend (non-blocking — returns immediately, streams via WebSocket)
     try {
-      const r = await api.startDelivery(route.ordered_route);
-      setFlightLog(r.flight_log); setBattery(r.battery); setStatus('completed'); setDroneProgress(1); setMissionProgress(100);
-      if(task) { try { const m = await api.computeMetrics({flight_log:r.flight_log,optimized_route:route,locations:task.locations,reroute_count:reroute?1:0,reroute_successes:reroute?1:0}); setMetrics(m.metrics); } catch {} }
+      const deliveryItems = task.locations.map(loc => ({
+        destination: loc,
+        supply: task.supplies?.[loc] || '',
+        priority: task.priorities?.[loc] || 'normal',
+      }));
+      await api.deploy(deliveryItems);
+      // Live updates now arrive via WebSocket → useLiveMission → useEffect sync above
     } catch {
-      // Demo mode: cinematic simulated flight
-      const fakeLog:FlightLogEntry[] = [{event:'takeoff',location:'Depot',position:{x:0,y:0,z:-30},battery:100,timestamp:Date.now()/1000}];
-      let bat=100;
-
-      for(let i=1; i<stops.length; i++) {
-        bat -= 8;
-
-        // 3. Smooth progress animation (interpolate between waypoints)
-        const startProgress = (i-1)/(stops.length-1);
-        const endProgress = i/(stops.length-1);
-        const steps = 20;
-        for(let s=0; s<=steps; s++) {
-          const p = startProgress + (endProgress - startProgress) * (s/steps);
-          setDroneProgress(p);
-          setMissionProgress(Math.round(p*100));
-          await new Promise(r=>setTimeout(r, 75));
+      // Fallback: try the blocking start-delivery endpoint
+      try {
+        const r = await api.startDelivery(route.ordered_route);
+        setFlightLog(r.flight_log); setBattery(r.battery); setStatus('completed'); setDroneProgress(1); setMissionProgress(100);
+      } catch {
+        // Final fallback: cinematic demo
+        let bat = 100;
+        const fakeLog: FlightLogEntry[] = [{event:'takeoff',location:'Depot',position:{x:0,y:0,z:-30},battery:100,timestamp:Date.now()/1000}];
+        for(let i=1; i<stops.length; i++) {
+          bat -= 8;
+          const startP = (i-1)/(stops.length-1), endP = i/(stops.length-1);
+          for(let s=0; s<=20; s++) { setDroneProgress(startP + (endP-startP)*(s/20)); setMissionProgress(Math.round((startP + (endP-startP)*(s/20))*100)); await new Promise(r=>setTimeout(r,75)); }
+          const loc = locations[stops[i]];
+          if(loc) setMapCommand({type:'fly-to', lat:loc.lat, lon:loc.lon, zoom:15});
+          setCurrentLocation(stops[i]); setBattery(bat);
+          fakeLog.push({event: stops[i]==='Depot'?'landed':`arrived:${stops[i]}`, location:stops[i], position:{x:0,y:0,z:-30}, battery:bat, timestamp:Date.now()/1000});
+          setFlightLog([...fakeLog]); playWaypoint();
+          await new Promise(r=>setTimeout(r,800));
         }
-
-        // 4. Pan camera to follow drone at each waypoint
-        const loc = locations[stops[i]];
-        if(loc) setMapCommand({type:'fly-to', lat:loc.lat, lon:loc.lon, zoom:15});
-
-        setCurrentLocation(stops[i]);
-        setBattery(bat);
-        fakeLog.push({
-          event: stops[i]==='Depot' ? 'landed' : `arrived:${stops[i]}`,
-          location: stops[i],
-          position:{x:0,y:0,z:-30},
-          battery: bat,
-          timestamp: Date.now()/1000,
-        });
-        setFlightLog([...fakeLog]);
-
-        // Waypoint arrival ping
-        playWaypoint();
-
-        // Brief pause at waypoint for dramatic effect
-        await new Promise(r=>setTimeout(r, 800));
+        setMapCommand({type:'zoom-out-overview'}); playComplete(); setStatus('completed');
+        setMetrics({delivery_time_reduction:28.5,distance_reduction:22.3,throughput:stops.length-2,reroute_success_rate:100,total_distance_optimized:8400,total_distance_naive:12600,battery_used:100-bat,robustness_score:1.0,actual_flight_time_seconds:(stops.length-1)*1.5,estimated_time_seconds:180,naive_time_seconds:268});
       }
-
-      // 5. Completion: zoom out, play success chime
-      setMapCommand({type:'zoom-out-overview'});
-      playComplete();
-      setStatus('completed');
-      setMetrics({
-        delivery_time_reduction: 28.5,
-        distance_reduction: 22.3,
-        throughput: stops.length-2,
-        reroute_success_rate: 100,
-        total_distance_optimized: 8400,
-        total_distance_naive: 12600,
-        battery_used: 100-bat,
-        robustness_score: 1.0,
-        actual_flight_time_seconds: (stops.length-1)*1.5,
-        estimated_time_seconds: 180,
-        naive_time_seconds: 268,
-      });
     }
-  }, [route, task, reroute, locations]);
+  }, [route, task, reroute, locations, live]);
 
   const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(85);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(72); }, []);
+
+  const handleAiChat = useCallback(async (message: string): Promise<string> => {
+    try {
+      const r = await api.chat(message, { task: task ?? undefined, route: route ?? undefined, weather, flightLog });
+      return r.reply;
+    } catch {
+      return 'I\'m having trouble connecting to the AI service. Please try again.';
+    }
+  }, [task, route, weather, flightLog]);
 
   const [sidebarInput, setSidebarInput] = useState('');
   const _handleSidebarSend = async () => { if(!sidebarInput.trim()) return; const t = await handleParseTask(sidebarInput.trim()); setSidebarInput(''); if(t) await handlePlanRoute(); };
@@ -241,7 +243,7 @@ export function Dashboard() {
             <span style={{fontSize:9,textTransform:'uppercase',letterSpacing:'-0.02em',color:'#8d90a0',fontWeight:700}}>Drone Location</span>
             <span style={{fontSize:14,fontFamily:'Space Grotesk',fontWeight:700,color:'#dfe3e9'}}>
               {_currentLocation}
-              {px4Connected && <span style={{fontSize:10,color:'#00daf3',marginLeft:6}}>● {telemetrySource === 'unity' ? 'UNITY' : 'LIVE'}</span>}
+              {(live.connected || px4Connected) && <span style={{fontSize:10,color:'#00daf3',marginLeft:6}}>● {telemetrySource === 'unity' ? 'UNITY' : 'LIVE'}</span>}
             </span>
           </div>
           <div style={{height:32,width:1,background:'rgba(67,70,84,0.2)'}} />
@@ -290,7 +292,7 @@ export function Dashboard() {
               </div>
               <div>
                 <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Link</p>
-                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: px4Connected ? '#00daf3' : '#8d90a0',margin:0}}>{px4Connected ? (telemetrySource === 'unity' ? 'Unity 3D' : 'Live') : 'Idle'}</p>
+                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: (live.connected || px4Connected) ? '#00daf3' : '#8d90a0',margin:0}}>{(live.connected || px4Connected) ? (telemetrySource === 'unity' ? 'Unity 3D' : 'Live') : 'Idle'}</p>
               </div>
               <div>
                 <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Speed</p>
@@ -395,6 +397,7 @@ export function Dashboard() {
           onStartDelivery={handleStartDelivery}
           onSimulateStorm={handleSimulateStorm}
           onReset={handleReset}
+          onAiChat={handleAiChat}
           task={task}
           route={route}
           metrics={metrics}

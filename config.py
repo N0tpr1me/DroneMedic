@@ -33,6 +33,23 @@ DRONE_MAX_ALTITUDE_M = 120.0   # UK air law
 BATTERY_DRAIN_RATE_BASE = 0.08      # % per meter (empty drone)
 BATTERY_DRAIN_RATE_PER_KG = 0.015   # additional % per meter per kg payload
 
+# --- Aerospace Physics Constants (see backend/physics.py) ---
+# These are the source-of-truth values used by the physics engine.
+PHYSICS_AIRFRAME_MASS_KG = 8.0            # carbon-fibre hex frame + avionics
+PHYSICS_BATTERY_MASS_KG = 4.0             # 2x high-density LiPo packs
+PHYSICS_BATTERY_CAPACITY_WH = 800.0       # nominal energy at pack level
+PHYSICS_USABLE_BATTERY_FRACTION = 0.80    # safe discharge to ~20% SoC
+PHYSICS_RESERVE_BATTERY_FRACTION = 0.15   # of usable -- emergency divert + landing
+PHYSICS_NUM_ROTORS = 6
+PHYSICS_PROP_DIAMETER_M = 0.457           # 18-inch props
+PHYSICS_MAX_THRUST_PER_MOTOR_N = 60.0     # per motor at full throttle
+PHYSICS_CRUISE_ALTITUDE_M = 80.0          # operating altitude AGL
+PHYSICS_CLIMB_RATE_MS = 3.0
+PHYSICS_DESCENT_RATE_MS = 2.0
+PHYSICS_MAX_SAFE_WIND_MS = 12.0           # sustained wind abort threshold
+PHYSICS_MIN_OPERATING_TEMP_C = -10.0
+PHYSICS_MAX_OPERATING_TEMP_C = 45.0
+
 # --- Medical Supply Weights (kg) ---
 SUPPLY_WEIGHTS = {
     "blood_pack": 0.5,
@@ -79,6 +96,26 @@ LOCATIONS = {
         "lat": 51.5000, "lon": -0.1400,
         "description": "Disaster relief camp",
     },
+    "Royal London": {
+        "x": 100, "y": 50, "z": -30,
+        "lat": 51.5185, "lon": -0.0590,
+        "description": "Royal London Hospital - Major trauma centre",
+    },
+    "Homerton": {
+        "x": -50, "y": 150, "z": -30,
+        "lat": 51.5468, "lon": -0.0456,
+        "description": "Homerton Hospital - Urgent care facility",
+    },
+    "Newham General": {
+        "x": 200, "y": -30, "z": -30,
+        "lat": 51.5155, "lon": 0.0285,
+        "description": "Newham General Hospital - Trauma kit resupply",
+    },
+    "Whipps Cross": {
+        "x": -100, "y": -80, "z": -30,
+        "lat": 51.5690, "lon": 0.0066,
+        "description": "Whipps Cross Hospital - Cardiac unit",
+    },
 }
 
 # --- Valid Location Names (for AI parser validation) ---
@@ -95,8 +132,8 @@ PRIORITY_WEIGHT = 0.3
 # --- Weather ---
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY", "")
 WEATHER_ENABLED = os.getenv("WEATHER_ENABLED", "false").lower() == "true"
-MAX_WIND_SPEED = 15        # m/s — abort flight above this
-MAX_PRECIPITATION = 5      # mm/h — reroute above this
+MAX_WIND_SPEED = 15        # m/s - abort flight above this
+MAX_PRECIPITATION = 5      # mm/h - reroute above this
 
 # --- Battery ---
 BATTERY_CAPACITY = 100     # percent

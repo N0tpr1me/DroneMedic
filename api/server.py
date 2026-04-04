@@ -28,6 +28,16 @@ from backend.weather_service import (
 )
 from backend.geofence import check_route_safety, get_no_fly_zones
 from backend.metrics import compute_metrics, compute_naive_baseline
+from backend.physics import (
+    DroneSpec, FlightConditions, compute_mission_energy, compute_weather_penalty,
+    check_thrust_feasibility, compute_hover_power, compute_cruise_power,
+    compute_energy_per_km, compute_hover_energy_per_minute, compute_mtom,
+)
+from backend.safety import (
+    preflight_check, inflight_assessment, triage_route, weather_to_conditions,
+    classify_delivery, BatteryState, MissionAction,
+)
+from backend.mission_controller import MissionController
 from simulation.drone_control import DroneController
 from simulation.obstacle_detector import check_for_obstacle, reset_obstacles
 from simulation.backend.voice_command import router as voice_router
@@ -475,6 +485,161 @@ def api_confirm_delivery(req: ConfirmDeliveryRequest) -> dict:
             "condition": req.condition_on_arrival,
             "signature_id": signature_id,
         }
+    }
+
+
+# ── Physics / Safety Request Models ───────────────────────────────────
+
+class PhysicsCheckRequest(BaseModel):
+    route: list[str]
+    payload_kg: float = 2.5
+    headwind_ms: float = 0.0
+    crosswind_ms: float = 0.0
+    precipitation_mmh: float = 0.0
+    temperature_c: float = 18.0
+    turbulence: str = "calm"
+
+
+class TriageRequest(BaseModel):
+    route: list[str]
+    supplies: dict[str, str] = {}
+    priorities: dict[str, str] = {}
+    energy_available_wh: float = 544.0
+    payload_kg: float = 2.5
+    headwind_ms: float = 0.0
+
+
+class WeatherPenaltyRequest(BaseModel):
+    headwind_ms: float = 0.0
+    crosswind_ms: float = 0.0
+    precipitation_mmh: float = 0.0
+    temperature_c: float = 18.0
+    turbulence: str = "calm"
+
+
+# ── Physics / Safety Endpoints ────────────────────────────────────────
+
+@app.post("/api/physics/preflight")
+def api_preflight_check(req: PhysicsCheckRequest) -> dict:
+    """Run full 12-rule pre-flight go/no-go check with physics model."""
+    conditions = FlightConditions(
+        headwind_ms=req.headwind_ms,
+        crosswind_ms=req.crosswind_ms,
+        precipitation_mmh=req.precipitation_mmh,
+        temperature_c=req.temperature_c,
+        turbulence=req.turbulence,
+    )
+    result = preflight_check(req.route, req.payload_kg, conditions)
+    return {
+        "decision": result.decision,
+        "battery_state": result.battery_state.value if result.battery_state else None,
+        "checks": result.checks,
+        "failed_checks": result.failed_checks,
+        "recommendations": result.recommendations,
+        "energy_budget": result.energy_budget.__dict__ if result.energy_budget else None,
+        "weather_penalty": result.weather_penalty.__dict__ if result.weather_penalty else None,
+    }
+
+
+@app.post("/api/physics/energy-budget")
+def api_energy_budget(req: PhysicsCheckRequest) -> dict:
+    """Compute full mission energy budget using aerospace physics model."""
+    spec = DroneSpec()
+    conditions = FlightConditions(
+        headwind_ms=req.headwind_ms,
+        crosswind_ms=req.crosswind_ms,
+        precipitation_mmh=req.precipitation_mmh,
+        temperature_c=req.temperature_c,
+        turbulence=req.turbulence,
+    )
+    budget = compute_mission_energy(spec, req.payload_kg, req.route, conditions)
+    return {
+        "feasible": budget.feasible,
+        "ratio": budget.ratio,
+        "total_energy_wh": budget.total_wh,
+        "available_energy_wh": budget.available_wh,
+        "reserve_wh": budget.reserve_wh,
+        "cruise_wh": budget.cruise_wh,
+        "hover_wh": budget.hover_wh,
+        "climb_wh": budget.climb_wh,
+        "descent_wh": budget.descent_wh,
+        "flight_time_s": budget.flight_time_s,
+        "max_range_km": budget.max_range_km,
+        "details": budget.details,
+    }
+
+
+@app.post("/api/physics/weather-penalty")
+def api_weather_penalty(req: WeatherPenaltyRequest) -> dict:
+    """Compute weather penalty factors for current conditions."""
+    conditions = FlightConditions(
+        headwind_ms=req.headwind_ms,
+        crosswind_ms=req.crosswind_ms,
+        precipitation_mmh=req.precipitation_mmh,
+        temperature_c=req.temperature_c,
+        turbulence=req.turbulence,
+    )
+    wp = compute_weather_penalty(conditions)
+    return {
+        "flyable": wp.flyable,
+        "k_wind": wp.k_wind,
+        "k_precip": wp.k_precip,
+        "k_temp": wp.k_temp,
+        "k_turbulence": wp.k_turbulence,
+        "k_total": wp.k_total,
+        "reasons": wp.reasons,
+    }
+
+
+@app.get("/api/physics/drone-specs")
+def api_drone_specs() -> dict:
+    """Return current drone physical specifications."""
+    spec = DroneSpec()
+    return {
+        "airframe_mass_kg": spec.airframe_mass_kg,
+        "battery_mass_kg": spec.battery_mass_kg,
+        "battery_capacity_wh": spec.battery_capacity_wh,
+        "usable_energy_wh": spec.usable_energy_wh,
+        "reserve_energy_wh": spec.reserve_energy_wh,
+        "mission_energy_wh": spec.mission_energy_wh,
+        "max_payload_kg": spec.max_payload_kg,
+        "num_rotors": spec.num_rotors,
+        "disk_area_m2": round(spec.disk_area_m2, 4),
+        "max_thrust_n": spec.max_total_thrust_n,
+        "cruise_speed_ms": spec.cruise_speed_ms,
+        "endurance_speed_ms": spec.endurance_speed_ms,
+        "cruise_altitude_m": spec.cruise_altitude_m,
+    }
+
+
+@app.post("/api/physics/thrust-check")
+def api_thrust_check(payload_kg: float = 2.5) -> dict:
+    """Check thrust feasibility at given payload."""
+    return check_thrust_feasibility(DroneSpec(), payload_kg)
+
+
+@app.post("/api/physics/triage")
+def api_triage_route(req: TriageRequest) -> dict:
+    """Triage route by dropping lowest-priority stops until energy-feasible."""
+    conditions = FlightConditions(headwind_ms=req.headwind_ms) if req.headwind_ms > 0 else None
+    result = triage_route(
+        req.route, req.supplies, req.priorities,
+        req.energy_available_wh, DroneSpec(), req.payload_kg, conditions,
+    )
+    return result
+
+
+@app.get("/api/physics/power-profile")
+def api_power_profile(payload_kg: float = 2.5) -> dict:
+    """Return power consumption at different flight phases."""
+    spec = DroneSpec()
+    return {
+        "payload_kg": payload_kg,
+        "mtom_kg": compute_mtom(spec, payload_kg),
+        "hover_power_w": round(compute_hover_power(spec, payload_kg), 1),
+        "cruise_power_w": round(compute_cruise_power(spec, payload_kg), 1),
+        "energy_per_km_wh": round(compute_energy_per_km(spec, payload_kg), 1),
+        "hover_cost_per_min_wh": round(compute_hover_energy_per_minute(spec, payload_kg), 1),
     }
 
 

@@ -155,6 +155,14 @@ export const api = {
       body: JSON.stringify({ locations, priorities, num_drones: numDrones }),
     }),
 
+  /** One-shot deploy: create deliveries + schedule + start. Returns immediately. Live updates via WebSocket. */
+  deploy: (deliveries: Array<{ destination: string; supply?: string; priority?: string; time_window_minutes?: number }>) =>
+    request<{ status: string; deliveries: any[]; missions: any[] }>('/api/deploy', {
+      method: 'POST',
+      body: JSON.stringify({ deliveries }),
+    }),
+
+
   recomputeRoute: (
     currentLocation: string,
     remainingLocations: string[],
