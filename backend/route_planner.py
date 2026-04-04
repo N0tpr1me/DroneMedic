@@ -15,6 +15,15 @@ from config import (
 from backend.geofence import segment_crosses_no_fly_zone
 from backend.weather_service import get_weather_at_location, is_flyable
 
+# Physics engine (optional — degrades gracefully)
+_physics_available = False
+try:
+    from backend.physics import DroneSpec, FlightConditions, compute_mission_energy
+    from backend.safety import preflight_check, weather_to_conditions, classify_battery_state
+    _physics_available = True
+except ImportError:
+    pass
+
 # Cost multiplier for paths crossing no-fly zones (effectively blocks them)
 NO_FLY_PENALTY = 100
 # Cost multiplier for paths toward locations with bad weather
@@ -226,7 +235,7 @@ def compute_route(
     battery_usage = raw_total * BATTERY_DRAIN_RATE
     estimated_time = (raw_total / 5) + (len(primary_route) * 10)
 
-    return {
+    result = {
         "ordered_route": primary_route,
         "ordered_routes": ordered_routes,
         "total_distance": total_distance,
@@ -234,6 +243,34 @@ def compute_route(
         "battery_usage": round(battery_usage, 1),
         "no_fly_violations": [],
     }
+
+    # Attach physics feasibility if engine is available
+    if _physics_available:
+        try:
+            spec = DroneSpec()
+            # Build conditions from weather if available
+            conditions = FlightConditions()
+            if weather:
+                # Average weather across route for conservative estimate
+                for loc_name in primary_route:
+                    if loc_name in (weather or {}):
+                        conditions = weather_to_conditions(weather[loc_name])
+                        break
+
+            budget = compute_mission_energy(spec, 2.5, primary_route, conditions)
+            result["physics"] = {
+                "feasible": budget.feasible,
+                "energy_ratio": budget.ratio,
+                "battery_state": classify_battery_state(budget.ratio).value,
+                "energy_needed_wh": round(budget.total_wh, 1),
+                "energy_available_wh": round(budget.available_wh, 1),
+                "flight_time_s": round(budget.flight_time_s, 1),
+                "max_range_km": round(budget.max_range_km, 1),
+            }
+        except Exception:
+            pass  # Physics check is advisory — don't break route planning
+
+    return result
 
 
 def recompute_route(
