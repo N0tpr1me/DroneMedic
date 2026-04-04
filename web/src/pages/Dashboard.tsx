@@ -40,7 +40,7 @@ export function Dashboard() {
   const [isCentered, setIsCentered] = useState(true);
   const [userLocation, setUserLocation] = useState<{lat:number;lon:number}|null>(null);
   const { playDeploy, playWaypoint, playComplete } = useSoundEffects();
-  const { telemetry: px4Telemetry, connected: px4Connected, sendCommand: px4Command } = usePX4Telemetry();
+  const { telemetry: px4Telemetry, connected: px4Connected, sendCommand: px4Command, source: telemetrySource } = usePX4Telemetry();
   const [show3D, setShow3D] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [bootComplete, setBootComplete] = useState(false);
@@ -48,11 +48,13 @@ export function Dashboard() {
   const [weatherLoaded, setWeatherLoaded] = useState(false);
   const [noFlyLoaded, setNoFlyLoaded] = useState(false);
 
-  // Sync PX4 telemetry into dashboard state
+  // Sync PX4/Unity telemetry into dashboard state (overrides live mission when connected)
   useEffect(() => {
     if (!px4Connected || !px4Telemetry) return;
     setBattery(Math.round(px4Telemetry.battery_pct));
+    if (px4Telemetry.current_location) setCurrentLocation(px4Telemetry.current_location);
     if (px4Telemetry.is_flying && status !== 'flying') setStatus('flying');
+    if (!px4Telemetry.is_flying && px4Telemetry.flight_mode === 'Idle' && status === 'flying') setStatus('completed');
     if (!px4Telemetry.is_flying && px4Telemetry.flight_mode === 'IDLE' && status === 'flying') setStatus('completed');
   }, [px4Telemetry, px4Connected]);
 
@@ -239,7 +241,7 @@ export function Dashboard() {
             <span style={{fontSize:9,textTransform:'uppercase',letterSpacing:'-0.02em',color:'#8d90a0',fontWeight:700}}>Drone Location</span>
             <span style={{fontSize:14,fontFamily:'Space Grotesk',fontWeight:700,color:'#dfe3e9'}}>
               {_currentLocation}
-              {px4Connected && <span style={{fontSize:10,color:'#00daf3',marginLeft:6}}>● LIVE</span>}
+              {px4Connected && <span style={{fontSize:10,color:'#00daf3',marginLeft:6}}>● {telemetrySource === 'unity' ? 'UNITY' : 'LIVE'}</span>}
             </span>
           </div>
           <div style={{height:32,width:1,background:'rgba(67,70,84,0.2)'}} />
@@ -288,7 +290,7 @@ export function Dashboard() {
               </div>
               <div>
                 <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Link</p>
-                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: px4Connected ? '#00daf3' : '#8d90a0',margin:0}}>{px4Connected ? 'Live' : 'Idle'}</p>
+                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: px4Connected ? '#00daf3' : '#8d90a0',margin:0}}>{px4Connected ? (telemetrySource === 'unity' ? 'Unity 3D' : 'Live') : 'Idle'}</p>
               </div>
               <div>
                 <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Speed</p>

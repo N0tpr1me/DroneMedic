@@ -1,0 +1,346 @@
+Type,GeoJSON,H_Region,Parish,H_Name,Address,Telephone,Sub Type,Accuracy,X,Y
+Health Centre,"{""coordinates"": [-77.40009357735117, 18.212208676811414], ""type"": ""Point""}",Southern,Clarendon,Aenon Town,Aenon Town P.O.,,1,Digitizing,707678.812272,673533.311374
+Health Centre,"{""coordinates"": [-77.4364590060752, 18.180433253407738], ""type"": ""Point""}",Southern,Clarendon,Alston,Alston P.O.,,2,Digitizing,703823.869677,670024.990593
+Health Centre,"{""coordinates"": [-77.2475938036256, 18.154005446827018], ""type"": ""Point""}",Southern,Clarendon,Brandon Hill,Brandon Hill P.A.,,1,Digitizing,723801.352277,667063.031097
+Health Centre,"{""coordinates"": [-77.237624999997, 17.968505555555737], ""type"": ""Point""}",Southern,Clarendon,Bryant Crescent,"38 Bryant Crescent, May Pen P.O.",,3,GPS,724829.867957,646530.317131
+Health Centre,"{""coordinates"": [-77.27029824987993, 18.082960524663797], ""type"": ""Point""}",Southern,Clarendon,Chapleton,Chapleton P.O.,987-2215,6,Digitizing,721387.464533,659203.001531
+Health Centre,"{""coordinates"": [-77.26525058719642, 18.145149389582638], ""type"": ""Point""}",Southern,Clarendon,Colonel's Ridge,Colonel's Ridge P.O.,,1,Digitizing,721931.633661,666085.405596
+Health Centre,"{""coordinates"": [-77.20650891004532, 18.131046493597818], ""type"": ""Point""}",Southern,Clarendon,Croft's Hill,Croft's Hill P.O.,,2,Digitizing,728145.836628,664516.557917
+Health Centre,"{""coordinates"": [-77.31628803351725, 18.13665064713291], ""type"": ""Point""}",Southern,Clarendon,Crooked River,Crooked River P.O.,,1,Digitizing,716529.338015,665153.215815
+Health Centre,"{""coordinates"": [-77.42905420673418, 18.11189626649533], ""type"": ""Point""}",Southern,Clarendon,Cumberland,Cumberland P.O.,,1,Digitizing,704589.721163,662437.342385
+Health Centre,"{""coordinates"": [-77.33862297479679, 18.00585085404934], ""type"": ""Point""}",Southern,Clarendon,Darlowe,Darlowe P.O.,,1,Digitizing,714139.342311,650680.321469
+Health Centre,"{""coordinates"": [-77.3657963203556, 18.147719888904238], ""type"": ""Point""}",Southern,Clarendon,Frankfield,Franfield P.O.,904-4113,3,Digitizing,711292.628264,666388.019857
+Health Centre,"{""coordinates"": [-77.24397979890293, 17.93237359950266], ""type"": ""Point""}",Southern,Clarendon,Halse Hall,Halse Hall P.A.,,1,Digitizing,724151.481909,642532.114719
+Health Centre,"{""coordinates"": [-77.33548344300247, 18.172495654912105], ""type"": ""Point""}",Southern,Clarendon,James Hill,James Hill P.O.,,2,Digitizing,714505.196046,669124.196873
+Health Centre,"{""coordinates"": [-77.22807910609706, 18.1692981922621], ""type"": ""Point""}",Southern,Clarendon,Kellits,Kellits P.O.,966-8303,3,Digitizing,725868.342383,668753.023102
+Health Centre,"{""coordinates"": [-77.40629441631451, 18.158387114897664], ""type"": ""Point""}",Southern,Clarendon,Leicesterfield,Leicesterfield P.O.,,1,Digitizing,707009.84576,667577.615135
+Health Centre,"{""coordinates"": [-77.2395055363349, 17.807147094778955], ""type"": ""Point""}",Southern,Clarendon,Lionel Town,Lionel Town P.O.,986-3213,3,Digitizing,724607.605345,628671.537162
+Health Centre,"{""coordinates"": [-77.25905833333044, 17.9745250000011], ""type"": ""Point""}",Southern,Clarendon,May Pen,Denbigh P.O.,,3,GPS,722560.501103,647199.58989
+Health Centre,"{""coordinates"": [-77.35216666666835, 17.88148333333108], ""type"": ""Point""}",Southern,Clarendon,Milk River,Milk River  P.O.,,2,GPS,712678.90298,636918.043124
+Health Centre,"{""coordinates"": [-77.20607457217501, 17.806394868954463], ""type"": ""Point""}",Southern,Clarendon,Mitchell Town,Mitchell Town P.O.,,1,Digitizing,728151.864524,628584.022895
+Health Centre,"{""coordinates"": [-77.33718333333313, 18.044083333329482], ""type"": ""Point""}",Southern,Clarendon,Mocho,Mocho  P.O.,,2,GPS,714299.497611,654911.633662
+Health Centre,"{""coordinates"": [-77.46796778892943, 18.195937727930193], ""type"": ""Point""}",Southern,Clarendon,Moravia,Moravia P.O.,,1,Digitizing,700494.667524,671749.199382
+Health Centre,"{""coordinates"": [-77.29251051869849, 18.109543465925988], ""type"": ""Point""}",Southern,Clarendon,Pennants,Pennants P.A.,,1,Digitizing,719040.819035,662148.810141
+Health Centre,"{""coordinates"": [-77.283204751007, 17.83451002943047], ""type"": ""Point""}",Southern,Clarendon,Race Course,Race Course P.O.,,3,Digitizing,719979.24051,631706.56351
+Health Centre,"{""coordinates"": [-77.23990000000113, 17.859699999998835], ""type"": ""Point""}",Southern,Clarendon,Raymonds,Raymonds  P.A.,,2,GPS,724573.310084,634488.087488
+Health Centre,"{""coordinates"": [-77.28993508526968, 18.17950820476526], ""type"": ""Point""}",Southern,Clarendon,Reckford,Reckford P.A.,,1,Digitizing,719325.510795,669892.237763
+Health Centre,"{""coordinates"": [-77.21320503067076, 18.06923080842034], ""type"": ""Point""}",Southern,Clarendon,Rock River,Rock River P.O.,,2,Digitizing,727429.340956,657675.498918
+Health Centre,"{""coordinates"": [-77.2635707945989, 17.774897190728705], ""type"": ""Point""}",Southern,Clarendon,Rocky Point,Rocky Point P.O.,,1,Digitizing,722051.132537,625105.623047
+Health Centre,"{""coordinates"": [-77.17517105048628, 17.936483528046175], ""type"": ""Point""}",Southern,Clarendon,Sandy Bay,Sandy Bay P.A.,,1,Digitizing,731441.874005,642978.760262
+Health Centre,"{""coordinates"": [-77.46362057198786, 18.154753896703774], ""type"": ""Point""}",Southern,Clarendon,Spaldings,Spaldings P.O.,964-0671,3,Digitizing,700943.151521,667189.711812
+Health Centre,"{""coordinates"": [-77.36115742979179, 18.083850928343942], ""type"": ""Point""}",Southern,Clarendon,Thompson Town,Thompson Town P.O.,,3,Digitizing,711769.730244,659317.930281
+Health Centre,"{""coordinates"": [-77.34843519408162, 17.96892042082371], ""type"": ""Point""}",Southern,Clarendon,Toll Gate,"Decoy Rd., Toll Gate P.O.",,2,Digitizing,713092.534128,646594.784403
+Health Centre,"{""coordinates"": [-77.24219406332917, 17.86446232818591], ""type"": ""Point""}",Southern,Clarendon,Vere Technical,Vere,,8,Digitizing,724330.853931,635015.493523
+Health Centre,"{""coordinates"": [-77.27386666666314, 17.944266666666795], ""type"": ""Point""}",Southern,Clarendon,York Town,York Town P.O.,,2,GPS,720987.054579,643852.856719
+Health Centre,"{""coordinates"": [-78.14735636702939, 18.382739588220247], ""type"": ""Point""}",Western,Hanover,Askenish,Askenish P.O.,,2,GPS,628752.164008,692738.069158
+Health Centre,"{""coordinates"": [-78.19937154332243, 18.410104939391726], ""type"": ""Point""}",Western,Hanover,Cacoon/Nyerere Farm,"Cacoon, Ken Jones P.O.",,1,GPS,623275.085531,695801.796066
+Health Centre,"{""coordinates"": [-78.10563730462678, 18.397544795736014], ""type"": ""Point""}",Western,Hanover,Cascade,Cascade P.O.,,2,GPS,633170.57928,694350.004939
+Health Centre,"{""coordinates"": [-78.27147015766853, 18.326132965737152], ""type"": ""Point""}",Western,Hanover,Cave Valley,"Cave Valley,  Green Island P.O.",,2,GPS,615593.565791,686558.175092
+Health Centre,"{""coordinates"": [-77.94901876363718, 18.329767547678767], ""type"": ""Point""}",Western,Hanover,Chester Castle,,,2,GPS,649681.442053,686756.360331
+Health Centre,"{""coordinates"": [-77.96837543846173, 18.375697005874837], ""type"": ""Point""}",Western,Hanover,Copse,Copse P.A.,,1,GPS,647661.862979,691850.643456
+Health Centre,"{""coordinates"": [-78.19461637563266, 18.39740794109092], ""type"": ""Point""}",Western,Hanover,Dias,Dias P.O.,,2,GPS,623768.451929,694393.179173
+Health Centre,"{""coordinates"": [-78.23160267686336, 18.366918456085056], ""type"": ""Point""}",Western,Hanover,Grange (Kendal),"Grange,  Cessnock P.O.",,2,GPS,619837.859589,691044.027254
+Health Centre,"{""coordinates"": [-78.06253632909456, 18.39834802609235], ""type"": ""Point""}",Western,Hanover,Great Valley,Great Valley P.O.,,1,GPS,637725.390392,694412.282407
+Health Centre,"{""coordinates"": [-78.27570138011778, 18.389183161796993], ""type"": ""Point""}",Western,Hanover,Green Island,Green Island P.O.,,3,GPS,615194.308679,693539.897521
+Health Centre,"{""coordinates"": [-78.01325700921706, 18.455220081361784], ""type"": ""Point""}",Western,Hanover,Hopewell,Hopewell P.O.,,3,GPS,642966.917419,700678.114813
+Health Centre,"{""coordinates"": [-78.19942556883443, 18.38614449605564], ""type"": ""Point""}",Western,Hanover,Kingsvale,Kingsvale P.A.,,1,GPS,623252.220993,693149.763724
+Health Centre,"{""coordinates"": [-78.29926588628655, 18.34839286014125], ""type"": ""Point""}",Western,Hanover,Logwood,"Logwood, Santoy P.A.",,1,GPS,612672.606843,689042.346619
+Health Centre,"{""coordinates"": [-78.17122390316803, 18.450797990672704], ""type"": ""Point""}",Western,Hanover,Lucea,"Fort Charlotte Dr., Lucea P.O.",,4,GPS,626277.561563,700286.94496
+Health Centre,"{""coordinates"": [-78.12440911567809, 18.38270699310427], ""type"": ""Point""}",Western,Hanover,Maryland,Maryland P.O.,,1,GPS,631177.081923,692719.605438
+Health Centre,"{""coordinates"": [-78.01835448373579, 18.34453104052058], ""type"": ""Point""}",Western,Hanover,Mount Peto,Mount Peto P.O.,,1,GPS,642361.171235,688429.334999
+Health Centre,"{""coordinates"": [-78.07620692489877, 18.43236361495968], ""type"": ""Point""}",Western,Hanover,Mountpelier,"Mountpelier, Sandy Bay P.O.",,1,GPS,636302.735073,698185.670161
+Health Centre,"{""coordinates"": [-77.99647739004801, 18.332386827953457], ""type"": ""Point""}",Western,Hanover,Ramble,Ramble P.O.,,2,GPS,644666.306718,687072.593633
+Health Centre,"{""coordinates"": [-78.0723040136749, 18.449960014668022], ""type"": ""Point""}",Western,Hanover,Sandy Bay,Sandy Bay P.O.,,2,GPS,636726.3228,700130.971926
+Health Centre,"{""coordinates"": [-76.78112057398981, 17.977217815107593], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Alpha Dental,"26 South Camp Rd., Kgn. 4",,8,Digitizing,773183.393116,647492.145775
+Health Centre,"{""coordinates"": [-76.66968886739406, 17.941518631672754], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Bull Bay,Bull Bay P.O.,967-6340,1,Digitizing,784993.107366,643558.447715
+Health Centre,"{""coordinates"": [-76.80401111111479, 17.97521388888565], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Chin Loy  (Opened February 2013),"Industrial Terrace, Kingston 14",,2,GPS,770759.09584,647267.638601
+Health Centre,"{""coordinates"": [-76.74359999999568, 18.004224999998005], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Community Health Psychiatry,University of the West Indies (Kgn 6),,3,GPS,777153.382262,650486.39939
+Health Centre,"{""coordinates"": [-76.79211666666981, 17.986344444444867], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Comprehensive,55  Slipe Pen Road (Kgn 5),,5,GPS,772017.570784,648500.941801
+Health Centre,"{""coordinates"": [-76.68649322634495, 18.04465856057213], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Content Gap,Content Gap,,1,Digitizing,783193.556007,654970.901491
+Health Centre,"{""coordinates"": [-76.70649046710601, 17.99724373463863], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Dallas,Dallas P.O.,,2,Digitizing,781084.591951,649719.53904
+Health Centre,"{""coordinates"": [-76.79993611111287, 17.977797222217117], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Denham Town,"19 Wellington Street, Kgn 14",,3,GPS,771190.410175,647554.023089
+Health Centre,"{""coordinates"": [-76.83091735750692, 18.024181430581066], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Drewsland,"Drews Avenue, Kgn. 20",,2,Digitizing,767904.251167,652684.57721
+Health Centre,"{""coordinates"": [-76.84525555555679, 18.03221944444442], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Duhaney Park,"122a Baldwin Crescent, Kgn 20",,3,GPS,766385.229601,653572.904243
+Health Centre,"{""coordinates"": [-76.78812287193219, 17.971233402475473], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,East Queen Street,Kingston,,8,Digitizing,772442.477039,646828.929246
+Health Centre,"{""coordinates"": [-76.79090109207905, 18.03143254961276], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Edna Manley,"35a Grant's Pen Road, Kgn. 8",931-6377,3,Digitizing,772140.688142,653491.457161
+Health Centre,"{""coordinates"": [-76.8611168080426, 18.11442645242515], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Essex Hall,Essex Hall P.A.,,1,Digitizing,764698.934099,662670.352517
+Health Centre,"{""coordinates"": [-76.78823888889079, 17.997024999996963], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Glen Vincent,"3 Trevennion Park Road, Kgn 5",,3,GPS,772426.928007,649683.532846
+Health Centre,"{""coordinates"": [-76.80654002602714, 18.096593575683535], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Golden Spring,Golden Spring P.A,,1,Digitizing,770477.216423,660701.755798
+Health Centre,"{""coordinates"": [-76.71910068909072, 18.03708127076424], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Gordon Town,"Gordon Town Road, Gordon Town P.O.",927-1291,3,Digitizing,779742.407499,654126.707353
+Health Centre,"{""coordinates"": [-76.82258333333529, 17.99993611111381], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Hagley Park,"118 Hagley Park Road,  Kgn 10",,3,GPS,768789.31292,650001.918244
+Health Centre,"{""coordinates"": [-76.72761973627969, 18.00653200517513], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Hall's Delight,Hall's Delight,,1,Digitizing,778845.354684,650744.152695
+Health Centre,"{""coordinates"": [-76.72017735603332, 17.951511142224607], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Harbour View,"Fort Nugent Drive, Kgn. 17",938-6513,3,Digitizing,779642.700452,644655.615314
+Health Centre,"{""coordinates"": [-76.75580974915917, 18.01853840616399], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Jamaica College,"189 Old Hope Rd., Kgn 6",,8,Digitizing,775858.254538,652068.867747
+Health Centre,"{""coordinates"": [-76.8423649544271, 18.15524470741911], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,King Weston,King Weston P.A.,942-6120,1,Digitizing,766679.726326,667189.793682
+Health Centre,"{""coordinates"": [-76.848632624048, 18.128358722529292], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Lawrence Tavern,Lawrence Tavern P.O.,942-8523,2,Digitizing,766018.959339,664213.438056
+Health Centre,"{""coordinates"": [-76.78980198255239, 17.969302234459885], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Lenworth Jacob,"East Street, Kgn.",,2,Digitizing,772264.864453,646614.985148
+Health Centre,"{""coordinates"": [-76.828285930685, 17.998951527465668], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Majesty Gardens,"Majesty Gardens,Kgn. 11",,3,Digitizing,768185.480419,649892.375596
+Health Centre,"{""coordinates"": [-76.79279574154646, 18.012917877336015], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Marriage Guidance,6 Hope Rd. Kgn.,929-6245,7,Digitizing,771942.361055,651442.01725
+Health Centre,"{""coordinates"": [-76.79009444444765, 17.98010555555461], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Mary Issa (VOUCH),1 National Heroes Circle ( Kgn 4),,3,GPS,772232.532279,647810.662065
+Health Centre,"{""coordinates"": [-76.65758579851722, 18.03141816096788], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Mavis Bank,Mavis Bank P.O.,942-7083,2,Digitizing,786256.927587,653510.859083
+Health Centre,"{""coordinates"": [-76.80455555555564, 17.996013888889703], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Maxfield Park,89 Maxfield Avenue (Kgn 10),,5,GPS,770699.001736,649569.725205
+Health Centre,"{""coordinates"": [-76.8641329339698, 18.147236526881823], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Mount Charles,"Mount Charles, Lawrence Tavern P.O.",,1,Digitizing,764377.056357,666301.605411
+Health Centre,"{""coordinates"": [-76.82185409599602, 18.020909468032], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,"Myrth Coore Dental
+",,,8,Digitizing,768864.312422,652323.333063
+Health Centre,"{""coordinates"": [-76.76345726224899, 18.0223022168688], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,"National Chest Dental
+",,,8,Digitizing,775047.898649,652484.398499
+Health Centre,"{""coordinates"": [-76.75948157946334, 17.97576734848402], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Norman Gardens,Range Crescent Kgn. 2,,3,Digitizing,775475.571229,647334.447484
+Health Centre,"{""coordinates"": [-76.81631388889201, 17.994908333336053], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Oak Glade (Opened April 2011),,,3,GPS,769453.829543,649446.088822
+Health Centre,"{""coordinates"": [-76.82737222222588, 18.016016666661738], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Olympic Gardens,200 Olympic Way (Kgn 11),,3,GPS,768280.488692,651781.242351
+Health Centre,"{""coordinates"": [-76.81830194696671, 17.988460792519554], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Operation Freindship,2c East Bell Road (Kgn),,3,Digitizing,769243.977664,648732.265984
+Health Centre,"{""coordinates"": [-76.84337442839222, 18.07746933596829], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Padmore,Padmore P.A.,,1,Digitizing,766580.183381,658581.376045
+Health Centre,"{""coordinates"": [-76.86516117926791, 18.09498965150032], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Parks Road,"Parks Road, Lawrence Tavern",,1,Digitizing,764272.455906,660518.737591
+Health Centre,"{""coordinates"": [-76.83980916834888, 17.937473706690664], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Port Royal,Port Royal,,1,Digitizing,766970.984162,643086.917664
+Health Centre,"{""coordinates"": [-76.84442315053896, 18.052792999537978], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Red Hills,"Red Hills Square, Red Hills P.O.",944-0241,2,Digitizing,766471.458725,655850.076895
+Health Centre,"{""coordinates"": [-76.88150231618103, 18.078769724635404], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Rock Hall,Rock Hall P.A.,,1,Digitizing,762543.922429,658722.310318
+Health Centre,"{""coordinates"": [-76.76752487296517, 17.977874808191263], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Rollington Town,"37a Giltress Road,Kgn 16",,3,Digitizing,774623.338254,647566.61456
+Health Centre,"{""coordinates"": [-76.841287214754, 18.00679373108739], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Seaview Gardens,Seaview Gardens,,2,Digitizing,766807.829078,650759.126778
+Health Centre,"{""coordinates"": [-76.8566642199676, 18.053918782760643], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,St. Margarets,Cedar Valley Road,,1,Digitizing,765175.358343,655973.635049
+Health Centre,"{""coordinates"": [-76.79438322459997, 18.08332857557508], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Stony Hill,Stony Hill,,3,Digitizing,771765.608725,659234.950682
+Health Centre,"{""coordinates"": [-76.81351753989352, 18.03719317776422], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Sunrise,Red Hills Road,,3,Digitizing,769745.278083,654126.493134
+Health Centre,"{""coordinates"": [-76.79532366614694, 17.976725095218026], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Victoria Jubilee,North Street (Kgn),,7,GPS,771679.082912,647435.893219
+Health Centre,"{""coordinates"": [-76.77565000000472, 17.969541666665652], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Windward Road,16 ÔøΩÔøΩÔøΩÔøΩÔøΩ Windward Road,,5,GPS,773763.856156,646643.242112
+Health Centre,"{""coordinates"": [-77.45244393103604, 18.081462870142627], ""type"": ""Point""}",Southern,Manchester,Bellefield,Bellefield P.O.,,2,Digitizing,702105.982555,659074.818443
+Health Centre,"{""coordinates"": [-77.45628499767906, 18.119217113523703], ""type"": ""Point""}",Southern,Manchester,Bombay,Bombay P.A.,,1,Digitizing,701709.665874,663254.506286
+Health Centre,"{""coordinates"": [-77.49065000000064, 18.163733333328345], ""type"": ""Point""}",Southern,Manchester,Christiana,Christiana P.O.,,3,GPS,698085.736877,668190.936014
+Health Centre,"{""coordinates"": [-77.55920000000455, 18.240416666664593], ""type"": ""Point""}",Southern,Manchester,Craighead,Craighead P.A.,,1,GPS,690858.277703,676699.003593
+Health Centre,"{""coordinates"": [-77.50096666667027, 17.89769999999974], ""type"": ""Point""}",Southern,Manchester,Cross Keys,Crosskeys P.O.,,3,GPS,696914.606054,638749.16551
+Health Centre,"{""coordinates"": [-77.56048295098563, 17.944180332077075], ""type"": ""Point""}",Southern,Manchester,Downs,Downs P.O.,,2,Digitizing,690623.477393,643911.618625
+Health Centre,"{""coordinates"": [-77.42129999999827, 17.974999999999316], ""type"": ""Point""}",Southern,Manchester,Harmons,Harmons  P.O.,,1,GPS,705375.981912,647283.691672
+Health Centre,"{""coordinates"": [-77.565303679437, 18.178313274348156], ""type"": ""Point""}",Southern,Manchester,Harry Watch,Harry Watch P.A.,,2,Digitizing,690191.789098,669827.170419
+Health Centre,"{""coordinates"": [-77.56668333333373, 18.023616666668456], ""type"": ""Point""}",Southern,Manchester,Lincoln,Lincoln P.O.,,2,GPS,689993.493741,652705.604999
+Health Centre,"{""coordinates"": [-77.50834722222547, 18.040997222219335], ""type"": ""Point""}",Southern,Manchester,Mandeville Comprehensive,"3 Brigade St., Mandeville P.O.",,4,GPS,696176.004377,654611.383179
+Health Centre,"{""coordinates"": [-77.54271099808071, 18.13396856265209], ""type"": ""Point""}",Southern,Manchester,Mile Gully,Mile Gully P.O.,,3,Digitizing,692567.684683,664911.861949
+Health Centre,"{""coordinates"": [-77.50803141718809, 17.95646334460049], ""type"": ""Point""}",Southern,Manchester,Newport,Newport P.O.,,3,Digitizing,696183.805794,645255.084595
+Health Centre,"{""coordinates"": [-77.46644614757935, 17.991672477660074], ""type"": ""Point""}",Southern,Manchester,Old England,Old England P.O.,,1,Digitizing,700598.762184,649140.446706
+Health Centre,"{""coordinates"": [-77.40602315903868, 18.03444149330579], ""type"": ""Point""}",Southern,Manchester,Porus,Porus P.O.,904-0943,3,Digitizing,707008.506355,653859.076926
+Health Centre,"{""coordinates"": [-77.41929100309088, 17.915168917482227], ""type"": ""Point""}",Southern,Manchester,Pratville,Pratville P.O.,,2,Digitizing,705573.799013,640661.132892
+Health Centre,"{""coordinates"": [-77.4744333333306, 18.051633333336152], ""type"": ""Point""}",Southern,Manchester,Royal Flat,"Royal Flat,  Mandeville P.O.",,1,GPS,699769.823852,655779.0777
+Health Centre,"{""coordinates"": [-76.68738333333454, 18.16596666666873], ""type"": ""Point""}",Northeastern,Portland,Bangor Ridge,Bangor Ridge P.O.,,1,GPS,783076.675124,668397.322807
+Health Centre,"{""coordinates"": [-76.65731666666615, 18.233433333331707], ""type"": ""Point""}",Northeastern,Portland,Buff Bay,Buff Bay,,6,GPS,786244.099743,675870.368589
+Health Centre,"{""coordinates"": [-76.71111666666529, 18.096966666669864], ""type"": ""Point""}",Northeastern,Portland,Cascade,"Cascade, Spring Hill P.O.",,1,GPS,780577.450463,660756.187808
+Health Centre,"{""coordinates"": [-76.62913333333513, 18.17223333333151], ""type"": ""Point""}",Northeastern,Portland,Chepstowe,Chepstowe P.O.,,1,GPS,789238.471493,669102.29327
+Health Centre,"{""coordinates"": [-76.33308333333795, 18.12698333333196], ""type"": ""Point""}",Northeastern,Portland,Fair Prospect,Priestman River P.O.,,2,GPS,820579.092303,664181.60225
+Health Centre,"{""coordinates"": [-76.36216666667116, 18.163550000000324], ""type"": ""Point""}",Northeastern,Portland,Fairy Hill,Fairy Hill P.O.,,1,GPS,817487.323105,668218.035562
+Health Centre,"{""coordinates"": [-76.45395143577012, 18.139210588905954], ""type"": ""Point""}",Northeastern,Portland,Fellowship,Fellowship P.O.,913-0678,2,Digitizing,807783.803062,665493.095772
+Health Centre,"{""coordinates"": [-76.5527333333366, 18.161716666665694], ""type"": ""Point""}",Northeastern,Portland,Fruitful Vale,Shrewbury P.O.,,1,GPS,797324.545372,667956.11657
+Health Centre,"{""coordinates"": [-76.56430000000314, 18.203133333335522], ""type"": ""Point""}",Northeastern,Portland,Hope Bay,Hope Bay P.O.,,2,GPS,796089.92564,672537.312371
+Health Centre,"{""coordinates"": [-76.27753333333136, 18.046749999996333], ""type"": ""Point""}",Northeastern,Portland,Katus Blakey,Manchioneal P.O. (Closed since August 2012),,8,GPS,826492.464425,655323.348829
+Health Centre,"{""coordinates"": [-76.27893333332878, 18.035966666663207], ""type"": ""Point""}",Northeastern,Portland,Manchioneal,Manchioneal P.O.,,3,GPS,826348.879157,654129.271914
+Health Centre,"{""coordinates"": [-76.42798640229363, 18.077189001236498], ""type"": ""Point""}",Northeastern,Portland,Moore Town,Moore Town P.O.,,1,Digitizing,810552.637256,658636.750115
+Health Centre,"{""coordinates"": [-76.52320000000189, 18.18096666666573], ""type"": ""Point""}",Northeastern,Portland,Mount Pleasant,Mount Pleasant P.O.,,1,GPS,800443.932727,670094.541188
+Health Centre,"{""coordinates"": [-76.42150204781795, 18.151854668452707], ""type"": ""Point""}",Northeastern,Portland,Nonesuch,Look Out P.O.,,1,Digitizing,811213.276131,666902.979459
+Health Centre,"{""coordinates"": [-76.44713055555854, 18.17441111111375], ""type"": ""Point""}",Northeastern,Portland,Port Antonio,"Smatt Rd., Port Antonio P.O.",,4,GPS,808493.98084,669391.302708
+Health Centre,"{""coordinates"": [-76.4435666666637, 18.175066666661305], ""type"": ""Point""}",Northeastern,Portland,Port Antonio Primary,Port Antonio  P.O.,,8,GPS,808870.823942,669464.989129
+Health Centre,"{""coordinates"": [-76.71551666667018, 18.128783333332677], ""type"": ""Point""}",Northeastern,Portland,Spring Hill,Spring Hill P.O.,,1,GPS,780106.320625,664276.992515
+Health Centre,"{""coordinates"": [-76.5170666666663, 18.19674999999631], ""type"": ""Point""}",Northeastern,Portland,St. Margaret's Bay,St. Margaret's Bay P.O.,,1,GPS,801088.268387,671843.163715
+Health Centre,"{""coordinates"": [-76.59163333333379, 18.161716666665438], ""type"": ""Point""}",Northeastern,Portland,Swift River,Swift River P.O.,,1,GPS,793208.607759,667946.619558
+Health Centre,"{""coordinates"": [-77.34996736163625, 18.30757004612283], ""type"": ""Point""}",Northeastern,St. Ann,Alexandria,Alexandria P.O.,975-2372,6,Digitizing,713000.990175,684077.594957
+Health Centre,"{""coordinates"": [-77.2608135415133, 18.39086986902376], ""type"": ""Point""}",Northeastern,St. Ann,Bamboo,Bamboo P.O.,972-6700,2,Digitizing,722439.411685,693282.223931
+Health Centre,"{""coordinates"": [-77.21285507063406, 18.23779029071373], ""type"": ""Point""}",Northeastern,St. Ann,Bensonton,Bensonton P.O.,,2,Digitizing,727487.806842,676332.042742
+Health Centre,"{""coordinates"": [-77.2022, 18.435249999995822], ""type"": ""Point""}",Northeastern,St. Ann,Beth Jacob Family Planning,St. Ann's Bay P.O.,,7,GPS,728638.553607,698186.835914
+Health Centre,"{""coordinates"": [-77.01570112630733, 18.256917534335965], ""type"": ""Point""}",Northeastern,St. Ann,Blackstonehenge,Blackstonehenge P.O.,,1,Digitizing,748339.580523,678436.275675
+Health Centre,"{""coordinates"": [-77.4814656121151, 18.21941265831205], ""type"": ""Point""}",Northeastern,St. Ann,Bohemia,Bohemia P.A.,,1,Digitizing,699073.511253,674351.133824
+Health Centre,"{""coordinates"": [-77.4280824013359, 18.197246875512676], ""type"": ""Point""}",Northeastern,St. Ann,Borobridge,Borobridge P.O.,,2,Digitizing,704714.385859,671883.904177
+Health Centre,"{""coordinates"": [-77.35129469380013, 18.389126695757525], ""type"": ""Point""}",Northeastern,St. Ann,Brown's Town,Brown's Town P.O.,975-2338,3,Digitizing,712877.766535,693105.059356
+Health Centre,"{""coordinates"": [-77.17986666666242, 18.328066666667368], ""type"": ""Point""}",Northeastern,St. Ann,Claremont,Claremont P.O.,,3,GPS,730986.451911,686320.583038
+Health Centre,"{""coordinates"": [-77.3611391016992, 18.245037686412303], ""type"": ""Point""}",Northeastern,St. Ann,Clarksonville,Alexandria P.O.,,1,Digitizing,711806.41944,677158.488291
+Health Centre,"{""coordinates"": [-77.06141666666703, 18.39981666666963], ""type"": ""Point""}",Northeastern,St. Ann,Exchange,Exchange P.O.,,2,GPS,743510.327613,694254.213762
+Health Centre,"{""coordinates"": [-77.43089734625724, 18.347235729248187], ""type"": ""Point""}",Northeastern,St. Ann,Gibraltar,Gibraltar P.O.,,1,Digitizing,704455.183,688486.033825
+Health Centre,"{""coordinates"": [-77.14389946628317, 18.240367277655793], ""type"": ""Point""}",Northeastern,St. Ann,Jefferyville,"Jefferyville, Moneague P.O.",,1,Digitizing,734780.978731,676610.2579
+Health Centre,"{""coordinates"": [-77.20945000000285, 18.399300000000643], ""type"": ""Point""}",Northeastern,St. Ann,Lime Hall,Lime Hall  P.O.,,1,GPS,727868.131589,694208.45083
+Health Centre,"{""coordinates"": [-77.24211204968265, 18.19399496392925], ""type"": ""Point""}",Northeastern,St. Ann,"McNie
+",,,1,Digitizing,724387.17254,671488.416727
+Health Centre,"{""coordinates"": [-77.11710000000028, 18.275116666662704], ""type"": ""Point""}",Northeastern,St. Ann,Moneague,Moneague P.O.,,2,GPS,737617.758795,680454.479678
+Health Centre,"{""coordinates"": [-77.32583000221909, 18.341838494327426], ""type"": ""Point""}",Northeastern,St. Ann,Muir House Buxton,Muir House P.A.,,1,Digitizing,715559.486409,687865.972351
+Health Centre,"{""coordinates"": [-77.10483333333262, 18.407250000001238], ""type"": ""Point""}",Northeastern,St. Ann,Ocho Rios,Ocho Rios P.O.,,3,GPS,738923.114352,695079.049469
+Health Centre,"{""coordinates"": [-77.33761024138592, 18.46241732345965], ""type"": ""Point""}",Northeastern,St. Ann,Runaway Bay,Runaway Bay P.O.,973-0532,2,Digitizing,714338.608481,701214.777645
+Health Centre,"{""coordinates"": [-77.20541388889288, 18.43849166666323], ""type"": ""Point""}",Northeastern,St. Ann,St. Ann's Bay,St. Ann's Bay P.O.,,4,GPS,728299.419539,698546.024538
+Health Centre,"{""coordinates"": [-77.16176666666198, 18.413666666667027], ""type"": ""Point""}",Northeastern,St. Ann,Steer Town,Steer Town P.A.,,1,GPS,732908.053024,695793.62172
+Health Centre,"{""coordinates"": [-77.29658731049649, 18.28824169974666], ""type"": ""Point""}",Northeastern,St. Ann,Stepney,Stepney P.A.,,2,Digitizing,718640.97202,681928.394293
+Health Centre,"{""coordinates"": [-77.32038040223702, 18.418383954159296], ""type"": ""Point""}",Northeastern,St. Ann,Sturge Town,Sturge Town P.A.,,1,Digitizing,716150.153312,696337.558221
+Health Centre,"{""coordinates"": [-77.09016666666365, 18.32411666666478], ""type"": ""Point""}",Northeastern,St. Ann,Walkerswood,Walkerswood,,1,GPS,740468.346758,685876.468886
+Health Centre,"{""coordinates"": [-77.41161187563512, 18.31410508942898], ""type"": ""Point""}",Northeastern,St. Ann,Watt Town,Watt Town P.A.,,2,Digitizing,706485.466754,684814.312731
+Health Centre,"{""coordinates"": [-77.14033175458673, 18.033696761693008], ""type"": ""Point""}",Southeastern,St. Catherine,Barton's,Barton's.P.O.,,1,Digitizing,735140.99214,653735.200469
+Health Centre,"{""coordinates"": [-77.00445598970352, 18.102218583207204], ""type"": ""Point""}",Southeastern,St. Catherine,Bog Walk,Bog Walk P.O.,,2,Digitizing,749528.360386,661313.663845
+Health Centre,"{""coordinates"": [-76.88256151944266, 17.954641920005308], ""type"": ""Point""}",Southeastern,St. Catherine,Bridgeport Dental,"Eberle Drive, Bridgeport P.O.",988-7235,8,Digitizing,762440.499186,644983.701122
+Health Centre,"{""coordinates"": [-76.91847415913844, 17.993479308881568], ""type"": ""Point""}",Southeastern,St. Catherine,Central Village,Central Village P.A.,,1,Digitizing,758634.309827,649280.185861
+Health Centre,"{""coordinates"": [-76.89112941214132, 17.99793086350918], ""type"": ""Point""}",Southeastern,St. Catherine,Christian Pen,"Christian Pen, Gregory Park P.O.",998-1796,3,Digitizing,761530.071537,649774.3723
+Health Centre,"{""coordinates"": [-77.16697833353535, 18.06756648245548], ""type"": ""Point""}",Southeastern,St. Catherine,Connors,Connors P.A.,,2,Digitizing,732322.899639,657486.272104
+Health Centre,"{""coordinates"": [-76.9402724378087, 17.987823449242097], ""type"": ""Point""}",Southeastern,St. Catherine,Cumberland Road,"43 Cumberland Rd., Spanish Town P.O.",984-2346,2,Digitizing,756325.880473,648653.314352
+Health Centre,"{""coordinates"": [-77.09395555555942, 18.17940833332961], ""type"": ""Point""}",Southeastern,St. Catherine,Ewarton,Ewarton P.O.,,2,GPS,740059.701304,669859.719006
+Health Centre,"{""coordinates"": [-76.88649785521949, 18.14983641747222], ""type"": ""Point""}",Southeastern,St. Catherine,Glengoffe,Glengoffe P.O.,,2,Digitizing,762010.289838,666587.776181
+Health Centre,"{""coordinates"": [-76.9070638888892, 17.939811111106437], ""type"": ""Point""}",Southeastern,St. Catherine,Greater Portmore,"5W Greater Portmore, Braeton P.O.",,3,GPS,759845.735935,643340.757347
+Health Centre,"{""coordinates"": [-76.99276090353736, 18.248783853696963], ""type"": ""Point""}",Southeastern,St. Catherine,Guys Hill,Guys Hill P.O.,994-3092,3,Digitizing,750765.581298,677535.949058
+Health Centre,"{""coordinates"": [-76.9133262509121, 18.12540641623318], ""type"": ""Point""}",Southeastern,St. Catherine,Harkers Hall,Harkers Hall P.O.,,1,Digitizing,759172.693118,663882.275738
+Health Centre,"{""coordinates"": [-77.04962558729773, 18.016304569900417], ""type"": ""Point""}",Southeastern,St. Catherine,Kitson Town,Kitson Town P.A.,981-9900,1,Digitizing,744744.886095,651805.300936
+Health Centre,"{""coordinates"": [-77.03091666666253, 18.133366666665996], ""type"": ""Point""}",Southeastern,St. Catherine,Linstead,"King Street, Linstead P.O.",,3,GPS,746728.232318,664761.462198
+Health Centre,"{""coordinates"": [-77.15644980636957, 18.131413166416934], ""type"": ""Point""}",Southeastern,St. Catherine,Lluidas Vale,Lluidas Vale P.O.,903-6801,1,Digitizing,733443.460834,664551.95685
+Health Centre,"{""coordinates"": [-77.11288872537096, 17.938233296838067], ""type"": ""Point""}",Southeastern,St. Catherine,Old Harbour,"Lot 5 Marlie Ave., Old Harbour",983-2313,3,Digitizing,738040.35992,643167.298532
+Health Centre,"{""coordinates"": [-77.11146911258476, 18.091823621109203], ""type"": ""Point""}",Southeastern,St. Catherine,Point Hill,Point Hill P.O.,705-4585,2,Digitizing,738200.976272,660166.673307
+Health Centre,"{""coordinates"": [-76.98856753471784, 18.209551576429718], ""type"": ""Point""}",Southeastern,St. Catherine,Redwood,Redwood P.O.,,1,Digitizing,751209.324936,673193.589937
+Health Centre,"{""coordinates"": [-76.96517371711586, 18.167337322746565], ""type"": ""Point""}",Southeastern,St. Catherine,Riversdale,Riversdale P.O.,903-7938,3,Digitizing,753684.798024,668521.492307
+Health Centre,"{""coordinates"": [-76.94192814119712, 18.09143356264352], ""type"": ""Point""}",Southeastern,St. Catherine,Sligoville,Sligoville P.O.,,2,Digitizing,756146.929507,660120.91689
+Health Centre,"{""coordinates"": [-76.94692777777864, 17.99288888889161], ""type"": ""Point""}",Southeastern,St. Catherine,St. Jago Park,"Burke Rd., Spanish Town",,4,GPS,755620.837988,649213.744194
+Health Centre,"{""coordinates"": [-76.97749398358211, 17.98904900874905], ""type"": ""Point""}",Southeastern,St. Catherine,Sydenham,"36 Federal Road, Spanish Town P.O.",981-7796,3,Digitizing,752383.646398,648788.085377
+Health Centre,"{""coordinates"": [-77.0426217328165, 18.188976391331337], ""type"": ""Point""}",Southeastern,St. Catherine,Treadways,"Natty Farm Yard, Treadways P.A.",903-8727,1,Digitizing,745490.954268,670916.740723
+Health Centre,"{""coordinates"": [-76.9252631413341, 18.203268173847793], ""type"": ""Point""}",Southeastern,St. Catherine,Troja,Troja P.O.,705-2675,1,Digitizing,757905.936916,672499.677231
+Health Centre,"{""coordinates"": [-76.87243744760673, 17.988065305942143], ""type"": ""Point""}",Southeastern,St. Catherine,Waterford,Waterford P.O.,,2,Digitizing,763510.417636,648683.711752
+Health Centre,"{""coordinates"": [-77.09321328732642, 18.062069737337122], ""type"": ""Point""}",Southeastern,St. Catherine,Watermount,"Back Pasture, Watermount P.O.",,1,Digitizing,740131.70257,656872.406543
+Health Centre,"{""coordinates"": [-77.70238311822531, 18.19697913596688], ""type"": ""Point""}",Southern,St. Elizabeth,Aberdeen,Aberdeen P.O.,,2,Digitizing,675696.896179,671942.730017
+Health Centre,"{""coordinates"": [-77.64954873806319, 18.167979336169655], ""type"": ""Point""}",Southern,St. Elizabeth,Balaclava,Balaclava P.O.,963-2212-3,3,Digitizing,681274.825879,668712.58703
+Health Centre,"{""coordinates"": [-77.66735338018563, 17.900065316460964], ""type"": ""Point""}",Southern,St. Elizabeth,Bellevue,Southfield P.O.,,1,Digitizing,679284.293712,639066.504639
+Health Centre,"{""coordinates"": [-77.85865000000443, 18.027311111107107], ""type"": ""Point""}",Southern,St. Elizabeth,Black River,Black River P.O.,,3,GPS,659079.01022,653233.337234
+Health Centre,"{""coordinates"": [-77.65372821171432, 18.079215700066747], ""type"": ""Point""}",Southern,St. Elizabeth,Braes River,Braes River P.O.,,1,Digitizing,680797.981375,658889.659248
+Health Centre,"{""coordinates"": [-77.75466372255919, 18.01299051051721], ""type"": ""Point""}",Southern,St. Elizabeth,Burnt Savannah,Burnt Savannah P.A.,,1,Digitizing,670083.424224,651600.433222
+Health Centre,"{""coordinates"": [-77.79681529094594, 18.23059886445578], ""type"": ""Point""}",Southern,St. Elizabeth,Elderslie,Elderslie P.O.,,2,Digitizing,665723.235874,675704.235502
+Health Centre,"{""coordinates"": [-77.89215928245925, 18.07215759925051], ""type"": ""Point""}",Southern,St. Elizabeth,Fyffes Pen,Fyffes Pen P.A.,,1,Digitizing,655554.679818,658213.686548
+Health Centre,"{""coordinates"": [-77.85742235460954, 18.20587305554333], ""type"": ""Point""}",Southern,St. Elizabeth,Ginger Hill,Ginger Hill P.O.,,1,Digitizing,659300.396828,672996.116693
+Health Centre,"{""coordinates"": [-77.60973301729427, 17.905862439475502], ""type"": ""Point""}",Southern,St. Elizabeth,Junction,Junction P.O.,965-8445,3,Digitizing,685392.088321,639687.096084
+Health Centre,"{""coordinates"": [-77.76064851132627, 18.0861340501597], ""type"": ""Point""}",Southern,St. Elizabeth,Lacovia,Lacovia P.O.,966-5698,3,Digitizing,669482.868711,659698.555249
+Health Centre,"{""coordinates"": [-77.76224013222794, 18.157027692586], ""type"": ""Point""}",Southern,St. Elizabeth,Maggotty,Maggotty P.O.,,3,Digitizing,669346.649184,667545.833426
+Health Centre,"{""coordinates"": [-77.70166699946884, 17.972816905067628], ""type"": ""Point""}",Southern,St. Elizabeth,Malvern,Malvern P.O.,966-5778,2,Digitizing,675678.760227,647131.997385
+Health Centre,"{""coordinates"": [-77.8359992587463, 18.105121823739516], ""type"": ""Point""}",Southern,St. Elizabeth,Middle Quarter's,Middle Quarter's P.O.,,1,Digitizing,661516.273163,661834.474122
+Health Centre,"{""coordinates"": [-77.63413453568828, 17.971789861812766], ""type"": ""Point""}",Southern,St. Elizabeth,Myersville,Myersville P.O.,,1,Digitizing,682831.445239,646992.557672
+Health Centre,"{""coordinates"": [-77.9032861111077, 18.150025], ""type"": ""Point""}",Southern,St. Elizabeth,New Market,"New Market,  Lewisville P.O.",,2,GPS,654418.773371,666837.797282
+Health Centre,"{""coordinates"": [-77.7475021057888, 17.92970839820693], ""type"": ""Point""}",Southern,St. Elizabeth,Newell Maternity Centre,Newell P.A.,,2,Digitizing,670804.651956,642379.76467
+Health Centre,"{""coordinates"": [-77.6061557681151, 18.02585320671869], ""type"": ""Point""}",Southern,St. Elizabeth,Pepper,Pepper P.O.,,2,Digitizing,685814.552869,652966.365102
+Health Centre,"{""coordinates"": [-77.64157680556872, 17.918970111947868], ""type"": ""Point""}",Southern,St. Elizabeth,Portsea,Portsea P.O.,,2,Digitizing,682022.922213,641149.224144
+Health Centre,"{""coordinates"": [-77.87701751492308, 18.11232267748129], ""type"": ""Point""}",Southern,St. Elizabeth,Prospect,Prospect  P.A.,,1,Digitizing,657178.625622,662651.524032
+Health Centre,"{""coordinates"": [-77.69866624759939, 18.04796135736183], ""type"": ""Point""}",Southern,St. Elizabeth,Santa Cruz,"47 Coke Drive, Santa Cruz P.O.",966-2101,3,Digitizing,676027.941053,655447.764911
+Health Centre,"{""coordinates"": [-77.67703037474723, 17.88666191944117], ""type"": ""Point""}",Southern,St. Elizabeth,Southfield,Southfield P.O.,965-6363,3,Digitizing,678253.46436,637586.752568
+Health Centre,"{""coordinates"": [-77.87329889590583, 18.172226482144865], ""type"": ""Point""}",Southern,St. Elizabeth,Springfield,Springfield P.A,,1,Digitizing,657603.420883,669279.887397
+Health Centre,"{""coordinates"": [-77.69133165340844, 18.065452879902146], ""type"": ""Point""}",Southern,St. Elizabeth,STETHS,"109 Main St., Santa Cruz P.O.",,8,Digitizing,676811.714166,657380.82141
+Health Centre,"{""coordinates"": [-77.79675180580405, 18.446698569808706], ""type"": ""Point""}",Western,St. James,Adelphi,Adephi  P.O.,912-1747,2,Digitizing,665832.735383,699623.256785
+Health Centre,"{""coordinates"": [-77.80031622335737, 18.51191303480621], ""type"": ""Point""}",Western,St. James,Barret Town,"Barret Town, Little River P.O.",,1,Digitizing,665487.357922,706843.385934
+Health Centre,"{""coordinates"": [-77.91066666666997, 18.325749999997985], ""type"": ""Point""}",Western,St. James,Cambridge,Cambridge P.O.,,3,GPS,653733.335309,686291.34829
+Health Centre,"{""coordinates"": [-77.87849579463679, 18.28767211886159], ""type"": ""Point""}",Western,St. James,Catadupa,Catadupa P.O.,,2,Digitizing,657114.126277,682060.318432
+Health Centre,"{""coordinates"": [-77.91719866794728, 18.459699230596616], ""type"": ""Point""}",Western,St. James,Catherine Hall,"West Green, Catherine Hall, Montego Bay P.O.",952-0396,3,Digitizing,653116.185681,701121.079055
+Health Centre,"{""coordinates"": [-77.9212083333292, 18.47179999999691], ""type"": ""Point""}",Western,St. James,Creek Street Mobay V,"Creek Street, Montego Bay P.O.",,5,GPS,652699.302481,702462.589178
+Health Centre,"{""coordinates"": [-77.89937586707524, 18.504720358070276], ""type"": ""Point""}",Western,St. James,Flankers,Flankers P.O.,,1,Digitizing,655022.968143,706095.180118
+Health Centre,"{""coordinates"": [-77.82570724439339, 18.304249049972025], ""type"": ""Point""}",Western,St. James,Garlands,Garlands P.O.,,1,Digitizing,662703.743702,683869.471339
+Health Centre,"{""coordinates"": [-77.89972071227878, 18.480707729438695], ""type"": ""Point""}",Western,St. James,Glendevon,Glendevon P.A.,971-6365,1,Digitizing,654973.653884,703437.426646
+Health Centre,"{""coordinates"": [-77.75241189965303, 18.47448998322676], ""type"": ""Point""}",Western,St. James,Goodwill,"Goodwill, Montego Bay 2 P.O.",,1,Digitizing,670529.171099,702679.874661
+Health Centre,"{""coordinates"": [-77.89578333332975, 18.4393999999977], ""type"": ""Point""}",Western,St. James,Granville,"Granville Dr., Granville P.O.",,2,GPS,655367.417068,698863.144985
+Health Centre,"{""coordinates"": [-77.87279402059538, 18.472758464257474], ""type"": ""Point""}",Western,St. James,Green Pond,Green Pond,,1,Digitizing,657813.423277,702543.940862
+Health Centre,"{""coordinates"": [-77.85209493699674, 18.420305713028334], ""type"": ""Point""}",Western,St. James,John's Hall,John's Hall P.O.,,1,Digitizing,659973.012048,696727.89613
+Health Centre,"{""coordinates"": [-77.81837501314203, 18.405655050197314], ""type"": ""Point""}",Western,St. James,Lottery,Lottery P.O.,,1,Digitizing,663528.465739,695090.210552
+Health Centre,"{""coordinates"": [-77.79274811645074, 18.344325151104776], ""type"": ""Point""}",Western,St. James,Maroon Town,Maroon Town P.O.,912-5510,3,Digitizing,666207.226089,688290.081296
+Health Centre,"{""coordinates"": [-77.93458333333355, 18.387433333328623], ""type"": ""Point""}",Western,St. James,Mount Carey,Montpelier P.O.,,2,GPS,651239.537513,693131.362431
+Health Centre,"{""coordinates"": [-77.91051620923118, 18.466010461673537], ""type"": ""Point""}",Western,St. James,Mount Salem,Montego Bay 2 P.O.,,2,Digitizing,653825.479531,701816.177452
+Health Centre,"{""coordinates"": [-77.90677544656391, 18.401555970801002], ""type"": ""Point""}",Western,St. James,Roehampton,Roehampton P.O.,,2,Digitizing,654185.708532,694679.952221
+Health Centre,"{""coordinates"": [-77.86593435888264, 18.490485254850434], ""type"": ""Point""}",Western,St. James,Salt Spring,Salt Spring P.O.,,2,Digitizing,658547.115659,704502.697848
+Health Centre,"{""coordinates"": [-77.78314031332795, 18.428434509805616], ""type"": ""Point""}",Western,St. James,Somerton,Somerton P.O.,,1,Digitizing,667262.078724,697595.524683
+Health Centre,"{""coordinates"": [-77.84641806524579, 18.374360446590337], ""type"": ""Point""}",Western,St. James,Springfield,Johns Hall P.O.,,1,Digitizing,660549.574644,691639.629923
+Health Centre,"{""coordinates"": [-77.96444215751453, 18.439779245968058], ""type"": ""Point""}",Western,St. James,Tower Hill,Tower Hill P.A.,,1,Digitizing,648114.424606,698941.508237
+Health Centre,"{""coordinates"": [-76.85717057743501, 18.29122333471087], ""type"": ""Point""}",Northeastern,St. Mary,Albany,Albany P.O.,,1,Digitizing,765101.515698,682239.152506
+Health Centre,"{""coordinates"": [-76.91874182476819, 18.372525466779745], ""type"": ""Point""}",Northeastern,St. Mary,Albion Mountain,Port Maria P.O.,,1,Digitizing,758587.575091,691234.230467
+Health Centre,"{""coordinates"": [-76.77288333333613, 18.27111666666231], ""type"": ""Point""}",Northeastern,St. Mary,Annotto Bay,Annotto Bay P.O.,996-2034,3,GPS,774016.02338,680022.539383
+Health Centre,"{""coordinates"": [-76.84489999999604, 18.260716666664607], ""type"": ""Point""}",Northeastern,St. Mary,Belfield,Belfield P.O.,,2,GPS,766401.721962,678863.570477
+Health Centre,"{""coordinates"": [-76.95048333333315, 18.326449999998616], ""type"": ""Point""}",Northeastern,St. Mary,Bonny Gate,Bonny Gate P.A.,,1,GPS,755234.412092,686133.117318
+Health Centre,"{""coordinates"": [-76.88871666666415, 18.174066666662224], ""type"": ""Point""}",Northeastern,St. Mary,Brainard/Caneheap,Brainerd P.O.,,1,GPS,761773.895518,669269.50239
+Health Centre,"{""coordinates"": [-76.82278125688282, 18.175837058320816], ""type"": ""Point""}",Northeastern,St. Mary,Castleton,Castleton P.O.,,2,Digitizing,768749.743271,669470.881739
+Health Centre,"{""coordinates"": [-76.87796666666897, 18.19901666666214], ""type"": ""Point""}",Northeastern,St. Mary,Clark Castle,Platfield P.A.,,1,GPS,762909.439276,672031.761006
+Health Centre,"{""coordinates"": [-76.8460500000032, 18.24146666666148], ""type"": ""Point""}",Northeastern,St. Mary,Clonmel,Clonmel  P.O.,,1,GPS,766281.879369,676732.796544
+Health Centre,"{""coordinates"": [-76.73300000000113, 18.215166666663606], ""type"": ""Point""}",Northeastern,St. Mary,Enfield,Enfield P.O.,,2,GPS,778242.326286,673835.385818
+Health Centre,"{""coordinates"": [-76.95851666666846, 18.269900000003457], ""type"": ""Point""}",Northeastern,St. Mary,Fellowship Hall,Fellowship Hall P.A.,,1,GPS,754386.608,679873.654801
+Health Centre,"{""coordinates"": [-76.91178333333681, 18.232599999995916], ""type"": ""Point""}",Northeastern,St. Mary,Flint River,Flint River P.A.,,1,GPS,759330.335306,675746.858089
+Health Centre,"{""coordinates"": [-77.00769999999675, 18.327999999999324], ""type"": ""Point""}",Northeastern,St. Mary,Gayle,Gayle P.O.,,3,GPS,749186.039298,686303.998482
+Health Centre,"{""coordinates"": [-76.91796666666423, 18.30751666666919], ""type"": ""Point""}",Northeastern,St. Mary,Hampstead,Hampstead P.O.,,1,GPS,758672.679389,684038.687325
+Health Centre,"{""coordinates"": [-76.87873855117309, 18.313200207148636], ""type"": ""Point""}",Northeastern,St. Mary,Heywood Hall,Heywood Hall P.A.,,1,Digitizing,762819.519015,684670.046725
+Health Centre,"{""coordinates"": [-76.88740000000215, 18.272916666661374], ""type"": ""Point""}",Northeastern,St. Mary,Highgate,Highgate P.O.,,3,GPS,761906.555793,680210.678431
+Health Centre,"{""coordinates"": [-76.97101666666414, 18.34369999999868], ""type"": ""Point""}",Northeastern,St. Mary,Hunt's Town/Dresssville,Hunt's Town P.A.,,1,GPS,753063.532806,688041.993465
+Health Centre,"{""coordinates"": [-76.84645000000184, 18.30373333333677], ""type"": ""Point""}",Northeastern,St. Mary,Islington,Islington P.O.,,2,GPS,766233.867455,683624.730804
+Health Centre,"{""coordinates"": [-77.00164999999639, 18.29888333333328], ""type"": ""Point""}",Northeastern,St. Mary,Jeffrey Town,Jeffrey Town P.A.,,1,GPS,749825.55117,683081.185472
+Health Centre,"{""coordinates"": [-77.02954451597444, 18.349428238731907], ""type"": ""Point""}",Northeastern,St. Mary,Labyrinth,Labyrinth .P.O.,,1,Digitizing,746877.251327,688676.040882
+Health Centre,"{""coordinates"": [-76.74868333332978, 18.20835000000322], ""type"": ""Point""}",Northeastern,St. Mary,Long Road,Long Road P.O.,,1,GPS,776584.421851,673078.574777
+Health Centre,"{""coordinates"": [-76.90798333333113, 18.39478333333491], ""type"": ""Point""}",Northeastern,St. Mary,Mason Hall,Mason Hall P.O.,,1,GPS,759723.337667,693698.424035
+Health Centre,"{""coordinates"": [-76.94851666666352, 18.404316666666936], ""type"": ""Point""}",Northeastern,St. Mary,Oracabessa,Oracabessa P.O.,,2,GPS,755439.915457,694751.98897
+Health Centre,"{""coordinates"": [-76.93363971562742, 18.34337974395457], ""type"": ""Point""}",Northeastern,St. Mary,Oxford,Port Maria P.O.,,1,Digitizing,757014.281968,688007.561284
+Health Centre,"{""coordinates"": [-76.89553333333163, 18.358116666665122], ""type"": ""Point""}",Northeastern,St. Mary,Port Maria,Port Maria P.O.,,3,GPS,761041.207127,689640.594722
+Health Centre,"{""coordinates"": [-77.03182539266815, 18.395595286207545], ""type"": ""Point""}",Northeastern,St. Mary,Retreat,Retreat P.O.,996-3207,2,Digitizing,746637.048024,693786.172989
+Health Centre,"{""coordinates"": [-76.80333333333733, 18.308666666662695], ""type"": ""Point""}",Northeastern,St. Mary,Robin's Bay,Robin's Bay P.O.,,1,GPS,770791.738398,684175.083969
+Health Centre,"{""coordinates"": [-76.85128333333243, 18.20619999999935], ""type"": ""Point""}",Northeastern,St. Mary,Rock River,"Rock River,  Richmond P.O.",,1,GPS,765731.528717,672828.897453
+Health Centre,"{""coordinates"": [-76.94976666666534, 18.263183333334915], ""type"": ""Point""}",Northeastern,St. Mary,Windsor Castle/Carron Hall,Highgate P.O.,,2,GPS,755312.068214,679130.45184
+Health Centre,"{""coordinates"": [-76.98686666666629, 18.301233333334977], ""type"": ""Point""}",Northeastern,St. Mary,Wood Park/Claude Stewart,"Wood Park,  Park P.O.",,2,GPS,751388.52378,683341.344436
+Health Centre,"{""coordinates"": [-76.6178381669755, 18.019629279815984], ""type"": ""Point""}",Southeastern,St. Thomas,Hagley Gap,Hagley Gap P.O.,,1,Digitizing,790468.335693,652214.283983
+Health Centre,"{""coordinates"": [-76.47291712224616, 17.87224648620152], ""type"": ""Point""}",Southeastern,St. Thomas,White Horses,White Horses P.O.,,1,Digitizing,805860.823541,635939.671945
+Health Centre,"{""coordinates"": [-76.3053166666639, 17.91471666666243], ""type"": ""Point""}",Southeastern,St.Thomas,Arcadia,Arcadia P.A.,,1,GPS,823605.619711,640698.734012
+Health Centre,"{""coordinates"": [-76.35035000000352, 17.948433333335224], ""type"": ""Point""}",Southeastern,St.Thomas,Bath and Sunning Hill,Bath P.O.,,2,GPS,818821.028819,644413.163333
+Health Centre,"{""coordinates"": [-76.58851666666969, 17.99409999999961], ""type"": ""Point""}",Southeastern,St.Thomas,Cedar Valley,Cedar Valley P.O.,,1,GPS,793579.548762,649395.343522
+Health Centre,"{""coordinates"": [-76.47520000000124, 17.930916666667837], ""type"": ""Point""}",Southeastern,St.Thomas,Danver's Pen,Danver's Pen P.O.,,1,GPS,805600.502637,642432.5421
+Health Centre,"{""coordinates"": [-76.50633333333374, 17.94326666666452], ""type"": ""Point""}",Southeastern,St.Thomas,Font Hill,Font Hill P.A.,,1,GPS,802298.416676,643790.372882
+Health Centre,"{""coordinates"": [-76.26484999999705, 17.91733333333384], ""type"": ""Point""}",Southeastern,St.Thomas,Isaac Barrant,Golden Grove P.O.,,6,GPS,827892.121287,641004.875654
+Health Centre,"{""coordinates"": [-76.60599999999967, 17.96228333333046], ""type"": ""Point""}",Southeastern,St.Thomas,Llandewey,Llandewey P.O.,,2,GPS,791735.402515,645869.856065
+Health Centre,"{""coordinates"": [-76.54768333333246, 17.901149999995837], ""type"": ""Point""}",Southeastern,St.Thomas,Lloyds Clinic,Lloyds  P.O.,,1,GPS,797929.231182,639117.755757
+Health Centre,"{""coordinates"": [-76.38993333333742, 17.879983333333254], ""type"": ""Point""}",Southeastern,St.Thomas,Morant Bay,"56 Lysson Rd., Morant Bay P.O.",,3,GPS,814652.689734,636822.944896
+Health Centre,"{""coordinates"": [-76.32688333332962, 17.90046666666275], ""type"": ""Point""}",Southeastern,St.Thomas,Port Morant,Port Morant P.O.,,2,GPS,821326.245596,639113.133137
+Health Centre,"{""coordinates"": [-76.28044999999777, 17.97224999999479], ""type"": ""Point""}",Southeastern,St.Thomas,Rowlandsfield,Rowlandsfield P.A.,,1,GPS,826215.658405,647076.512349
+Health Centre,"{""coordinates"": [-76.45288333333527, 17.93778333333263], ""type"": ""Point""}",Southeastern,St.Thomas,Seaforth,Seaforth P.O.,,2,GPS,807962.616654,643199.373959
+Health Centre,"{""coordinates"": [-76.51046666666633, 17.96171666666231], ""type"": ""Point""}",Southeastern,St.Thomas,Trinityville,Triniytville P.O.,,2,GPS,801855.146177,645831.248666
+Health Centre,"{""coordinates"": [-76.4511333333351, 17.954450000000627], ""type"": ""Point""}",Southeastern,St.Thomas,White Hall,White Hall P.A.,,1,GPS,808142.553923,645044.577553
+Health Centre,"{""coordinates"": [-76.57803333332981, 17.877699999999525], ""type"": ""Point""}",Southeastern,St.Thomas,Yallahs,Yallahs P.O.,,3,GPS,794719.139756,636514.749792
+Health Centre,"{""coordinates"": [-77.54118634592284, 18.29351277255256], ""type"": ""Point""}",Western,Trelawny,Albert Town,Albert Town P.O.,610-0785,3,Digitizing,692780.573413,682570.249282
+Health Centre,"{""coordinates"": [-77.71357215853038, 18.453332451437213], ""type"": ""Point""}",Western,Trelawny,Bounty Hall,Bounty Hall P.A.,954-6584,1,Digitizing,674622.446752,700321.760921
+Health Centre,"{""coordinates"": [-77.69605749370837, 18.392555710356902], ""type"": ""Point""}",Western,Trelawny,Bunker's Hill,Bunker's Hill P.O.,610-3796,1,Digitizing,676447.329083,693587.503111
+Health Centre,"{""coordinates"": [-77.54308009647909, 18.42200402061859], ""type"": ""Point""}",Western,Trelawny,Clarks Town,Clarks Town P.O.,954-1738,2,Digitizing,692622.005832,696793.042728
+Health Centre,"{""coordinates"": [-77.74510561014012, 18.390393192035432], ""type"": ""Point""}",Western,Trelawny,Deeside,Deeside P.O.,,1,Digitizing,671263.460274,693368.284105
+Health Centre,"{""coordinates"": [-77.53731267186878, 18.467048992987188], ""type"": ""Point""}",Western,Trelawny,Dewars/ Duncans,Duncans P.O.,954-9304,3,Digitizing,693245.798279,701777.221824
+Health Centre,"{""coordinates"": [-77.59686466840596, 18.403250233476708], ""type"": ""Point""}",Western,Trelawny,Duanvale,Duanvale P.O.,,2,Digitizing,686932.845604,694734.702699
+Health Centre,"{""coordinates"": [-77.66087222222616, 18.49562222222478], ""type"": ""Point""}",Western,Trelawny,Falmouth,"97 Cornwall Street, Falmouth  P.O.",,4,GPS,680206.017324,704982.137355
+Health Centre,"{""coordinates"": [-77.49107348356452, 18.413591357912654], ""type"": ""Point""}",Western,Trelawny,Jackson Town,Jackson Town P.O.,610-4512,2,Digitizing,698114.176184,695846.540696
+Health Centre,"{""coordinates"": [-77.4940666288038, 18.236827460454865], ""type"": ""Point""}",Western,Trelawny,Lowe River,Albert Town,,1,Digitizing,697745.792133,676282.171172
+Health Centre,"{""coordinates"": [-77.45702277471193, 18.462837169918203], ""type"": ""Point""}",Western,Trelawny,Rio Bueno,Rio Bueno P.O.,,1,Digitizing,701725.33314,701288.278949
+Health Centre,"{""coordinates"": [-77.55407634107674, 18.30124780991488], ""type"": ""Point""}",Western,Trelawny,Rock Spring,"Rock Spring P.A.,",,1,Digitizing,691420.28161,683430.425593
+Health Centre,"{""coordinates"": [-77.61649722221912, 18.393030555555818], ""type"": ""Point""}",Western,Trelawny,Sherwood Content,Sherwood Content  P.O.,,1,GPS,684854.636246,693610.30472
+Health Centre,"{""coordinates"": [-77.44865437345653, 18.38794726460762], ""type"": ""Point""}",Western,Trelawny,Stewart Town,Stewart Town P.O,,1,Digitizing,702589.21534,692996.705478
+Health Centre,"{""coordinates"": [-77.60645613594093, 18.24731174604845], ""type"": ""Point""}",Western,Trelawny,Troy,Troy P.O.,,1,Digitizing,685862.920402,677477.886071
+Health Centre,"{""coordinates"": [-77.52153404160936, 18.315407903131973], ""type"": ""Point""}",Western,Trelawny,Ulster Spring,Ulster Spring P.O.,,6,Digitizing,694865.215282,684987.757223
+Health Centre,"{""coordinates"": [-77.51428649708512, 18.25017273982654], ""type"": ""Point""}",Western,Trelawny,Wait-A-Bit,Wait-A-Bit P.O.,990-5124,2,Digitizing,695611.370908,677765.091846
+Health Centre,"{""coordinates"": [-77.72769415597173, 18.414329619211816], ""type"": ""Point""}",Western,Trelawny,Wakefield,Wakefield P.O.,610-3050,2,Digitizing,673113.746212,696010.425239
+Health Centre,"{""coordinates"": [-77.58067519658616, 18.262662073551805], ""type"": ""Point""}",Western,Trelawny,Warsop,Warsop P.O.,,2,Digitizing,688594.751299,679168.19117
+Health Centre,"{""coordinates"": [-78.18052985594554, 18.31025720024947], ""type"": ""Point""}",Western,Westmoreland,Baulk,Baulk P.A.,,1,Digitizing,625195.493619,684737.424396
+Health Centre,"{""coordinates"": [-77.9636833333337, 18.145399999999754], ""type"": ""Point""}",Western,Westmoreland,Beeston Spring,Beeston Spring P.O.,,1,GPS,648025.235974,666358.073812
+Health Centre,"{""coordinates"": [-77.89268820477022, 18.218726382315495], ""type"": ""Point""}",Western,Westmoreland,Berkshire,Berkshire P.O.,,1,Digitizing,655576.7926,674436.358387
+Health Centre,"{""coordinates"": [-77.95044999999922, 18.29813333333114], ""type"": ""Point""}",Western,Westmoreland,Bethel Town,Bethel Town P.O.,,3,GPS,649512.20192,683255.727672
+Health Centre,"{""coordinates"": [-78.02596509098312, 18.165563764296376], ""type"": ""Point""}",Western,Westmoreland,Bluefields,Bluefields P.O.,955-8285,1,Digitizing,641447.137454,668625.178048
+Health Centre,"{""coordinates"": [-77.98687153924081, 18.285169758309515], ""type"": ""Point""}",Western,Westmoreland,Cornwall Mountain,Cornwall Mountain P.O.,,1,Digitizing,645653.876804,681840.990034
+Health Centre,"{""coordinates"": [-77.97303333333602, 18.233583333336437], ""type"": ""Point""}",Western,Westmoreland,Darliston,Darliston P.O.,,3,GPS,647087.07107,676123.517896
+Health Centre,"{""coordinates"": [-78.23714491577593, 18.27457930273728], ""type"": ""Point""}",Western,Westmoreland,Delveland,Delveland P.A.,,1,Digitizing,619183.940414,680827.519952
+Health Centre,"{""coordinates"": [-78.1386842357552, 18.275662780102312], ""type"": ""Point""}",Western,Westmoreland,Georges Plain,Georges Plain P.A.,955-6761,1,Digitizing,629595.80101,680880.738702
+Health Centre,"{""coordinates"": [-78.18188333333558, 18.30870000000054], ""type"": ""Point""}",Western,Westmoreland,Grange Hill,Grange Hill P.O.,,3,GPS,625051.30853,684565.979899
+Health Centre,"{""coordinates"": [-78.23401518168235, 18.326718952952493], ""type"": ""Point""}",Western,Westmoreland,Jerusalem Mountain,Jerusalem Mountain P.O.,,1,Digitizing,619553.283712,686596.282881
+Health Centre,"{""coordinates"": [-77.91524419947405, 18.261487615064034], ""type"": ""Point""}",Western,Westmoreland,Lamb's River,Lamb's River P.O,,2,Digitizing,653214.336923,679180.921792
+Health Centre,"{""coordinates"": [-78.10496666667062, 18.220783333329194], ""type"": ""Point""}",Western,Westmoreland,Little London,Little London P.O.,,2,GPS,633124.846405,674784.983341
+Health Centre,"{""coordinates"": [-78.34381666667119, 18.2787833333302], ""type"": ""Point""}",Western,Westmoreland,Negril,Negril P.O.,,3,GPS,607908.000909,681371.335872
+Health Centre,"{""coordinates"": [-77.97165387205115, 18.172269046279492], ""type"": ""Point""}",Western,Westmoreland,New Works,New Works P.A.,,1,Digitizing,647197.404298,669336.371546
+Health Centre,"{""coordinates"": [-78.06324999999917, 18.263250000001182], ""type"": ""Point""}",Western,Westmoreland,Petersfield,Petersfield P.O.,,2,GPS,637564.229932,679459.493244
+Health Centre,"{""coordinates"": [-78.12831666666429, 18.225513888884517], ""type"": ""Point""}",Western,Westmoreland,Savanna-la-mar,Savanna-la-mar P.O.,,3,GPS,630658.273572,675323.443623
+Health Centre,"{""coordinates"": [-77.89681090833206, 18.25683497597034], ""type"": ""Point""}",Western,Westmoreland,St. Leonardo,St. Leonards P.O.,,1,Digitizing,655161.12285,678656.427544
+Health Centre,"{""coordinates"": [-77.96554999999819, 18.090016666667182], ""type"": ""Point""}",Western,Westmoreland,Whitehouse,Whitehouse P.O.,,3,GPS,647795.789481,660229.248024
+Health Centre,"{""coordinates"": [-78.0635426255046, 18.32068017212481], ""type"": ""Point""}",Western,Westmoreland,Williamsfeild,Williamsfeild P.O.,,1,Digitizing,637569.74804,685816.234901
+Health Centre,"{""coordinates"": [-76.76921137028246, 17.99815386970348], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Nannyville,Nannyville Gardens,,2,Digitizing,774441.913871,649810.881359
+Hospital,"{""coordinates"": [-77.25982499999594, 17.97420833332924], ""type"": ""Point""}",Southern,Clarendon,May Pen,Muirhead Ave,986-2528,C,GPS,722479.246589,647164.654851
+Hospital,"{""coordinates"": [-77.2413722222192, 17.80803888888827], ""type"": ""Point""}",Southern,Clarendon,Lionel Town,Vere,986-3226,C,GPS,724409.827773,628770.496441
+Hospital,"{""coordinates"": [-78.16779444444866, 18.452077777776687], ""type"": ""Point""}",Western,Hanover,Noel Holmes,Fort Charlotte Dr.,956-2733,C,GPS,626640.720434,700426.315462
+Hospital,"{""coordinates"": [-76.79537499999758, 17.977288888885422], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Victoria Jubilee,"North Street, Kgn.",922-1700,S (Specialist),GPS,771673.576825,647498.287939
+Hospital,"{""coordinates"": [-76.77819166667085, 17.999283333336255], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Bustamante,"Arthur Wint Dr., Kgn. 5",926-5721,S (Specialist),GPS,773490.697001,649934.729939
+Hospital,"{""coordinates"": [-76.79490555555175, 17.97627499999957], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Kingston Public,"North Street, Kgn.",922-0227,A,GPS,771723.423794,647386.125589
+Hospital,"{""coordinates"": [-76.7401040188898, 18.0047033012407], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Sir John Golding,"7 Golding Ave., Kgn. 7",927-2504,S (Specialist),Digitizing,777523.5407,650539.8534
+Hospital,"{""coordinates"": [-76.73818916465916, 18.000104258321297], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Hope Institute,Elleston Flats,927-2111,S (Specialist),Digitizing,777727.04649,650031.11522
+Hospital,"{""coordinates"": [-76.77235833333485, 17.970727777776737], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Bellevue,"16  1/2 Windward Rd., Kgn. 2",928-1380-1,S (Specialist),GPS,774112.358469,646774.945844
+Hospital,"{""coordinates"": [-76.74297222222509, 18.011024999995108], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,University,Mona,927-1620,A,GPS,777218.822084,651239.117957
+Hospital,"{""coordinates"": [-76.74409068702073, 18.011264085728033], ""type"": ""Point""}",Southeastern,Kingston & St. Andrew,Mona Rehabilitation,Mona,,A,Digitizing,777100.34204,651265.41623
+Hospital,"{""coordinates"": [-77.50958611111176, 18.043091666668694], ""type"": ""Point""}",Southern,Manchester,Mandeville,32 Hargreaves Ave.,962-2067,B,GPS,696045.4678,654843.557375
+Hospital,"{""coordinates"": [-77.4648111111127, 18.155363888889973], ""type"": ""Point""}",Southern,Manchester,Percy Junor,Christiana P.O.,964-2322,C,GPS,700817.347126,667257.5425
+Hospital,"{""coordinates"": [-76.45595555555617, 18.176499999996697], ""type"": ""Point""}",Northeastern,Portland,Port Antonio,Naylors Hill,993-2646,C,GPS,807559.613853,669619.744138
+Hospital,"{""coordinates"": [-77.20954166666391, 18.43726111111327], ""type"": ""Point""}",Northeastern,St. Ann,St. Anns Bay,St. Anns Bay P.O.,972-2272,B,GPS,727863.194138,698410.304055
+Hospital,"{""coordinates"": [-76.9471972222198, 17.991816666664317], ""type"": ""Point""}",Southeastern,St. Catherine,Spanish Town,"Burke Rd., Spanish Town",984-3031-2,B,GPS,755592.335133,649095.062171
+Hospital,"{""coordinates"": [-77.03157499999962, 18.133616666666846], ""type"": ""Point""}",Southeastern,St. Catherine,Linstead,"Rodney Hall Rd., Linstead P.O.",984-2241,C,GPS,746658.568662,664789.144492
+Hospital,"{""coordinates"": [-77.85883611111247, 18.026677777775234], ""type"": ""Point""}",Southern,St. Elizabeth,Black River,"45 High Street, Black River",965-2212,C,GPS,659058.978679,653163.331477
+Hospital,"{""coordinates"": [-77.91004444444745, 18.469419444441375], ""type"": ""Point""}",Western,St. James,Cornwall Regional,"Mt. Salem, Montego Bay P.O.",952-6683,A,GPS,653877.161977,702193.266704
+Hospital,"{""coordinates"": [-76.76169722222596, 18.273269444443493], ""type"": ""Point""}",Northeastern,St. Mary,Annotto Bay,Annotto Bay,996-2222,C,GPS,775198.570707,680262.303457
+Hospital,"{""coordinates"": [-76.89552777778053, 18.35810277777295], ""type"": ""Point""}",Northeastern,St. Mary,Port Maria,"Trinity, Port Maria",994-2228,C,GPS,761041.795166,689639.057738
+Hospital,"{""coordinates"": [-76.3909694444463, 17.880447222218532], ""type"": ""Point""}",Southeastern,St. Thomas,Princess Margaret,"54 Lyssons Rd., Morant Bay P.O.",982-2304,C,GPS,814542.718122,636873.92652
+Hospital,"{""coordinates"": [-77.66079999999656, 18.496450000001403], ""type"": ""Point""}",Western,Trelawny,Falmouth,Golden Grove,954-3250,C,GPS,680213.971153,705073.736511
+Hospital,"{""coordinates"": [-78.1292166666667, 18.22572222222097], ""type"": ""Point""}",Western,Westmoreland,Sav-La-Mar,"Barracks Rd., Sav-La-Mar",955-2133,B,GPS,630563.222445,675347.081846

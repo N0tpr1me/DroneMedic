@@ -1,0 +1,9 @@
+{
+  "route": ["Depot", "Clinic A", "Clinic B", "Clinic C", "Clinic D", "Depot"],
+  "priorities": {
+    "Clinic A": "normal",
+    "Clinic B": "high",
+    "Clinic C": "normal",
+    "Clinic D": "high"
+  }
+}

@@ -1,0 +1,770 @@
+[
+  {
+    "name": "Dr George Mukhari",
+    "region": "South Africa",
+    "website": "",
+    "address": "Sekwati Street, Ga-Rankuwa Unit 2, Gauteng",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Boitumelo Regional Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "Smaldeel Road, Kroonstad, Free State, 9499",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Steve Biko Academic Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "c/o, Steve Biko and Malan Street, Capital Park, 0001",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Thelle Mogoerane Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "12390, Nguzu Street, Vosloorus, Gauteng, 1475",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Selby Hospital(Solomon Stix Morewa Memorial)",
+    "region": "South Africa",
+    "website": "https://clinix.co.za/",
+    "address": "121, Eloff Street, Selby, Johannesburg, 2001",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Tower Psychiatric Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "2411, Somerset Street, Fort Beaufort, 5720",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Dora Nginza Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "Spondo Street, iBhayi",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Tambo Memorial Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "Railway Street, Boksburg, 1459",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Nelson Mandela Academic Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "Nelson Mandela Drive, Mthatha, Eastern Cape",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Netcare Unitas Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "Clifton Avenue, Lyttelton Centurion, 0140",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Netcare St. Augustine's Hospital",
+    "region": "South Africa",
+    "website": "https://www.netcarehospitals.co.za/Hospital/Netcare-St-Augustines-Hospital",
+    "address": "107, J.B. Marks Road, Bulwer, Berea, 4001",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mankweng Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "Houtbos Dorp Street, Mankweng, 0727",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Tintswalo Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "Chavelagaza Road, Acornhoek, 1360",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mediclinic Panorama",
+    "region": "South Africa",
+    "website": "",
+    "address": "Rothschild Boulevard, Panorama, Cape Town, 7500",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Eugene Marais Hospital",
+    "region": "South Africa",
+    "website": "https://www.lifehealthcare.co.za/hospitals/gauteng/pretoria/life-eugene-marais-hospital/",
+    "address": "696 5th ais,, Avenue, Les Marais, Pretoria, 0084",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Lenmed Ethekwini Hospital & Heart Centre",
+    "region": "South Africa",
+    "website": "",
+    "address": "11, Riverhorse Road, Durban",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Netcare Garden City Hospital",
+    "region": "South Africa",
+    "website": "http://www.netcarehospitals.co.za/Hospital/Netcare-Garden-City-Hospital",
+    "address": "35, Bartlett road, Johannesburg, 2092",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Life Wilgers Hospital",
+    "region": "South Africa",
+    "website": "https://www.lifehealthcare.co.za/hospitals/gauteng/pretoria/life-wilgers-hospital/",
+    "address": "Denneboom Road, Pretoria, 0184",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Butterworth Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "Cnr Scanlen & Geach Street, Butterworth",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Khayelitsha Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "C/o Steve Biko and Walter Sisulu Drives, Khayelitsha, Cape Town, 7784",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Vryheid Hospital",
+    "region": "South Africa",
+    "website": "www.kznhealth.gov.za/vryheidhospital.htm",
+    "address": "Coswald Brown Street, Vryheid, 3100",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mamelodi Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "1947, Mathane Avenue, Tshwane, 0122",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Life St George's Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "40, Park Drive, Gqeberha, 6001",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Medi clinic Sandton",
+    "region": "South Africa",
+    "website": "",
+    "address": "Cnr Main Road & Peter Place, Bryanston, Johannesburg, 2021",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Northern Cape Mental Healthcare Hospital",
+    "region": "South Africa",
+    "website": "",
+    "address": "Oosterzee Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Dr S.K. Matseke Memorial Hospital.",
+    "region": "South Africa",
+    "website": "https://www.clinix.co.za/dr-sk-matseke-memorial-hospital",
+    "address": "cnr Immink drive & Chris Hani road, Johannesburg, 1862",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "George Provincial Hospital",
+    "region": "South Africa",
+    "website": "www.georgehospital.co.za",
+    "address": "Corner of Davidson and Langenhoven Road, Heatherlands, George",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Annotto Bay Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Bellevue Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "16, Windward Road",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Black River Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Bustamante Children Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "Authur Wint Drive",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Catherine Hall Health Centre",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Community Health Center",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Cornwall Regional Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Cross Keys Health Centre",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Falmouth Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Falmouth Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Font Hill Health Centre",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Glengoffe Health Centre",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Hargreaves Memorial Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Harkers Hall Health Center",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Hospiten Montego Bay",
+    "region": "Jamaica",
+    "website": "https://hospiten.com/hospitales/hospiten-montego-bay",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Isaac Barrant Clinic",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Kingston Open MRI",
+    "region": "Jamaica",
+    "website": "http://www.kingstonopenmri.com/",
+    "address": "48, Constant Spring Road, Kingston, 10",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Kingston Public Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Lincoln Health Centre",
+    "region": "Jamaica",
+    "website": "",
+    "address": "Lincoln-Fairfield Main Road, Mandeville",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Linstead Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "7, Rodney Hall Road",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mandeville Memorial Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mandeville Public Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "May Pen Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "National Chest Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "35 1/5, Barbican Rd",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Noel Holmes Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Nutall Memorial Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "Kingston",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Percy Junor Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Port Antonio Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Saint Thomas Infirmary",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Savannah La Mar Public General Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Sir John Golding Rehabilitation Center",
+    "region": "Jamaica",
+    "website": "",
+    "address": "7, John Golding Road",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Spanish Town Hospital",
+    "region": "Jamaica",
+    "website": "https://www.serha.gov.jm/",
+    "address": "Burke Road",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "St Ann's Bay Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "St Ann's Bay Infirmary",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "St. Ann's Bay Hospital",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "St. Elizabeth's Infirmary",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "St. Jago Park Health Centre",
+    "region": "Jamaica",
+    "website": "https://www.serha.gov.jm/",
+    "address": "Burke Road, Spanish Town",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "St. Joseph's Hospital Complex",
+    "region": "Jamaica",
+    "website": "",
+    "address": "22, Deanery Road",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Trinityville Health Centre",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "University Hospital Of The West Indies",
+    "region": "Jamaica",
+    "website": "https://uhwi.gov.jm/",
+    "address": "Mona, KGN7",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "University Hospital of the West Indies",
+    "region": "Jamaica",
+    "website": "https://uhwi.gov.jm/",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Uwi Health Center",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Barna- og unglingageðdeild Landspítalans",
+    "region": "Iceland",
+    "website": "https://www.landspitali.is/sjuklingar-adstandendur/deildir-og-thjonusta/barna-og-unglingageddeild/",
+    "address": "12, Dalbraut, 105",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Fjórðungssjúkrahúsið í Neskaupstað",
+    "region": "Iceland",
+    "website": "",
+    "address": "20, Mýrargata, Neskaupstaður, 740",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "HSN Blönduós",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilbrigðisstofnun Suðurlands",
+    "region": "Iceland",
+    "website": "",
+    "address": "Selfoss, 800",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilbrigðisstofnun Suðurlands",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilbrigðisstofnun Vesturlands",
+    "region": "Iceland",
+    "website": "",
+    "address": "Austurgata, 340",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Heilbrigðisstofnunin Fjallabyggð",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilbrigðisstofun Þingeyinga",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilbrigðisstofunin Sauðárkróki",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilsugæsla Rangárþings",
+    "region": "Iceland",
+    "website": "",
+    "address": "4, Öldubakki, Hvolsvöllur, 860",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilsugæsla Raufarhafnar",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilsugæsla Suðurnesja",
+    "region": "Iceland",
+    "website": "",
+    "address": "6, Skólavegur, Keflavík, 230",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilsugæsla við Víkurbraut",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilsugæslan",
+    "region": "Iceland",
+    "website": "",
+    "address": "8, Búðareyri, 730",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilsugæslusel Flateyrar",
+    "region": "Iceland",
+    "website": "https://hvest.is/starfsstodvar/flateyri/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilsugæslustöðin Djúpavogi",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Kleppsspítali",
+    "region": "Iceland",
+    "website": "",
+    "address": "Reykjavík, 104",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Landakotsspítali",
+    "region": "Iceland",
+    "website": "",
+    "address": "Reykjavík",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Landspítali",
+    "region": "Iceland",
+    "website": "https://www.landspitali.is/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Landspítali Fossvogur",
+    "region": "Iceland",
+    "website": "http://landspitali.is",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Landspítali Grensás",
+    "region": "Iceland",
+    "website": "",
+    "address": "Reykjavík, 108",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Rauði kross Íslands",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Sjúkrahúsið Vogur",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Sjúkrahúsið og Heilsugæslan á Akranesi",
+    "region": "Iceland",
+    "website": "https://www.sha.is/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Sjúkrahúsið og heilsugæslan á Ísafirði",
+    "region": "Iceland",
+    "website": "",
+    "address": "Torfnes, Ísafjörður, 400",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Sjúkrahúsið á Akureyri",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Öldrunardeild Vífilsstöðum",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  }
+]

@@ -1,0 +1,324 @@
+X,Y,osm_id,osm_type,completeness,amenity,healthcare,name,operator,source,speciality,operator_type,operational_status,opening_hours,beds,staff_doctors,staff_nurses,health_amenity_type,dispensing,wheelchair,emergency,insurance,water_source,electricity,is_in_health_area,is_in_health_zone,url,addr_housenumber,addr_street,addr_postcode,addr_city,changeset_id,changeset_version,changeset_timestamp,uuid
+-76.8984704221741,17.9607216269561,"4233670899",node,18.75,pharmacy,pharmacy,Monarch Pharmacy,,,,,,"Mo-Sa 10:00-23:00; Su 10:00-21:00",,,,,,,,,,,,,,,Braeton Parkway,,,145749344,6,2024/01/01 00:12:31+00,69bb4a1024fe47e5a768106fefc12ea2
+,,"850844417",way,15.625,pharmacy,pharmacy,,,,,,,"Mo-Su 09:00-22:00; Sa 09:00-17:00; PH closed",,,,,,limited,,,,,,,,,,,,142668550,2,2023/10/16 14:09:43+00,d41d7640f26342798f89b5a31b07ce38
+,,"374468828",way,15.625,clinic,,Gregory Park Clinic,,,,,,,,,,,,,,,,,,,,,Gregory Park Main Road,,Portmore,94695094,3,2020/11/24 09:39:18+00,47930f8edb424092b9b079c2305dab36
+-77.5300997161075,18.4689063580824,"3721456693",node,12.5,clinic,,Duncans Medical Center,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,4,2016/02/06 04:19:25+00,5e498e3e08f64909bfec2425bfca8c1b
+,,"374956734",way,12.5,clinic,,Hope Institute,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,93869822,4,2020/11/10 15:07:30+00,27bdb18569bc416abe832a52fd575b52
+,,"374993684",way,12.5,pharmacy,pharmacy,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,96221911,2,2020/12/22 00:35:13+00,fbc4c440d00147928ce5d4b99a1c1ade
+-77.0316411777856,18.1371207908994,"3776984639",node,15.625,dentist,dentist,New Smile Dental,,,,,,Mo-Sa 08:00-18:00,,,,,,,,,,,,,,,,,,127276143,6,2022/10/10 03:09:03+00,585255c948e8446388d25fa336bf62c8
+-78.3504742144446,18.2789590211255,"3775366068",node,12.5,dentist,,Dentist,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:19:17+00,53fd9feba10f404594f287d64181bf66
+,,"374122448",way,12.5,pharmacy,,Benson's Pharmacy,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,,,,,34472822,1,2015/10/06 16:40:39+00,dbf90fed3af646c7aded380a1a6db83a
+,,"371793800",way,12.5,clinic,,Urology Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:13:27+00,8d067fa2f6204a2b8b87c04b8a65c4d8
+,,"371543551",way,12.5,pharmacy,,Ultra-Med Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:13:16+00,9c79ba53c9f54c4082629efa2a7105cc
+-78.3449057808903,18.2785485593271,"3774334191",node,12.5,doctors,,Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:21:56+00,541102cd9f6e4eb386bbb1753aa3bfcf
+,,"374989762",way,12.5,pharmacy,pharmacy,Ashbiz Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,96221968,2,2020/12/22 00:38:53+00,1f5ac2577abe4636864c5f759f9eb8e7
+,,"374475179",way,15.625,pharmacy,pharmacy,Leed's Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,2,2022/12/13 18:58:00+00,cd13fa82292a4a2fa56b47963154480d
+-77.0317816584828,18.1370339543826,"3776984641",node,15.625,pharmacy,pharmacy,Sambells Discout Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,127276143,6,2022/10/10 03:09:03+00,258600ca5a3f40e9802d3873109b0778
+-77.5008098260199,17.8977536690125,"2641521380",node,15.625,hospital,,Cross Keys Health Centre,,,,,,Mo-Fr 08:30-16:00,,,,,,,yes,,,,,,,,,,,79680235,2,2020/01/17 06:31:03+00,c35a6121bf3e4aa682c8fc1b9e89eb59
+,,"325781633",way,21.875,hospital,hospital,Kingston Public Hospital,Government of Jamaica,,,,,24/7,,,,,,,yes,,,,,,,,,,,162426826,9,2025/02/12 11:54:21+00,96d536efbf574a9da511c27605d3ec7f
+-77.6059710272535,17.9099234380491,"2681065722",node,9.375,doctors,,Junction Medical,,,,,,,,,,,,,,,,,,,,,,,,20662152,1,2014/02/19 19:17:03+00,dfdbc530a3d54dbaa80b4998c6c16074
+,,"372859454",way,12.5,clinic,clinic,Padmanu Medical Centre,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,6e4dfa136c884f8e8f193d36cc91a4a4
+,,"374576276",way,15.625,doctors,doctor,Dr. Philip D. Waite,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,76866633,2,2019/11/10 12:22:41+00,30e5044d49424157a76c2d71c69c7168
+-77.759130526458,18.0831763708173,"4636333195",node,15.625,doctors,doctor,Lacovia Medical Centre,,,,,,07:00-17:00,,,,,,,,,,,,,,,,,,88781904,3,2020/07/31 12:13:40+00,72c8f548aae84fb78a328a3106d3de3b
+,,"371487430",way,21.875,dentist,dentist,Island Smiles,,,,,,,,,,,,,,,,,,,,"20",Hillcrest Avenue,Kingston 6,,96274338,2,2020/12/22 17:45:40+00,4bc23d6b3ed54d61840ca9dfdc4efc2d
+-77.6059391760214,17.9103039764532,"2681065725",node,9.375,doctors,,Dr. Hoyte,,,,,,,,,,,,,,,,,,,,,,,,20662152,1,2014/02/19 19:17:03+00,64e4dbb219b442fe9db091c17acd82ee
+-77.1733473092177,18.4251839203775,"9984241318",node,6.25,pharmacy,,,,,,,,,,,,,,,,,,,,,,,,,,125497422,1,2022/08/28 22:41:25+00,995eede005bf4c239b99b431c0434992
+-76.9547338634073,17.9922398460023,"3786393970",node,18.75,pharmacy,,Cumberland Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Young Street,,Spanish Town,94657410,4,2020/11/23 19:22:31+00,836200c9c0734686954a1e6bfcc109ac
+-76.8793501275689,17.9529213440438,"4582212840",node,15.625,pharmacy,,West Bay Pharmacy,,,,,,Mo-Su 10:00-23:59,,,,,,,,,,,,,,,East Biscayne Dr.,,,65433548,4,2018/12/13 08:17:54+00,37e1b775c8c34120886b4b41e1f52e17
+,,"374579362",way,18.75,pharmacy,,TLC Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Wellington Street,,Spanish Town,34533811,1,2015/10/09 16:47:21+00,68cd03d2095248d687240a048ece93d4
+,,"371794538",way,12.5,pharmacy,,Chung's Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,92674714,5,2020/10/19 03:02:37+00,c70770d0d16040c99bb559fd0d6e0821
+-76.8814519736087,17.9821907822876,"3777470194",node,12.5,clinic,clinic,Medical Centre,,,,,,,,,,,,,,,,,,,,,,,,130047189,2,2022/12/13 19:02:11+00,f76f93e91f88490d9aa654439a5e9128
+,,"372870155",way,12.5,clinic,,Premier Heart & Surgery Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,4,2016/02/06 04:08:22+00,0759b041158a469f83b5ca83b7bade12
+,,"375149725",way,21.875,clinic,,Alma Jones Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"119",Hagley Park Road,,Kingston,34622887,1,2015/10/13 22:16:58+00,baf941826b7441f5828b061baf3abaaf
+,,"374027542",way,18.75,clinic,,Cumberland Medical,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Cumberland Road,,Spanish Town,34458339,1,2015/10/05 22:22:22+00,09a806beccbc4136b6b791fb8a03b39a
+-76.4103296713827,17.8811694868504,"3789572929",node,15.625,pharmacy,pharmacy,Light Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,149471931,4,2024/04/02 10:02:39+00,98cdf8c4e5b84b5593072949110f8211
+-76.8824618253031,17.9838694260362,"3777470180",node,12.5,pharmacy,pharmacy,Grange Lane Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,130047189,2,2022/12/13 19:02:11+00,3e72af64ae884d68a8b1c4a62738bfef
+,,"371794543",way,12.5,pharmacy,,Drugs Mart,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,46859969,4,2017/03/15 06:27:08+00,5fa25c65478f409a830f23bdeab9b190
+,,"353080113",way,25,hospital,hospital,Bellevue Hospital,,KG Ground Survey 2015,psychiatry,,,,,,,,,,,,,,,,,"16",Windward Road,,,100506408,14,2021/03/05 17:29:04+00,7c419ab12a9b406087052c2ece422e66
+-76.8935985247736,17.9578265176,"4233681796",node,9.375,pharmacy,,Medlife Rx,,,,,,,,,,,,,,,,,,,,,,,,39906148,1,2016/06/09 11:11:45+00,ec8ea2705c544e29bcb6d4fd7957c4f6
+-77.9230629505352,18.4739951791371,"7080127968",node,9.375,pharmacy,,Clinicare Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,78780387,1,2019/12/23 15:36:11+00,cfabdd2dccf54fb2bfec901d6a3ef7df
+,,"374311916",way,21.875,clinic,clinic,Linstead Clinic (Type 5),,,,,,,,,,,,,no,,,,,,,,Kings Street,,Linstead,127276143,2,2022/10/10 03:09:03+00,9cde37677c284691b6e49cbc58d24989
+-77.921617658971,18.4537410644896,"3764461474",node,12.5,pharmacy,,Fairview Drug,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:19:42+00,771e1d9bd6e14c1c976a2a26d9382908
+,,"374181032",way,12.5,pharmacy,,Baywatch Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:54:58+00,08e2c090300045eb8abfe54ae9543cda
+,,"374335233",way,21.875,clinic,clinic,Prince Medical and Dental Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Kings Street,,Linstead,127276143,3,2022/10/10 03:09:03+00,1dda5ec287a64c2783b30fb6c941d0da
+-76.7962808570726,18.0346352607969,"3787759262",node,12.5,doctors,,Doctor's Office,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,89377555,4,2020/08/13 22:33:32+00,3000464fb95e4d1d9dfe1a372a71542b
+,,"475914049",way,12.5,pharmacy,pharmacy,Fontana Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,96273834,3,2020/12/22 17:33:24+00,5ada4a6fa9794f99a5b59cf4249f73f1
+,,"461643085",way,28.125,hospital,hospital,University Hospital Of The West Indies,,,,,,24/7,,,,,,yes,yes,,,,,,,,,KGN7,Mona,142851628,9,2023/10/20 06:19:45+00,a8843dcf54684c24a9f12047d30b0459
+-76.8119584525874,18.0343835522446,"6394147785",node,18.75,dentist,,Dr. J.O. Lasisi,,,,,,Mo-Su 09:00-18:00,,,,,,,,,,,,,,shop#2,Red Hills Road,,,69051549,1,2019/04/09 15:49:13+00,1970f759671e48f6bfa3994c52667423
+,,"375239621",way,18.75,clinic,,The People's Medical Clinic,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Young Street,,Spanish Town,37034644,3,2016/02/06 04:12:26+00,202c0f865ab642208e0ee0011e6566b5
+,,"375125545",way,12.5,clinic,,Windward Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:14:00+00,367824f46afb49d18045ae465f7fb061
+-77.763124168044,18.1619391871011,"6564850257",node,9.375,clinic,,Holy Spirit Clinic,,,,,,,,,,,,,,,,,,,,,,,,71514520,1,2019/06/22 17:15:39+00,b9d177cb7b364a0f8665305bc8a190bf
+-76.8115366752197,18.0207383167923,"3786799383",node,15.625,pharmacy,,New World Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Molynes Road,,,48732012,4,2017/05/16 13:34:34+00,01d80c7274b44561be736b967e0f9412
+,,"374461381",way,18.75,clinic,clinic,Portmore Healthcare,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,Portmore,130047189,2,2022/12/13 19:02:11+00,1b66276fb7c4408daf3888d9ba4d9d20
+-76.7774399313002,18.0298334361068,"3788234394",node,12.5,pharmacy,,Monarch Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:22:02+00,72d9a6acce624458801853c014b2d5e9
+,,"1122405558",way,6.25,clinic,,,,,,,,,,,,,,,,,,,,,,,,,,131671555,2,2023/01/24 22:34:24+00,f5bf61e7c8874e2bac2c0f0e5d0dd619
+,,"374359534",way,12.5,dentist,dentist,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,146334930,4,2024/01/16 18:48:03+00,7419d6aec5224f9bace0cce1d7af7170
+-76.8228138553874,18.0280312431055,"442000523",node,12.5,pharmacy,pharmacy,Hughenden Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,95109059,3,2020/12/01 17:47:06+00,5422f656dd9c40e0968cca4918b11ef7
+-77.0012849419763,18.1132292655508,"4201512589",node,15.625,clinic,,Ewarton health center,,,,,,Mo-Fr 08:00-16:00,,,,,,,,,,,,,,,Mount  rosser,,,44232825,3,2016/12/07 18:56:32+00,8b4572da424b4dd0bf172f093e175051
+-76.7943539413521,18.0335329567105,"3664711470",node,9.375,doctors,,Doctor,,,,,,,,,,,,,,,,,,,,,,,,46229793,2,2017/02/20 00:16:38+00,95183540fbdd47cbbdd9965b3dd42c04
+,,"371816206",way,12.5,pharmacy,,J&J Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,92674714,4,2020/10/19 03:02:37+00,284b5d240bae42a4bc7edf18ac28fa4c
+,,"373914152",way,12.5,clinic,clinic,Maxfield Health Centre,,,,,,,,,,,,,,,,,,,,,,,,122518209,4,2022/06/17 17:29:44+00,363646b8adc347d78d486e178506bab3
+,,"905891267",way,12.5,clinic,,Far East Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,99057262,1,2021/02/10 17:38:35+00,e9745f5b3cb4404f9bfe3ab46d396cdf
+,,"371392515",way,12.5,dentist,,City Centre Dental,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:57:26+00,913146f3494c44a199fa5823a0fe667e
+-76.7868887669287,17.9937398713943,"3787792955",node,21.875,pharmacy,pharmacy,Marching Bees Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Caledonia Avenue,,Kingston,96221968,5,2020/12/22 00:38:53+00,5e013d03abe04d28b9bd0e313d344aed
+,,"375152673",way,12.5,clinic,,Qualcare,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,89538427,2,2020/08/17 21:03:20+00,fd36663b104645ceb89dff222ac5039f
+-76.782589856429,18.0005354993922,"3780155320",node,15.625,dentist,dentist,Dental Office,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,122518209,4,2022/06/17 17:29:44+00,c28224eeeb684b96ad91d1eb8e389288
+-77.4648507070342,18.1554685254892,"3162368771",node,12.5,hospital,,Percy Junor Hospital,Ministry of Health,,,,,,,,,,,,,,,,,,,,,,,26496527,1,2014/11/02 05:45:35+00,e3bafc4cbe1a48fe93255fcfc65fd4e0
+,,"372852185",way,12.5,clinic,,Oasis X-Ray & Ultrasound,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,34532653,2,2015/10/09 15:51:50+00,59f8e77f8def49138d54c7805baa24e0
+,,"374472097",way,15.625,hospital,hospital,Savannah La Mar Public General Hospital,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,2,2022/12/13 18:58:00+00,47cbe5d935de4399aa532d4fed490b7f
+,,"848741537",way,12.5,clinic,,Greater Portmore Health Center,,,,,,,,,,,,,,,,,,,,,West Henderson Boulevard,,,103290379,2,2021/04/20 18:51:13+00,51d3c97ca01e4823ae43592f162a3b94
+-76.7609790469338,18.0225121789609,"2658010771",node,15.625,hospital,,National Chest Hospital,,,,,,,,,,,,,,,,,,,,35 1/5,Barbican Rd,,,48879149,2,2017/05/22 07:33:42+00,9f687b0306fd4dd2b9c2ee14baf8a8d9
+,,"375583426",way,15.625,hospital,hospital,Saint Thomas Infirmary,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,173014714,5,2025/10/08 16:50:35+00,29d8162338cb4d63ae4e58c11f976497
+,,"375289093",way,12.5,clinic,,Olympic Garden Health Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,89785310,4,2020/08/22 15:55:00+00,bbded6de31af48ac91dfcf237de6efc6
+-77.6991504655386,18.0530762859689,"3757611369",node,9.375,pharmacy,,The Santa Cruz Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,34229439,1,2015/09/24 16:35:18+00,9249f59229b647b3a3272017270b9627
+,,"375258009",way,21.875,doctors,,Doctor's Office,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"13",Burke Road,,Spanish Town,94838307,4,2020/11/26 12:02:59+00,11caed6d7e7d413b98e6da9b68caa48c
+,,"247298062",way,18.75,hospital,hospital,Bustamante Children Hospital,,,,,,,,,,,,,yes,,,,,,,,Authur Wint Drive,,,122518209,8,2022/06/17 17:29:44+00,11eccd5e0f8a4f36ad8d2b1fa5b831d8
+-77.5080015827618,18.0458706990868,"2688149109",node,12.5,pharmacy,pharmacy,Fontana Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,130047123,3,2022/12/13 19:00:14+00,21b5211c19e54c1087e88eb61c6b4757
+,,"247473410",way,15.625,pharmacy,pharmacy,Pharmacy,,Bing,,,,,,,,,,,,,,,,,,,,,,130047290,4,2022/12/13 19:04:50+00,ae61e85892444015ba4fab9030eb7719
+-77.6059662495687,17.9088473693197,"2883935897",node,9.375,dentist,,Dr. Michael Brown,,,,,,,,,,,,,,,,,,,,,,,,27489659,2,2014/12/15 19:29:10+00,94d42786569e4c1bbddb5c02dd869861
+,,"373449853",way,12.5,clinic,,May Pen Healthcare Complex,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,,,,,34393665,1,2015/10/02 17:09:38+00,fec82eff931a4c7d9fd33d9ee9b514dd
+,,"372372305",way,15.625,hospital,hospital,Mandeville Memorial Hospital,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047123,5,2022/12/13 19:00:14+00,fce1940563654fb987494e8b3dd43783
+,,"373996625",way,25,pharmacy,pharmacy,York Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"91",Half Way Tree Road,,Kingston,96274150,3,2020/12/22 17:40:59+00,994e0c3a657d4111ba274db7273279f1
+-76.8840424007845,17.9837125168088,"3778638877",node,12.5,dentist,dentist,Dental Care,,,,,,,,,,,,,,,,,,,,,,,,130047189,2,2022/12/13 19:02:11+00,48f17c7f0ffa440bbaf658e303c73e2e
+,,"375151271",way,25,clinic,clinic,Medical Associates Hospital,,KG Ground Survey 2015,,,,24/7,,,,,,,,,,,,,,"18",Tangerine Place,,,96274150,6,2020/12/22 17:40:59+00,87eaf1870c7d4c5bb986730e978262ca
+,,"371544702",way,12.5,pharmacy,,Best Care Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,62921952,4,2018/09/25 17:44:31+00,47e318bf450a4ca2a45749ee63396648
+-76.804878929529,17.9995756876598,"3773492894",node,12.5,clinic,clinic,Heart Trust NTA,,,,,,,,,,,,,,,,,,,,,,,,95113750,2,2020/12/01 19:49:39+00,a58f4fbce11f47b6a86ae5901fca6afc
+-77.6081008688499,17.905858298829,"2745664802",node,9.375,pharmacy,,Junction Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,21331035,2,2014/03/26 19:26:15+00,a52843b636164a3f91096cc00be11c0a
+,,"892956244",way,21.875,doctors,doctor,Iris Medical Services,,,"general;nephrology;pulmonology;gynaecology",,,,,,,,,,,,,,,,,"68",,,Kingston,142515327,2,2023/10/13 09:56:27+00,ff8fe7f210374a7eb4f4dee4d53e1f49
+,,"372852186",way,12.5,clinic,,Spanish Town Dialysis & Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,34532653,2,2015/10/09 15:51:51+00,cc328b41123f4149a18793fedc0026f2
+-77.0317635535719,18.134985584885,"3777357283",node,28.125,clinic,clinic,SRK Medical Centre,,KG Ground Survey 2015,,,,09:00-19:00,,,,,,,,,,,,,,#12,King Street,,Linstead,127276143,2,2022/10/10 03:09:03+00,ce478199d9c342aea2cdcc377fbd0b40
+,,"243008393",way,9.375,hospital,,Harkers Hall Health Center,,,,,,,,,,,,,,,,,,,,,,,,94883594,2,2020/11/27 08:59:43+00,08b764717c1c4badaf04af66c91d6fc1
+-76.4551488811179,18.1783701480731,"11997632790",node,9.375,pharmacy,pharmacy,,,,,,,,,,,,,,,,,,,,,,,,,152963206,1,2024/06/20 19:30:16+00,c87e1ed788304f79aed4d9f7a1edead5
+,,"374580333",way,18.75,pharmacy,,Victory Drug Store,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Cumberland Road,,Spanish Town,34594902,2,2015/10/12 17:03:50+00,c22ab9163ffd44b39d0c500c0dae4b02
+,,"370655367",way,12.5,pharmacy,,Nu Millennium Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:06:41+00,72c7a6630c7748f7b05fbabbc95153da
+-77.9242294599999,18.4543586431155,"7446966543",node,25,pharmacy,pharmacy,St. James Pharmacy,,,,,,24/7,,,,,yes,yes,,,,,,,,,,,Montego Bay,84118973,2,2020/04/25 19:23:29+00,427f998894484863b2af5735d8b7e177
+-77.6074679513412,17.9067514744312,"6312185412",node,12.5,doctors,doctor,,Dr. Andrew Holness,,,,,,,,,,,,,,,,,,,,,,,67707561,1,2019/03/02 07:48:54+00,d7389a3abfaf4d76a9ad5feaeaf1a772
+-77.1663671117118,18.4257440829666,"5158019860",node,12.5,doctors,doctor,Lifeline Medical Center,,,,,,,,,,,,,,,,,,,,,,,,52775013,1,2017/10/09 23:24:26+00,09659bb7af7f4e9ca8007d3a65ea1d96
+,,"374982887",way,18.75,clinic,clinic,Oxford Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,Kingston,96221911,2,2020/12/22 00:35:13+00,8cd2631576ae48bd92388322da3728e1
+-76.7755835073853,17.9698689655274,"12539931951",node,9.375,clinic,clinic,,,,,,,,,,,,,,,,,,,,,,,,,161873355,1,2025/01/28 20:51:47+00,7ebf98bbe16b4c73a9986b90f647f5f3
+-76.9562962501589,17.9952695687234,"3786354023",node,18.75,pharmacy,,VR Pharmacy & Beauty Supplies,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Young Street,,Spanish Town,37034644,3,2016/02/06 04:23:46+00,d6207fa6ecaf4880b2a3de357f3adff2
+,,"373937101",way,9.375,doctors,,Physician and Surgeon,,,,,,,,,,,,,,,,,,,,,,,,34453004,1,2015/10/05 17:52:50+00,c9301b89edd54f05ab5b16ab206bcf52
+-77.6092625168107,17.9062415194421,"3832145870",node,9.375,doctors,,Dr. Carol Hamilton,,,,,,,,,,,,,,,,,,,,,,,,35254813,1,2015/11/12 06:40:57+00,bcc0996426664f73ad650df5a8eb9be6
+,,"371443854",way,12.5,doctors,,Doctor's Office,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:59:03+00,085c24fac8844856a9b65e2c7a21a29f
+-77.0316836740347,18.1351060328336,"3777253340",node,15.625,dentist,dentist,Dental Care,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,127276143,2,2022/10/10 03:09:03+00,203db61cfeff4558960bbe03dd9f1905
+,,"375421025",way,21.875,clinic,clinic,Lydia Dialysis Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Half Way Tree Road,,Kingston,96221733,4,2020/12/22 00:20:13+00,3c3e873d3ddb417c92143b4a21344a81
+,,"374971512",way,15.625,pharmacy,pharmacy,Island Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,94775054,3,2020/11/25 12:37:55+00,35912db4fa354bff8f632f2499f2498b
+-77.411772556645,18.0348223448757,"3766354392",node,9.375,pharmacy,,Wholelife Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,34357317,1,2015/09/30 22:19:47+00,0a258a44ef264454a41c04b9237bc783
+-77.5092617180849,18.0380701647174,"2688149119",node,12.5,pharmacy,pharmacy,Bravo Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,f29ed05cb50946c3b67fdca3e7b60423
+,,"374517166",way,15.625,pharmacy,pharmacy,St Bess Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,156625262,5,2024/09/14 19:28:19+00,6f144be501754e88a735c413e7eeb8e8
+-77.5666814428609,18.0235734955407,"2641583981",node,21.875,hospital,hospital,Lincoln Health Centre,,,,,,,,,,,,,yes,,,,,,,,Lincoln-Fairfield Main Road,,Mandeville,92301116,3,2020/10/11 12:59:04+00,d391884e8d8a4fdbbb6c8d9cd6ae0338
+,,"375992664",way,31.25,doctors,doctor,Heart Foundation,,KG Ground Survey 2015,cardiology,,,"Mo-Th 08:00-16:00; Fr 08:00-15:00",,,,,,,,,,,,,,"28",Beechwood Avenue,,Kingston,157438636,2,2024/10/03 22:16:48+00,3fc7059d58e445c7aafdf880acc481e2
+,,"374472966",way,15.625,pharmacy,pharmacy,The New Sav-la-mar Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,2,2022/12/13 18:58:00+00,ded9d90a43ea4c6ea7cc312dba029826
+,,"375000510",way,15.625,pharmacy,pharmacy,Everybody's Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,96221968,2,2020/12/22 00:38:53+00,c9bb695b1c774654932eb3c4ddff5323
+-76.8954412023672,17.9632476811155,"5091682334",node,12.5,pharmacy,,LiveWell Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,123620681,2,2022/07/14 18:17:54+00,27ac5b0612994a12a1eeb4a8a45b51c8
+-77.9387914242023,18.458638861971,"9698157244",node,18.75,dentist,dentist,General & Cosmetic Dentistry,Dr. David G. McLeggan,,"general;cosmetic",,,,,,,,,,,,,,,,,,,,,120266304,1,2022/04/27 15:51:03+00,0b73c6ffe3fa46b79c1a0c36b12f6f9a
+-76.766581511015,18.0210129917593,"3783426643",node,12.5,pharmacy,pharmacy,Liguanea Lane Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,96854983,3,2021/01/03 16:37:30+00,255d2cc25cb84cb7aa7f9f517c26d044
+-76.8121034595123,18.0375774764489,"3787736975",node,12.5,pharmacy,,Sunrise Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:23:21+00,c80d479605394378bb36d4b7cd6e887e
+,,"374516573",way,15.625,pharmacy,pharmacy,Allen's Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,88756085,4,2020/07/31 01:23:43+00,b36386674bec4f70a600e98b6c9d0446
+,,"937285855",way,9.375,hospital,,Isaac Barrant Clinic,,,,,,,,,,,,,,,,,,,,,,,,103917193,1,2021/04/30 13:54:12+00,3c49d0c1185742e283bd322541d1b843
+-76.7433804030307,18.0113410298683,"973449690",node,25,hospital,hospital,University Hospital of the West Indies,Government of Jamaica,KG Ground Survey 2015,,,,24/7,,,,,,,yes,,,,,,,,,,,76866633,7,2019/11/10 12:22:41+00,375e1536ecb843d89347b3a7bb8cda8d
+-76.4649739803799,18.1835024712052,"11929535823",node,12.5,pharmacy,pharmacy,QJ's Family Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,153166247,2,2024/06/25 16:49:58+00,847db60b49b74272beb1aa7efd590cfe
+,,"374359290",way,15.625,pharmacy,pharmacy,Pill Box Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,146334930,5,2024/01/16 18:48:03+00,4426e978c8b240a5b6f37559bd577371
+-76.7777623831153,18.0195387826291,"3750527706",node,21.875,pharmacy,pharmacy,The Alchemist,,,,,,,,,,,,,,,,,,,,"20",Hillcrest Avenue,Kingston 6,,96274338,2,2020/12/22 17:45:40+00,6b2203c412ef4adea24c906a80da39b1
+,,"574578716",way,9.375,,dentist,Majestic Garden Health Centre,,,,,,,,,,,,,,,,,,,,,,,,89510608,3,2020/08/17 10:05:06+00,f6d71a48d6d3420ea44ccb10a1e2f30c
+-76.8937378320043,17.963499976401,"4486136090",node,12.5,clinic,,Apex Medical Center,,,,,,,,,,,,,,,,,,,,,Braeton Parkway,,,43454128,1,2016/11/06 23:36:42+00,58695d4daf374d36aafd13256b516d37
+-76.7932872603542,18.0499104411403,"3788018952",node,15.625,pharmacy,pharmacy,Discount Centre Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,73941779,5,2019/08/31 03:54:16+00,768fcb237d2241998ef920405f1ea03d
+,,"371544323",way,12.5,dentist,,Union Dental Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:13:17+00,f3149f40de15480f9f68bce17df2d565
+,,"375109069",way,15.625,clinic,clinic,Comprehensive Health Centre,,"KG Ground Survey 2015;Bing",,,,,,,,,,,,,,,,,,,,,,139372211,5,2023/08/03 04:14:21+00,e82ff497be7a4252a214c3d33f94d856
+,,"372367038",way,12.5,dentist,dentist,Midwest Dental Lab,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,b0ae3f93721b4b5a81c262945064be3a
+,,"375136078",way,15.625,pharmacy,pharmacy,Robinson's Drug Store,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,122518209,2,2022/06/17 17:29:44+00,09c531f8c5b24da6a4a2c11b3473891b
+,,"373279998",way,12.5,pharmacy,,Family Care Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:00:08+00,6618356c06ad480da8a736f7aba75882
+,,"532427823",way,9.375,pharmacy,pharmacy,,,,,,,,,,,,,,,,,,,,,,,,,93488998,2,2020/11/03 14:34:13+00,dec68aa86d0644d2b7804c4e0745e1a2
+,,"374514947",way,15.625,hospital,hospital,Black River Hospital,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,156625262,2,2024/09/14 19:28:19+00,95e6791e401442098abb59bf593ce4ac
+,,"307773576",way,12.5,hospital,,Catherine Hall Health Center,,,,,,,,,,,,,no,,,,,,,,,,,26079760,1,2014/10/14 19:02:18+00,67ca38bde46f48d7b6a1eb78ea478aae
+,,"375126176",way,12.5,pharmacy,,Eastern Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,99056460,4,2021/02/10 17:20:29+00,a3df0cb3c7754f5cb251b6457ffa5abb
+,,"374472964",way,15.625,clinic,clinic,Cure Well Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,2,2022/12/13 18:58:00+00,8bfcdc51dc2d444fbadebef447283a23
+-76.7901490758061,17.9655784369309,"3785307170",node,12.5,clinic,,Downtown Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:19:24+00,ee4f1ca971a04f32901752d6052d83a9
+-78.1317931266756,18.2226337214469,"3778338232",node,25,clinic,clinic,Royale Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"10",Lewis Street,,Savannah La Mar,130047056,2,2022/12/13 18:58:00+00,648da8defde24b9d8fd222b690bdf2fb
+-77.9255374559901,18.4553368950348,"7447058269",node,18.75,pharmacy,pharmacy,Fontana Pharmacy,,,,,,,,,,,yes,,,,,,,,,,,,Montego Bay,84118973,1,2020/04/25 19:23:29+00,c7aea7eda47f4c0b9ebe0d4ecdc85e19
+,,"374492933",way,15.625,clinic,clinic,Savanna La Mar Infirmary,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,6,2022/12/13 18:58:00+00,29c833baa6604cb4a137b10f7f03b962
+,,"373533055",way,18.75,pharmacy,,New Life Pharmacy,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,"43",Main Street,,,34398436,1,2015/10/02 21:38:46+00,9028c1dbbacd414ea083e6b4e231a461
+-77.6051487625522,17.9081208259526,"2879061766",node,34.375,doctors,doctor,Dr. R.D. Wilson Medical Care,Dr. Raefer Wilson,,"general;gynaecology",,,"Mo-Fr 08:30-16:30,  Sa 09:30-16:30",,,,,,yes,,,,,,,,Shop #29,Pines Plaza,,Junction,71875155,12,2019/07/03 20:46:51+00,cfd79cf42fc847ca8b7c6b85e9137fe0
+-76.7959453294886,18.022002559248,"2576174707",node,25,hospital,hospital,Kingston Open MRI,,,,,,,,,,,,,,,,,,,,"48",Constant Spring Road,"10",Kingston,135160250,5,2023/04/20 17:20:23+00,da86787503ca413785c0dca10d77483e
+-76.7789940199676,18.0072844401895,"4337171897",node,18.75,doctors,doctor,Fairhaven Medical,,,,,,,,,,,,,,,,,,,,"34",Lady Musgrave Road,,,76866633,4,2019/11/10 12:22:41+00,cb4426e007cb45feb03bcd3ff0258ce9
+-76.880396272904,17.9822747689574,"9163278972",node,15.625,pharmacy,pharmacy,Independence City Pharmacy,,,,,,,,,,,,,,,,,,,,,Independence City Plaza,,,130047189,2,2022/12/13 19:02:11+00,264edf328ade4a9e8e5161869b29e77b
+-76.7903394288271,17.9656064324875,"3785307171",node,12.5,pharmacy,,Dick Kenkead Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:19:18+00,2af69229d2504731b26f0195658b1c02
+,,"374472967",way,15.625,pharmacy,pharmacy,Pill Box Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,2,2022/12/13 18:58:00+00,ff0f33f056214844ab4e9398191e3da2
+-77.510006701639,18.0407199357676,"3759241428",node,12.5,pharmacy,pharmacy,Caledonia Mall Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,3e1246e29b3644c9a6433a9bb2e1982c
+-76.8480661827163,18.0270121713177,"11963474669",node,6.25,doctors,,,,,,,,,,,,,,,,,,,,,,,,,,152393314,1,2024/06/07 21:11:00+00,7827275c9ece49909c3586e695ddf997
+,,"371547036",way,15.625,pharmacy,pharmacy,Hilton's Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,96873087,5,2021/01/04 03:39:47+00,4b99081b7f004684b444511b092be374
+-76.7875466625087,18.0134644173993,"3148451729",node,21.875,hospital,hospital,Andrews Memorial Hospital,,,,,,,,,,,,,yes,,,,,,,"27",Hope Road,,,89533674,7,2020/08/17 18:36:54+00,f1806467abae4ee8b6eb0aab8b3669af
+,,"372654990",way,12.5,pharmacy,,Drug Store,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:59:13+00,bcb7eccd4b1547748a58d75334ae4314
+-76.7434220610895,18.0114295427659,"8109246308",node,9.375,hospital,hospital,,,,,,,,,,,,,,,,,,,,,,,,,93948468,1,2020/11/11 19:33:00+00,5bcb9fdb3eea4379bb26f7dd54b21410
+,,"371358772",way,12.5,pharmacy,,Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:07:45+00,ed2a3782e7f342229394a5837b36429f
+,,"374585117",way,18.75,doctors,doctor,Medical and Dental,,KG Ground Survey 2015,,,,Su-Sa 10:00-22:00,,,,,,,,,,,,,,,,,,76866633,3,2019/11/10 12:22:41+00,66cf3ce93c9449269bddb31695c9f6b8
+,,"375403079",way,12.5,clinic,,Mannings Hill Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:05:02+00,1842332eadb54e11a6821147c85884c8
+-76.7595878186451,17.9757369683011,"4286048828",node,15.625,clinic,centre,,,,,,,,,,,,,,,,,,,,,"2",Range Crescent,,,40521268,1,2016/07/06 13:28:04+00,a3ac8119b2a941f08502421106d841b9
+-76.7972798122929,18.0068603997079,"3596918340",node,12.5,pharmacy,pharmacy,Parkington Pharmacy Limited,,,,,,,,,,,,,,,,,,,,,,,,96274150,2,2020/12/22 17:40:59+00,f67172496f6a4ff7bfac1fed2071506e
+,,"838009736",way,31.25,clinic,clinic,Apex Health Care Accoviates,,,"general;dermatology",,,24/7,,,,,,,,,,,,,,2a,Molynes Road,Kingston 10,St Andrew,95301095,3,2020/12/04 14:39:14+00,b75188fd80104602988c31875f2afb34
+-77.508247675439,18.0387224444223,"3762929241",node,12.5,pharmacy,pharmacy,Park View Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,59987c1deeca44739536bf4c91e8495e
+,,"375423699",way,12.5,pharmacy,,New Stony Hill Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,82096870,4,2020/03/12 07:11:51+00,25158e542b524e7fa7907e9283e1991d
+-76.9572592470145,17.9969061353181,"3783951144",node,18.75,pharmacy,,Palms Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Young Street,,Spanish Town,37034644,3,2016/02/06 04:22:20+00,2555e22d99c24fc994679e610e449c9b
+-76.8693762495257,17.9691857565997,"5778032068",node,21.875,clinic,clinic,Portmore Hospital Complex,,,,,,24/7,,,,,,,,,,,,,,"4",Mega Way,,,74775753,2,2019/09/22 16:11:26+00,a8cd07cbfa5743908df15951fdbf223b
+-76.7436519766936,18.0043340940914,"6489529485",node,12.5,hospital,hospital,Uwi Health Center,,,,,,,,,,,,,,,,,,,,,,,,76866633,2,2019/11/10 12:22:41+00,ad50bd9861b04d3381b041a2da0682e3
+-77.5437373240279,18.1342927367687,"2649189228",node,12.5,clinic,,Mile Gully Health Centre,,,,,,,,,,,,,,,,,,,,,Mile Gully Main Road,,,76673870,2,2019/11/06 02:03:08+00,1d2b7305ce934f11a9a266ab6b8d6e97
+,,"375423698",way,12.5,clinic,,Stony Hill Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,82096870,4,2020/03/12 07:11:51+00,7808340594694e0f8406d31e9f5175da
+,,"375097802",way,12.5,clinic,clinic,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047223,4,2022/12/13 19:03:13+00,7e3ac95a19464aab99bfeac1016a4c90
+,,"371533182",way,12.5,clinic,,St James Infirmary,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:11:03+00,9d1cf3a2eef64d8caa2e596d9cbdfae7
+,,"439123958",way,12.5,clinic,clinic,Maxfield Park Health Centre,,,,,,,,,,,,,,,,,,,,,,,,99112426,4,2021/02/11 14:01:47+00,b2cc1c6388104fc5b2325a9b578cbd02
+-76.8025402109055,18.0475196708981,"3664727731",node,9.375,pharmacy,,New Dale Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,32853417,1,2015/07/24 16:00:19+00,3a61d884e0cc4e91ba8e811f5b51c178
+,,"223086661",way,12.5,clinic,,Poly Spring Care Family Health Services,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,,,,,34480869,2,2015/10/06 23:09:05+00,8ad0801a31b04bb18a26c6ca860d425b
+,,"243109700",way,9.375,hospital,,Glengoffe Health Centre,,,,,,,,,,,,,,,,,,,,,,,,46457148,2,2017/02/28 03:14:01+00,c1b3ecdbd7a64224a73594d90284a372
+,,"1204549759",way,9.375,pharmacy,,Fantana Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,140738777,1,2023/09/02 23:12:22+00,a91a8db5dfd74b8fa17794a981cbdec3
+,,"375123482",way,15.625,clinic,clinic,J&S Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,122518209,2,2022/06/17 17:29:44+00,0bba7fa717c1455fbfc5a6c1ce8176b4
+-76.8842870685381,17.9837036319914,"3777470169",node,9.375,pharmacy,pharmacy,,,,,,,,,,,,,,,,,,,,,,,,,130047189,2,2022/12/13 19:02:11+00,60b4336de3504bada9e2031e581ad922
+,,"1186013755",way,12.5,pharmacy,pharmacy,St. Bess Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,137962392,1,2023/06/30 14:54:00+00,8b6b2a756e0c449f9591f39a661794a6
+-76.4601889194962,18.1815810875408,"11929535826",node,12.5,pharmacy,pharmacy,Taj Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,151786360,2,2024/05/24 19:50:26+00,777b16ccace24866bc28d057e9d2a8f3
+,,"372706254",way,12.5,clinic,,General Medical Practice,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,4,2016/02/06 04:01:10+00,9a8c6e0591834945ad7af0f891bece2c
+-76.8034720270813,18.0015058723226,"7833045205",node,12.5,pharmacy,pharmacy,Krysdave Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,122518209,2,2022/06/17 17:29:44+00,91401d5d74624240abe10e54028a0828
+-77.605119258253,17.9081157968107,"2904626244",node,18.75,,laboratory,Mid Island Medical Laboratories,,,,,,,,,,,,,,,,,,,,"29",Pines Plaza,,,71875155,6,2019/07/03 20:46:51+00,012c9cff60944d6397a0d8708d6da23e
+-77.0317439399185,18.1350200345071,"3777253338",node,15.625,clinic,clinic,Total Wellness Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,127276143,2,2022/10/10 03:09:03+00,1b1c157e25ca447f839f3b9f725603eb
+-77.6056208313389,17.9083149508301,"2745664806",node,9.375,pharmacy,,Rite Care Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,22795592,2,2014/06/07 16:27:20+00,1cd5f6dbc0ee41698fb8cb7ed64b5961
+,,"372846629",way,12.5,pharmacy,,St James Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:11:03+00,68f1c51a486240d78bddb640d5d87630
+-76.4533324388812,18.1784480997726,"11931463854",node,12.5,dentist,dentist,Modern Dentistry,,,,,,,,,,,,,,,,,,,,,,,,151793571,2,2024/05/25 03:48:58+00,79153d3de03c4cd68a081b1b4f2c83ee
+,,"374576275",way,25,clinic,clinic,El Shaddai Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,94 1/2,Old Hope Road,,Kingston,76866633,2,2019/11/10 12:22:41+00,d0a8e52286c84e5f9dfbfd290cc05afe
+,,"369279236",way,12.5,pharmacy,,Granston Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:01:29+00,24fc10ee01b24939b63cd84adeadd092
+,,"374190503",way,9.375,clinic,,Siri Medical & Dental,,,,,,,,,,,,,,,,,,,,,,,,34480792,1,2015/10/06 23:02:59+00,1cd3a978932444728f59843ba360aa7c
+-76.7692360597501,18.0213440769346,"1917689355",node,18.75,pharmacy,pharmacy,Discount Pharmacy,,KG Ground Survey 2015,,,,,,,,,yes,,,,,,,,,,,,,96274338,7,2020/12/22 17:45:40+00,eb03567ee52f45f3a8882b9478162f12
+,,"260539581",way,21.875,doctors,doctor,Thames Medical Centre,Dr. S. Dale Thames,,"general;gynaecology;dermatology",,,Mo-Sa 08:00-17:00,,,,,,,,,,,,,,,,,,71875155,4,2019/07/03 20:46:51+00,f008377705d948eea5610705d305cff4
+-78.1678153613922,18.4522794282142,"4775937981",node,9.375,hospital,,Noel Holmes Hospital,,,,,,,,,,,,,,,,,,,,,,,,47460029,1,2017/04/05 00:46:09+00,8fe539518af244659de4c9cb466d92d6
+,,"370101860",way,15.625,clinic,clinic,Parish Health Center,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,127275401,4,2022/10/10 02:45:33+00,73850c6c756c495f99942e9cb0986963
+,,"374989176",way,21.875,hospital,hospital,Nutall Memorial Hospital,,KG Ground Survey 2015,,,,,,,,,,,yes,,,,,,,,,,Kingston,96221911,3,2020/12/22 00:35:13+00,0af3cc1218884dfe9e3a17ac8342cf2d
+,,"371543552",way,15.625,doctors,,Skinn Dermatologist,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"30",,,,37034644,3,2016/02/06 04:10:32+00,9d0e0d516c8a41ee8cee2451b855a288
+-76.8284423033684,17.99897143626,"5514851728",node,9.375,,clinic,Majestic Garden Health Centre,,,,,,,,,,,,,,,,,,,,,,,,57642277,1,2018/03/29 18:33:06+00,32bbaddec383450c81ab186074c1a590
+-76.7945897242884,18.0487137568242,"4691505849",node,12.5,pharmacy,pharmacy,Public Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,73941779,3,2019/08/31 03:54:16+00,cadc9c5bad924fa79a09cf3287cf4f87
+-77.0314428619565,18.1367776357835,"4278347390",node,12.5,pharmacy,pharmacy,Your Choice Family Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,127276143,2,2022/10/10 03:09:03+00,15049232a0234524b235ad2b075af879
+-76.847772229372,18.0263962690725,"13071300940",node,9.375,pharmacy,,K's Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,170449562,1,2025/08/14 18:08:16+00,114d541cbe704160b6732ed06844c50e
+,,"371391276",way,12.5,pharmacy,,Beachfront Pharmacy,,2023 youthmapper survey,,,,,,,,,,,,,,,,,,,,,,131002985,5,2023/01/08 05:25:00+00,760e2a2c47424c198c852be84a36e638
+-77.5099959728029,18.0435533543164,"3759306696",node,12.5,doctors,doctor,Mid Island Medical Laboratory,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,6183c15b2d754b5a9a0d6ddad48ff500
+,,"374134882",way,12.5,pharmacy,,Solid Care Pharmacy,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,,,,,90285340,2,2020/09/02 07:32:11+00,4646fe163cf648a392ea31fd8694a88f
+,,"372212305",way,9.375,pharmacy,,PharmaPlex,,,,,,,,,,,,,,,,,,,,,,,,73599029,2,2019/08/21 22:36:23+00,9f8da25a221d4781ae6285264bd44049
+,,"1286382783",way,9.375,,doctor,The Wellness Fountain Medical Centre,,,,,,,,,,,,,,,,,,,,,,,,153659424,2,2024/07/07 12:11:45+00,fa9ebf077e4f4e13b75af2d1b89a5743
+-76.9511907491168,17.9912202713003,"4857782821",node,12.5,pharmacy,,Healthplus Pharmacy (2 White Church Street Branch),,,,,,,,,,,,,,,,,,,,,White Church Street,,,48731962,1,2017/05/16 13:32:23+00,5b6d67a955f0441d91d2dc0a630e459e
+,,"1355012976",way,9.375,clinic,clinic,,,,,,,,,,,,,,,,,,,,,,,,,161873185,1,2025/01/28 20:47:08+00,49e02eab45a9465bab18323048baefd3
+,,"165433150",way,12.5,hospital,hospital,Winchester Medical,,,,,,,,,,,,,,,,,,,,,,,,96274150,5,2020/12/22 17:40:59+00,added4cd6d8e4ff8a76b125869cf87b5
+,,"372220274",way,9.375,pharmacy,,Kalz Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,88923447,2,2020/08/04 10:38:10+00,f330c46df41a4915adc28cba728da6d1
+,,"375248140",way,18.75,pharmacy,,Medicare Pharmacy Ltd.,,KG Ground Survey 2015,,,,Mo-Sa 09:00-17:00,,,,,,,,,,,,,,,,,Spanish Town,67178466,6,2019/02/14 00:16:05+00,b86280d57d394f04aecdedc22c7ddc2c
+-76.9576496760643,17.9976535496241,"3785029357",node,18.75,dentist,dentist,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Young Street,,Spanish Town,121534589,4,2022/05/26 16:03:14+00,c4051af697ea4dc69b021bcd2cae47f3
+,,"375563238",way,12.5,doctors,,Doctor's Office,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:59:04+00,737ccea0f1eb4c5ca41da4bea8e31c41
+-76.7403440586061,17.9951665551334,"3783543231",node,15.625,doctors,doctor,Doctor's Office,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,76866633,6,2019/11/10 12:22:41+00,9fbd008c7c624d61ad487a5511bf0c0c
+,,"375406972",way,12.5,pharmacy,,Lee's Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,95614199,4,2020/12/10 11:45:26+00,224b07da3f3e41d7acc3c49953d9349d
+,,"371547276",way,12.5,pharmacy,,Bay Court Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,62921952,4,2018/09/25 17:45:29+00,0f172965ab7640959066556e69dd168a
+-76.5104581264939,17.9618486576568,"4129641495",node,12.5,hospital,centre,Trinityville Health Centre,,,,,,,,,,,,,,,,,,,,,,,,43994160,3,2016/11/27 23:36:40+00,7ef33ac1c0c74857a7e703d8918d524a
+,,"372856781",way,12.5,pharmacy,pharmacy,Johnson's Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,23f9b53afd7b407589087219339a58d6
+-76.7922796717737,18.0218062550756,"13071284145",node,9.375,pharmacy,,Fontana pharmacy,,,,,,,,,,,,,,,,,,,,,,,,170449562,1,2025/08/14 18:08:18+00,3aa94c7b79754f42b2f997cfa88f38aa
+-77.1137527320252,17.9389444366829,"3775290757",node,21.875,pharmacy,,Vicky's Pharmacy,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,"6",West Street,,Old Harbour,34473395,2,2015/10/06 17:09:56+00,3fd15cc0c967481097048082b39c62ab
+,,"353901490",way,25,dentist,dentist,All Smiles Dental Care,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"17",Holborn Road,,Kingston,96221733,5,2020/12/22 00:20:13+00,395f76c9fdfb4810bb603504e7df83f8
+,,"375019445",way,12.5,pharmacy,,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,72c,,,,34601945,1,2015/10/13 00:25:08+00,570f5cd2a17b49c39564924265130723
+,,"361096039",way,21.875,hospital,hospital,St. Joseph's Hospital Complex,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"22",Deanery Road,,,128575922,9,2022/11/07 01:41:51+00,33ae5f4d8a8c4f518b75dd35801d0906
+,,"372850250",way,12.5,clinic,,Elohim Medical,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:59:39+00,2247c09a78aa44d7b1a88efd18416b54
+,,"221364016",way,12.5,clinic,,Sandy Bay Health Centre,,Bing,,,,,,,,,,,,,,,,,,,,,,31988641,2,2015/06/15 17:13:37+00,a5cd69f081624390b6727ddd7d7ae3ba
+,,"374516574",way,21.875,pharmacy,pharmacy,Cawley's Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"35",High Street,,,88756085,5,2020/07/31 01:23:43+00,b86d23b676ef4112a9afcfbe1399f131
+-77.5105309058634,18.0427132361613,"6312185411",node,12.5,doctors,doctor,,Dr. Ansell Gillman,,,,,,,,,,,,,,,,,,,,,,,67707561,1,2019/03/02 07:48:54+00,0a8037593c3743b69c42e87e40316fc8
+,,"330862725",way,12.5,clinic,,Green Island Health Center,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,88670220,5,2020/07/29 09:56:10+00,9bc2cdbe7049400fa0ad42bb9f0e4ff1
+,,"374153121",way,12.5,pharmacy,pharmacy,Health Plus Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,144428236,2,2023/11/25 03:52:24+00,78dfa9e11c784bb8802478276746f6f5
+,,"820857343",way,31.25,dentist,dentist,The Dental Studio,Dr. Kirk Samuels,,dentistry,,,Mo-Sa 09:00-17:00,,,,,,,,,,,,,,"5",Ardenne Road,,Kingston,87273104,1,2020/06/29 06:04:43+00,919a93c575254ebe80ac92d49c7a7f80
+-77.6076223459977,17.9097495973773,"2711514868",node,12.5,doctors,,Dr. Vish Junction Office,,,,,,04:00-18:00,,,,,,,,,,,,,,,,,,43994160,2,2016/11/27 23:36:37+00,16a75723aa9b4ef1b30398e02c3ff53d
+,,"373431055",way,12.5,hospital,,May Pen Hospital,,Updates from driving in Jamaica. KG Ground Survey 2015 and Bing.,,,,,,,,,,,,,,,,,,,,,,34391607,1,2015/10/02 15:29:30+00,a5535f54da09417781e4cfd8d210e1fc
+-76.888803237968,17.9614882358203,"11935829024",node,12.5,doctors,doctor,GreenLeaf Medical and Diagnostics,,,,,,,,,,,,,,,,,,,,,,,,151871237,1,2024/05/26 21:54:46+00,672e546f41cc4ce280b6cf1b51f87a7e
+-76.7877842056447,18.0080857501328,"7700417585",node,18.75,pharmacy,pharmacy,Supermed Pharmacy,,,,,,,,,,,,,,,,,,,,"28",Barbados Avenue,,,122518209,2,2022/06/17 17:29:44+00,a30e26d671d74f0fbdfeef35e32292d6
+,,"373468392",way,12.5,clinic,,May Pen Medical Centre,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,,,,,34394491,1,2015/10/02 17:57:27+00,c181ede35e044a11926c74f7f3b81917
+,,"374579370",way,6.25,pharmacy,,,,,,,,,,,,,,,,,,,,,,,,,,34533811,1,2015/10/09 16:47:21+00,d213712d499648579c192ffd56116cce
+-78.1331009550278,18.221728056809,"3778621074",node,15.625,clinic,clinic,Heritage Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,4,2022/12/13 18:58:00+00,0d10fead6d074eab94db74160223afc8
+-76.8164538348974,18.043874548846,"1924425763",node,9.375,pharmacy,,Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,13190017,1,2012/09/21 00:45:56+00,97303d38810d43f19023131b07b03697
+,,"372115759",way,12.5,hospital,,St. Elizabeth's Infirmary,St. Elizabeth's,,,,,,,,,,,,,,,,,,,,,,,89969619,2,2020/08/26 11:39:47+00,05ae6523f26f4253849471c4a4fb4eda
+,,"370784643",way,12.5,pharmacy,,Oracabessa Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:06:56+00,718b675a4b924236bc15a6d897f1e7b8
+-77.5107203368751,18.0403740984427,"6312185410",node,18.75,doctors,doctor,Howell's Medical Complex,Dr. Jerome Howell,,,,,Su-Fr 09:00-18:00,,,,,,,,,,,,,,,,,,67707561,1,2019/03/02 07:48:53+00,a3f3eeb6be4048d2b9bab1e418c55b63
+,,"375446310",way,21.875,pharmacy,,Fontana Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"34",East King's House Road,,Kingston,37034644,3,2016/02/06 04:00:43+00,58c803d8e47848e3b37e6c24de0096ad
+-76.811986448144,18.020877624023,"11930640592",node,12.5,doctors,doctor,Iris Medical Services,,,,,,,,,,,,,,,,,,,,,,,,151772356,2,2024/05/24 14:17:03+00,03d5e61a2aa44399ac853287376f923c
+-77.0327001474325,18.1381871366212,"3777121506",node,12.5,clinic,clinic,Absolute Care,,,,,,,,,,,,,,,,,,,,,,,,127276143,2,2022/10/10 03:09:03+00,501242af52f5498d9f1ec1bfa4406719
+,,"250710022",way,21.875,hospital,hospital,Linstead Hospital,,,,,,,,,,,,,yes,,,,,,,"7",Rodney Hall Road,,,127276143,7,2022/10/10 03:09:03+00,3681e0e0b8b9427f86b5b348fe797d5e
+-76.8980717788592,17.9561292660263,"4630893462",node,12.5,pharmacy,,Genus Pharmacy,,,,,,"Mo-Sa 09:00-22:00; Su 10:00-21:00",,,,,,,,,,,,,,,,,,60965787,2,2018/07/23 01:04:26+00,adfb9d8355fb4252b46dfc86843422f8
+-76.8994197565276,17.9468238447612,"10265551914",node,15.625,clinic,,Zenith Medical Centre,,local knowledge,,,,,,,,,,,,,,,,,,,Walkway 33,,,131671555,2,2023/01/24 22:34:24+00,e11973a59e1548b3aac00b2014fb03fd
+-77.031523328227,18.1415133272575,"3777162942",node,9.375,pharmacy,,Bickens Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,34496056,1,2015/10/07 17:45:04+00,f364c62531f64182a23f2370e302655f
+-76.793783301384,17.9640422855363,"12016411286",node,9.375,,laboratory,Imaging and Intervention Associates,,,,,,,,,,,,,,,,,,,,,,,,153276113,1,2024/06/28 06:12:03+00,81f092ec356e45c39fb68ec526a6015b
+,,"374514952",way,15.625,clinic,clinic,AAIMS Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,156625262,4,2024/09/14 19:28:19+00,e73e7bc42962458195fb38d0161c9a46
+,,"374042764",way,12.5,pharmacy,,Sunset Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:11:26+00,87f4ee1040ac4d008a5e324830a00568
+-77.2423710245661,17.9684531782624,"3769752264",node,12.5,pharmacy,,Far More Pharmacy,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,,,,,34398436,1,2015/10/02 21:38:45+00,648c72515981495c9a016e81fef7d08a
+,,"221609290",way,12.5,pharmacy,,Jenni's Pharmacy,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,,,,,34399003,2,2015/10/02 22:27:55+00,c76d37281d9540e5a8f4aff1f98ac23e
+-77.2527690269099,17.9737282452056,"3769090109",node,12.5,pharmacy,,GSD Pharmacy,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,,,,,34392822,1,2015/10/02 16:28:28+00,0c91806c73d74c929ff3af3f5ea6c64e
+-77.6060338077083,17.9088467825865,"2745664805",node,9.375,pharmacy,,Lenmax Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,21330748,1,2014/03/26 19:07:23+00,fa1e5e28177a4965b795dfdbe5041965
+-77.5049962513789,18.0472145696226,"3764510507",node,12.5,pharmacy,pharmacy,Haughton's Rx,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,758b70d5714349b4ade7f856036fde83
+,,"371545118",way,12.5,pharmacy,,Medi Mart Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130952140,6,2023/01/06 15:21:12+00,7e512421d74c424c9a0db562e87d647c
+-78.3447153440502,18.2785740403128,"3774334194",node,12.5,pharmacy,,Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:22:30+00,39e4b8ef8064492f8e40161102bdfa1e
+,,"375151272",way,18.75,dentist,dentist,Smile Clinic,,,,,,,,,,,,,,,,,,,,,Half Way Tree Road,,Kingston,96274150,3,2020/12/22 17:40:59+00,d66da04f1cca4eed959d12aae5d7d2cf
+,,"458953339",way,18.75,,alternative,HALLELUYAHLIFESTYLE WELLNESS CENTRE,,,naturopathy,,,,,,,,,,,,,,,,,"6",Boundbrook Avenue,,,153293654,5,2024/06/28 13:28:30+00,8370123f3ab347d88ee5f200ea7fca7c
+-76.9945400244925,18.1135030185084,"6216257285",node,9.375,clinic,,Bog walk Health Center,,,,,,,,,,,,,,,,,,,,,,,,68113779,2,2019/03/13 20:39:30+00,25223c2ec000449db8def6d85bea75b5
+-77.9269757067557,18.4554624559444,"7447058271",node,15.625,clinic,clinic,GWest Centre,,,,,,,,,,,,,,,,,,,,,,,Montego Bay,121242864,2,2022/05/20 12:34:02+00,2d8c3f4649f544ebad9f0fba88bc4e46
+,,"375435874",way,12.5,pharmacy,,Bell's Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,96885611,4,2021/01/04 07:21:46+00,b61cb4f3e76e42b6b5b735ed70b4f9c5
+,,"370655688",way,12.5,pharmacy,,Annotto Bay Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:53:46+00,7aa4098d1fe34ccdac2be4dde907eb78
+-78.1328917427246,18.2216643543449,"3778621069",node,15.625,pharmacy,pharmacy,Heritage Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,4,2022/12/13 18:58:00+00,cb9d091eee83439fa59a44dae4f7d4f5
+,,"358532698",way,9.375,clinic,,James Hill health center,,,,,,,,,,,,,,,,,,,,,,,,87570677,2,2020/07/06 02:10:02+00,07fdf293a54745eaae0f054a2a9eb14a
+-77.5061465837705,18.0341451709183,"2681104251",node,15.625,doctors,doctor,Dr. Basil Robinson,,,,,,,,,,,,,,,,,,,,,Manchester Road,,,130047123,2,2022/12/13 19:00:14+00,e659758c94ff445bbc915f077832c67c
+,,"372367039",way,12.5,pharmacy,pharmacy,Gateway Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,130047123,5,2022/12/13 19:00:14+00,b20f64a6831d408994d53ad8f25b7c0b
+,,"371444664",way,12.5,clinic,,City Medical,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:57:27+00,54dad3c9358a471094eaf4cfad6e1089
+-77.5083214361869,18.0399804842697,"3763134005",node,12.5,pharmacy,pharmacy,Pure Life Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,8feadcfc531643d089759faf5f884aa8
+,,"374514999",way,12.5,clinic,clinic,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,88937208,5,2020/08/04 15:27:18+00,10b24e37ef7e48b88aadacf11946314e
+,,"373529057",way,21.875,pharmacy,,Lubsey's Pharmacy,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,"15",Main Street,,May Pen,34397957,1,2015/10/02 21:02:12+00,ac9551bed9c147d0835930571942db26
+-76.740195866558,18.0052647368008,"3768978579",node,21.875,hospital,,Sir John Golding Rehabilitation Center,,NLA of Jamaica,,,,,,,,,,yes,,,,,,,,"7",John Golding Road,,,99219188,4,2021/02/13 17:54:12+00,19594a874896449ebfc4e2fb1c5ff990
+,,"369126214",way,15.625,pharmacy,pharmacy,Fontana Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047290,5,2022/12/13 19:04:50+00,0d1dabd292c74ee78c1f05fa958e6329
+-76.5063939092831,17.9431597796079,"4142137515",node,12.5,hospital,yes,Font Hill Health Centre,,,,,,,,,,,,,,,,,,,,,,,,78857564,4,2019/12/25 22:22:52+00,08ce7ab03ce540508e1297a96780fa78
+-77.1022111028124,18.4087046796432,"4284176694",node,15.625,dentist,dentist,Dr. W.D Chuck - Francis (Dentist),,,,,,,,,,,,,,,,,,,,,Evelyn Street,,,130047290,7,2022/12/13 19:04:50+00,62bc0198bbef419a8b8002155d95ceba
+,,"373232611",way,12.5,clinic,,Baywest Wellness Clinic,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,34370071,1,2015/10/01 14:56:38+00,df627524bda6417aaf3694404e81fbd6
+-76.8450757711211,18.0322104600278,"4654253990",node,18.75,clinic,clinic,Duhaney Park Health Center,,,general,,,Mo-Fr 09:00-17:00,,,,,,,,,,,,,,,,,,161873438,2,2025/01/28 20:54:40+00,117e60ccbaae47c39c45a5719f574daf
+-76.8983277621821,17.9610997346082,"5777817153",node,12.5,dentist,,Citidental,,,,,,,,,,,,,,,,,,,,,Braeton Parkway,,,60963267,1,2018/07/22 21:40:44+00,f510e53fa0c141bf8379045d3ca6f07c
+,,"371812558",way,21.875,clinic,,Molyne's Medical Complex,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,"50",Molynes Road,,Kingston,34639102,2,2015/10/14 18:36:17+00,c9aaf0eb392443b2923cc38ac71f4b82
+-76.7431920616664,18.01101539293,"8079332233",node,6.25,hospital,,,,,,,,,,,,,,,,,,,,,,,,,,93506024,1,2020/11/03 22:55:31+00,9193094c1ea0483481d8199ff3f5f50e
+-76.4531127491991,18.1776323729557,"12038975910",node,12.5,pharmacy,pharmacy,Taj Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,153645837,1,2024/07/07 03:30:42+00,7bdfface37494f429a3e1da1adc77201
+-77.909967148836,18.4697242641941,"4715648118",node,9.375,hospital,,Cornwall Regional Hospital,,,,,,,,,,,,,,,,,,,,,,,,70787828,2,2019/05/30 22:14:26+00,7541abf0dfd5483bb5714db261f70f2c
+,,"372706258",way,12.5,pharmacy,,J&J Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:02:58+00,8320cfc64b664da291c4493796af099f
+,,"374593273",way,15.625,hospital,,Spanish Town Hospital,,,,,,,,,,,,,yes,,,,,,,,Burke Road,,,121242193,5,2022/05/20 12:23:41+00,63bbd3f91b3c40629261d113061d2ec3
+-76.9786286576983,17.9911553953698,"3783503186",node,15.625,pharmacy,,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Willowdene Parkway,,Spanish Town,34594235,1,2015/10/12 16:30:22+00,348a62624e874fce98a225863600dae8
+-76.789905916795,18.0068299733994,"4823940670",node,25,pharmacy,pharmacy,New Kingston Pharmacy,,,,,,"Mo-Fr 08:30-19:00; Sa 09:00-19:00",,,,,yes,,,,,,,,,"30",Dominica Drive,,,77335479,4,2019/11/20 16:06:26+00,3578798c183f487daca14a28ee0e6b0d
+,,"371392513",way,12.5,pharmacy,,City Centre Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:57:26+00,b9e2892f82a34bfbab0dc913fda4d7fe
+-77.799995238095,18.5117067864383,"2521442713",node,9.375,hospital,,Community Health Center,,,,,,,,,,,,,,,,,,,,,,,,18736604,1,2013/11/05 20:32:00+00,cf915f4793e24a8b93a5e6aca600bea1
+-76.9819668344561,17.9897314776586,"3779624144",node,18.75,pharmacy,,My Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Old Harbour Road,,Spanish Town,34532524,1,2015/10/09 15:45:23+00,24981502007e42ca955030daf7dc41c7
+-76.7784632778586,18.0038055312773,"3779801268",node,15.625,pharmacy,pharmacy,Horizons Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,78857222,3,2019/12/25 21:52:17+00,4c46d50a2ced403a94a37edde5cc2aae
+-76.9177577681096,17.9973821435993,"3778803517",node,6.25,pharmacy,,,,,,,,,,,,,,,,,,,,,,,,,,34519234,1,2015/10/08 21:18:46+00,6d19265e23fa49a0a2f6459c5409e548
+-78.1322926042857,18.2228680794597,"3778338238",node,18.75,clinic,clinic,Dr Reddy's Medical Centre,,KG Ground Survey 2015,,,,24/7,,,,,,,,,,,,,,,,,,130047056,4,2022/12/13 18:58:00+00,dec685f23edd41ecbd60c20695fa64f6
+-76.8119180518141,18.0208826531649,"11930640593",node,12.5,pharmacy,pharmacy,Health Plus Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,151772356,2,2024/05/24 14:17:03+00,8b5578e6f06c4fccafd8af976ffe83ad
+-76.7928110006159,18.0508607813221,"4691161073",node,15.625,pharmacy,pharmacy,Manor Park Pharmacy,,,,,,,,,,,,,,,,,,,,,Constant Spring Road,,,107839084,3,2021/07/12 12:23:05+00,222d5c1f877642b8889f4c20772afa51
+,,"372876068",way,15.625,hospital,hospital,Hargreaves Memorial Hospital,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047123,3,2022/12/13 19:00:14+00,212e71a53acc4237910c536b890d9b25
+,,"374031473",way,9.375,clinic,,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:14:12+00,fd9e7c49318d43d58adbfe3719df4adc
+,,"840888295",way,9.375,pharmacy,,Maxi-Med Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,89969619,1,2020/08/26 11:39:47+00,818d87c72f2643c9b6f7bc54f8e68d25
+,,"375389202",way,21.875,clinic,clinic,Victoria Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Half Way Tree Road,,Kingston,96274150,2,2020/12/22 17:40:59+00,5d88e30365e74ddf96d0cb14548f44b4
+,,"375132096",way,9.375,pharmacy,,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,89919448,5,2020/08/25 13:59:37+00,88e24bf3f5c645e0a74221a86d4f4415
+,,"372849793",way,12.5,clinic,,Oasis Health Care,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,34532653,3,2015/10/09 15:51:50+00,e26d969f43b74d35a1baff4eb539b0c0
+,,"368293415",way,12.5,clinic,,Duncans Health Center,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,34338773,2,2015/09/30 03:44:57+00,8f31c7720cd6473e8a46e39151575fd9
+-76.7716925441131,17.9703502544076,"12539931952",node,12.5,hospital,hospital,bellevue hospital,,,,,,,,,,,,,,,,,,,,,,,,161873355,1,2025/01/28 20:51:47+00,b94e0a2d2a0145f9b2356dfd7ed5074e
+-76.8794378022761,17.9529706296344,"4582193723",node,18.75,clinic,,Portmore Medical Services,,,,,,Mo-Su 08:00-23:59,,,,,,,,,,,,,,31a,West Biscayne Dr.,,,65433548,5,2018/12/13 08:17:54+00,6db4a1671cb84af298959e5f809761f3
+,,"841980171",way,9.375,hospital,,St Ann's Bay Hospital,,,,,,,,,,,,,,,,,,,,,,,,92239202,2,2020/10/09 12:54:22+00,c3b239ca4ff44b89b06a11022d97df73
+-76.8814113213783,17.9975474347299,"11931349350",node,12.5,pharmacy,pharmacy,ForeverCare Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,151784086,1,2024/05/24 18:34:42+00,3915828c03ee416cb2ef1e678fc3d8d0
+,,"375455375",way,21.875,clinic,clinic,SureTime Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Trafalgar Road,,Kingston,76866633,4,2019/11/10 12:22:41+00,053139c3f7964fb3880b47ff7ef2aa30
+,,"371544695",way,12.5,doctors,,Doctor's Office,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130952140,4,2023/01/06 15:21:12+00,289051617b2042d48bc434931e5b8916
+-77.508770706197,18.0385637749953,"3763102181",node,12.5,pharmacy,pharmacy,Medspring Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,130047123,2,2022/12/13 19:00:14+00,422aad3931724e79bd9a2115cb3757a6
+-78.1307673493652,18.2250455302661,"3778582632",node,15.625,pharmacy,pharmacy,Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,4,2022/12/13 18:58:00+00,e55b7827f16c44a7b99824cf27d474f2
+,,"370584644",way,12.5,clinic,,O&S Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:06:43+00,071c38f0a281477cac1517eec2827111
+-78.3470979000272,18.2782408596616,"1338117940",node,12.5,pharmacy,,Negril Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,5,2016/02/06 04:22:11+00,d58a4acda6e84da0aca5ec195f3a7b72
+-77.5095568448956,18.0423285906247,"1888911780",node,18.75,hospital,hospital,Mandeville Public Hospital,Ministry of Health,,,,,,,,,,,,yes,,,,,,,,,,,130047123,3,2022/12/13 19:00:14+00,fc303c35691b47e98e47611b7dfd8446
+,,"1287257740",way,12.5,pharmacy,pharmacy,Supermed Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,151923271,1,2024/05/28 02:50:05+00,672a39e12bee4ae1935152bf3771bb97
+-76.9468228555541,17.9928400740886,"3764180937",node,18.75,hospital,,St. Jago Park Health Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Burke Road,,Spanish Town,94879736,2,2020/11/27 07:54:03+00,fa541ea977664c15a20f1f2982799591
+,,"370587964",way,12.5,pharmacy,,AnnCare,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 03:53:46+00,51414dfcde25437988c715851954d87a
+-77.6065523122386,17.9059314728437,"2883887889",node,9.375,pharmacy,,St. Paul's Pharmacy,,,,,,,,,,,,,,,,,,,,,,,,22586497,1,2014/05/27 18:12:03+00,ccd8d8b38d7c49ce97e6a0ece9bec925
+,,"374348036",way,21.875,clinic,clinic,Premium Care Dental & Medical,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,Kings Street,,Linstead,127276143,2,2022/10/10 03:09:03+00,cb5a2b4861cb493dbbb7b22ee6802a39
+,,"374580280",way,15.625,clinic,clinic,The Diabetes Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,76866633,2,2019/11/10 12:22:41+00,5d7bd537e28440b8bada09c7c95ba410
+,,"373356821",way,18.75,pharmacy,pharmacy,GeoNames Place ID 11494997,,,,,,,,,,,,,,,,,,,,,St. Clavers Ave,,Montego Bay,159726633,2,2024/11/29 04:55:04+00,941cdc481f2646e4b88ae0a414c728c8
+,,"374472105",way,15.625,pharmacy,pharmacy,Royale Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,3,2022/12/13 18:58:00+00,4c40447d5db84416b3d52deefdf30e32
+-77.2431770283752,17.9695987329691,"3769757213",node,12.5,doctors,,Dr. Horace A Charod,,Updates from driving in Jamaica. KG Ground Survey 2015.,,,,,,,,,,,,,,,,,,,,,,34398577,1,2015/10/02 21:50:35+00,03787b2f4060486b971ac11d2943babb
+,,"375601448",way,12.5,pharmacy,pharmacy,,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,89004772,4,2020/08/06 00:08:11+00,c60457cde83f4c9694a576207b57c8f9
+,,"371816203",way,12.5,pharmacy,,J&J Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,92674714,4,2020/10/19 03:02:37+00,d7e2beaca34a4806bcdafe375eecc179
+,,"374442479",way,15.625,clinic,clinic,Savannah La Mar Medical Clinic,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,2,2022/12/13 18:58:00+00,a07367d54a544d638da2f0ef92f4bf60
+-76.4561682043629,18.1764267200033,"4399419390",node,12.5,hospital,hospital,Port Antonio Hospital,,,,,,,,,,,,,,,,,,,,,,,,152162357,3,2024/06/02 14:21:58+00,e0d0b91d4c3045aa94f09142bb3d53fd
+,,"375408355",way,12.5,pharmacy,,Mannings Hill Pharmacy,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,37034644,3,2016/02/06 04:05:03+00,fbbc57f9bca747728aba0c74c9819ccf
+-76.7874019070409,18.0081516318918,"3292562651",node,15.625,pharmacy,pharmacy,Pharmacie Centrale,,,,,,08:00-18:00,,,,,,,,,,,,,,,,,,122518209,4,2022/06/17 17:29:44+00,f2a3166d997e4fd98281e22332c3ced6
+,,"374472960",way,15.625,clinic,clinic,Sav Central Medical Centre,,KG Ground Survey 2015,,,,,,,,,,,,,,,,,,,,,,130047056,3,2022/12/13 18:58:00+00,69db99da98a5442ab5f33b186375f29a

@@ -1,0 +1,518 @@
+[
+  {
+    "name": "Albury Wodonga Health - Albury Campus",
+    "region": "Australia",
+    "website": "https://www.awh.org.au/About-Us",
+    "phone": "02 6051 7111"
+  },
+  {
+    "name": "Albury Wodonga Private Hospital",
+    "region": "Australia",
+    "website": "https://www.alburywodongaprivate.com.au/",
+    "phone": "02 6041 1411"
+  },
+  {
+    "name": "Alderley Child Health",
+    "region": "Australia",
+    "website": "https://www.childrens.health.qld.gov.au/service-child-health/",
+    "phone": ""
+  },
+  {
+    "name": "Alexandria Specialist Day Hospital",
+    "region": "Australia",
+    "website": "https://www.asdh.com.au",
+    "phone": ""
+  },
+  {
+    "name": "Alwyn Rehabilitation Hospital",
+    "region": "Australia",
+    "website": "https://alwyn.com.au/",
+    "phone": "08 9330 1000"
+  },
+  {
+    "name": "Anne Caudle Campus",
+    "region": "Australia",
+    "website": "https://www.bendigohealth.org.au/",
+    "phone": ""
+  },
+  {
+    "name": "Anne Leach Wing",
+    "region": "Australia",
+    "website": "https://perthradclinic.com.au",
+    "phone": ""
+  },
+  {
+    "name": "Ashford Hospital",
+    "region": "Australia",
+    "website": "https://ashfordhospital.org.au/",
+    "phone": "08 8375 5222"
+  },
+  {
+    "name": "Attadale Rehabilitation Hospital",
+    "region": "Australia",
+    "website": "https://www.attadalerehabilitation.com.au/",
+    "phone": "+61 8 9330 1000"
+  },
+  {
+    "name": "Austin Hospital",
+    "region": "Australia",
+    "website": "https://www.austin.org.au/",
+    "phone": ""
+  },
+  {
+    "name": "Bellinger River District Hospital",
+    "region": "Australia",
+    "website": "https://mnclhd.health.nsw.gov.au/hospital/bellinger-river-district-hospital/",
+    "phone": "+61 2 6659 5800"
+  },
+  {
+    "name": "Ramsay Clinic Wentworthville",
+    "region": "Australia",
+    "website": "https://www.ramsaymentalhealth.com.au/wentworthville",
+    "phone": "+61 2 8833 2222"
+  },
+  {
+    "name": "Wyvern Private Hospital",
+    "region": "Australia",
+    "website": "https://www.wyvernprivatehospital.com.au/",
+    "phone": "+61 2 8428 0200"
+  },
+  {
+    "name": "Barna- og unglingageðdeild Landspítalans",
+    "region": "Iceland",
+    "website": "https://www.landspitali.is/sjuklingar-adstandendur/deildir-og-thjonusta/barna-og-unglingageddeild/",
+    "phone": "03545434300"
+  },
+  {
+    "name": "Heilsugæslusel Flateyrar",
+    "region": "Iceland",
+    "website": "https://hvest.is/starfsstodvar/flateyri/",
+    "phone": "+354 450 4500"
+  },
+  {
+    "name": "Landspítali",
+    "region": "Iceland",
+    "website": "https://www.landspitali.is/",
+    "phone": "+354 543 1000"
+  },
+  {
+    "name": "Landspítali Fossvogur",
+    "region": "Iceland",
+    "website": "http://landspitali.is",
+    "phone": "+354 543 1000"
+  },
+  {
+    "name": "Kingston Open MRI",
+    "region": "Jamaica",
+    "website": "http://www.kingstonopenmri.com/",
+    "phone": "+1 876 908 1828"
+  },
+  {
+    "name": "St. Jago Park Health Centre",
+    "region": "Jamaica",
+    "website": "https://www.serha.gov.jm/",
+    "phone": "+18769843031"
+  },
+  {
+    "name": "University Hospital Of The West Indies",
+    "region": "Jamaica",
+    "website": "https://uhwi.gov.jm/",
+    "phone": "+1 (876) 927-1621-9"
+  },
+  {
+    "name": "University Hospital of the West Indies",
+    "region": "Jamaica",
+    "website": "https://uhwi.gov.jm/",
+    "phone": "927-1620"
+  },
+  {
+    "name": "AOI名古屋病院",
+    "region": "Japan",
+    "website": "https://www.aoikai.jp/aoinagoya/",
+    "phone": "042-861-8800"
+  },
+  {
+    "name": "AOI広島病院",
+    "region": "Japan",
+    "website": "https://www.aoikai.jp/aoihiroshima/",
+    "phone": "082-420-7000"
+  },
+  {
+    "name": "JCHO 東京山手メディカルセンター",
+    "region": "Japan",
+    "website": "https://yamate.jcho.go.jp/",
+    "phone": "076-252-2200"
+  },
+  {
+    "name": "JCHO仙台病院",
+    "region": "Japan",
+    "website": "https://sendai.jcho.go.jp/",
+    "phone": "+81 22 378 9111"
+  },
+  {
+    "name": "JCHO北海道病院",
+    "region": "Japan",
+    "website": "https://hokkaido.jcho.go.jp/",
+    "phone": "076-252-2200"
+  },
+  {
+    "name": "JCHO大阪病院",
+    "region": "Japan",
+    "website": "https://osaka.jcho.go.jp/",
+    "phone": "+81 6 6441 5451"
+  },
+  {
+    "name": "JCHO東京新宿メディカルセンター",
+    "region": "Japan",
+    "website": "https://shinjuku.jcho.go.jp/",
+    "phone": "+81 3 3269 8111"
+  },
+  {
+    "name": "KKR札幌医療センター",
+    "region": "Japan",
+    "website": "https://www.kkr-smc.com/",
+    "phone": "+81 11 822 1811"
+  },
+  {
+    "name": "医療法人社団竜山会金沢古府記念病院",
+    "region": "Japan",
+    "website": "https://www.kkm-hp.jp/",
+    "phone": "+81 76 240 3555"
+  },
+  {
+    "name": "大阪市立総合医療センター",
+    "region": "Japan",
+    "website": "https://www.osakacity-hp.or.jp/ocgh/",
+    "phone": "+81-6-69291221"
+  },
+  {
+    "name": "Asociația Medicală Teritorială Ciocana",
+    "region": "Moldova",
+    "website": "https://amt-ciocana.md/",
+    "phone": "+373022866966"
+  },
+  {
+    "name": "Centrul Național de Medicină Sportivă „Atletmed”",
+    "region": "Moldova",
+    "website": "https://www.atletmed.md/",
+    "phone": ""
+  },
+  {
+    "name": "24 Hour Surgery",
+    "region": "New Zealand",
+    "website": "https://www.24hoursurgery.co.nz/",
+    "phone": "+64 3 365 7777"
+  },
+  {
+    "name": "Alexandra Hospital",
+    "region": "New Zealand",
+    "website": "https://www.nmdhb.govt.nz/hospitals-and-community-services/hospitals/alexandra-hospital/",
+    "phone": "03 539 3920"
+  },
+  {
+    "name": "Auckland City Surgical Services Limited",
+    "region": "New Zealand",
+    "website": "https://www.onehealth.co.nz/",
+    "phone": "+64 9 522 2800"
+  },
+  {
+    "name": "Bay Radiology",
+    "region": "New Zealand",
+    "website": "https://bayradiology.co.nz/",
+    "phone": "+6475780273"
+  },
+  {
+    "name": "Bay of Islands Hospital",
+    "region": "New Zealand",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/bay-of-islands-hospital-services/",
+    "phone": "+6494040280"
+  },
+  {
+    "name": "Bay of Islands Hospital",
+    "region": "New Zealand",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/bay-of-islands-hospital-services/",
+    "phone": "+6494040280"
+  },
+  {
+    "name": "Birthright",
+    "region": "New Zealand",
+    "website": "https://www.onehealth.co.nz/",
+    "phone": "+64 9 522 2800"
+  },
+  {
+    "name": "Child & Youth Services Te Roopu Kimiora",
+    "region": "New Zealand",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/kaitaia-hospital-services/",
+    "phone": "+6494089180"
+  },
+  {
+    "name": "Child Development Service",
+    "region": "New Zealand",
+    "website": "https://cdhb.health.nz/childdevelopmentservice",
+    "phone": ""
+  },
+  {
+    "name": "Christchurch Hospital",
+    "region": "New Zealand",
+    "website": "https://www.cdhb.health.nz/Hospitals-Services/hospitals/Christchurch-Hospital/Pages/default.aspx",
+    "phone": "+64 3 364 0600"
+  },
+  {
+    "name": "Christchurch Public Hospital",
+    "region": "New Zealand",
+    "website": "https://www.cdhb.health.nz/hospitals-health-facilities/christchurch-hospital/",
+    "phone": "03 364 0600"
+  },
+  {
+    "name": "Kaitaia Hospital",
+    "region": "New Zealand",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/kaitaia-hospital-services/",
+    "phone": "+6494089180"
+  },
+  {
+    "name": "Binangonan Lakeview Hospital",
+    "region": "Philippines",
+    "website": "https://www.ourblh.com",
+    "phone": "+63 727-1250"
+  },
+  {
+    "name": "Chong Hua Hospital",
+    "region": "Philippines",
+    "website": "www.chonghua.com.ph",
+    "phone": "+63 32 255-8000"
+  },
+  {
+    "name": "Jose B. Lingad Memorial Regional Hospital",
+    "region": "Philippines",
+    "website": "https://jblmgh.doh.gov.ph",
+    "phone": "jblmgh_2012@yahoo.com.ph"
+  },
+  {
+    "name": "Eugene Marais Hospital",
+    "region": "South Africa",
+    "website": "https://www.lifehealthcare.co.za/hospitals/gauteng/pretoria/life-eugene-marais-hospital/",
+    "phone": "+27 12 334 2777"
+  },
+  {
+    "name": "Aberaeron Integrated Care Centre",
+    "region": "UK",
+    "website": "https://www.wales.nhs.uk/ourservices/directory/Hospitals/95",
+    "phone": "+44 1545 900100"
+  },
+  {
+    "name": "Aintree University Hospital",
+    "region": "UK",
+    "website": "https://www.aintreehospital.nhs.uk/",
+    "phone": "+44 151 525 5980"
+  },
+  {
+    "name": "Arundel & District Community Hospital",
+    "region": "UK",
+    "website": "http://www.sussexcommunity.nhs.uk/services",
+    "phone": "+44 1903 882543"
+  },
+  {
+    "name": "John Munroe Hospital",
+    "region": "UK",
+    "website": "https://www.johnmunroehospital.co.uk/",
+    "phone": "+44 1538 394270"
+  },
+  {
+    "name": "Leek Moorlands Hospital",
+    "region": "UK",
+    "website": "https://www.mpft.nhs.uk/services/leek-moorlands-hospital",
+    "phone": "+44 300 123 1894"
+  },
+  {
+    "name": "Lister Hospital",
+    "region": "UK",
+    "website": "https://www.enherts-tr.nhs.uk/hospitals/lister/",
+    "phone": "+44 1438 314333"
+  },
+  {
+    "name": "North Walsham and District War Memorial Hospital",
+    "region": "UK",
+    "website": "http://www.norfolkcommunityhealthandcare.nhs.uk",
+    "phone": "+44 1692 408000"
+  },
+  {
+    "name": "Ospadal Naomh Brianain",
+    "region": "UK",
+    "website": "https://www.wihb.scot.nhs.uk/st-brendan-s-hospital-barra",
+    "phone": "01871 810465"
+  },
+  {
+    "name": "Priory Hospital Ty Cwm Rhondda",
+    "region": "UK",
+    "website": "https://www.priorygroup.com/locations/nhs/priory-hospital-ty-cwm-rhondda",
+    "phone": "+441443424940"
+  },
+  {
+    "name": "The Lady Margaret Hospital",
+    "region": "UK",
+    "website": "https://www.nhsaaa.net/hospitals/lady-margaret-hospital/",
+    "phone": "+44 1475 530307"
+  },
+  {
+    "name": "Abbott Northwestern Hospital",
+    "region": "USA",
+    "website": "https://www.allinahealth.org/Abbott-Northwestern-Hospital",
+    "phone": "+1 612 863 4000"
+  },
+  {
+    "name": "AdventHealth Orlando",
+    "region": "USA",
+    "website": "https://www.floridahospital.com/orlando",
+    "phone": "+1 407 303 5600"
+  },
+  {
+    "name": "Advocate Christ Medical Center",
+    "region": "USA",
+    "website": "https://www.advocatehealth.com/cmc/",
+    "phone": "+1 708 684 8000"
+  },
+  {
+    "name": "Aultman Hospital",
+    "region": "USA",
+    "website": "https://aultman.org/",
+    "phone": "+1 330 452 9911"
+  },
+  {
+    "name": "Barnes-Jewish Hospital",
+    "region": "USA",
+    "website": "https://www.barnesjewish.org/",
+    "phone": "+1-314-747-3000"
+  },
+  {
+    "name": "Baylor University Medical Center",
+    "region": "USA",
+    "website": "https://www.bswhealth.com/locations/dallas",
+    "phone": "+1 214 820 0111"
+  },
+  {
+    "name": "Beaumont Hospital - Royal Oak",
+    "region": "USA",
+    "website": "https://www.beaumont.edu/",
+    "phone": "+1 248 898 5000"
+  },
+  {
+    "name": "CHRISTUS Spohn Hospital Corpus Christi - Memorial",
+    "region": "USA",
+    "website": "https://www.christushealth.org/spohn/memorial",
+    "phone": "+1 361 902 4000"
+  },
+  {
+    "name": "Cedars-Sinai Medical Center",
+    "region": "USA",
+    "website": "https://www.cedars-sinai.org/",
+    "phone": "+1 310 423 3277"
+  },
+  {
+    "name": "Charlton Memorial Hospital",
+    "region": "USA",
+    "website": "https://www.southcoast.org/locations/charlton-memorial-hospital/",
+    "phone": "+1 508 679 3131"
+  },
+  {
+    "name": "Corewell Health Butterworth Hospital",
+    "region": "USA",
+    "website": "https://corewellhealth.org",
+    "phone": "+1 616 391 1774"
+  },
+  {
+    "name": "Henry Ford Hospital",
+    "region": "USA",
+    "website": "https://www.henryford.com/locations/henry-ford-hospital",
+    "phone": "+1 203 916 2600"
+  },
+  {
+    "name": "Inova Fairfax Hospital",
+    "region": "USA",
+    "website": "https://www.inova.org/ifh",
+    "phone": "+1 703-776-4001"
+  },
+  {
+    "name": "Mayo Clinic Saint Marys Campus",
+    "region": "USA",
+    "website": "https://www.mayoclinic.org/patient-visitor-guide/minnesota/clinic-hospital-buildings/mayo-clinic-hospital-saint-marys-campus",
+    "phone": "+1 507 255 5123"
+  },
+  {
+    "name": "Medical City Dallas",
+    "region": "USA",
+    "website": "https://medicalcityhospital.com/",
+    "phone": "+1 972 566 7000"
+  },
+  {
+    "name": "Methodist Hospital",
+    "region": "USA",
+    "website": "https://sahealth.com/locations/methodisthospital/",
+    "phone": "+1 210 575 4000"
+  },
+  {
+    "name": "Methodist Hospital South",
+    "region": "USA",
+    "website": "https://sahealth.com/locations/methodisthospitalsouth/",
+    "phone": "+1 830 769 3515"
+  },
+  {
+    "name": "Mount Sinai Beth Israel",
+    "region": "USA",
+    "website": "https://www.mountsinai.org/locations/beth-israel",
+    "phone": "+1 212 420 2000"
+  },
+  {
+    "name": "Northwestern Memorial Hospital",
+    "region": "USA",
+    "website": "https://www.nm.org/locations/northwestern-memorial-hospital",
+    "phone": "+1 312 926 2000"
+  },
+  {
+    "name": "Olin E. Teague Veterans Medical Center",
+    "region": "USA",
+    "website": "https://www.centraltexas.va.gov/",
+    "phone": "+1 254-778-4811"
+  },
+  {
+    "name": "Orlando Regional Medical Center",
+    "region": "USA",
+    "website": "https://www.orlandohealth.com/facilities/orlando-regional-medical-center",
+    "phone": "+1-321-841-5111"
+  },
+  {
+    "name": "Parkland Memorial Hospital",
+    "region": "USA",
+    "website": "https://www.parklandhospital.com/phhs/home.aspx",
+    "phone": "+1 214 590 8000"
+  },
+  {
+    "name": "Riverside Methodist Hospital",
+    "region": "USA",
+    "website": "https://www.ohiohealth.com/locations/hospitals/riverside-methodist-hospital",
+    "phone": "+1 614 566 5000"
+  },
+  {
+    "name": "Swedish First Hill Medical Center",
+    "region": "USA",
+    "website": "http://www.swedish.org/locations/first-hill-campus",
+    "phone": "+1-206-386-6000"
+  },
+  {
+    "name": "Texas Health Presbyterian Hospital Dallas",
+    "region": "USA",
+    "website": "https://www.texashealth.org/dallas/",
+    "phone": "+1 214 345 6789"
+  },
+  {
+    "name": "University Hospitals Cleveland Medical Center",
+    "region": "USA",
+    "website": "http://www.uhhospitals.org/cleveland",
+    "phone": "+1 216 844 1000"
+  },
+  {
+    "name": "University of Chicago Medicine Campus",
+    "region": "USA",
+    "website": "https://uchicagomedicine.org/",
+    "phone": "+1 773 702 1000"
+  }
+]

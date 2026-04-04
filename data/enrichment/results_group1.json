@@ -1,0 +1,542 @@
+[
+  {
+    "name": "Yale New Haven Hospital",
+    "region": "USA",
+    "phone": "203-688-4242",
+    "email": "giving@ynhh.org"
+  },
+  {
+    "name": "Barnes-Jewish Hospital",
+    "region": "USA",
+    "phone": "314-747-3000",
+    "email": ""
+  },
+  {
+    "name": "AdventHealth Orlando",
+    "region": "USA",
+    "phone": "407-303-5600",
+    "email": ""
+  },
+  {
+    "name": "Mayo Clinic Saint Marys Campus",
+    "region": "USA",
+    "phone": "507-255-5123",
+    "email": ""
+  },
+  {
+    "name": "Atascadero State Hospital",
+    "region": "USA",
+    "phone": "805-468-2000",
+    "email": "ashroi@dsh.ca.gov"
+  },
+  {
+    "name": "Porterville Developmental Center",
+    "region": "USA",
+    "phone": "833-421-0061",
+    "email": "info@dds.ca.gov"
+  },
+  {
+    "name": "Carolinas Medical Center - Center For Mental Health",
+    "region": "USA",
+    "phone": "704-358-2736",
+    "email": "kimberly.greene@atriumhealth.org"
+  },
+  {
+    "name": "Johns Hopkins Hospital",
+    "region": "USA",
+    "phone": "410-955-5000",
+    "email": "jhhpublichealth@jhmi.edu"
+  },
+  {
+    "name": "Saint Francis Hospital",
+    "region": "USA",
+    "phone": "918-494-2200",
+    "email": "patientadvocate@saintfrancis.com"
+  },
+  {
+    "name": "Memorial Hermann-Texas Medical Center",
+    "region": "USA",
+    "phone": "713-704-4000",
+    "email": "patient.billing@memorialhermann.org"
+  },
+  {
+    "name": "Riverside Methodist Hospital",
+    "region": "USA",
+    "phone": "614-566-5000",
+    "email": ""
+  },
+  {
+    "name": "Inova Fairfax Hospital",
+    "region": "USA",
+    "phone": "703-776-4001",
+    "email": ""
+  },
+  {
+    "name": "University Hospitals Cleveland Medical Center",
+    "region": "USA",
+    "phone": "216-844-8447",
+    "email": ""
+  },
+  {
+    "name": "Baylor University Medical Center",
+    "region": "USA",
+    "phone": "214-820-0111",
+    "email": ""
+  },
+  {
+    "name": "New Bridge Medical Center",
+    "region": "USA",
+    "phone": "201-967-4000",
+    "email": "businessdevelopment@newbridgehealth.org"
+  },
+  {
+    "name": "Tampa General Hospital",
+    "region": "USA",
+    "phone": "813-844-7000",
+    "email": "patientrelations@tgh.org"
+  },
+  {
+    "name": "Beaumont Hospital - Royal Oak",
+    "region": "USA",
+    "phone": "248-898-5000",
+    "email": ""
+  },
+  {
+    "name": "Parkland Memorial Hospital",
+    "region": "USA",
+    "phone": "214-590-8000",
+    "email": ""
+  },
+  {
+    "name": "Mary Washington Hospital",
+    "region": "USA",
+    "phone": "540-741-1100",
+    "email": "Marketing.Communications@mwhc.com"
+  },
+  {
+    "name": "Abbott Northwestern Hospital",
+    "region": "USA",
+    "phone": "612-863-4000",
+    "email": ""
+  },
+  {
+    "name": "Olin E. Teague Veterans Medical Center",
+    "region": "USA",
+    "phone": "254-778-4811",
+    "email": ""
+  },
+  {
+    "name": "Medical City Dallas",
+    "region": "USA",
+    "phone": "972-566-7000",
+    "email": ""
+  },
+  {
+    "name": "Texas Health Presbyterian Hospital Dallas",
+    "region": "USA",
+    "phone": "214-345-6789",
+    "email": ""
+  },
+  {
+    "name": "Northwestern Memorial Hospital",
+    "region": "USA",
+    "phone": "312-926-2000",
+    "email": ""
+  },
+  {
+    "name": "Orlando Regional Medical Center",
+    "region": "USA",
+    "phone": "321-841-5111",
+    "email": ""
+  },
+  {
+    "name": "Cedars-Sinai Medical Center",
+    "region": "USA",
+    "phone": "310-423-3277",
+    "email": ""
+  },
+  {
+    "name": "Henry Ford Hospital",
+    "region": "USA",
+    "phone": "313-916-2600",
+    "email": ""
+  },
+  {
+    "name": "Lehigh Valley Hospital",
+    "region": "USA",
+    "phone": "610-402-8000",
+    "email": "402care@lvhn.org"
+  },
+  {
+    "name": "Charlton Memorial Hospital",
+    "region": "USA",
+    "phone": "508-679-3131",
+    "email": ""
+  },
+  {
+    "name": "Dallas VA Medical Center",
+    "region": "USA",
+    "phone": "214-742-8387",
+    "email": "NTXPublicAffairs@va.gov"
+  },
+  {
+    "name": "Corewell Health Butterworth Hospital",
+    "region": "USA",
+    "phone": "616-391-1774",
+    "email": ""
+  },
+  {
+    "name": "Erlanger North Hospital - Satellite",
+    "region": "USA",
+    "phone": "423-778-3300",
+    "email": "billing@erlanger.org"
+  },
+  {
+    "name": "CHRISTUS Spohn Hospital Corpus Christi - Memorial",
+    "region": "USA",
+    "phone": "361-902-4000",
+    "email": ""
+  },
+  {
+    "name": "Swedish First Hill Medical Center",
+    "region": "USA",
+    "phone": "206-386-6000",
+    "email": ""
+  },
+  {
+    "name": "Baptist Health Medical Center - Little Rock",
+    "region": "USA",
+    "phone": "501-202-2000",
+    "email": "baptisthealth.foundation@baptist-health.org"
+  },
+  {
+    "name": "Aultman Hospital",
+    "region": "USA",
+    "phone": "330-452-9911",
+    "email": ""
+  },
+  {
+    "name": "Methodist Hospital",
+    "region": "USA",
+    "phone": "210-575-4000",
+    "email": ""
+  },
+  {
+    "name": "Methodist Hospital South",
+    "region": "USA",
+    "phone": "210-575-4000",
+    "email": ""
+  },
+  {
+    "name": "University of Chicago Medicine Campus",
+    "region": "USA",
+    "phone": "773-702-1000",
+    "email": ""
+  },
+  {
+    "name": "Brigham and Women's Hospital",
+    "region": "USA",
+    "phone": "617-732-5500",
+    "email": "careers@partners.org"
+  },
+  {
+    "name": "Advocate Christ Medical Center",
+    "region": "USA",
+    "phone": "708-684-8000",
+    "email": ""
+  },
+  {
+    "name": "Mount Sinai Beth Israel",
+    "region": "USA",
+    "phone": "800-637-4624",
+    "email": ""
+  },
+  {
+    "name": "Queens Hospital",
+    "region": "UK",
+    "phone": "01708 435000",
+    "email": "bhrut.communications@nhs.net"
+  },
+  {
+    "name": "Lister Hospital",
+    "region": "UK",
+    "phone": "01438 314333",
+    "email": ""
+  },
+  {
+    "name": "Croydon University Hospital",
+    "region": "UK",
+    "phone": "020 8401 3000",
+    "email": "chs.comms@nhs.net"
+  },
+  {
+    "name": "University College Hospital",
+    "region": "UK",
+    "phone": "",
+    "email": "foundation.trust@uclh.nhs.uk"
+  },
+  {
+    "name": "Roseberry Park",
+    "region": "UK",
+    "phone": "01642 837300",
+    "email": "tewv.libraryadmin@nhs.net"
+  },
+  {
+    "name": "Cleveland Clinic London",
+    "region": "UK",
+    "phone": "+44 20 3423 7500",
+    "email": "ccl-contact.centre@ccf.org"
+  },
+  {
+    "name": "The Chiltern Hospital",
+    "region": "UK",
+    "phone": "01494 890890",
+    "email": "info.chiltern@circlehealth.co.uk"
+  },
+  {
+    "name": "John Munroe Hospital",
+    "region": "UK",
+    "phone": "01538 306244",
+    "email": ""
+  },
+  {
+    "name": "Leek Moorlands Hospital",
+    "region": "UK",
+    "phone": "0300 123 1894",
+    "email": ""
+  },
+  {
+    "name": "North Walsham and District War Memorial Hospital",
+    "region": "UK",
+    "phone": "01692 408000",
+    "email": ""
+  },
+  {
+    "name": "Arundel & District Community Hospital",
+    "region": "UK",
+    "phone": "01903 882543",
+    "email": ""
+  },
+  {
+    "name": "Priory Hospital Ty Cwm Rhondda",
+    "region": "UK",
+    "phone": "+441443424940",
+    "email": ""
+  },
+  {
+    "name": "Midhurst Community Hospital",
+    "region": "UK",
+    "phone": "01730 819112",
+    "email": ""
+  },
+  {
+    "name": "Grenoside Grange",
+    "region": "UK",
+    "phone": "0114 271 6310",
+    "email": ""
+  },
+  {
+    "name": "Danesbury House Neurological Centre",
+    "region": "UK",
+    "phone": "01438 841841",
+    "email": "hct.patientexperienceteam@nhs.net"
+  },
+  {
+    "name": "Newton Stuart Hospital",
+    "region": "UK",
+    "phone": "01671 402015",
+    "email": "dg.feedback@nhs.net"
+  },
+  {
+    "name": "The Cove",
+    "region": "UK",
+    "phone": "01524 550360",
+    "email": "camhstier4.enquiries@lscft.nhs.uk"
+  },
+  {
+    "name": "The Lady Margaret Hospital",
+    "region": "UK",
+    "phone": "01475 530307",
+    "email": ""
+  },
+  {
+    "name": "Ospadal Naomh Brianain",
+    "region": "UK",
+    "phone": "01871 810465",
+    "email": ""
+  },
+  {
+    "name": "Abbey Surgery",
+    "region": "UK",
+    "phone": "01822 612247",
+    "email": "abbey.surgery@nhs.net"
+  },
+  {
+    "name": "Aberaeron Integrated Care Centre",
+    "region": "UK",
+    "phone": "01545 900100",
+    "email": ""
+  },
+  {
+    "name": "Aberbeeg Hospital",
+    "region": "UK",
+    "phone": "0800 218 2398",
+    "email": "referrals@elysiumhealthcare.co.uk"
+  },
+  {
+    "name": "Abingdon Community Hospital",
+    "region": "UK",
+    "phone": "01865 904346",
+    "email": ""
+  },
+  {
+    "name": "Aboyne Hospital and Health Centre",
+    "region": "UK",
+    "phone": "013398 86433",
+    "email": ""
+  },
+  {
+    "name": "Adamson Hospital",
+    "region": "UK",
+    "phone": "01334 651200",
+    "email": "info@nhsfife.org"
+  },
+  {
+    "name": "Addenbrooke's Hospital",
+    "region": "UK",
+    "phone": "01223 245151",
+    "email": ""
+  },
+  {
+    "name": "Aintree University Hospital",
+    "region": "UK",
+    "phone": "0151 525 5980",
+    "email": ""
+  },
+  {
+    "name": "Airbles Road Centre",
+    "region": "UK",
+    "phone": "01698 261331",
+    "email": ""
+  },
+  {
+    "name": "Airedale General Hospital",
+    "region": "UK",
+    "phone": "01535 652511",
+    "email": "anhsft.patientadvice@nhs.net"
+  },
+  {
+    "name": "Tamworth Rural Referral Hospital",
+    "region": "Australia",
+    "phone": "02 6767 7700",
+    "email": ""
+  },
+  {
+    "name": "Auburn Hospital",
+    "region": "Australia",
+    "phone": "02 8759 3000",
+    "email": "WSLHD-AuburnCommunityHealth@health.nsw.gov.au"
+  },
+  {
+    "name": "Wyvern Private Hospital",
+    "region": "Australia",
+    "phone": "02 8428 0200",
+    "email": ""
+  },
+  {
+    "name": "Ramsay Clinic Wentworthville",
+    "region": "Australia",
+    "phone": "02 8833 2222",
+    "email": ""
+  },
+  {
+    "name": "Bellinger River District Hospital",
+    "region": "Australia",
+    "phone": "02 6659 5800",
+    "email": ""
+  },
+  {
+    "name": "Abbotsford Private Hospital",
+    "region": "Australia",
+    "phone": "08 9381 1833",
+    "email": "abbotsford@aurorahealth.com.au"
+  },
+  {
+    "name": "Adeney Private Hospital",
+    "region": "Australia",
+    "phone": "03 7049 5000",
+    "email": "admissions@adeneyprivate.com.au"
+  },
+  {
+    "name": "Albury Wodonga Health - Albury Campus",
+    "region": "Australia",
+    "phone": "02 6051 7111",
+    "email": ""
+  },
+  {
+    "name": "Albury Wodonga Private Hospital",
+    "region": "Australia",
+    "phone": "02 6041 1411",
+    "email": ""
+  },
+  {
+    "name": "Alexandra District Health",
+    "region": "Australia",
+    "phone": "03 5772 0900",
+    "email": "alexandra@humehealth.org.au"
+  },
+  {
+    "name": "Alfred Hospital",
+    "region": "Australia",
+    "phone": "03 9076 2000",
+    "email": "contactus@alfred.org.au"
+  },
+  {
+    "name": "Alice Springs Hospital",
+    "region": "Australia",
+    "phone": "08 8951 7777",
+    "email": "patientliaisonash.doh@nt.gov.au"
+  },
+  {
+    "name": "Allowah Presbyterian Children's Hospital",
+    "region": "Australia",
+    "phone": "02 8877 3400",
+    "email": "admin@allowah.org.au"
+  },
+  {
+    "name": "Angliss Hospital",
+    "region": "Australia",
+    "phone": "1300 342 255",
+    "email": "feedback@easternhealth.org.au"
+  },
+  {
+    "name": "Aramac Primary Health Centre",
+    "region": "Australia",
+    "phone": "07 4652 9000",
+    "email": "barcaldineadmin@health.qld.gov.au"
+  },
+  {
+    "name": "Ashford Hospital",
+    "region": "Australia",
+    "phone": "08 8375 5222",
+    "email": ""
+  },
+  {
+    "name": "Atherton Hospital",
+    "region": "Australia",
+    "phone": "07 4091 0211",
+    "email": "AthertonPharmacy@health.qld.gov.au"
+  },
+  {
+    "name": "Attadale Rehabilitation Hospital",
+    "region": "Australia",
+    "phone": "08 9330 1000",
+    "email": ""
+  },
+  {
+    "name": "Augathella Multipurpose Health Service",
+    "region": "Australia",
+    "phone": "07 4656 7100",
+    "email": "Augathella_Administration@health.qld.gov.au"
+  }
+]

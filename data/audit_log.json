@@ -1,0 +1,89 @@
+[
+  {
+    "delivery_id": "2830e940",
+    "drone_id": "Drone2",
+    "origin": "Depot",
+    "destination": "Clinic B",
+    "supplies": [
+      "defibrillator"
+    ],
+    "payload_kg": 2.0,
+    "requested_at": "2026-04-03T18:08:20.759951+00:00",
+    "departed_at": "2026-04-03T18:08:20.864439+00:00",
+    "arrived_at": null,
+    "status": "failed",
+    "temperature_log": [],
+    "tamper_status": false,
+    "route_taken": [
+      {
+        "lat": 51.51,
+        "lon": -0.13,
+        "timestamp": "2026-04-03T18:08:20.864470+00:00"
+      }
+    ],
+    "re_routes": 1,
+    "country": "DE",
+    "compliance_violations": [
+      "REROUTE: weather: storm at Clinic B",
+      "FAILURE: low battery after reroute"
+    ]
+  },
+  {
+    "delivery_id": "61b7c5f3",
+    "drone_id": "Drone1",
+    "origin": "Depot",
+    "destination": "Clinic A",
+    "supplies": [
+      "vaccine_kit",
+      "blood_pack"
+    ],
+    "payload_kg": 0.8,
+    "requested_at": "2026-04-03T18:08:20.759709+00:00",
+    "departed_at": "2026-04-03T18:08:20.759987+00:00",
+    "arrived_at": "2026-04-03T18:08:20.864343+00:00",
+    "status": "delivered",
+    "temperature_log": [
+      {
+        "temp_c": 4.0,
+        "timestamp": "2026-04-03T18:08:20.864320+00:00"
+      },
+      {
+        "temp_c": 4.22,
+        "timestamp": "2026-04-03T18:08:20.864331+00:00"
+      },
+      {
+        "temp_c": 4.44,
+        "timestamp": "2026-04-03T18:08:20.864336+00:00"
+      },
+      {
+        "temp_c": 4.66,
+        "timestamp": "2026-04-03T18:08:20.864339+00:00"
+      },
+      {
+        "temp_c": 4.88,
+        "timestamp": "2026-04-03T18:08:20.864341+00:00"
+      }
+    ],
+    "tamper_status": false,
+    "route_taken": [
+      {
+        "lat": 51.508,
+        "lon": -0.126,
+        "timestamp": "2026-04-03T18:08:20.864285+00:00"
+      },
+      {
+        "lat": 51.51,
+        "lon": -0.123,
+        "timestamp": "2026-04-03T18:08:20.864300+00:00"
+      },
+      {
+        "lat": 51.5124,
+        "lon": -0.12,
+        "timestamp": "2026-04-03T18:08:20.864303+00:00"
+      }
+    ],
+    "re_routes": 0,
+    "country": "GB",
+    "compliance_violations": []
+  }
+]

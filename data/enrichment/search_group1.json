@@ -1,0 +1,906 @@
+[
+  {
+    "name": "Yale New Haven Hospital",
+    "region": "USA",
+    "website": "https://www.ynhh.org/childrens-hospital.aspx",
+    "address": "20, York Street, New Haven, 06510",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Barnes-Jewish Hospital",
+    "region": "USA",
+    "website": "https://www.barnesjewish.org/",
+    "address": "1, Barnes-Jewish Hospital Plaza, Saint Louis, 63110",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "AdventHealth Orlando",
+    "region": "USA",
+    "website": "https://www.floridahospital.com/orlando",
+    "address": "601, East Rollins Street, Orlando, 32803",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mayo Clinic Saint Marys Campus",
+    "region": "USA",
+    "website": "https://www.mayoclinic.org/patient-visitor-guide/minnesota/clinic-hospital-buildings/mayo-clinic-hospital-saint-marys-campus",
+    "address": "1216, 2nd Street Southwest, Rochester, 55902",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Atascadero State Hospital",
+    "region": "USA",
+    "website": "https://dsh.ca.gov/Atascadero/",
+    "address": "10333, El Camino Real, Atascadero",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Porterville Developmental Center",
+    "region": "USA",
+    "website": "https://www.dds.ca.gov/Porterville/",
+    "address": "26501, Avenue 140, Porterville, 93257",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Carolinas Medical Center - Center For Mental Health",
+    "region": "USA",
+    "website": "",
+    "address": "234 EAST 149TH STREET, BRONX, NY 10451",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Johns Hopkins Hospital",
+    "region": "USA",
+    "website": "https://www.hopkinsmedicine.org/the_johns_hopkins_hospital/",
+    "address": "1800, Orleans Street, Baltimore, 21287",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Saint Francis Hospital",
+    "region": "USA",
+    "website": "https://www.saintfrancis.com/",
+    "address": "6161, South Yale Avenue East, Tulsa, 74136",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Memorial Hermann-Texas Medical Center",
+    "region": "USA",
+    "website": "https://www.memorialhermann.org/locations/texas-medical-center/",
+    "address": "6411, Fannin Street, Houston, 77030",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Riverside Methodist Hospital",
+    "region": "USA",
+    "website": "https://www.ohiohealth.com/locations/hospitals/riverside-methodist-hospital",
+    "address": "3535, Olentangy River Road, Columbus, 43214",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Inova Fairfax Hospital",
+    "region": "USA",
+    "website": "https://www.inova.org/ifh",
+    "address": "3300, Gallows Road, Falls Church, 22042",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "University Hospitals Cleveland Medical Center",
+    "region": "USA",
+    "website": "http://www.uhhospitals.org/cleveland",
+    "address": "11100, Euclid Avenue, Cleveland, 44106",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Baylor University Medical Center",
+    "region": "USA",
+    "website": "https://www.bswhealth.com/locations/dallas",
+    "address": "3500, Gaston Avenue, Dallas, 75246",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "New Bridge Medical Center",
+    "region": "USA",
+    "website": "https://www.newbridgehealth.org",
+    "address": "230, East Ridgewood Avenue, Paramus, 07652",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Tampa General Hospital",
+    "region": "USA",
+    "website": "https://www.tgh.org/",
+    "address": "1, Tampa General Circle, Tampa, 33606",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Beaumont Hospital - Royal Oak",
+    "region": "USA",
+    "website": "https://www.beaumont.edu/",
+    "address": "3601, West 13 Mile Road, Royal Oak, 48073",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Parkland Memorial Hospital",
+    "region": "USA",
+    "website": "https://www.parklandhospital.com/phhs/home.aspx",
+    "address": "5200, Harry Hines Boulevard, Dallas, 75235",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mary Washington Hospital",
+    "region": "USA",
+    "website": "https://www.marywashingtonhealthcare.com",
+    "address": "1001, Sam Perry Boulevard, Fredericksburg, 22401",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Abbott Northwestern Hospital",
+    "region": "USA",
+    "website": "https://www.allinahealth.org/Abbott-Northwestern-Hospital",
+    "address": "800, East 28th Street, Minneapolis, 55407",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Olin E. Teague Veterans Medical Center",
+    "region": "USA",
+    "website": "https://www.centraltexas.va.gov/",
+    "address": "1901, Veterans Memorial Drive, Temple, 76504",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Medical City Dallas",
+    "region": "USA",
+    "website": "https://medicalcityhospital.com/",
+    "address": "7777, Forest Lane, Dallas, 75230",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Texas Health Presbyterian Hospital Dallas",
+    "region": "USA",
+    "website": "https://www.texashealth.org/dallas/",
+    "address": "8200, Walnut Hill Lane, Dallas, 75231",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Northwestern Memorial Hospital",
+    "region": "USA",
+    "website": "https://www.nm.org/locations/northwestern-memorial-hospital",
+    "address": "251, East Huron Street, Chicago, 60611",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Orlando Regional Medical Center",
+    "region": "USA",
+    "website": "https://www.orlandohealth.com/facilities/orlando-regional-medical-center",
+    "address": "52, West Underwood Street, Orlando, 32806",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Cedars-Sinai Medical Center",
+    "region": "USA",
+    "website": "https://www.cedars-sinai.org/",
+    "address": "8700, Beverly Boulevard, Los Angeles, 90048",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Henry Ford Hospital",
+    "region": "USA",
+    "website": "https://www.henryford.com/locations/henry-ford-hospital",
+    "address": "2799, West Grand Boulevard, Detroit, 48202",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Lehigh Valley Hospital",
+    "region": "USA",
+    "website": "https://www.lvhn.org/locations/lehigh-valley-hospital-cedar-crest#scroll",
+    "address": "1200, South Cedar Crest Boulevard, Allentown, 18105",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Charlton Memorial Hospital",
+    "region": "USA",
+    "website": "https://www.southcoast.org/locations/charlton-memorial-hospital/",
+    "address": "363, Highland Avenue, Fall River, 02720",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Dallas VA Medical Center",
+    "region": "USA",
+    "website": "https://www.northtexas.va.gov/",
+    "address": "4500, South Lancaster Road, Dallas, 75216",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Corewell Health Butterworth Hospital",
+    "region": "USA",
+    "website": "https://corewellhealth.org",
+    "address": "100, Michigan Street Northeast, Grand Rapids, 49503",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Erlanger North Hospital - Satellite",
+    "region": "USA",
+    "website": "https://www.erlanger.org/erlanger-north-hospital/north-hospital",
+    "address": "632, Morrison Springs Road, Chattanooga, 37415",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "CHRISTUS Spohn Hospital Corpus Christi - Memorial",
+    "region": "USA",
+    "website": "https://www.christushealth.org/spohn/memorial",
+    "address": "2606, Hospital Boulevard, Corpus Christi, 78405",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Swedish First Hill Medical Center",
+    "region": "USA",
+    "website": "http://www.swedish.org/locations/first-hill-campus",
+    "address": "747, Broadway, Seattle, 98122",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Baptist Health Medical Center - Little Rock",
+    "region": "USA",
+    "website": "https://www.baptist-health.com/location/baptist-health-medical-center-little-rock-little-rock",
+    "address": "9601, Baptist Health Drive, Little Rock, 72205",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Aultman Hospital",
+    "region": "USA",
+    "website": "https://aultman.org/",
+    "address": "2600, 6th Street Southwest, Canton, 44710",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Methodist Hospital",
+    "region": "USA",
+    "website": "https://sahealth.com/locations/methodisthospital/",
+    "address": "7700, Floyd Curl Drive, San Antonio, 78229",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Methodist Hospital South",
+    "region": "USA",
+    "website": "https://sahealth.com/locations/methodisthospitalsouth/",
+    "address": "1905, Highway 97 East, Jourdanton, 78026",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "University of Chicago Medicine Campus",
+    "region": "USA",
+    "website": "https://uchicagomedicine.org/",
+    "address": "5481, South Maryland Avenue, Chicago, 60637",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Brigham and Women's Hospital",
+    "region": "USA",
+    "website": "https://www.brighamandwomens.org/",
+    "address": "75, Francis Street, Boston, 02115",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Advocate Christ Medical Center",
+    "region": "USA",
+    "website": "https://www.advocatehealth.com/cmc/",
+    "address": "4400, West 95th Street, Oak Lawn, 60453",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mount Sinai Beth Israel",
+    "region": "USA",
+    "website": "https://www.mountsinai.org/locations/beth-israel",
+    "address": "New York, 10003",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Queens Hospital",
+    "region": "UK",
+    "website": "http://www.bhrhospitals.nhs.uk",
+    "address": "Rom Valley Way, Romford, RM7 0AG",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Lister Hospital",
+    "region": "UK",
+    "website": "https://www.enherts-tr.nhs.uk/hospitals/lister/",
+    "address": "Coreys Mill Lane, Stevenage, SG1 4AB",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Croydon University Hospital",
+    "region": "UK",
+    "website": "http://www.croydonhealthservices.nhs.uk/",
+    "address": "530, London Road, Thornton Heath, CR7 7YE",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "University College Hospital",
+    "region": "UK",
+    "website": "https://www.uclh.nhs.uk/",
+    "address": "235, Euston Road, London, NW1 2BU",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Roseberry Park",
+    "region": "UK",
+    "website": "",
+    "address": "Marton Road, Middlesbrough, TS4 3AF",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Cleveland Clinic London",
+    "region": "UK",
+    "website": "https://clevelandcliniclondon.uk/",
+    "address": "33, Grosvenor Place, London, SW1X 7HY",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "The Chiltern Hospital",
+    "region": "UK",
+    "website": "https://www.bmihealthcare.co.uk/hospitals/bmi-the-chiltern-hospital",
+    "address": "London Road, HP16 0EN",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "John Munroe Hospital",
+    "region": "UK",
+    "website": "https://www.johnmunroehospital.co.uk/",
+    "address": "ST13 8RU",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Leek Moorlands Hospital",
+    "region": "UK",
+    "website": "https://www.mpft.nhs.uk/services/leek-moorlands-hospital",
+    "address": "Ashbourne Road, ST13 5BQ",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "North Walsham and District War Memorial Hospital",
+    "region": "UK",
+    "website": "http://www.norfolkcommunityhealthandcare.nhs.uk",
+    "address": "Yarmouth Road, NR28 9AP",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Arundel & District Community Hospital",
+    "region": "UK",
+    "website": "http://www.sussexcommunity.nhs.uk/services",
+    "address": "Chichester Road, Arundel, BN18 0AB",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Priory Hospital Ty Cwm Rhondda",
+    "region": "UK",
+    "website": "https://www.priorygroup.com/locations/nhs/priory-hospital-ty-cwm-rhondda",
+    "address": "Tyntyla Avenue, Ystrad, CF41 7SU",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Midhurst Community Hospital",
+    "region": "UK",
+    "website": "",
+    "address": "Dodsley Lane, Midhurst, GU29 9AW",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Grenoside Grange",
+    "region": "UK",
+    "website": "",
+    "address": "Salt Box Lane, Sheffield, S35 8QS",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Danesbury House Neurological Centre",
+    "region": "UK",
+    "website": "",
+    "address": "School Lane, Welwyn, AL6 9PW",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Newton Stuart Hospital",
+    "region": "UK",
+    "website": "",
+    "address": "Newton Stewart, DG8 6LZ",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "The Cove",
+    "region": "UK",
+    "website": "https://www.lscft.nhs.uk/the-cove",
+    "address": "Plover Drive, Heysham, LA3 2SL",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "The Lady Margaret Hospital",
+    "region": "UK",
+    "website": "https://www.nhsaaa.net/hospitals/lady-margaret-hospital/",
+    "address": "KA28 0HF",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Ospadal Naomh Brianain",
+    "region": "UK",
+    "website": "https://www.wihb.scot.nhs.uk/st-brendan-s-hospital-barra",
+    "address": "Isle of Barra, HS9 5XE",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Abbey Surgery",
+    "region": "UK",
+    "website": "",
+    "address": "Station Road, Yelverton, PL20 7EJ",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Aberaeron Integrated Care Centre",
+    "region": "UK",
+    "website": "https://www.wales.nhs.uk/ourservices/directory/Hospitals/95",
+    "address": "Vicarage Hill,, Aberaeron, SA46 0DY",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Aberbeeg Hospital",
+    "region": "UK",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Abingdon Community Hospital",
+    "region": "UK",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Aboyne Hospital and Health Centre",
+    "region": "UK",
+    "website": "",
+    "address": "Bellwood Road, Aboyne, AB34 5HQ",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Accident & Emergency",
+    "region": "UK",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Adamson Hospital",
+    "region": "UK",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Addenbrooke's Hospital",
+    "region": "UK",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Aintree University Hospital",
+    "region": "UK",
+    "website": "https://www.aintreehospital.nhs.uk/",
+    "address": "Lower Lane, Liverpool, L9 7AL",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Airbles Road Centre",
+    "region": "UK",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Airedale General Hospital",
+    "region": "UK",
+    "website": "https://www.airedale-trust.nhs.uk/",
+    "address": "Skipton Road, Keighley, BD20 6TD",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Tamworth Rural Referral Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "Dean Street, 2340",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Auburn Hospital",
+    "region": "Australia",
+    "website": "https://www.wslhd.health.nsw.gov.au/Auburn-Hospital",
+    "address": "18-20, Hargrave Road",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Wyvern Private Hospital",
+    "region": "Australia",
+    "website": "https://www.wyvernprivatehospital.com.au/",
+    "address": "33A, Myoora Road",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Ramsay Clinic Wentworthville",
+    "region": "Australia",
+    "website": "https://www.ramsaymentalhealth.com.au/wentworthville",
+    "address": "23-27, Lytton Street",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Bellinger River District Hospital",
+    "region": "Australia",
+    "website": "https://mnclhd.health.nsw.gov.au/hospital/bellinger-river-district-hospital/",
+    "address": "Church Street, 2454",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Abbotsford Private Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "61-69, Cambridge Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Adeney Private Hospital",
+    "region": "Australia",
+    "website": "https://adeneyprivate.com.au/",
+    "address": "209, Cotham Road, 3101",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Adolescent and Young Adult Hospice (AYAH)",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Adult Prevention and Recovery Care (APARC)",
+    "region": "Australia",
+    "website": "",
+    "address": "91, Beach Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Albany Community Hospice",
+    "region": "Australia",
+    "website": "",
+    "address": "30, Warden Avenue",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Albany Regional Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "30, Warden Avenue",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Albury Wodonga Health - Albury Campus",
+    "region": "Australia",
+    "website": "https://www.awh.org.au/About-Us",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Albury Wodonga Private Hospital",
+    "region": "Australia",
+    "website": "https://www.alburywodongaprivate.com.au/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alcohol and Drug Services",
+    "region": "Australia",
+    "website": "",
+    "address": "St Johns Avenue",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alderley Child Health",
+    "region": "Australia",
+    "website": "https://www.childrens.health.qld.gov.au/service-child-health/",
+    "address": "24, South Pine Road, Brisbane, 4051",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alexandra District Health",
+    "region": "Australia",
+    "website": "http://www.alexandrahospital.org.au/",
+    "address": "12, Cooper Street, 3714",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alexandria Specialist Day Hospital",
+    "region": "Australia",
+    "website": "https://www.asdh.com.au",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alfred Hospital",
+    "region": "Australia",
+    "website": "https://www.alfred.org.au/",
+    "address": "55, Commercial Road",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Alice Springs Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Allowah Presbyterian Children's Hospital",
+    "region": "Australia",
+    "website": "https://www.allowah.org.au/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alpine Health [Mount Beauty]",
+    "region": "Australia",
+    "website": "",
+    "address": "10, Hollonds Street, 3699",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alwyn Rehabilitation Hospital",
+    "region": "Australia",
+    "website": "https://alwyn.com.au/",
+    "address": "1, Emu Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulance Victoria",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Angaston District Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Angliss Hospital",
+    "region": "Australia",
+    "website": "https://www.easternhealth.org.au/locations/angliss/default.aspx",
+    "address": "39, Albert Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Anne Caudle Campus",
+    "region": "Australia",
+    "website": "https://www.bendigohealth.org.au/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Anne Leach Wing",
+    "region": "Australia",
+    "website": "https://perthradclinic.com.au",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Aramac Primary Health Centre",
+    "region": "Australia",
+    "website": "https://www.health.qld.gov.au/centralwest/menu/locations-and-services/aramac",
+    "address": "2, Lodge Street, 4726",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Arcadia Pittwater Private Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "4, Daydream Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ardrossan Community Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Armadale Kelmscott District Memorial Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "3056, Albany Highway, 6112",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Armidale Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "226, Rusden Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Armidale Private Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "226B, Rusden Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ashford Hospital",
+    "region": "Australia",
+    "website": "https://ashfordhospital.org.au/",
+    "address": "55-57, Anzac Highway",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ashworth House",
+    "region": "Australia",
+    "website": "",
+    "address": "25, Kolberg Street, Brisbane, 4034",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Atherton Hospital",
+    "region": "Australia",
+    "website": "https://www.health.qld.gov.au/services/cairns-hinterland/cairns_ath_hosp",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Attadale Rehabilitation Hospital",
+    "region": "Australia",
+    "website": "https://www.attadalerehabilitation.com.au/",
+    "address": "21, Hislop Road, 6156",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Augathella Multipurpose Health Service",
+    "region": "Australia",
+    "website": "https://www.southwest.health.qld.gov.au/healthcare-facilities/multipurpose-health-services/augathella-multipurpose-health-service/",
+    "address": "Cavanagh Street, 4477",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Austin Hospital",
+    "region": "Australia",
+    "website": "https://www.austin.org.au/",
+    "address": "145, Studley Road",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Avive Clinic Mt Eliza",
+    "region": "Australia",
+    "website": "",
+    "address": "2, Mount Eliza Way",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Ayr Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  }
+]

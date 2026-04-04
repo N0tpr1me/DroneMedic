@@ -12,13 +12,16 @@ export interface PX4Telemetry {
   heading_deg: number;
   speed_m_s: number;
   timestamp: number;
-  source: 'px4' | 'mock';
+  source: 'px4' | 'mock' | 'unity';
+  drone_id?: string;
+  current_location?: string;
 }
 
 interface UsePX4TelemetryReturn {
   telemetry: PX4Telemetry | null;
   connected: boolean;
   sendCommand: (cmd: Record<string, unknown>) => void;
+  source: 'px4' | 'mock' | 'unity' | null;
 }
 
 const WS_URL = 'ws://localhost:8765';
@@ -27,6 +30,7 @@ const MAX_RECONNECT_DELAY = 5000;
 export function usePX4Telemetry(): UsePX4TelemetryReturn {
   const [telemetry, setTelemetry] = useState<PX4Telemetry | null>(null);
   const [connected, setConnected] = useState(false);
+  const [source, setSource] = useState<'px4' | 'mock' | 'unity' | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectDelay = useRef(1000);
   const reconnectTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -59,9 +63,10 @@ export function usePX4Telemetry(): UsePX4TelemetryReturn {
 
       ws.onmessage = (event) => {
         try {
-          const data = JSON.parse(event.data) as PX4Telemetry;
+          const data = JSON.parse(event.data);
           if (data.type === 'telemetry') {
-            latestData.current = data;
+            latestData.current = data as PX4Telemetry;
+            if (data.source && data.source !== source) setSource(data.source);
             scheduleUpdate();
           }
         } catch {
@@ -116,5 +121,5 @@ export function usePX4Telemetry(): UsePX4TelemetryReturn {
     }
   }, []);
 
-  return { telemetry, connected, sendCommand };
+  return { telemetry, connected, sendCommand, source };
 }

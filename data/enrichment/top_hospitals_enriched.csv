@@ -1,0 +1,490 @@
+Name,Type,Phone Number,Email,Physical Address,Latitude,Longitude,Region,Beds,Website
+Yale New Haven Hospital,Hospital,+1 203 688 4242,,"20, York Street, New Haven, 06510",41.304422,-72.935604,USA,1541,https://www.ynhh.org/childrens-hospital.aspx
+Barnes-Jewish Hospital,Hospital,+1-314-747-3000,,"1, Barnes-Jewish Hospital Plaza, Saint Louis, 63110",38.637166,-90.264366,USA,1400,https://www.barnesjewish.org/
+AdventHealth Orlando,Hospital,+1 407 303 5600,,"601, East Rollins Street, Orlando, 32803",28.57513,-81.370582,USA,1368,https://www.floridahospital.com/orlando
+Mayo Clinic Saint Marys Campus,Hospital,+1 507 255 5123,,"1216, 2nd Street Southwest, Rochester, 55902",44.019363,-92.480982,USA,1265,https://www.mayoclinic.org/patient-visitor-guide/minnesota/clinic-hospital-buildings/mayo-clinic-hospital-saint-marys-campus
+Atascadero State Hospital,Hospital,(602) 220-6000,,"10333, El Camino Real, Atascadero",35.463944,-120.634214,USA,1239,https://dsh.ca.gov/Atascadero/
+Porterville Developmental Center,Hospital,+1 559 782 2222,,"26501, Avenue 140, Porterville, 93257",36.039234,-118.984171,USA,1226,https://www.dds.ca.gov/Porterville/
+Carolinas Medical Center - Center For Mental Health,Hospital,+1 704 355 2000,,"234 EAST 149TH STREET, BRONX, NY 10451",35.192004,-80.80394,USA,1211,
+Johns Hopkins Hospital,Hospital,+1 410 955 5000,,"1800, Orleans Street, Baltimore, 21287",39.29625,-76.591831,USA,1154,https://www.hopkinsmedicine.org/the_johns_hopkins_hospital/
+Saint Francis Hospital,Hospital,+1 918 494 2200,,"6161, South Yale Avenue East, Tulsa, 74136",36.071474,-95.919749,USA,1112,https://www.saintfrancis.com/
+Memorial Hermann-Texas Medical Center,Hospital,+1 713 704 4000,,"6411, Fannin Street, Houston, 77030",29.713393,-95.395693,USA,1098,https://www.memorialhermann.org/locations/texas-medical-center/
+Riverside Methodist Hospital,Hospital,+1 614 566 5000,,"3535, Olentangy River Road, Columbus, 43214",40.031126,-83.034826,USA,1059,https://www.ohiohealth.com/locations/hospitals/riverside-methodist-hospital
+Inova Fairfax Hospital,Hospital,+1 703-776-4001,,"3300, Gallows Road, Falls Church, 22042",38.856988,-77.227999,USA,1043,https://www.inova.org/ifh
+University Hospitals Cleveland Medical Center,Hospital,+1 216 844 1000,,"11100, Euclid Avenue, Cleveland, 44106",41.505931,-81.606049,USA,1032,http://www.uhhospitals.org/cleveland
+Baylor University Medical Center,Hospital,+1 214 820 0111,,"3500, Gaston Avenue, Dallas, 75246",32.790027,-96.778612,USA,1025,https://www.bswhealth.com/locations/dallas
+New Bridge Medical Center,Hospital,+1 201 967 4000,,"230, East Ridgewood Avenue, Paramus, 07652",40.955459,-74.062262,USA,1020,https://www.newbridgehealth.org
+Tampa General Hospital,Hospital,+1-813-844-7000,,"1, Tampa General Circle, Tampa, 33606",27.937469,-82.458939,USA,1011,https://www.tgh.org/
+Beaumont Hospital - Royal Oak,Hospital,+1 248 898 5000,,"3601, West 13 Mile Road, Royal Oak, 48073",42.514248,-83.192873,USA,1000,https://www.beaumont.edu/
+Parkland Memorial Hospital,Hospital,+1 214 590 8000,,"5200, Harry Hines Boulevard, Dallas, 75235",32.813107,-96.835526,USA,983,https://www.parklandhospital.com/phhs/home.aspx
+Mary Washington Hospital,Hospital,+1-540-741-1100,,"1001, Sam Perry Boulevard, Fredericksburg, 22401",38.310434,-77.483428,USA,981,https://www.marywashingtonhealthcare.com
+Abbott Northwestern Hospital,Hospital,+1 612 863 4000,,"800, East 28th Street, Minneapolis, 55407",44.953755,-93.261337,USA,952,https://www.allinahealth.org/Abbott-Northwestern-Hospital
+Olin E. Teague Veterans Medical Center,Hospital,+1 254-778-4811,,"1901, Veterans Memorial Drive, Temple, 76504",31.077584,-97.345322,USA,949,https://www.centraltexas.va.gov/
+Medical City Dallas,Hospital,+1 972 566 7000,,"7777, Forest Lane, Dallas, 75230",32.91149,-96.773456,USA,899,https://medicalcityhospital.com/
+Texas Health Presbyterian Hospital Dallas,Hospital,+1 214 345 6789,,"8200, Walnut Hill Lane, Dallas, 75231",32.879693,-96.761476,USA,898,https://www.texashealth.org/dallas/
+Northwestern Memorial Hospital,Hospital,+1 312 926 2000,,"251, East Huron Street, Chicago, 60611",41.895082,-87.621915,USA,894,https://www.nm.org/locations/northwestern-memorial-hospital
+Orlando Regional Medical Center,Hospital,+1-321-841-5111,,"52, West Underwood Street, Orlando, 32806",28.525896,-81.378273,USA,888,https://www.orlandohealth.com/facilities/orlando-regional-medical-center
+Cedars-Sinai Medical Center,Hospital,+1 310 423 3277,,"8700, Beverly Boulevard, Los Angeles, 90048",34.075215,-118.380696,USA,886,https://www.cedars-sinai.org/
+Henry Ford Hospital,Hospital,+1 203 916 2600,,"2799, West Grand Boulevard, Detroit, 48202",42.367804,-83.085485,USA,877,https://www.henryford.com/locations/henry-ford-hospital
+Lehigh Valley Hospital,Hospital,+1-610-402-8000,,"1200, South Cedar Crest Boulevard, Allentown, 18105",40.565227,-75.524333,USA,877,https://www.lvhn.org/locations/lehigh-valley-hospital-cedar-crest#scroll
+Charlton Memorial Hospital,Hospital,+1 508 679 3131,,"363, Highland Avenue, Fall River, 02720",41.709373,-71.145904,USA,867,https://www.southcoast.org/locations/charlton-memorial-hospital/
+Dallas VA Medical Center,Hospital,+1 800 849 3597,,"4500, South Lancaster Road, Dallas, 75216",32.694727,-96.789177,USA,853,https://www.northtexas.va.gov/
+Corewell Health Butterworth Hospital,Hospital,+1 616 391 1774,,"100, Michigan Street Northeast, Grand Rapids, 49503",42.969404,-85.664244,USA,852,https://corewellhealth.org
+Erlanger North Hospital - Satellite,Hospital,+1 423 778 6110,,"632, Morrison Springs Road, Chattanooga, 37415",35.123513,-85.302108,USA,848,https://www.erlanger.org/erlanger-north-hospital/north-hospital
+CHRISTUS Spohn Hospital Corpus Christi - Memorial,Hospital,+1 361 902 4000,,"2606, Hospital Boulevard, Corpus Christi, 78405",27.779899,-97.416021,USA,846,https://www.christushealth.org/spohn/memorial
+Swedish First Hill Medical Center,Hospital,+1-206-386-6000,,"747, Broadway, Seattle, 98122",47.60861,-122.322259,USA,830,http://www.swedish.org/locations/first-hill-campus
+Baptist Health Medical Center - Little Rock,Hospital,+1-501-202-2000,,"9601, Baptist Health Drive, Little Rock, 72205",34.743831,-92.380634,USA,827,https://www.baptist-health.com/location/baptist-health-medical-center-little-rock-little-rock
+Aultman Hospital,Hospital,+1 330 452 9911,,"2600, 6th Street Southwest, Canton, 44710",40.79662,-81.403804,USA,820,https://aultman.org/
+Methodist Hospital,Hospital,+1 210 575 4000,,"7700, Floyd Curl Drive, San Antonio, 78229",29.508264,-98.571941,USA,811,https://sahealth.com/locations/methodisthospital/
+Methodist Hospital South,Hospital,+1 830 769 3515,,"1905, Highway 97 East, Jourdanton, 78026",28.933089,-98.526004,USA,811,https://sahealth.com/locations/methodisthospitalsouth/
+University of Chicago Medicine Campus,Hospital,+1 773 702 1000,,"5481, South Maryland Avenue, Chicago, 60637",41.79019,-87.603693,USA,811,https://uchicagomedicine.org/
+Brigham and Women's Hospital,Hospital,+1 617 732 5500,,"75, Francis Street, Boston, 02115",42.335942,-71.105671,USA,804,https://www.brighamandwomens.org/
+Advocate Christ Medical Center,Hospital,+1 708 684 8000,,"4400, West 95th Street, Oak Lawn, 60453",41.722153,-87.730504,USA,802,https://www.advocatehealth.com/cmc/
+Mount Sinai Beth Israel,Hospital,+1 212 420 2000,,"New York, 10003",40.733225,-73.982443,USA,799,https://www.mountsinai.org/locations/beth-israel
+St George's Hospital,Hospital,+44 20 8672 1255,communications@stgeorges.nhs.uk,"Blackshaw Road, London, SW17 0QT",51.426442,-0.175207,UK,1300,http://www.stgeorges.nhs.uk
+Queens Hospital,Hospital,+44 330 400 4333,,"Rom Valley Way, Romford, RM7 0AG",51.568723,0.181018,UK,939,http://www.bhrhospitals.nhs.uk
+Lister Hospital,Hospital,+44 1438 314333,,"Coreys Mill Lane, Stevenage, SG1 4AB",51.924738,-0.213963,UK,730,https://www.enherts-tr.nhs.uk/hospitals/lister/
+Croydon University Hospital,Hospital,020 8401 3000,,"530, London Road, Thornton Heath, CR7 7YE",51.390124,-0.110056,UK,670,http://www.croydonhealthservices.nhs.uk/
+University College Hospital,Hospital,+44 20 3456 7890,,"235, Euston Road, London, NW1 2BU",51.52487,-0.136443,UK,665,https://www.uclh.nhs.uk/
+Medway Maritime Hospital,Hospital,+44 1634 830000,medwayft.pals@nhs.net,"Windmill Road, Gillingham, ME7 5NY",51.379623,0.541633,UK,588,https://www.medway.nhs.uk/
+Walsall Manor Hospital,Hospital,01922 721172,contactus@walsallhealthcare.nhs.uk,"Moat Road, Walsall, WS2 9PS",52.583047,-1.998457,UK,550,https://www.walsallhealthcare.nhs.uk/patients-and-visitors/planning-your-visit/hospital/
+Newham University Hospital,Hospital,020 7476 4000,nuhpals@bartshealth.nhs.uk,,51.521674,0.03664,UK,430,https://www.bartshealth.nhs.uk/our-hospitals/newham-university-hospital/
+Roseberry Park,Hospital,+44 1642 837300,,"Marton Road, Middlesbrough, TS4 3AF",54.556017,-1.217118,UK,365,
+Cleveland Clinic London,Hospital,+44 20 3423 7500,,"33, Grosvenor Place, London, SW1X 7HY",51.499394,-0.148755,UK,184,https://clevelandcliniclondon.uk/
+Wellesley Hospital,Hospital,+44 1823 668150,wellesley@elysiumhealthcare.co.uk,"West Park, Wellington, TA21 9FF",50.979109,-3.205855,UK,73,https://www.elysiumhealthcare.co.uk/location/wellesley-hospital/
+The Chiltern Hospital,Hospital,+44 1494 890890,,"London Road, HP16 0EN",51.690353,-0.693918,UK,66,https://www.bmihealthcare.co.uk/hospitals/bmi-the-chiltern-hospital
+John Munroe Hospital,Hospital,+44 1538 394270,,ST13 8RU,53.125087,-2.08255,UK,57,https://www.johnmunroehospital.co.uk/
+Cygnet,Hospital,0114 279 3350,enquiries@cygnethealth.co.uk,"83, East Bank Road, Sheffield, S2 3PX",53.368066,-1.45873,UK,55,https://www.cygnetgroup.com/locations/cygnet-hospital-sheffield/
+Bexhill Hospital,Hospital,+44 1424 755255,enquiries@esht.nhs.uk,"Holliers Hill, Bexhill-on-Sea, TN40 2DZ",50.850038,0.475202,UK,54,https://www.esht.nhs.uk/our-locations/bexhill-hospital/
+Leek Moorlands Hospital,Hospital,+44 300 123 1894,,"Ashbourne Road, ST13 5BQ",53.102849,-2.009541,UK,44,https://www.mpft.nhs.uk/services/leek-moorlands-hospital
+Wellesley Hospital 2,Hospital,+44 1823 668150,wellesley@elysiumhealthcare.co.uk,"West Park, Wellington, TA21 9FF",50.97937,-3.20463,UK,30,https://www.elysiumhealthcare.co.uk/location/wellesley-hospital/
+North Walsham and District War Memorial Hospital,Hospital,+44 1692 408000,,"Yarmouth Road, NR28 9AP",52.814069,1.388482,UK,24,http://www.norfolkcommunityhealthandcare.nhs.uk
+Arundel & District Community Hospital,Hospital,+44 1903 882543,,"Chichester Road, Arundel, BN18 0AB",50.854362,-0.56541,UK,20,http://www.sussexcommunity.nhs.uk/services
+Priory Hospital Ty Cwm Rhondda,Hospital,,,"Tyntyla Avenue, Ystrad, CF41 7SU",51.643182,-3.456562,UK,20,https://www.priorygroup.com/locations/nhs/priory-hospital-ty-cwm-rhondda
+Midhurst Community Hospital,Hospital,+44 1730 819100,,"Dodsley Lane, Midhurst, GU29 9AW",50.99358,-0.735205,UK,17,
+Grenoside Grange,Hospital,,,"Salt Box Lane, Sheffield, S35 8QS",53.435858,-1.496566,UK,16,
+Pinhoe View,Hospital,01392 350054,exeter.enquiries@ramsayhealth.co.uk,"College Way, Exeter, EX1 3PZ",50.731307,-3.46927,UK,16,https://www.elysiumhealthcare.co.uk/location/pinhoe-view-2/
+Danesbury House Neurological Centre,Hospital,+44 1438 841841,,"School Lane, Welwyn, AL6 9PW",51.827908,-0.222839,UK,14,
+Newton Stuart Hospital,Hospital,,,"Newton Stewart, DG8 6LZ",54.951168,-4.491924,UK,14,
+The Cove,Hospital,,,"Plover Drive, Heysham, LA3 2SL",54.035144,-2.892219,UK,14,https://www.lscft.nhs.uk/the-cove
+The Lady Margaret Hospital,Hospital,+44 1475 530307,,KA28 0HF,55.76128,-4.922684,UK,10,https://www.nhsaaa.net/hospitals/lady-margaret-hospital/
+Ospadal Naomh Brianain,Hospital,,,"Isle of Barra, HS9 5XE",56.951929,-7.497062,UK,5,https://www.wihb.scot.nhs.uk/st-brendan-s-hospital-barra
+A&E Department,Hospital,020 7476 4000,nuhpals@bartshealth.nhs.uk,,51.52298,0.03436,UK,0,http://www.bartshealth.nhs.uk
+Abbey Surgery,Hospital,,,"Station Road, Yelverton, PL20 7EJ",50.480002,-4.192086,UK,0,
+Aberaeron Integrated Care Centre,Hospital,+44 1545 900100,,"Vicarage Hill,, Aberaeron, SA46 0DY",52.23782,-4.2577,UK,0,https://www.wales.nhs.uk/ourservices/directory/Hospitals/95
+Aberbeeg Hospital,Hospital,,,,51.708474,-3.150013,UK,0,
+Abingdon Community Hospital,Hospital,01865 904346,,,51.669902,-1.30202,UK,0,
+Aboyne Hospital and Health Centre,Hospital,,,"Bellwood Road, Aboyne, AB34 5HQ",57.076213,-2.766945,UK,0,
+Accident & Emergency,Hospital,,,,51.684958,-3.935163,UK,0,
+Adamson Hospital,Hospital,,,,56.32384,-3.017885,UK,0,
+Addenbrooke's Hospital,Hospital,,,,52.17403,0.141172,UK,0,
+Addington Clinic,Hospital,01202 570821,dhc.enquiries@nhs.net,,50.766217,-1.906153,UK,0,http://www.dorsethealthcare.nhs.uk
+Aintree University Hospital,Hospital,+44 151 525 5980,,"Lower Lane, Liverpool, L9 7AL",53.465693,-2.933351,UK,0,https://www.aintreehospital.nhs.uk/
+Airbles Road Centre,Hospital,,,,55.782574,-3.983115,UK,0,
+Aire Court Community Unit,Hospital,0113 8555000,pals.lypft@nhs.net,,53.747083,-1.539677,UK,0,http://www.leedsandyorkpft.nhs.uk/
+Airedale General Hospital,Hospital,01535 652511,,"Skipton Road, Keighley, BD20 6TD",53.897721,-1.96435,UK,0,https://www.airedale-trust.nhs.uk/
+大阪市立総合医療センター,Hospital,+81-6-69291221,,"22, 大阪市, 534-0021",34.707673,135.523969,Japan,1063,https://www.osakacity-hp.or.jp/ocgh/
+獨協医科大学埼玉医療センター,Hospital,,,,35.878247,139.790622,Japan,928,
+KKR札幌医療センター,Hospital,+81 11 822 1811,,"40, 札幌市, 062-0931",43.036512,141.366888,Japan,410,https://www.kkr-smc.com/
+河北リハビリテーション病院,Hospital,+81 3 3313 8241,,166-8588,35.684153,139.650969,Japan,331,
+医療法人社団竜山会金沢古府記念病院,Hospital,+81 76 240 3555,,,36.563933,136.607539,Japan,105,https://www.kkm-hp.jp/
+(医）立川メディカルセンター柏崎厚生病院,Hospital,,,,37.353635,138.58704,Japan,0,
+16号整形外科,Hospital,,,,35.563598,139.393564,Japan,0,
+753歯科,Hospital,,,,35.547279,140.183801,Japan,0,
+AED設置場所,Hospital,,,,37.917901,140.100142,Japan,0,
+AOI七沢リハビリテーション病院,Hospital,,,,35.447795,139.292506,Japan,0,
+AOI名古屋病院,Hospital,,,,35.178342,136.915755,Japan,0,https://www.aoikai.jp/aoinagoya/
+AOI国際病院,Hospital,,,,35.533528,139.745954,Japan,0,
+AOI広島病院,Hospital,082-420-7000,,,34.443778,132.871146,Japan,0,https://www.aoikai.jp/aoihiroshima/
+AOI湘北病院,Hospital,,,,35.563991,139.356245,Japan,0,
+BMC,Hospital,,,,35.320856,138.866566,Japan,0,
+BOWOW,Hospital,,,,35.671879,139.687451,Japan,0,
+E歯科,Hospital,,,,35.386702,133.393569,Japan,0,
+Fビレッジ メディカルスクエア,Hospital,,,,42.989218,141.55508,Japan,0,
+HITO病院,Hospital,,,,33.991457,133.58733,Japan,0,
+Hospital General,Hospital,,,,32.847728,130.805325,Japan,0,
+IMS グループ,Hospital,,,,35.704605,139.266914,Japan,0,
+JASMIN,Hospital,+81 45 910 5292,,"37号, 横浜市, 224-0001",35.562829,139.569184,Japan,0,https://nakagawaekimae-naika.jp
+JAとりで総合医療センター,Hospital,,,,35.911068,140.068855,Japan,0,
+JA北海道厚生連 帯広厚生病院,Hospital,,,,42.919467,143.181105,Japan,0,
+JA北海道厚生連美深厚生病院,Hospital,,,,44.479959,142.348412,Japan,0,
+JA厚生連健康管理センター,Hospital,+81-99-252-2228,,,31.571919,130.567124,Japan,0,
+JA尾道総合病院,Hospital,,,,34.40768,133.176186,Japan,0,
+JA長野厚生連 佐久総合病院小海分院,Hospital,,,,36.094217,138.483746,Japan,0,
+JA長野厚生連 富士見高原医療福祉センター 富士見高原病院,Hospital,,,,35.914424,138.243002,Japan,0,
+JCHO 東京山手メディカルセンター,Hospital,,,"1, 新宿区, 169-0073",35.704733,139.699049,Japan,0,https://yamate.jcho.go.jp/
+JCHOさいたま北部医療センター,Hospital,,,,35.932718,139.619683,Japan,0,
+JCHO仙台南病院,Hospital,+81 22 306 1711,,"仙台市, 981-1103",38.190455,140.899921,Japan,0,
+JCHO仙台病院,Hospital,+81 22 378 9111,,"1, 仙台市, 981-3281",38.345762,140.832463,Japan,0,https://sendai.jcho.go.jp/
+JCHO北海道病院,Hospital,,,"18, 札幌市, 062-8618",43.025363,141.356258,Japan,0,https://hokkaido.jcho.go.jp/
+JCHO千葉病院,Hospital,,,,35.583825,140.162836,Japan,0,
+JCHO千葉病院,Hospital,,,,35.583808,140.162735,Japan,0,
+JCHO大阪病院,Hospital,+81 6 6441 5451,,"78, 553-0003",34.691914,135.483221,Japan,0,https://osaka.jcho.go.jp/
+JCHO東京新宿メディカルセンター,Hospital,+81 3 3269 8111,,"1, 新宿区, 162-8543",35.703571,139.742232,Japan,0,https://shinjuku.jcho.go.jp/
+JCHO玉造病院,Hospital,,,,35.431105,133.01784,Japan,0,
+JCHO登別病院,Hospital,,,,42.456716,141.179258,Japan,0,
+JCHO相模野病院,Hospital,,,,35.573039,139.388541,Japan,0,
+JCHO金沢病院,Hospital,,,,36.591941,136.65346,Japan,0,
+Tamworth Rural Referral Hospital,Hospital,+61 2 6767 7700,,"Dean Street, 2340",-31.073041,150.925084,Australia,282,
+Auburn Hospital,Hospital,+61 2 8759 3000,,"18-20, Hargrave Road",-33.860404,151.033124,Australia,155,https://www.wslhd.health.nsw.gov.au/Auburn-Hospital
+Wyvern Private Hospital,Hospital,+61 2 8428 0200,,"33A, Myoora Road",-33.68785,151.220949,Australia,85,https://www.wyvernprivatehospital.com.au/
+Ramsay Clinic Wentworthville,Hospital,+61 2 8833 2222,,"23-27, Lytton Street",-33.810872,150.974478,Australia,70,https://www.ramsaymentalhealth.com.au/wentworthville
+Bellinger River District Hospital,Hospital,+61 2 6659 5800,,"Church Street, 2454",-30.457293,152.893494,Australia,42,https://mnclhd.health.nsw.gov.au/hospital/bellinger-river-district-hospital/
+Abbotsford Private Hospital,Hospital,,,"61-69, Cambridge Street",-31.940987,115.837399,Australia,0,
+Adeney Private Hospital,Hospital,+61 3 7049 5000,,"209, Cotham Road, 3101",-37.808572,145.048139,Australia,0,https://adeneyprivate.com.au/
+Adolescent and Young Adult Hospice (AYAH),Hospital,,,,-33.807162,151.295225,Australia,0,
+Adult Prevention and Recovery Care (APARC),Hospital,,,"91, Beach Street",-38.143028,145.13388,Australia,0,
+Albany Community Hospice,Hospital,,,"30, Warden Avenue",-35.003167,117.904363,Australia,0,
+Albany Regional Hospital,Hospital,,,"30, Warden Avenue",-35.003467,117.90456,Australia,0,
+Albury Wodonga Health - Albury Campus,Hospital,,,,-36.078556,146.938137,Australia,0,https://www.awh.org.au/About-Us
+Albury Wodonga Private Hospital,Hospital,,,,-36.075756,146.883262,Australia,0,https://www.alburywodongaprivate.com.au/
+Alcohol and Drug Services,Hospital,,,St Johns Avenue,-42.856141,147.295389,Australia,0,
+Alderley Child Health,Hospital,,,"24, South Pine Road, Brisbane, 4051",-27.424686,153.000237,Australia,0,https://www.childrens.health.qld.gov.au/service-child-health/
+Alexandra District Health,Hospital,,,"12, Cooper Street, 3714",-37.194972,145.716601,Australia,0,http://www.alexandrahospital.org.au/
+Alexandria Specialist Day Hospital,Hospital,,,,-33.904891,151.19617,Australia,0,https://www.asdh.com.au
+Alfred Hospital,Hospital,+61 3 9076 2000,,"55, Commercial Road",-37.846153,144.982588,Australia,0,https://www.alfred.org.au/
+Alice Springs Hospital,Hospital,,,,-23.706177,133.878259,Australia,0,
+Allowah Presbyterian Children's Hospital,Hospital,,,,-33.791871,151.063878,Australia,0,https://www.allowah.org.au/
+Alpha Emergency Hub,Hospital,+61 7 4809 7002,alphaprivatesurgery@health.qld.gov.au,,-23.649044,146.632997,Australia,0,
+Alpine Health [Mount Beauty],Hospital,,,"10, Hollonds Street, 3699",-36.743433,147.16983,Australia,0,
+Alwyn Rehabilitation Hospital,Hospital,,,"1, Emu Street",-33.882897,151.094267,Australia,0,https://alwyn.com.au/
+Ambulance Victoria,Hospital,,,,-37.812823,145.116082,Australia,0,
+Angaston District Hospital,Hospital,,,,-34.503599,139.054784,Australia,0,
+Angliss Hospital,Hospital,,,"39, Albert Street",-37.89895,145.31448,Australia,0,https://www.easternhealth.org.au/locations/angliss/default.aspx
+Anne Caudle Campus,Hospital,,,,-36.751105,144.280694,Australia,0,https://www.bendigohealth.org.au/
+Anne Leach Wing,Hospital,,,,-31.968998,115.809044,Australia,0,https://perthradclinic.com.au
+Aramac Primary Health Centre,Hospital,+61 7 4652 9000,,"2, Lodge Street, 4726",-22.966487,145.244781,Australia,0,https://www.health.qld.gov.au/centralwest/menu/locations-and-services/aramac
+Arcadia Pittwater Private Hospital,Hospital,,,"4, Daydream Street",-33.677001,151.286328,Australia,0,
+Ardrossan Community Hospital,Hospital,,,,-34.426469,137.917527,Australia,0,
+Armadale Kelmscott District Memorial Hospital,Hospital,,,"3056, Albany Highway, 6112",-32.132697,116.020111,Australia,0,
+Armidale Hospital,Hospital,,,"226, Rusden Street",-30.512916,151.655037,Australia,0,
+Armidale Private Hospital,Hospital,,,"226B, Rusden Street",-30.512079,151.654617,Australia,0,
+Ashford Hospital,Hospital,,,"55-57, Anzac Highway",-34.948168,138.576745,Australia,0,https://ashfordhospital.org.au/
+Ashworth House,Hospital,,,"25, Kolberg Street, Brisbane, 4034",-27.354941,153.036603,Australia,0,
+Atherton Hospital,Hospital,+61 7 4091 0211,,,-17.266375,145.483316,Australia,0,https://www.health.qld.gov.au/services/cairns-hinterland/cairns_ath_hosp
+Attadale Rehabilitation Hospital,Hospital,+61 8 9330 1000,,"21, Hislop Road, 6156",-32.029683,115.810648,Australia,0,https://www.attadalerehabilitation.com.au/
+Augathella Multipurpose Health Service,Hospital,+61 7 4656 7100,,"Cavanagh Street, 4477",-25.795859,146.590609,Australia,0,https://www.southwest.health.qld.gov.au/healthcare-facilities/multipurpose-health-services/augathella-multipurpose-health-service/
+Austin Hospital,Hospital,,,"145, Studley Road",-37.756605,145.058914,Australia,0,https://www.austin.org.au/
+Avive Clinic Mt Eliza,Hospital,+61 3 9787 8877,,"2, Mount Eliza Way",-38.179066,145.095261,Australia,0,
+Ayr Hospital,Hospital,,,,-19.564289,147.40924,Australia,0,
+Dr George Mukhari,Hospital,+27 12 529 3000,,"Sekwati Street, Ga-Rankuwa Unit 2, Gauteng",-25.617582,28.011796,South Africa,1652,
+Madadeni Provincial Hospital,Hospital,+27 34 328 8000,Happy.Khanyi@kznhealth.gov.za,"Section 5, Madadeni.New Castle, 2951",-27.766883,30.051704,South Africa,1620,
+Prince Mshiyeni Memorial Hospital,Hospital,+27 31 907 8111,maxwell.mbanjwa@kznhealth.gov.za,"Mshiyeni Road, Umlazi",-29.954572,30.934909,South Africa,1075,
+Boitumelo Regional Hospital,Hospital,+27 56 216 5200; +27 56 216 5380,,"Smaldeel Road, Kroonstad, Free State, 9499",-27.642861,27.214204,South Africa,1018,
+King Edward VIII Hospital,Hospital,+27 31 360 3111,rejoice.khuzwayo@kznhealth.gov.za/ lungile.mpanza@kznhealth.gov.za,"Cnr Sydney & Rick Turner Road, Congella, 4013",-29.881474,30.989561,South Africa,852,
+Inkosi Albert Luthuli Central Hospital,Hospital,+27 31 240 1000,thandeka.khanyile@ialch.co.za,"800, Bellair Road, Cato Manor, Durban, 4058",-29.873421,30.958003,South Africa,846,https://www.ialch.co.za/
+Steve Biko Academic Hospital,Hospital,+27 12 354 1000,,"c/o, Steve Biko and Malan Street, Capital Park, 0001",-25.729362,28.201748,South Africa,834,
+Thelle Mogoerane Hospital,Hospital,+27 11 241 5600,,"12390, Nguzu Street, Vosloorus, Gauteng, 1475",-26.35695,28.224307,South Africa,821,
+Selby Hospital(Solomon Stix Morewa Memorial),Hospital,+27114914100,,"121, Eloff Street, Selby, Johannesburg, 2001",-26.221591,28.043064,South Africa,642,https://clinix.co.za/
+Tower Psychiatric Hospital,Hospital,+27 46 645 1122,,"2411, Somerset Street, Fort Beaufort, 5720",-32.771454,26.624094,South Africa,600,
+Dora Nginza Hospital,Hospital,+27 41 406 4111,,"Spondo Street, iBhayi",-33.876771,25.559959,South Africa,570,
+General Justice Gizenga Mpanza Regional Hospital (formerly Stanger Hospital),Hospital,+27 32 437 6000,pumla.mba@kznhealth.gov.za,"Corner of King Shaka and Patterson Street, Kwadukuza, Stanger, 4449",-29.335072,31.284318,South Africa,545,
+Tambo Memorial Hospital,Hospital,+27 118988000,,"Railway Street, Boksburg, 1459",-26.218348,28.244772,South Africa,540,
+Nelson Mandela Academic Hospital,Hospital,,,"Nelson Mandela Drive, Mthatha, Eastern Cape",-31.587743,28.764635,South Africa,512,
+Ladysmith Hospital,Hospital,+27 36 637 2111,Bhekizizwe.Msibi@kznhealth.gov.za,"Malcom Road,, Ladysmith, 3370",-28.557503,29.764799,South Africa,508,http://www.kznhealth.gov.za/ladysmithhospital.htm
+Dr Pixley Ka Isaka Seme Memorial Hospital,Hospital,Tel: (034) 331 3011,nkosi.bongani@kznhealth.gov.za,"310, Bhejane Street, KwaMashu, Durban, 4360",-29.72821,30.990262,South Africa,500,
+Addington Hospital,Hospital,+27 31 327 2002,Zimhlophe.jali@kznhealth.gov.za,"16, Erskine Road, South Beach, Durban, Kwazulu-Natal",-29.861985,31.041146,South Africa,471,http://www.kznhealth.gov.za/addingtonhospital.htm
+Netcare Unitas Hospital,Hospital,+27 12 677 8000,,"Clifton Avenue, Lyttelton Centurion, 0140",-25.832154,28.195842,South Africa,470,
+Netcare St. Augustine's Hospital,Hospital,+27 31 268 5000,,"107, J.B. Marks Road, Bulwer, Berea, 4001",-29.855967,30.991272,South Africa,464,https://www.netcarehospitals.co.za/Hospital/Netcare-St-Augustines-Hospital
+Fort Napier Hospital,Hospital,+27 33 260 4300,spha.buthelezi@kznhealth.gov.za,"1, Devonshire Road, Pietermaritzburg, Kwazulu Natal, 3200",-29.612416,30.368428,South Africa,450,http://www.kznhealth.gov.za/fortnapierhospital.htm
+Mankweng Hospital,Hospital,+27 15 287 5014,,"Houtbos Dorp Street, Mankweng, 0727",-23.877115,29.721547,South Africa,450,
+Port Elizabeth Provincial Hospital,Hospital,+27 41 392 3911,Thembi.mkhize@kznhealth.gov.zaBawinile.ndlovu@kznhealth.gov.za,"Buckingham Road, Gqeberha, 6001",-33.957767,25.599786,South Africa,450,
+Tintswalo Hospital,Hospital,+27 13 795 5490,,"Chavelagaza Road, Acornhoek, 1360",-24.59043,31.061058,South Africa,423,
+Umgeni Hospital,Hospital,+27 33 330 6146,ayanda.mazwana@kznhealth.gov.za,"Main Street, Howick, 3290",-29.502776,30.234265,South Africa,411,
+Mediclinic Panorama,Hospital,+27 21 938 2111,,"Rothschild Boulevard, Panorama, Cape Town, 7500",-33.876173,18.577845,South Africa,400,
+Eugene Marais Hospital,Hospital,+27 12 334 2777,,"696 5th ais,, Avenue, Les Marais, Pretoria, 0084",-25.709566,28.193996,South Africa,386,https://www.lifehealthcare.co.za/hospitals/gauteng/pretoria/life-eugene-marais-hospital/
+Charles Johnson Memorial Hospital,Hospital,+27 34 271 6400,sthabiso.ngwenya@kznhealth.gov.za,"Lot 92, Hlubi Street, Nquthu",-28.211045,30.673679,South Africa,385,www.kznhealth.gov.za/cjmhospital.htm
+Sutherland Hospital,Hospital,Tel: (031) 327 2000,Mthetheleli.Ndlangisa@kznhealth.gov.za,"Theron Street, Sutherland, 6920",-32.39893,20.664449,South Africa,375,
+Lenmed Ethekwini Hospital & Heart Centre,Hospital,,,"11, Riverhorse Road, Durban",-29.777918,30.995624,South Africa,373,
+Netcare Garden City Hospital,Hospital,+27 114955000,,"35, Bartlett road, Johannesburg, 2092",-26.197504,28.004874,South Africa,365,http://www.netcarehospitals.co.za/Hospital/Netcare-Garden-City-Hospital
+GJ Crookes Hospital,Hospital,+27 39 978 7000,maxwell.mbanjwa@kznhealth.gov.za,"Hospital road, Scottburgh, 4180",-30.289182,30.745067,South Africa,360,http://www.kznhealth.gov.za/gjcrookeshospital.htm
+Life Wilgers Hospital,Hospital,+27 12 807 8100,,"Denneboom Road, Pretoria, 0184",-25.768377,28.319914,South Africa,360,https://www.lifehealthcare.co.za/hospitals/gauteng/pretoria/life-wilgers-hospital/
+Butterworth Hospital,Hospital,+27 47 491 4161,,"Cnr Scanlen & Geach Street, Butterworth",-32.332803,28.13798,South Africa,350,
+Mahatma Gandhi Memorial Hospital,Hospital,+27 31 502 1719,Siboniso.maphumulo@kznhealth.gov.za,"100, Phoenix Highway, Phoenix, Kwazulu Natal",-29.717766,31.028972,South Africa,350,https://www.kznhealth.gov.za/mahatmagandhihospital.htm
+Khayelitsha Hospital,Hospital,+27 21 360 4200,,"C/o Steve Biko and Walter Sisulu Drives, Khayelitsha, Cape Town, 7784",-34.050897,18.674575,South Africa,340,
+Vryheid Hospital,Hospital,+27 34 982 2111,,"Coswald Brown Street, Vryheid, 3100",-27.757884,30.797481,South Africa,338,www.kznhealth.gov.za/vryheidhospital.htm
+Mamelodi Hospital,Hospital,,,"1947, Mathane Avenue, Tshwane, 0122",-25.719602,28.36894,South Africa,337,
+Life St George's Hospital,Hospital,+27 41 392 6111,,"40, Park Drive, Gqeberha, 6001",-33.968583,25.604554,South Africa,302,
+Medi clinic Sandton,Hospital,,,"Cnr Main Road & Peter Place, Bryanston, Johannesburg, 2021",-26.077342,28.012449,South Africa,301,
+Northern Cape Mental Healthcare Hospital,Hospital,,,Oosterzee Street,-28.771763,24.72199,South Africa,287,
+Dr S.K. Matseke Memorial Hospital.,Hospital,+27 11 933 5000,,"cnr Immink drive & Chris Hani road, Johannesburg, 1862",-26.258151,27.936122,South Africa,266,https://www.clinix.co.za/dr-sk-matseke-memorial-hospital
+George Provincial Hospital,Hospital,+27 44 802 4528,,"Corner of Davidson and Langenhoven Road, Heatherlands, George",-33.953109,22.450659,South Africa,266,www.georgehospital.co.za
+Binangonan Lakeview Hospital,Hospital,,,"Manila East Road, Binangonan",14.502496,121.169989,Philippines,883,https://www.ourblh.com
+Chong Hua Hospital,Hospital,,,"Don Mariano Cui Street, Cebu, 6000",10.310048,123.8912,Philippines,660,www.chonghua.com.ph
+Cagayan Valley Medical Center,Hospital,+6378 3020000;+6378 3043789;+6378 304 1410;+6378 304­1810,,"Dalan na Pagayaya, Tuguegarao",17.656583,121.747123,Philippines,649,http://cvmc.doh.gov.ph/
+Mayor Hilarion A. Ramiro Sr. Medical Center,Hospital,,,"Ozamiz-Oroquieta Road, Ozamiz City, 7200",8.170016,123.857762,Philippines,550,
+Zamboanga City Medical Center,Hospital,+6362 9912934,,"Evangelista Street, Zamboanga",6.906826,122.081316,Philippines,400,
+Iloilo Doctors' Hospital,Hospital,+63 333377702,,,10.697155,122.554245,Philippines,300,
+Ospital ng Maynila,Hospital,+63 025246063;+63 025246064,ommc_a@yahoo.com,"Quirino Avenue, Manila, 1004",14.563902,120.986443,Philippines,300,
+Maguindanao Provincial Hospital,Hospital,,,9624,6.851613,124.430122,Philippines,299,
+Davao Doctors Hospital,Hospital,+63 82 222 8000,info@ddh.com.ph,"118, E. Quirino Avenue, Davao City, 8000",7.070456,125.603844,Philippines,250,https://www.ddh.com.ph/
+Quezon City General Hospital,Hospital,+632 8630800,,"Seminary Road, Quezon City",14.661506,121.01796,Philippines,250,
+Ospital ng Palawan,Hospital,+63920 4408720;+6348 4346864;+6348 4342148,,"220, Malvar Street, Puerto Princesa, 5300",9.747837,118.744482,Philippines,213,
+Divine Word Hospital,Hospital,+6353 3212308,,"Avenida Veteranos, Tacloban",11.241047,125.000028,Philippines,179,
+Misamis Occidental Provincial Hospital,Hospital,+63 8853 11529,,President Elpidio Quirino Street,8.482325,123.802901,Philippines,159,
+Adventist Medical Center Manila,Hospital,+632 8525-9192 to 98,info@amcmanila.org,"1945, Donada Street, Pasay, 1300",14.555996,120.995281,Philippines,150,https://amcmanila.org
+North General Hospital,Hospital,+63 323437777;+63 323437240,,Kauswagan Road,10.373203,123.914556,Philippines,150,https://cdg.cebudocgroup.com.ph/about/hospitals/ngh
+President Ramon Magsaysay Memorial Hospital,Hospital,+63915 3966014;+63919 2442299,,"J. P. Rizal Street, 2201",15.315328,119.991208,Philippines,150,
+Rogaciano M. Mercado Memorial Hospital,Hospital,+63 446413038,rmmmh@bulacan.gov.ph,Jose Corazon de Jesus Street,14.818864,120.959774,Philippines,150,
+Roxas Memorial Provincial Hospital,Hospital,+6336 621 0823,,Arnaldo Boulevard,11.588076,122.75283,Philippines,147,
+Ciudad Medical de Zamboanga,Hospital,+63629927330,,"Mayor Vitaliano D. Agan Avenue, Zamboanga, 7000",6.915064,122.076882,Philippines,131,
+Bukidnon Provincial Hospital - Maramag,Hospital,,bph_maramag@yahoo.com,,7.76472,125.008719,Philippines,130,
+Lucena MMG General Hospital,Hospital,,,Old Manila South Road,13.94494,121.630928,Philippines,122,
+The Medical City Iloilo,Hospital,+63 33 338 1507,,"Locsin Street, Iloilo City, 5000",10.699149,122.543016,Philippines,122,http://themedicalcityiloilo.com/
+Biliran Provincial Hospital,Hospital,,,"Castin Street, 6560",11.556777,124.397084,Philippines,120,
+Gregorio T. Lluch Memorial Hospital,Hospital,+63 63 221 2536,,"Gregorio T. Lluch Sr. Avenue, Iligan City, 9200",8.225999,124.254552,Philippines,119,
+Mendero Medical Center,Hospital,+63 32 236 0091,,"Consolacion, 6001",10.381794,123.968269,Philippines,110,
+Metro Iloilo Hospital and Medical Center,Hospital,,,Metropolis Avenue,10.762516,122.58064,Philippines,110,
+St. Anthony College Hospital,Hospital,,,San Roque Street Extension,11.578009,122.756684,Philippines,110,
+West Metro Medical Center,Hospital,+63 629912507;+63 0629912506,,"Veterans Avenue Extension, Zamboanga City, 7000",6.923477,122.079378,Philippines,110,
+Metro Antipolo Hospital and Medical Center,Hospital,,,"Marcos Highway, Antipolo",14.624525,121.118156,Philippines,109,
+Camarin Doctors Hospital,Hospital,+63960 600 2967,,"1, Camarin Road, Caloocan",14.753514,121.04012,Philippines,105,https://camarindoctorshospital.ph
+Camiguin General Hospital,Hospital,,,"General B. Aranas Street, 9100",9.248474,124.721585,Philippines,105,
+Pamplona Hospital & Medical Center,Hospital,+63 0282554802,,"46, Alabang-Zapote Road",14.462869,120.968774,Philippines,101,
+ACE Dumaguete Doctors,Hospital,+63 355235957,,"Claytown Road, Dumaguete, 6200",9.317076,123.295991,Philippines,100,
+Allah Valley Medical Specialists Center Incorporated,Hospital,+63 949 163 1598,,"General Santos Drive, Koronadal City, 9506",6.478567,124.86758,Philippines,100,
+Cebu Provincial Hospital - Carcar City,Hospital,+63324878120,,"Carcar Diversion Road, Carcar",10.098788,123.643731,Philippines,100,
+Cebu Provincial Hospital - Danao,Hospital,,,"Cebu North Road, Danao, 6004",10.522121,124.02896,Philippines,100,
+Cebu South General Hospital,Hospital,+63 324898080,sgh_naga@yahoo.com,"Natalio Bacalso Avenue, Naga, 6037",10.231794,123.770955,Philippines,100,
+Dr. George T. Hofer Medical Center,Hospital,,,"Pagadian-Zamboanga City Highway, 7001",7.815232,122.641483,Philippines,100,
+Jose B. Lingad Memorial Regional Hospital,Hospital,jblmgh_2012@yahoo.com.ph,,"2000, MacArthur Highway, San Fernando, 2000",15.034482,120.684655,Philippines,100,https://jblmgh.doh.gov.ph
+Medina General Hospital,Hospital,,,"7200, Governor Angel N. Medina Sr. Avenue, Ozamiz",8.145849,123.84889,Philippines,100,
+Mindoro Medical Center Calapan,Hospital,,,J. P. Rizal Street,13.387676,121.165328,Philippines,100,
+Ormoc District Hospital,Hospital,+63 538320119,,"Merida-Ormoc Road, Ormoc",11.022629,124.603155,Philippines,100,
+450-й военный госпиталь Министерства обороны РФ,Hospital,,,,46.839606,29.631511,Moldova,0,
+Ambulatoriul Bardar,Hospital,,,"2, Strada Limba Noastră, Bardar, MD-6811",46.902512,28.674713,Moldova,0,
+Ambulatoriul Bușila (abandonat),Hospital,,,"1, Strada Speranțelor, Bușila",47.387801,27.813666,Moldova,0,
+Ambulatoriul Cărbuna (închis),Hospital,,,Cărbuna,46.713423,28.947677,Moldova,0,
+Ambulatoriul Săghieni (abandonat),Hospital,,,"16, Strada Ștefan cel Mare și Sfânt, Săghieni",47.245811,27.97208,Moldova,0,
+Asociația Medicală Teritorială Ciocana,Hospital,+373022866966,,"80, Strada Vadul lui Vodă, Chișinău, MD-2052",47.031292,28.886661,Moldova,0,https://amt-ciocana.md/
+Azil de batrini,Hospital,,,"60, Strada 27 August 1989, Rezina, MD-5400",47.74925,28.95508,Moldova,0,
+Azilul de Bătrâni din Cimișlia,Hospital,,,"27/1, Strada Cetatea Albă, Cimișlia, MD-4101",46.515995,28.781581,Moldova,0,
+Blocul central,Hospital,,,"17, Strada Vlaicu Pârcălab, Chișinău",47.017934,28.828142,Moldova,0,
+Centru Sănătății din sat. Năpădeni,Hospital,,,,47.403886,28.148153,Moldova,0,
+Centru de reabilitare pentru copii,Hospital,,,,48.167892,27.659472,Moldova,0,
+Centru de sănătate satului Copceac,Hospital,,,,45.839211,28.69409,Moldova,0,
+Centrul Clinic Republican „Constructorul”,Hospital,,,"15, Strada Nikolai Zelinski, Chișinău, MD-2038",46.992032,28.853805,Moldova,0,
+Centrul Consultativ,Hospital,,,,47.773068,27.897507,Moldova,0,
+Centrul Consultativ Diagnostic AMT Rîșcani,Hospital,,,"11, Strada Alecu Russo, Chișinău",47.043821,28.86637,Moldova,0,
+Centrul Fiziopneumologic de Reabilitare pentru Copii din Cornești,Hospital,,,"70, Strada Ștefan cel Mare și Sfânt, Cornești",47.368333,27.997121,Moldova,0,
+Centrul Medical Consultativ „Lacteia”,Hospital,,,"2, Strada Vlaicu Pîrcălab, Chișinău, MD-2009",47.015965,28.826149,Moldova,0,
+Centrul Medical de Urgență Cimișlia / Serviciu de Ambulanță Cimișlia,Hospital,,,"131/C, Strada Alexandru cel Bun, Cimișlia, MD-4101",46.524708,28.775323,Moldova,0,
+Centrul Medical „Neurogen”,Hospital,+37379858324,neurogenmoldova@gmail.com,"3/2, Bulevardul Mircea cel Bătrân, Chișinău, MD-2044",47.040109,28.889108,Moldova,0,www.neurogen.md
+Centrul Medical „Sfântul Panteleimon”,Hospital,,,"15, Strada Igor Vieru, Chișinău",47.051548,28.893164,Moldova,0,
+Centrul Medicilor de Familie,Hospital,,,Mingir,46.673656,28.328901,Moldova,0,
+Centrul Medicilor de Familie (blocul 2),Hospital,,,Rezina,47.748256,28.960881,Moldova,0,
+Centrul Medicilor de Familie Cantemir,Hospital,,,"22, Strada Nicolae Testemițanu, Cantemir, MD-7301",46.276346,28.206031,Moldova,0,
+Centrul Medicilor de Familie Căinari,Hospital,,,"57/A, Strada Trandafirilor, Căinari, MD-7701",46.685222,29.057984,Moldova,0,
+Centrul Medicilor de Familie Căușeni,Hospital,,,"18, Strada Ana și Alexandru, Căușeni, 4301",46.655257,29.408917,Moldova,0,
+Centrul Medicilor de Familie Rezina,Hospital,,,"5, Bulevardul Alexei Șciusev, Rezina",47.746852,28.96117,Moldova,0,
+Centrul Medicilor de Familie Vorniceni,Hospital,,,Vorniceni,47.152193,28.426463,Moldova,0,
+Centrul Medicilor de Familie de la Soroca Nouă,Hospital,,,,48.175925,28.316104,Moldova,0,
+Centrul Medicilor de Familie nr. 1,Hospital,,,"101B, Strada Decebal, Bălți",47.774694,27.895791,Moldova,0,
+Centrul Medicilor de Familie nr. 10,Hospital,,,"19, Strada Socoleni, Chișinău",47.060414,28.839689,Moldova,0,
+Centrul Medicilor de Familie nr. 12,Hospital,,,"17, Strada Miron Costin, Chișinău, MD-2068",47.050167,28.86843,Moldova,0,
+Centrul Medicilor de Familie nr. 2,Hospital,,,"28, Strada Independenței, Chișinău",46.976446,28.857513,Moldova,0,
+Centrul Medicilor de Familie nr. 4,Hospital,,,"24, Strada Ion Creangă, Chișinău, MD-2064",47.032438,28.804495,Moldova,0,
+Centrul Medicilor de Familie nr. 5 „Sfânta Maria”,Hospital,+37322592338,,"1, Strada Ion Luca Caragiale, Chișinău",47.034907,28.790472,Moldova,0,
+Centrul Medicilor de Familie Ștefan Vodă,Hospital,,,"2, Strada Nicolae Testemițeanu, Ștefan Vodă",46.514803,29.671231,Moldova,0,
+Centrul Național de Asistență Medicală Urgentă Prespitalicească,Hospital,,,,46.995777,28.831526,Moldova,0,
+Centrul Național de Medicină Sportivă „Atletmed”,Hospital,,,"7/1, Stradela Studenților, Chișinău, MD-2020",47.06313,28.847552,Moldova,0,https://www.atletmed.md/
+Centrul Național de Transfuzie a Sângelui (Blocul B),Hospital,,,"65, Strada Gheorghe Asachi, Chișinău",46.997636,28.821476,Moldova,0,
+Centrul Național de Transfuzie a Sângelui (CNTS),Hospital,+373 22 109 055,,"11, Strada Academiei, Chișinău",47.003376,28.813377,Moldova,0,https://cnts.md/
+Centrul Pneumofiziologic,Hospital,,,,47.7542,27.906229,Moldova,0,
+"Centrul Republican Experimental de Protezare, Ortopedie și Reabilitare",Hospital,,,Chișinău,47.028803,28.847841,Moldova,0,
+Centrul Republican de Diagnostică Medicală / Institutul de Pneumologie „Chiril Draganiuc”,Hospital,,crdm@mednet.md,"13, Strada Constantin Vârnav, Chișinău",46.996762,28.832203,Moldova,0,http://crdm.ms.md/
+2- больница Теректинского района,Hospital,,,Ақжайық,50.776289,51.227192,Kazakhstan,0,
+4-я поликлиника,Hospital,,,,42.302014,69.598457,Kazakhstan,0,
+6,Hospital,,,,50.825745,73.294238,Kazakhstan,0,
+American Medical Center,Hospital,,,,43.243167,76.928061,Kazakhstan,0,
+DOS dental,Hospital,,,,49.215827,50.304344,Kazakhstan,0,
+DOS dental,Hospital,,,,49.215825,50.304361,Kazakhstan,0,
+Dostarmed,Hospital,,,,43.214195,76.896551,Kazakhstan,0,
+Dr Di Cosmetology,Hospital,+7 727 339 0480;+7 778 769 3881,consultant@invivo.kz,"51/78, Қабанбай батыр көшесі, Алматы, 050000",43.25106,76.95969,Kazakhstan,0,https://invivo.kz
+ERT Station,Hospital,,,,46.304371,53.44303,Kazakhstan,0,
+Erensau,Hospital,,,,43.210776,76.949954,Kazakhstan,0,https://erensau.kz
+Euro Med,Hospital,,,"61, Кайсенова улица",49.945774,82.622465,Kazakhstan,0,
+EuroDent стоматология,Hospital,+77212518100,,,49.812476,73.113154,Kazakhstan,0,
+Fitness Centre (15),Hospital,,,"15, Льва Толстого",49.946281,82.65386,Kazakhstan,0,
+Gio Trade,Hospital,,,"2, Сатыбалдина улица",49.774095,73.146219,Kazakhstan,0,
+ICT Lab,Hospital,,,,43.228408,76.929776,Kazakhstan,0,
+IMC Mukanova,Hospital,(727) 378-64-64,,"235 A-1, Mukanov St.",43.247411,76.915035,Kazakhstan,0,https://imcalmaty.kz
+Interteach,Hospital,,,,51.162593,53.015861,Kazakhstan,0,
+MARTEBE,Hospital,+7 727 339 0480;+7 778 769 3881,consultant@invivo.kz,,45.002685,78.351754,Kazakhstan,0,https://invivo.kz
+Medical Assistance Group,Hospital,,,,43.264376,76.959536,Kazakhstan,0,
+Medical park,Hospital,3033333,,"105Б, Розыбакиев көшесі",43.231347,76.890236,Kazakhstan,0,
+National Center for Tuberculosis Problems,Hospital,,,,43.245528,76.96299,Kazakhstan,0,https://www.nncf.kz/
+On Clinic,Hospital,,,"30, улица Абдулинных, Алматы",43.260081,76.960316,Kazakhstan,0,
+President,Hospital,+7 (7252) 54 04 81,,"11, Түркістан көшесі",42.317297,69.594462,Kazakhstan,0,
+Private Clinic,Hospital,+7(727)2-75-99-00,info@privateclinic.kz,,43.188549,76.872462,Kazakhstan,0,https://www.privateclinic.kz/
+RAVIL,Hospital,,,,51.1123,71.436162,Kazakhstan,0,
+SBS med,Hospital,"+7 727 302 59 59, +7 727 302 60 00",sbsmed@mail.ru,"7Б, улица Навои, Алматы, A10P8C9",43.217673,76.880393,Kazakhstan,0,https://sbsmed.kz/
+Small hospital,Hospital,,,,43.051077,78.607473,Kazakhstan,0,
+Syrym aýdandyq aýrýhanasy,Hospital,+7 727 339 0480;+7 778 769 3881,consultant@invivo.kz,"83, улица Сырыма Датова",50.256445,52.603127,Kazakhstan,0,https://invivo.kz
+TCO Clinic,Hospital,,,E6,46.305654,53.443518,Kazakhstan,0,
+Viamedis,Hospital,+7 777 868 4151,,,52.264915,76.947457,Kazakhstan,0,https://www.viamedis.kz/
+Vita+,Hospital,,,"39/2, Lenin street, Aksu, 140100",52.029156,76.931607,Kazakhstan,0,
+Zhurek,Hospital,,,Желтоксан,42.902118,71.368819,Kazakhstan,0,
+«Жаңа ұрпақ клиникасы» халықаралық репродукция орталығы – NGC,Hospital,+77010990990,ngc_kz@gmail.com,"116/1 E1A, әл-Фараби даңғылы, 050044",43.21717,76.929601,Kazakhstan,0,https://ngc.kz/
+«СЕГРЭС-2» АҚ медициналық пункті,Hospital,,,,52.025323,75.472908,Kazakhstan,0,
+АМЦ,Hospital,,,"8е, Жанаконыс мкр",50.28365,57.061265,Kazakhstan,0,
+Ай Мед ,Hospital,,,улица Жандосова,42.34035,69.598149,Kazakhstan,0,
+Айболит,Hospital,,,,44.995768,78.355754,Kazakhstan,0,
+Айнұрдың үйінде,Hospital,,,4-й микрорайон,42.338767,69.57502,Kazakhstan,0,
+Айтекебийская центральная районная больница,Hospital,,,,50.43622,60.491793,Kazakhstan,0,
+Акайская сельская амбулатория,Hospital,,,"1, Гарышкер",45.616706,63.276481,Kazakhstan,0,
+Акимат,Hospital,,,"130а, 1-я зона, Турыш",45.447681,56.1047,Kazakhstan,0,
+Акмарал больница Жуковский,Hospital,,,"24, Г.Муратбаев улица, Туркестан",43.303656,68.281554,Kazakhstan,0,
+Hospital Dr. Raúl Humberto de Pasquali,Hospital,,,Ospino,9.308519,-69.44953,Venezuela,65,
+AMBULATORIO SAN MIGUEL,Hospital,,,,10.642164,-71.668322,Venezuela,0,
+ASCARDIO,Hospital,,,,10.063897,-69.302229,Venezuela,0,
+Ambulartorio Seguro Social,Hospital,,,"Av. José Rafael Pocaterra, Guacara, 2015",10.237488,-67.896423,Venezuela,0,
+Ambulatio Urbano Tipo I,Hospital,,,"Calle 3, Queniquea, 5054",7.917249,-72.014089,Venezuela,0,
+Ambulatorio,Hospital,,,,5.06633,-67.812629,Venezuela,0,
+Ambulatorio,Hospital,,,,6.053583,-67.279371,Venezuela,0,
+Ambulatorio,Hospital,,,,8.617897,-70.191545,Venezuela,0,
+Ambulatorio,Hospital,,,,10.50819,-67.60629,Venezuela,0,
+Ambulatorio,Hospital,,,Carretera: Caicara del Orinoco - Ciudad Bolívar,7.442021,-64.795754,Venezuela,0,
+Ambulatorio,Hospital,,,"Prolongación, Calle Ayacucho, Los Teques",10.347617,-67.047163,Venezuela,0,
+Ambulatorio,Hospital,,,Lobatera,7.929726,-72.247987,Venezuela,0,
+Ambulatorio,Hospital,,,,9.309169,-64.483728,Venezuela,0,
+Ambulatorio,Hospital,,,,8.878855,-64.282213,Venezuela,0,
+Ambulatorio,Hospital,,,,8.882839,-64.276035,Venezuela,0,
+Ambulatorio,Hospital,,,,9.307023,-64.480206,Venezuela,0,
+Ambulatorio,Hospital,,,,9.739813,-64.558077,Venezuela,0,
+Ambulatorio,Hospital,,,,10.606369,-66.172669,Venezuela,0,
+Ambulatorio,Hospital,,,,7.035404,-71.434414,Venezuela,0,
+Ambulatorio,Hospital,,,,10.227838,-67.468226,Venezuela,0,
+Ambulatorio,Hospital,,,,10.504795,-63.420321,Venezuela,0,
+Ambulatorio,Hospital,,,,7.540224,-72.421909,Venezuela,0,
+Ambulatorio,Hospital,,,,11.144478,-69.614625,Venezuela,0,
+Ambulatorio,Hospital,,,,9.189589,-69.908206,Venezuela,0,
+Ambulatorio,Hospital,,,,9.128968,-70.70747,Venezuela,0,
+Ambulatorio,Hospital,,,,9.733118,-63.232031,Venezuela,0,
+Ambulatorio,Hospital,,,"Calle Benito Marín, Tabay, 5116",8.631415,-71.079406,Venezuela,0,
+Ambulatorio,Hospital,,,"Calle Juncal, Barcelona, 6001",10.129204,-64.698005,Venezuela,0,
+Ambulatorio,Hospital,,,,6.20527,-67.453958,Venezuela,0,
+"Ambulatorio ""Dr. Numa Quevedo""",Hospital,,,,9.347634,-70.435477,Venezuela,0,
+"Ambulatorio ""Nuestra Señora de La Paz"";Iglesia Adventista del Séptimo Día",Hospital,,,"Calle 10;Avenida Hospital, Valera",9.315297,-70.612651,Venezuela,0,
+Ambulatorio Adícora,Hospital,,,"Calle Santa Ana, Adícora, 4142",11.941227,-69.807168,Venezuela,0,
+Ambulatorio Alfonzo López Porras,Hospital,,,,10.528521,-66.98055,Venezuela,0,
+Ambulatorio Alí Romero,Hospital,,,"Avenida Fuerzas Armadas, Barcelona, 6001",10.142229,-64.684321,Venezuela,0,
+Ambulatorio Andres Eloy Blanco,Hospital,,,,11.681849,-70.213203,Venezuela,0,
+Ambulatorio Atapirire,Hospital,,,,8.433369,-64.368616,Venezuela,0,
+Ambulatorio Boca de Pozo,Hospital,,,,11.004487,-64.379256,Venezuela,0,
+Ambulatorio Boyaca V,Hospital,,,,10.169769,-64.673344,Venezuela,0,
+Ambulatorio Boyaca V,Hospital,,,"Avenida Principal  IV y V, Barcelona, 6001",10.170012,-64.673401,Venezuela,0,
+Ambulatorio Boyacá V,Hospital,,,,10.169927,-64.673257,Venezuela,0,
+Ambulatorio CAPI,Hospital,,,,10.721987,-71.690817,Venezuela,0,
+Ambulatorio CDI,Hospital,,,,10.115719,-64.571766,Venezuela,0,
+Annotto Bay Hospital,Hospital,996-2034,,,18.273199,-76.762054,Jamaica,0,
+Bellevue Hospital,Hospital,+1876 926-1380,,"16, Windward Road",17.970466,-76.770509,Jamaica,0,
+Black River Hospital,Hospital,,,,18.02656,-77.858901,Jamaica,0,
+Bustamante Children Hospital,Hospital,926-5721,,Authur Wint Drive,17.999875,-76.777766,Jamaica,0,
+Catherine Hall Health Centre,Hospital,952-0396,,,18.462577,-77.918953,Jamaica,0,
+Community Health Center,Hospital,,,,18.511798,-77.800159,Jamaica,0,
+Cornwall Regional Hospital,Hospital,952-6683,,,18.469724,-77.909967,Jamaica,0,
+Cross Keys Health Centre,Hospital,,,,17.897754,-77.50081,Jamaica,0,
+Falmouth Hospital,Hospital,,,,18.496548,-77.660525,Jamaica,0,
+Falmouth Hospital,Hospital,,,,18.496017,-77.660849,Jamaica,0,
+Font Hill Health Centre,Hospital,,,,17.94316,-76.506394,Jamaica,0,
+Glengoffe Health Centre,Hospital,,,,18.135646,-76.884787,Jamaica,0,
+Hargreaves Memorial Hospital,Hospital,,,,18.043989,-77.507412,Jamaica,0,
+Harkers Hall Health Center,Hospital,,,,18.121219,-76.910634,Jamaica,0,
+Hospiten Montego Bay,Hospital,,,,18.521042,-77.853085,Jamaica,0,https://hospiten.com/hospitales/hospiten-montego-bay
+Isaac Barrant Clinic,Hospital,,,,17.917294,-76.265221,Jamaica,0,
+Kingston Open MRI,Hospital,+1 876 908 1828,,"48, Constant Spring Road, Kingston, 10",18.022003,-76.795945,Jamaica,0,http://www.kingstonopenmri.com/
+Kingston Public Hospital,Hospital,922-0227,,,17.975855,-76.795447,Jamaica,0,
+Lincoln Health Centre,Hospital,,,"Lincoln-Fairfield Main Road, Mandeville",18.023574,-77.566681,Jamaica,0,
+Linstead Hospital,Hospital,+18769852241,,"7, Rodney Hall Road",18.133145,-77.031638,Jamaica,0,
+Mandeville Memorial Hospital,Hospital,962-2067,,,18.042752,-77.508947,Jamaica,0,
+Mandeville Public Hospital,Hospital,962-2067,,,18.042329,-77.509557,Jamaica,0,
+May Pen Hospital,Hospital,,,,17.973559,-77.259826,Jamaica,0,
+National Chest Hospital,Hospital,+18769270655,,"35 1/5, Barbican Rd",18.022512,-76.760979,Jamaica,0,
+Noel Holmes Hospital,Hospital,+18769562733,,,18.452279,-78.167815,Jamaica,0,
+Nutall Memorial Hospital,Hospital,,,Kingston,17.995241,-76.785732,Jamaica,0,
+Percy Junor Hospital,Hospital,964-2322,,,18.155469,-77.464851,Jamaica,0,
+Port Antonio Hospital,Hospital,,,,18.176427,-76.456168,Jamaica,0,
+Saint Thomas Infirmary,Hospital,,,,17.885886,-76.417982,Jamaica,0,
+Savannah La Mar Public General Hospital,Hospital,,,,18.225975,-78.129133,Jamaica,0,
+Sir John Golding Rehabilitation Center,Hospital,+18769272504,,"7, John Golding Road",18.005265,-76.740196,Jamaica,0,
+Spanish Town Hospital,Hospital,+18769843031,,Burke Road,17.991774,-76.947143,Jamaica,0,https://www.serha.gov.jm/
+St Ann's Bay Hospital,Hospital,,,,18.43585,-77.210787,Jamaica,0,
+St Ann's Bay Infirmary,Hospital,,,,18.447322,-77.223756,Jamaica,0,
+St. Ann's Bay Hospital,Hospital,,,,18.436271,-77.210769,Jamaica,0,
+St. Elizabeth's Infirmary,Hospital,,,,18.058312,-77.704472,Jamaica,0,
+St. Jago Park Health Centre,Hospital,+18769843031,,"Burke Road, Spanish Town",17.99284,-76.946823,Jamaica,0,https://www.serha.gov.jm/
+St. Joseph's Hospital Complex,Hospital,,,"22, Deanery Road",17.980415,-76.772085,Jamaica,0,
+Trinityville Health Centre,Hospital,,,,17.961849,-76.510458,Jamaica,0,
+University Hospital Of The West Indies,Hospital,+1 (876) 927-1621-9,,"Mona, KGN7",18.011018,-76.74452,Jamaica,0,https://uhwi.gov.jm/
+University Hospital of the West Indies,Hospital,927-1620,,,18.011341,-76.74338,Jamaica,0,https://uhwi.gov.jm/
+Uwi Health Center,Hospital,,,,18.004334,-76.743652,Jamaica,0,
+Barna- og unglingageðdeild Landspítalans,Hospital,03545434300,,"12, Dalbraut, 105",64.148602,-21.87642,Iceland,0,https://www.landspitali.is/sjuklingar-adstandendur/deildir-og-thjonusta/barna-og-unglingageddeild/
+Fjórðungssjúkrahúsið í Neskaupstað,Hospital,,,"20, Mýrargata, Neskaupstaður, 740",65.14843,-13.676025,Iceland,0,
+HSN Blönduós,Hospital,,,,65.656474,-20.280292,Iceland,0,
+Heilbrigðisstofnun Suðurlands,Hospital,,,"Selfoss, 800",63.939191,-20.987013,Iceland,0,
+Heilbrigðisstofnun Suðurlands,Hospital,,,,63.420755,-19.006431,Iceland,0,
+Heilbrigðisstofnun Vesturlands,Hospital,+354 432 1200,,"Austurgata, 340",65.077387,-22.721755,Iceland,0,
+Heilbrigðisstofnunin Fjallabyggð,Hospital,,,,66.155647,-18.909295,Iceland,0,
+Heilbrigðisstofun Þingeyinga,Hospital,,,,66.049057,-17.34058,Iceland,0,
+Heilbrigðisstofunin Sauðárkróki,Hospital,,,,65.73937,-19.639755,Iceland,0,
+Heilsugæsla Rangárþings,Hospital,,,"4, Öldubakki, Hvolsvöllur, 860",63.751572,-20.217493,Iceland,0,
+Heilsugæsla Raufarhafnar,Hospital,,,,66.452694,-15.950413,Iceland,0,
+Heilsugæsla Suðurnesja,Hospital,,,"6, Skólavegur, Keflavík, 230",64.001093,-22.555173,Iceland,0,
+Heilsugæsla við Víkurbraut,Hospital,,,,64.258864,-15.213518,Iceland,0,
+Heilsugæslan,Hospital,,,"8, Búðareyri, 730",65.033517,-14.222559,Iceland,0,
+Heilsugæslusel Flateyrar,Hospital,,,,66.046775,-23.512311,Iceland,0,https://hvest.is/starfsstodvar/flateyri/
+Heilsugæslustöðin Djúpavogi,Hospital,,,,64.654415,-14.280435,Iceland,0,
+Kleppsspítali,Hospital,,,"Reykjavík, 104",64.14504,-21.848411,Iceland,0,
+Landakotsspítali,Hospital,,,Reykjavík,64.148418,-21.949093,Iceland,0,
+Landspítali,Hospital,,,,64.138099,-21.927523,Iceland,0,https://www.landspitali.is/
+Landspítali Fossvogur,Hospital,,,,64.122068,-21.888698,Iceland,0,http://landspitali.is
+Landspítali Grensás,Hospital,,,"Reykjavík, 108",64.125614,-21.881402,Iceland,0,
+Rauði kross Íslands,Hospital,,,,65.975086,-18.530503,Iceland,0,
+Sjúkrahúsið Vogur,Hospital,,,,64.126256,-21.792991,Iceland,0,
+Sjúkrahúsið og Heilsugæslan á Akranesi,Hospital,,,,64.319691,-22.081835,Iceland,0,https://www.sha.is/
+Sjúkrahúsið og heilsugæslan á Ísafirði,Hospital,,,"Torfnes, Ísafjörður, 400",66.075137,-23.127915,Iceland,0,
+Sjúkrahúsið á Akureyri,Hospital,,,,65.673313,-18.093636,Iceland,0,
+Öldrunardeild Vífilsstöðum,Hospital,,,,64.082131,-21.888015,Iceland,0,
+Auckland City Hospital,Hospital,09 307 8888,,"2, Park Road, Auckland, 1023",-36.859739,174.770482,New Zealand,1165,https://www.adhb.health.nz/hospitals-and-clinics/auckland-city-hospital/
+Kaitaia Hospital,Hospital,+6494089180,,"29, Redan Road, Kaitaia, 0410",-35.119245,173.260701,New Zealand,26,https://www.northlanddhb.org.nz/our-services/our-hospitals/kaitaia-hospital-services/
+Bay of Islands Hospital,Hospital,+6494040280,,"Hospital Road, Kawakawa, 0210",-35.386294,174.069256,New Zealand,20,https://www.northlanddhb.org.nz/our-services/our-hospitals/bay-of-islands-hospital-services/
+24 Hour Surgery,Hospital,+64 3 365 7777,,"401, Madras Street, Christchurch, 8013",-43.521619,172.641532,New Zealand,0,https://www.24hoursurgery.co.nz/
+Accident and Urgent Medical Centre,Hospital,+64 4 384 4944,,"17, Adelaide Road, Wellington",-41.301904,174.779877,New Zealand,0,https://www.wamc.co.nz/
+Albany Veterinary Hospital,Hospital,,,,-36.739009,174.692041,New Zealand,0,
+Alexandra Hospital,Hospital,,,"5, Alexandra Grove, Nelson",-41.340652,173.199734,New Zealand,0,https://www.nmdhb.govt.nz/hospitals-and-community-services/hospitals/alexandra-hospital/
+Althorp Private Hospital,Hospital,,,,-37.740239,176.126202,New Zealand,0,
+Amberwood Hospital and Rest Home,Hospital,,,,-36.827072,174.608702,New Zealand,0,
+Aranui Rest Home and Hospital,Hospital,,,,-36.886301,174.710442,New Zealand,0,
+Ascot Hospital,Hospital,,,,-36.887492,174.800523,New Zealand,0,
+Ashburton Hospital,Hospital,,,,-43.894456,171.746819,New Zealand,0,
+Auckland City Surgical Services Limited,Hospital,+64 9 522 2800,,,-36.873708,174.782235,New Zealand,0,https://www.onehealth.co.nz/
+Auckland Radiology Oncology,Hospital,+64 0800 497 297,info@radiology.co.nz,Mountain Road,-36.873406,174.769779,New Zealand,0,https://radiology.co.nz/locations/epsom
+Auckland Skin and Cancer Foundation,Hospital,,,,-36.87972,174.791678,New Zealand,0,
+Auckland Spinal Rehabilitation Unit,Hospital,+6492709070,info@nzspinaltrust.org.nz,"30, Bairds Road, Auckland, 2025",-36.956766,174.855302,New Zealand,0,https://nzspinaltrust.org.nz
+Awhinatia Health Centre,Hospital,,,,-37.055711,174.933492,New Zealand,0,
+Bay Radiology,Hospital,+6475780273,,"281, Cheyne Road, 3112",-37.742462,176.137083,New Zealand,0,https://bayradiology.co.nz/
+Bay of Islands Hospital,Hospital,+6494040280,,"21, Hospital Road, Kawakawa, 0210",-35.386281,174.069394,New Zealand,0,https://www.northlanddhb.org.nz/our-services/our-hospitals/bay-of-islands-hospital-services/
+Beach Haven Hospital,Hospital,,,,-36.78822,174.700173,New Zealand,0,
+Bethesda Home and Hospital,Hospital,,,,-36.997177,174.883728,New Zealand,0,
+Bidwell Hospital,Hospital,,,,-44.394316,171.242623,New Zealand,0,
+Birthright,Hospital,+64 9 522 2800,,,-36.873329,174.782604,New Zealand,0,https://www.onehealth.co.nz/
+Bluff Medical Centre,Hospital,,,"2, Tone Street",-46.604411,168.350465,New Zealand,0,
+Botany SuperClinic,Hospital,+64 9 277 1516,,,-36.922402,174.91373,New Zealand,0,
+Bowen Hospital,Hospital,,,"98, Churchill Drive, Wellington",-41.259206,174.766869,New Zealand,0,
+Braemar Hospital,Hospital,,,"24, Ohaupo Road",-37.807901,175.278984,New Zealand,0,https://braemarhospital.co.nz/
+Brightside Hospital,Hospital,,,,-36.879079,174.771155,New Zealand,0,http://www.endoscopyak.co.nz/
+Buchanan Rehabilitation and Carrington Haemodialysis,Hospital,,,,-36.87366,174.711855,New Zealand,0,
+Bupa Hillsborough Care Home,Hospital,,,,-36.924005,174.768477,New Zealand,0,
+Burwood Hospital,Hospital,,,"300, Burwood Road, Christchurch, 8083",-43.480151,172.684946,New Zealand,0,
+CHT Highfield Home and Hospital,Hospital,,,,-38.02171,175.333358,New Zealand,0,
+Cancer Society,Hospital,+64 9 9239909,,,-36.86323,174.770016,New Zealand,0,
+Canterbury Charity Hospital,Hospital,,,,-43.486329,172.583222,New Zealand,0,https://charityhospital.org.nz
+Cascades Rest Home and Hospital,Hospital,,,,-37.79759,175.281949,New Zealand,0,
+Chalmers Hospital,Hospital,,,,-39.051874,174.082685,New Zealand,0,
+Child & Youth Services Te Roopu Kimiora,Hospital,+6494089180,,,-35.119902,173.262122,New Zealand,0,https://www.northlanddhb.org.nz/our-services/our-hospitals/kaitaia-hospital-services/
+Child Development Service,Hospital,,,"440, Montreal Street, Christchurch",-43.521313,172.631069,New Zealand,0,https://cdhb.health.nz/childdevelopmentservice
+Christchurch Hospital,Hospital,+64 3 364 0600,,"Riccarton Avenue, Christchurch, 8011",-43.533748,172.625238,New Zealand,0,https://www.cdhb.health.nz/Hospitals-Services/hospitals/Christchurch-Hospital/Pages/default.aspx
+Christchurch Outpatients,Hospital,+64 3 364 0490,,"2, Oxford Terrace, Christchurch, 8011",-43.534884,172.627155,New Zealand,0,
+Christchurch Outpatients,Hospital,+64 3 364 0490,,,-43.534882,172.627013,New Zealand,0,
+Christchurch Public Hospital,Hospital,,,"2, Riccarton Avenue, Christchurch, 8011",-43.534333,172.625489,New Zealand,0,https://www.cdhb.health.nz/hospitals-health-facilities/christchurch-hospital/
