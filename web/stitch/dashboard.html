@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container": "#1b2024",
+            "on-background": "#dfe3e9",
+            "primary-fixed-dim": "#b3c5ff",
+            "on-primary-fixed-variant": "#003fa4",
+            "outline": "#8d90a0",
+            "outline-variant": "#434654",
+            "surface-container-low": "#171c20",
+            "tertiary-fixed-dim": "#00daf3",
+            "secondary-fixed-dim": "#ffb3ac",
+            "on-error": "#690005",
+            "surface-container-highest": "#30353a",
+            "on-secondary-fixed-variant": "#930010",
+            "on-primary-fixed": "#001849",
+            "inverse-on-surface": "#2c3135",
+            "background": "#0f1418",
+            "tertiary-container": "#006470",
+            "surface-dim": "#0f1418",
+            "primary-container": "#0051ce",
+            "on-tertiary-container": "#33e6ff",
+            "secondary": "#ffb3ac",
+            "on-tertiary-fixed": "#001f24",
+            "surface": "#0f1418",
+            "on-secondary-container": "#ffaea6",
+            "secondary-fixed": "#ffdad6",
+            "on-primary-container": "#c5d2ff",
+            "primary-fixed": "#dae1ff",
+            "inverse-primary": "#0054d6",
+            "surface-variant": "#30353a",
+            "surface-tint": "#b3c5ff",
+            "primary": "#b3c5ff",
+            "surface-container-high": "#262b2f",
+            "surface-bright": "#353a3e",
+            "error-container": "#93000a",
+            "on-surface-variant": "#c3c6d6",
+            "tertiary": "#00daf3",
+            "error": "#ffb4ab",
+            "surface-container-lowest": "#0a0f13",
+            "on-tertiary-fixed-variant": "#004f58",
+            "on-secondary-fixed": "#410003",
+            "on-secondary": "#680008",
+            "on-surface": "#dfe3e9",
+            "inverse-surface": "#dfe3e9",
+            "on-tertiary": "#00363d",
+            "on-primary": "#002b75",
+            "on-error-container": "#ffdad6",
+            "secondary-container": "#a40213",
+            "tertiary-fixed": "#9cf0ff"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+<style>
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+}
+.glass-panel {
+    background: rgba(48, 53, 58, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+/* Dynamic Map Backgrounds */
+.map-container.mode-day {
+    background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(200, 210, 220, 0.4) 100%), url('https://lh3.googleusercontent.com/aida-public/AGV9T-Z6Zl8Z6Zl8Z6Zl8Z6Zl8Z6Zl8Z6Zl8Z6Zl8Z6Zl8Z6Zl8Z6Zl8Z6Zl8Z6Zl8Z6Zl8=s0'); /* Placeholder for topo map */
+    background-color: #e5e7eb;
+    background-blend-mode: multiply;
+    background-size: cover;
+}
+.map-container.mode-sunset {
+    background-image: radial-gradient(circle at 70% 30%, rgba(255, 120, 0, 0.3) 0%, rgba(50, 20, 80, 0.6) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuCUC7jh4UAfu58GyO1dBPpWVvvKzr0g-h9KVSQTZE3iupUGMm1GBO-z4LzyGeuYju00');
+    background-size: cover;
+}
+.map-container.mode-night {
+    background-image: radial-gradient(circle at center, rgba(15, 20, 24, 0.2) 0%, rgba(15, 20, 24, 0.9) 100%), url(https://lh3.googleusercontent.com/aida-public/AB6AXuCUC7jh4UAfu58GyO1dBPpWVvvKzr0g-h9KVSQTZE3iupUGMm1GBO-z4LzyGeuYju0w-oR5HLL3qDI17ah7cTS2Z3XH58NhULtz78g5W1QaLSRIyYcvv8J-CgNtSsfiIYvxQCPnQYE2s4TZS1aLpQJyO6b0IVi7JZ6-sAkt5EVTqfz7G2PNK-oyl5gSLEp6dBwjzUcUFIL5ySTs6EtdowQ5vAoBgl1-ylt4RbJA-OnELwNgQoBaLVuHKpeSk0bx8bnaiiSte3fu9fJu);
+    background-size: cover;
+}
+
+/* 3D Drone Animation */
+@keyframes drone-float {
+    0%, 100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
+    50% { transform: translateY(-20px) rotateX(10deg) rotateY(-10deg); }
+}
+
+@keyframes rotor-spin {
+    from { transform: rotateZ(0deg); }
+    to { transform: rotateZ(360deg); }
+}
+
+.drone-container {
+    perspective: 1000px;
+}
+
+.drone-body {
+    transform-style: preserve-3d;
+    animation: drone-float 6s ease-in-out infinite;
+    transition: filter 1s ease-in-out;
+}
+
+/* Mode-Specific Drone Lighting */
+.mode-day .drone-body {
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
+}
+.mode-sunset .drone-body {
+    filter: drop-shadow(-20px 40px 40px rgba(80, 20, 0, 0.4));
+}
+.mode-night .drone-body {
+    filter: drop-shadow(0 0 40px rgba(0, 218, 243, 0.2));
+}
+
+.mode-day .drone-chassis { background: #e2e8f0; border-color: #cbd5e1; }
+.mode-sunset .drone-chassis { background: linear-gradient(135deg, #4c1d95, #f59e0b); border-color: #fbbf24; }
+.mode-night .drone-chassis { background: linear-gradient(135deg, #0f172a, #1e293b); border-color: #38bdf8; }
+
+.rotor {
+    animation: rotor-spin 0.2s linear infinite;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(179, 197, 255, 0.2);
+    border-radius: 10px;
+}
+</style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30 overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0f1418]/60 backdrop-blur-md flex justify-between items-center px-6 py-3 h-16 border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<span class="text-lg font-black text-[#dfe3e9] uppercase tracking-widest font-headline">DroneMedic</span>
+<div class="h-4 w-[1px] bg-outline-variant/30 hidden md:block"></div>
+<div class="hidden md:flex items-center gap-6">
+<span class="text-blue-400 font-bold underline decoration-2 underline-offset-4 font-headline tracking-tight text-sm cursor-pointer active:scale-95 ease-out">Live Ops</span>
+<span class="text-[#c3c6d6] opacity-70 font-headline tracking-tight text-sm cursor-pointer hover:bg-[#262b2f] transition-colors duration-200 p-1 rounded">Fleet Status</span>
+</div>
+</div>
+<!-- Local Time Indicators -->
+<div class="hidden xl:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+<div class="flex flex-col items-center">
+<span class="text-[9px] uppercase tracking-tighter text-outline font-bold">Drone Location</span>
+<span class="text-sm font-headline font-bold text-on-surface">14:42 <span class="text-[10px] opacity-60">PDT</span></span>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/20"></div>
+<div class="flex flex-col items-center">
+<span class="text-[9px] uppercase tracking-tighter text-outline font-bold">Destination</span>
+<span class="text-sm font-headline font-bold text-on-surface">14:46 <span class="text-[10px] opacity-60">PDT</span></span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 rounded bg-surface-container-high border border-outline-variant/10">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(0,218,243,0.5)]"></span>
+<span class="text-[10px] uppercase font-bold tracking-widest text-tertiary">System Live</span>
+</div>
+<span class="material-symbols-outlined text-[#b3c5ff] cursor-pointer" data-icon="battery_charging_full">battery_charging_full</span>
+<span class="material-symbols-outlined text-[#b3c5ff] cursor-pointer" data-icon="signal_cellular_4_bar">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[#b3c5ff] cursor-pointer" data-icon="location_on">location_on</span>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-[#171c20] border-r border-[#434654]/15 flex flex-col pt-20 pb-8 hidden lg:flex">
+<div class="px-6 mb-8">
+<h2 class="font-headline text-xl font-bold text-[#dfe3e9]">Mission Control</h2>
+<p class="text-xs font-medium uppercase tracking-wider text-on-surface-variant opacity-60">Sentinel v4.2</p>
+</div>
+<nav class="flex-1">
+<div class="bg-gradient-to-r from-[#b3c5ff]/10 to-transparent border-l-4 border-[#b3c5ff] text-[#b3c5ff] py-4 px-6 flex items-center gap-4 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="monitor_heart">monitor_heart</span>
+<span class="font-label text-xs font-medium uppercase tracking-wider">Live Ops</span>
+</div>
+<div class="text-[#c3c6d6] py-4 px-6 flex items-center gap-4 opacity-60 hover:bg-[#262b2f] transition-all duration-300 hover:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="precision_manufacturing">precision_manufacturing</span>
+<span class="font-label text-xs font-medium uppercase tracking-wider">Fleet Status</span>
+</div>
+<div class="text-[#c3c6d6] py-4 px-6 flex items-center gap-4 opacity-60 hover:bg-[#262b2f] transition-all duration-300 hover:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-label text-xs font-medium uppercase tracking-wider">Mission Logs</span>
+</div>
+<div class="text-[#c3c6d6] py-4 px-6 flex items-center gap-4 opacity-60 hover:bg-[#262b2f] transition-all duration-300 hover:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label text-xs font-medium uppercase tracking-wider">Analytics</span>
+</div>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold rounded-md shadow-lg shadow-primary-container/20 active:scale-95 transition-transform uppercase text-xs tracking-widest">
+        Deploy Drone
+      </button>
+<div class="mt-8 space-y-4">
+<div class="flex items-center gap-4 text-[#c3c6d6] opacity-60 hover:opacity-100 cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+<span class="font-label text-[10px] uppercase tracking-widest">System Settings</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area (Map) -->
+<!-- Start with 'Night' as default to match original design, user can toggle -->
+<main class="lg:ml-64 pt-16 h-screen relative overflow-hidden map-container mode-night" data-location="San Francisco" id="main-map">
+<!-- 3D Drone Visualization Hero Overlay -->
+<div class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center -translate-y-12">
+<div class="drone-container w-[600px] h-[400px] flex items-center justify-center">
+<div class="drone-body relative w-64 h-24">
+<!-- Central Chassis -->
+<div class="drone-chassis absolute inset-0 rounded-full border shadow-[0_0_50px_rgba(179,197,255,0.15)] flex items-center justify-center overflow-hidden transition-colors duration-1000">
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+<!-- Branding/Status Light -->
+<div class="w-24 h-1 bg-primary/40 rounded-full blur-[2px] absolute top-4"></div>
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary text-xs" data-icon="medication">medication</span>
+</div>
+</div>
+<!-- Structural Arms -->
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#434654] to-transparent -translate-y-1/2"></div>
+<div class="absolute top-1/2 left-1/2 w-[2px] h-48 bg-gradient-to-b from-transparent via-[#434654] to-transparent -translate-x-1/2 -translate-y-1/2"></div>
+<!-- Rotors & Motors -->
+<div class="absolute -top-12 -left-12">
+<div class="w-12 h-12 bg-[#1b2024] rounded-full border border-white/5 relative shadow-xl">
+<div class="rotor w-32 h-1 bg-white/10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[0.5px]"></div>
+<div class="rotor w-1 h-32 bg-white/5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[0.5px]" style="animation-delay: -0.05s"></div>
+</div>
+</div>
+<div class="absolute -top-12 -right-12">
+<div class="w-12 h-12 bg-[#1b2024] rounded-full border border-white/5 relative shadow-xl">
+<div class="rotor w-32 h-1 bg-white/10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[0.5px]"></div>
+<div class="rotor w-1 h-32 bg-white/5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[0.5px]" style="animation-delay: -0.05s"></div>
+</div>
+</div>
+<div class="absolute -bottom-12 -left-12">
+<div class="w-12 h-12 bg-[#1b2024] rounded-full border border-white/5 relative shadow-xl">
+<div class="rotor w-32 h-1 bg-white/10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[0.5px]"></div>
+<div class="rotor w-1 h-32 bg-white/5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[0.5px]" style="animation-delay: -0.05s"></div>
+</div>
+</div>
+<div class="absolute -bottom-12 -right-12">
+<div class="w-12 h-12 bg-[#1b2024] rounded-full border border-white/5 relative shadow-xl">
+<div class="rotor w-32 h-1 bg-white/10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[0.5px]"></div>
+<div class="rotor w-1 h-32 bg-white/5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[0.5px]" style="animation-delay: -0.05s"></div>
+</div>
+</div>
+<!-- Optical Sensors / Camera -->
+<div class="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-8 h-8 bg-[#0a0f13] rounded-full border border-white/10 flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-red-500/80 animate-pulse shadow-[0_0_10px_red]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- SVG Overlay -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-40">
+<defs>
+<filter id="glow">
+<fegaussianblur result="coloredBlur" stddeviation="2.5"></fegaussianblur>
+<femerge>
+<femergenode in="coloredBlur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+<lineargradient id="lineGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#b3c5ff"></stop>
+<stop offset="100%" stop-color="#00daf3"></stop>
+</lineargradient>
+</defs>
+<path d="M 400 300 Q 600 200 800 500 T 1200 400" fill="none" filter="url(#glow)" stroke="url(#lineGradient)" stroke-dasharray="10 5" stroke-width="3"></path>
+<g transform="translate(1200, 400)">
+<circle fill="#0051ce" fill-opacity="0.2" r="20"></circle>
+<circle fill="#00daf3" r="6"></circle>
+<text fill="#dfe3e9" font-family="Space Grotesk" font-size="12" font-weight="bold" x="-30" y="30">CENTRAL CLINIC</text>
+</g>
+</svg>
+<!-- Telemetry HUD -->
+<div class="absolute top-6 right-6 w-80 space-y-4 z-20">
+<section class="glass-panel rounded-lg p-5 border border-outline-variant/15">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline text-sm font-bold tracking-tight text-primary uppercase">Drone Status</h3>
+<span class="text-[10px] bg-primary/20 text-primary-fixed-dim px-2 py-0.5 rounded">AUTO-FLIGHT</span>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="space-y-1">
+<p class="text-[9px] text-on-surface-variant uppercase font-bold tracking-widest">Battery</p>
+<p class="font-headline text-lg font-bold text-on-surface">85<span class="text-xs ml-0.5 opacity-60">%</span></p>
+</div>
+<div class="space-y-1">
+<p class="text-[9px] text-on-surface-variant uppercase font-bold tracking-widest">GPS</p>
+<p class="font-headline text-lg font-bold text-tertiary">Strong</p>
+</div>
+<div class="space-y-1">
+<p class="text-[9px] text-on-surface-variant uppercase font-bold tracking-widest">Speed</p>
+<p class="font-headline text-lg font-bold text-on-surface">45<span class="text-xs ml-0.5 opacity-60">km/h</span></p>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant/10">
+<div class="flex justify-between text-[10px] uppercase font-bold text-on-surface-variant mb-1">
+<span>Mission Progress</span>
+<span class="text-primary">72%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[72%]"></div>
+</div>
+<p class="mt-2 text-[10px] text-on-surface opacity-70">Est. Arrival: <span class="text-primary font-bold">4m 12s</span></p>
+</div>
+</section>
+<section class="glass-panel rounded-lg p-5 border border-outline-variant/15 flex flex-col h-64">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-tertiary text-lg" data-icon="psychology">psychology</span>
+<h3 class="font-headline text-sm font-bold tracking-tight text-on-surface uppercase">Mission Coordinator</h3>
+</div>
+<div class="flex-1 space-y-3 overflow-y-auto pr-2 custom-scrollbar">
+<div class="flex gap-3">
+<div class="w-1 h-8 bg-tertiary/40 rounded-full mt-1"></div>
+<div>
+<p class="text-[10px] text-tertiary font-bold uppercase tracking-widest">09:42:01</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Flight path stabilized. Optimizing for current wind velocity (+12km/h tailwind).</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-1 h-8 bg-primary/40 rounded-full mt-1"></div>
+<div>
+<p class="text-[10px] text-primary font-bold uppercase tracking-widest">09:43:15</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Obstacle detected - re-routing to avoid restricted airspace 'Z-04'.</p>
+</div>
+</div>
+</div>
+<div class="mt-4 flex gap-2">
+<div class="flex-1 bg-surface-container-lowest px-3 py-2 rounded text-[10px] text-on-surface-variant flex items-center border border-outline-variant/5">
+            Manual override prompt...
+          </div>
+<button class="bg-surface-container-highest p-2 rounded text-primary hover:bg-surface-bright">
+<span class="material-symbols-outlined text-sm" data-icon="send">send</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Bottom Left Tactical Info -->
+<div class="absolute bottom-6 left-6 z-20 flex gap-4">
+<div class="glass-panel p-4 rounded-lg border border-outline-variant/15 flex items-center gap-4">
+<div class="p-3 bg-secondary-container rounded-lg">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="emergency">emergency</span>
+</div>
+<div>
+<p class="text-[10px] uppercase font-black text-secondary tracking-widest">Emergency Payload</p>
+<p class="font-headline text-lg font-bold">O- Negative Plasma (2U)</p>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-lg border border-outline-variant/15 flex items-center gap-4">
+<div class="p-3 bg-surface-container-highest rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="thermostat">thermostat</span>
+</div>
+<div>
+<p class="text-[10px] uppercase font-black text-on-surface-variant tracking-widest">Internal Temp</p>
+<p class="font-headline text-lg font-bold">4.2°C <span class="text-tertiary text-xs">STABLE</span></p>
+</div>
+</div>
+</div>
+<!-- Map Controls -->
+<div class="absolute bottom-6 right-6 z-20 flex flex-col gap-2">
+<!-- Time of Day Toggle -->
+<div class="glass-panel p-1 rounded-lg border border-outline-variant/20 flex flex-col items-center mb-4">
+<button class="p-2 rounded text-on-surface hover:bg-primary/20 transition-all hover:text-primary mode-btn-day" onclick="setMapMode('day')">
+<span class="material-symbols-outlined text-sm" data-icon="wb_sunny">wb_sunny</span>
+</button>
+<button class="p-2 rounded text-on-surface hover:bg-orange-500/20 transition-all hover:text-orange-400 mode-btn-sunset" onclick="setMapMode('sunset')">
+<span class="material-symbols-outlined text-sm" data-icon="wb_twilight">wb_twilight</span>
+</button>
+<button class="p-2 rounded text-primary bg-primary/10 transition-all mode-btn-night" onclick="setMapMode('night')">
+<span class="material-symbols-outlined text-sm" data-icon="dark_mode">dark_mode</span>
+</button>
+</div>
+<button class="glass-panel p-2 rounded-lg border border-outline-variant/20 text-on-surface hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<button class="glass-panel p-2 rounded-lg border border-outline-variant/20 text-on-surface hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<div class="h-2"></div>
+<button class="glass-panel p-2 rounded-lg border border-outline-variant/20 text-primary hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined" data-icon="my_location">my_location</span>
+</button>
+<button class="glass-panel p-2 rounded-lg border border-outline-variant/20 text-on-surface hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+</button>
+</div>
+</main>
+<!-- Mobile Bottom Nav -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-low h-16 flex justify-around items-center z-50 border-t border-outline-variant/10">
+<div class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined" data-icon="monitor_heart" style="font-variation-settings: 'FILL' 1;">monitor_heart</span>
+<span class="text-[9px] uppercase font-bold mt-1">Live</span>
+</div>
+<div class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="precision_manufacturing">precision_manufacturing</span>
+<span class="text-[9px] uppercase font-bold mt-1">Fleet</span>
+</div>
+<div class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="text-[9px] uppercase font-bold mt-1">Logs</span>
+</div>
+<div class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[9px] uppercase font-bold mt-1">Settings</span>
+</div>
+</nav>
+<script>
+function setMapMode(mode) {
+    const map = document.getElementById('main-map');
+    map.classList.remove('mode-day', 'mode-sunset', 'mode-night');
+    map.classList.add('mode-' + mode);
+    
+    // Update active button state
+    document.querySelectorAll('[class*="mode-btn-"]').forEach(btn => {
+        btn.classList.remove('text-primary', 'bg-primary/10', 'text-orange-400', 'bg-orange-500/10');
+        btn.classList.add('text-on-surface');
+    });
+    
+    const activeBtn = document.querySelector('.mode-btn-' + mode);
+    if (mode === 'day') activeBtn.classList.add('text-primary', 'bg-primary/10');
+    if (mode === 'sunset') activeBtn.classList.add('text-orange-400', 'bg-orange-500/10');
+    if (mode === 'night') activeBtn.classList.add('text-primary', 'bg-primary/10');
+}
+</script>
+</body></html>

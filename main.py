@@ -64,6 +64,7 @@ def run_delivery(
     skip_ai: bool = False,
     enable_weather: bool = False,
     enable_obstacles: bool = False,
+    mode: str = "mock",
 ):
     """Execute a full delivery pipeline with optional weather/obstacle scenarios."""
     reroute_count = 0
@@ -103,7 +104,7 @@ def run_delivery(
 
     # --- Step 3: Execute route ---
     print("[STEP 3] Executing delivery route...")
-    drone = DroneController(use_airsim=use_airsim)
+    drone = DroneController(use_airsim=use_airsim, mode=mode)
     drone.connect()
     drone.takeoff()
 
@@ -341,9 +342,18 @@ def main():
     parser.add_argument("--demo-full", action="store_true", help="All scenarios combined")
     parser.add_argument("--multi-drone", action="store_true", help="Multi-drone VRP demo")
     parser.add_argument("--airsim", action="store_true", help="Use AirSim (default: mock)")
+    parser.add_argument("--px4", action="store_true", help="Use PX4 SITL (default: mock)")
     args = parser.parse_args()
 
     print_banner()
+
+    # Determine simulation mode
+    if args.px4:
+        mode = "px4"
+    elif args.airsim:
+        mode = "airsim"
+    else:
+        mode = "mock"
 
     if args.multi_drone:
         run_multi_drone(use_airsim=args.airsim)
@@ -354,24 +364,24 @@ def main():
     if args.demo_full:
         print(f"Request: {user_input}\n")
         run_delivery(user_input, use_airsim=args.airsim, skip_ai=True,
-                     enable_weather=True, enable_obstacles=True)
+                     enable_weather=True, enable_obstacles=True, mode=mode)
     elif args.demo_weather:
         print(f"Request: {user_input}\n")
         run_delivery(user_input, use_airsim=args.airsim, skip_ai=True,
-                     enable_weather=True)
+                     enable_weather=True, mode=mode)
     elif args.demo_obstacle:
         print(f"Request: {user_input}\n")
         run_delivery(user_input, use_airsim=args.airsim, skip_ai=True,
-                     enable_obstacles=True)
+                     enable_obstacles=True, mode=mode)
     elif args.demo or args.skip_ai:
         print(f"Request: {user_input}\n")
-        run_delivery(user_input, use_airsim=args.airsim, skip_ai=True)
+        run_delivery(user_input, use_airsim=args.airsim, skip_ai=True, mode=mode)
     else:
         user_input = input("Enter delivery request: ")
         if not user_input.strip():
             print("No input provided. Exiting.")
             return
-        run_delivery(user_input, use_airsim=args.airsim)
+        run_delivery(user_input, use_airsim=args.airsim, mode=mode)
 
 
 if __name__ == "__main__":

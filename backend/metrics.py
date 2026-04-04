@@ -6,7 +6,117 @@ delivery time reduction, throughput, re-routing success rate, etc.
 """
 
 import math
+from typing import List, Dict
+
 from config import LOCATIONS, BATTERY_DRAIN_RATE
+
+
+# ── MissionMetrics — standalone evaluation helpers ──
+
+class MissionMetrics:
+    """
+    Standalone evaluation metrics for hackathon judging.
+
+    Each method is a pure function that takes raw numbers and returns
+    a single metric value — no side effects, no shared state.
+    """
+
+    @staticmethod
+    def delivery_time_reduction(optimized_times: List[float], naive_times: List[float]) -> float:
+        """
+        Percentage improvement of optimized vs naive sequential delivery.
+
+        Args:
+            optimized_times: List of delivery times (seconds) using optimized routing.
+            naive_times: List of delivery times (seconds) using naive sequential routing.
+
+        Returns:
+            Percentage reduction (0-100). Positive means optimized is faster.
+        """
+        if not naive_times or not optimized_times:
+            return 0.0
+        total_naive = sum(naive_times)
+        total_optimized = sum(optimized_times)
+        if total_naive == 0:
+            return 0.0
+        return round(((total_naive - total_optimized) / total_naive) * 100, 1)
+
+    @staticmethod
+    def throughput(deliveries_completed: int, hours: float) -> float:
+        """
+        Deliveries per hour.
+
+        Args:
+            deliveries_completed: Number of successful deliveries.
+            hours: Total elapsed time in hours.
+
+        Returns:
+            Throughput as deliveries/hour. Returns 0 if hours <= 0.
+        """
+        if hours <= 0:
+            return 0.0
+        return round(deliveries_completed / hours, 2)
+
+    @staticmethod
+    def rerouting_success_rate(total_disruptions: int, successful_reroutes: int) -> float:
+        """
+        Percentage of disrupted deliveries successfully rerouted.
+
+        Args:
+            total_disruptions: Total number of disruption events (weather, no-fly, etc.).
+            successful_reroutes: Number of disruptions handled via successful rerouting.
+
+        Returns:
+            Success rate as a percentage (0-100). Returns 100 if no disruptions.
+        """
+        if total_disruptions <= 0:
+            return 100.0
+        return round((successful_reroutes / total_disruptions) * 100, 1)
+
+    @staticmethod
+    def robustness(total_obstacles: int, successful_avoidances: int) -> float:
+        """
+        Percentage of obstacles successfully avoided.
+
+        Args:
+            total_obstacles: Total obstacle encounters.
+            successful_avoidances: Obstacles successfully navigated around.
+
+        Returns:
+            Robustness score as a percentage (0-100). Returns 100 if no obstacles.
+        """
+        if total_obstacles <= 0:
+            return 100.0
+        return round((successful_avoidances / total_obstacles) * 100, 1)
+
+    @staticmethod
+    def coverage_lives_saved(distances_km: List[float], avg_response_min: float) -> Dict[str, float]:
+        """
+        Estimate geographic coverage and lives impacted.
+
+        Uses the "golden hour" heuristic: faster medical response = more lives saved.
+        Assumes ~0.5 lives saved per delivery that arrives within 30 minutes,
+        scaling down as response time increases.
+
+        Args:
+            distances_km: List of delivery distances in kilometres.
+            avg_response_min: Average response time in minutes for drone deliveries.
+
+        Returns:
+            Dict with 'total_km' (sum of all distances) and 'est_lives_impacted' (estimate).
+        """
+        total_km = round(sum(distances_km), 2) if distances_km else 0.0
+        num_deliveries = len(distances_km)
+
+        if num_deliveries == 0 or avg_response_min <= 0:
+            return {"total_km": total_km, "est_lives_impacted": 0.0}
+
+        # Golden hour factor: deliveries under 30 min get full credit,
+        # linearly decreasing to 0 at 60 min.
+        golden_factor = max(0.0, min(1.0, (60.0 - avg_response_min) / 30.0))
+        est_lives = round(num_deliveries * 0.5 * golden_factor, 1)
+
+        return {"total_km": total_km, "est_lives_impacted": est_lives}
 
 
 def _route_distance(route: list) -> float:

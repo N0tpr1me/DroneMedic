@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
-import { supabase, supabaseConfigured } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 
 interface AuthState {
   user: User | null;
@@ -12,12 +12,10 @@ export function useAuth() {
   const [state, setState] = useState<AuthState>({
     user: null,
     session: null,
-    loading: supabaseConfigured,
+    loading: true,
   });
 
   useEffect(() => {
-    if (!supabaseConfigured) return;
-
     supabase.auth.getSession().then(({ data: { session } }) => {
       setState({ user: session?.user ?? null, session, loading: false });
     });

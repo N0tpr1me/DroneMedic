@@ -11,6 +11,7 @@ from ortools.constraint_solver import routing_enums_pb2, pywrapcp
 from config import (
     LOCATIONS, PRIORITY_HIGH, PRIORITY_WEIGHT,
     BATTERY_CAPACITY, BATTERY_DRAIN_RATE, BATTERY_MIN_RESERVE, NUM_DRONES,
+    MAX_WIND_SPEED, MAX_PRECIPITATION,
 )
 from backend.geofence import segment_crosses_no_fly_zone
 from backend.weather_service import get_weather_at_location, is_flyable
@@ -30,6 +31,17 @@ NO_FLY_PENALTY = 100
 WEATHER_PENALTY = 3
 
 
+def _haversine_distance(loc1: dict, loc2: dict) -> int:
+    """Distance in meters between two GPS points using haversine formula."""
+    from math import radians, sin, cos, sqrt, atan2
+    R = 6371000
+    lat1, lon1 = radians(loc1["lat"]), radians(loc1["lon"])
+    lat2, lon2 = radians(loc2["lat"]), radians(loc2["lon"])
+    dlat, dlon = lat2 - lat1, lon2 - lon1
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    return int(R * 2 * atan2(sqrt(a), sqrt(1 - a)))
+
+
 def _euclidean_distance(loc1: dict, loc2: dict) -> int:
     """Compute Euclidean distance between two locations using AirSim coords."""
     return int(math.sqrt(
@@ -38,23 +50,29 @@ def _euclidean_distance(loc1: dict, loc2: dict) -> int:
     ))
 
 
-def _build_distance_matrix(location_names: list, priorities: dict) -> list:
+def _build_distance_matrix(location_names: list, priorities: dict, use_gps: bool = False) -> list:
     """
     Build a distance matrix for the given locations.
 
     High-priority destinations get their incoming distances multiplied by
     PRIORITY_WEIGHT (e.g. 0.3), making them appear "closer" so the solver
     visits them earlier in the route.
+
+    Args:
+        location_names: List of location name strings.
+        priorities: Dict mapping location names to priority levels.
+        use_gps: If True, use haversine (GPS lat/lon) instead of Euclidean (AirSim x/y).
     """
     coords = [LOCATIONS[name] for name in location_names]
     n = len(coords)
     matrix = [[0] * n for _ in range(n)]
+    distance_fn = _haversine_distance if use_gps else _euclidean_distance
 
     for i in range(n):
         for j in range(n):
             if i == j:
                 continue
-            dist = _euclidean_distance(coords[i], coords[j])
+            dist = distance_fn(coords[i], coords[j])
             # Apply priority weight: reduce distance TO high-priority locations
             if priorities.get(location_names[j]) == PRIORITY_HIGH:
                 dist = int(dist * PRIORITY_WEIGHT)
@@ -108,6 +126,8 @@ def compute_route(
     priorities: dict,
     weather: dict = None,
     num_drones: int = None,
+    time_windows: dict = None,
+    use_gps: bool = False,
 ) -> dict:
     """
     Compute optimal delivery route(s) using OR-Tools VRP solver.
@@ -117,6 +137,9 @@ def compute_route(
         priorities: Dict mapping location names to "high" or "normal".
         weather: Optional dict of {location_name: weather_dict} for penalties.
         num_drones: Number of drones (default: config.NUM_DRONES).
+        time_windows: Optional dict of {location_name: max_seconds}.
+                      Each value is the latest arrival time in seconds from start.
+                      E.g. {"Clinic B": 1800} means Clinic B must be reached within 30 min.
 
     Returns:
         Dict with:
@@ -144,7 +167,7 @@ def compute_route(
         }
 
     # Build and enhance distance matrix
-    distance_matrix = _build_distance_matrix(all_locations, priorities)
+    distance_matrix = _build_distance_matrix(all_locations, priorities, use_gps=use_gps)
     distance_matrix = _apply_no_fly_penalty(distance_matrix, all_locations)
     distance_matrix = _apply_weather_penalty(distance_matrix, all_locations, weather)
 
@@ -165,7 +188,7 @@ def compute_route(
     routing.SetArcCostEvaluatorOfAllVehicles(transit_callback_index)
 
     # Battery constraint: uses RAW distance (without penalties) for realistic drain
-    raw_matrix = _build_distance_matrix(all_locations, {})  # no priority/penalty adjustments
+    raw_matrix = _build_distance_matrix(all_locations, {}, use_gps=use_gps)  # no priority/penalty adjustments
 
     def raw_distance_callback(from_index, to_index):
         from_node = manager.IndexToNode(from_index)
@@ -181,6 +204,43 @@ def compute_route(
         True,                   # start cumul to zero
         "Distance",
     )
+
+    # Time window constraints (if any delivery has a deadline)
+    if time_windows:
+        # Build a time matrix: travel_time = distance / velocity + 10s per stop
+        velocity = 5  # m/s (from config.DRONE_VELOCITY)
+        service_time = 10  # seconds per delivery stop
+
+        def time_callback(from_index, to_index):
+            from_node = manager.IndexToNode(from_index)
+            to_node = manager.IndexToNode(to_index)
+            travel = raw_matrix[from_node][to_node]
+            travel_seconds = int(travel / velocity) + service_time if travel > 0 else 0
+            return travel_seconds
+
+        time_transit_index = routing.RegisterTransitCallback(time_callback)
+
+        # Max horizon: largest time window or 2 hours
+        max_time = max(time_windows.values()) if time_windows else 7200
+        max_time = max(max_time, 7200)
+
+        routing.AddDimension(
+            time_transit_index,
+            max_time,          # allow waiting (slack)
+            max_time,          # max cumulative time per vehicle
+            True,              # start cumul to zero
+            "Time",
+        )
+
+        time_dimension = routing.GetDimensionOrDie("Time")
+
+        # Depot has no constraint (index 0)
+        # Apply time windows to delivery locations
+        for loc_name, deadline_seconds in time_windows.items():
+            if loc_name in all_locations:
+                node_index = all_locations.index(loc_name)
+                index = manager.NodeToIndex(node_index)
+                time_dimension.CumulVar(index).SetRange(0, int(deadline_seconds))
 
     # Search strategy
     search_params = pywrapcp.DefaultRoutingSearchParameters()
@@ -361,6 +421,70 @@ def recompute_route(
         "battery_usage": round(battery_usage, 1),
         "no_fly_violations": [],
     }
+
+
+def build_reroute_reasons(drone_state: dict, weather: dict = None, destination: str = "") -> list[dict]:
+    """Build human-readable reasons for a re-route decision (Explainable AI).
+
+    Args:
+        drone_state: {"battery": float, "position": dict, "current_priority": str}
+        weather: {"wind_speed": float, "condition": str, ...} or None
+        destination: target location name
+
+    Returns list of reason dicts with: factor, description, metric_value, threshold, severity, impact
+    """
+    reasons = []
+
+    battery = drone_state.get("battery", 100)
+    if battery < 50:
+        reasons.append({
+            "factor": "battery",
+            "description": f"Battery at {battery:.0f}% (below 50% threshold)",
+            "metric_name": "battery_pct",
+            "metric_value": battery,
+            "threshold": 50.0,
+            "severity": "critical" if battery < 25 else "warning",
+            "impact": "Selecting shorter route to conserve battery"
+        })
+
+    if weather:
+        wind = weather.get("wind_speed", 0)
+        if wind > MAX_WIND_SPEED * 0.8:
+            reasons.append({
+                "factor": "weather",
+                "description": f"Wind {wind:.1f}m/s at {destination} (limit: {MAX_WIND_SPEED}m/s)",
+                "metric_name": "wind_speed_ms",
+                "metric_value": wind,
+                "threshold": float(MAX_WIND_SPEED),
+                "severity": "critical" if wind >= MAX_WIND_SPEED else "warning",
+                "impact": "Avoiding high-wind waypoints" if wind >= MAX_WIND_SPEED else "Monitoring wind"
+            })
+
+        precip = weather.get("precipitation", 0)
+        if precip > MAX_PRECIPITATION * 0.5:
+            reasons.append({
+                "factor": "weather",
+                "description": f"Precipitation {precip:.1f}mm/h at {destination} (limit: {MAX_PRECIPITATION}mm/h)",
+                "metric_name": "precipitation_mmh",
+                "metric_value": precip,
+                "threshold": float(MAX_PRECIPITATION),
+                "severity": "critical" if precip >= MAX_PRECIPITATION else "warning",
+                "impact": "Rerouting around heavy precipitation"
+            })
+
+    priority = drone_state.get("current_priority", "normal")
+    if priority in ("high", "critical"):
+        reasons.append({
+            "factor": "priority",
+            "description": f"Priority: {priority.upper()} — shortest path selected",
+            "metric_name": "priority_level",
+            "metric_value": {"normal": 0, "high": 1, "critical": 2}.get(priority, 0),
+            "threshold": None,
+            "severity": "warning" if priority == "high" else "critical",
+            "impact": "Priority delivery takes precedence in route ordering"
+        })
+
+    return reasons
 
 
 # --- Quick test ---
