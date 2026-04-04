@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, LocateFixed, Layers, Siren, Thermometer, Brain } from 'lucide-react';
+import { Plus, Minus, LocateFixed, Layers, Siren, Thermometer, Brain, Box } from 'lucide-react';
 import { ChatPanel } from '../components/dashboard/ChatPanel';
 import { MapView } from '../components/dashboard/MapView';
 import type { MapCommand } from '../components/dashboard/MapView';
@@ -13,6 +13,8 @@ import { HudStatus } from '../components/ui/hud-status';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { SideNav } from '../components/layout/SideNav';
 import { useSoundEffects } from '../hooks/useSoundEffects';
+import { usePX4Telemetry } from '../hooks/usePX4Telemetry';
+import { DroneScene } from '../components/three/DroneScene';
 import { api } from '../lib/api';
 import type { Task, Route, Location, Weather, NoFlyZone, Metrics, FlightLogEntry } from '../lib/api';
 
@@ -38,11 +40,21 @@ export function Dashboard() {
   const [isCentered, setIsCentered] = useState(true);
   const [userLocation, setUserLocation] = useState<{lat:number;lon:number}|null>(null);
   const { playDeploy, playWaypoint, playComplete } = useSoundEffects();
+  const { telemetry: px4Telemetry, connected: px4Connected, sendCommand: px4Command } = usePX4Telemetry();
+  const [show3D, setShow3D] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [bootComplete, setBootComplete] = useState(false);
   const [locationsLoaded, setLocationsLoaded] = useState(false);
   const [weatherLoaded, setWeatherLoaded] = useState(false);
   const [noFlyLoaded, setNoFlyLoaded] = useState(false);
+
+  // Sync PX4 telemetry into dashboard state
+  useEffect(() => {
+    if (!px4Connected || !px4Telemetry) return;
+    setBattery(Math.round(px4Telemetry.battery_pct));
+    if (px4Telemetry.is_flying && status !== 'flying') setStatus('flying');
+    if (!px4Telemetry.is_flying && px4Telemetry.flight_mode === 'IDLE' && status === 'flying') setStatus('completed');
+  }, [px4Telemetry, px4Connected]);
 
   useEffect(() => {
     (async () => {
@@ -225,12 +237,17 @@ export function Dashboard() {
         <div style={{display:'flex',alignItems:'center',gap:32,position:'absolute',left:'50%',transform:'translateX(-50%)'}}>
           <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
             <span style={{fontSize:9,textTransform:'uppercase',letterSpacing:'-0.02em',color:'#8d90a0',fontWeight:700}}>Drone Location</span>
-            <span style={{fontSize:14,fontFamily:'Space Grotesk',fontWeight:700,color:'#dfe3e9'}}>14:42 <span style={{fontSize:10,opacity:0.6}}>PDT</span></span>
+            <span style={{fontSize:14,fontFamily:'Space Grotesk',fontWeight:700,color:'#dfe3e9'}}>
+              {_currentLocation}
+              {px4Connected && <span style={{fontSize:10,color:'#00daf3',marginLeft:6}}>● LIVE</span>}
+            </span>
           </div>
           <div style={{height:32,width:1,background:'rgba(67,70,84,0.2)'}} />
           <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
             <span style={{fontSize:9,textTransform:'uppercase',letterSpacing:'-0.02em',color:'#8d90a0',fontWeight:700}}>Destination</span>
-            <span style={{fontSize:14,fontFamily:'Space Grotesk',fontWeight:700,color:'#dfe3e9'}}>14:46 <span style={{fontSize:10,opacity:0.6}}>PDT</span></span>
+            <span style={{fontSize:14,fontFamily:'Space Grotesk',fontWeight:700,color:'#dfe3e9'}}>
+              {route ? route.ordered_route[route.ordered_route.length - 2] || 'Depot' : '—'}
+            </span>
           </div>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:16}}>
@@ -245,7 +262,9 @@ export function Dashboard() {
       {/* ═══ MAIN MAP AREA ═══ */}
       <main onClick={() => { if (showChat) setShowChat(false); }} style={{marginLeft:0,paddingTop:0,height:'100vh',width:'100vw',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,zIndex:0}}>
-          {Object.keys(locations).length > 0 ? (
+          {show3D ? (
+            <DroneScene scene="sim" telemetry={px4Telemetry} />
+          ) : Object.keys(locations).length > 0 ? (
             <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={noFlyZones} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} />
           ) : (
             <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100%'}}>
@@ -265,15 +284,15 @@ export function Dashboard() {
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16}}>
               <div>
                 <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Battery</p>
-                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color:'#dfe3e9',margin:0}}>{battery}<span style={{fontSize:12,marginLeft:2,opacity:0.6}}>%</span></p>
+                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: battery > 50 ? '#dfe3e9' : battery > 20 ? '#f5a623' : '#ff4444',margin:0}}>{battery}<span style={{fontSize:12,marginLeft:2,opacity:0.6}}>%</span></p>
               </div>
               <div>
-                <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>GPS</p>
-                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color:'#00daf3',margin:0}}>Strong</p>
+                <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Link</p>
+                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: px4Connected ? '#00daf3' : '#8d90a0',margin:0}}>{px4Connected ? 'Live' : 'Idle'}</p>
               </div>
               <div>
                 <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Speed</p>
-                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color:'#dfe3e9',margin:0}}>45<span style={{fontSize:12,marginLeft:2,opacity:0.6}}>km/h</span></p>
+                <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color:'#dfe3e9',margin:0}}>{px4Telemetry ? Math.round(px4Telemetry.speed_m_s * 3.6) : 45}<span style={{fontSize:12,marginLeft:2,opacity:0.6}}>km/h</span></p>
               </div>
             </div>
             <div style={{marginTop:16,paddingTop:16,borderTop:'1px solid rgba(67,70,84,0.1)'}}>
@@ -337,6 +356,9 @@ export function Dashboard() {
 
         {/* ── BOTTOM RIGHT CONTROLS ── */}
         <div style={{position:'fixed',bottom:24,right:24,zIndex:20,display:'flex',flexDirection:'column',gap:8}}>
+          <LiquidButton size="sm" onClick={() => setShow3D(prev => !prev)} aria-label="Toggle 3D View" style={{ color: show3D ? '#00daf3' : '#c3c6d6' }}>
+            <Box size={20} />
+          </LiquidButton>
           <LiquidButton size="sm" onClick={() => setShowChat(prev => !prev)} aria-label="Toggle AI Copilot" style={{ color: showChat ? '#00daf3' : '#c3c6d6' }}>
             <Brain size={20} />
           </LiquidButton>

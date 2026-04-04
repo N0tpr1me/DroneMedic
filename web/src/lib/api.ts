@@ -122,6 +122,21 @@ export interface DeliveryConfirmation {
   signature_id: string;
 }
 
+export interface TelemetryData {
+  lat: number;
+  lon: number;
+  alt_m: number;
+  relative_alt_m: number;
+  battery_pct: number;
+  flight_mode: string;
+  is_armed: boolean;
+  is_flying: boolean;
+  heading_deg: number;
+  speed_m_s: number;
+  timestamp: number;
+  source: 'px4' | 'mock';
+}
+
 // ── API Functions ──
 
 export const api = {
