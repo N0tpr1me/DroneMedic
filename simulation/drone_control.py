@@ -18,6 +18,19 @@ from config import (
 
 logger = logging.getLogger("DroneMedic.Drone")
 
+# Lazy import: physics engine (optional - degrades gracefully if not available)
+_physics_available = False
+try:
+    from backend.physics import (
+        DroneSpec as _DroneSpec,
+        compute_energy_per_km as _energy_per_km,
+        compute_hover_energy as _hover_energy,
+        haversine_m as _haversine_m,
+    )
+    _physics_available = True
+except ImportError:
+    pass
+
 
 class DroneMode:
     """Constants for supported flight-controller backends."""
@@ -41,8 +54,6 @@ class DroneController:
 
     def __init__(self, use_airsim: bool = None, mode: str = None):
         # --- Resolve backend mode -----------------------------------------
-        # Explicit *mode* param takes priority.  Fall back to *use_airsim*
-        # for backward compatibility.  Final fallback: auto-detect from env.
         if mode is not None:
             self.mode = mode
         elif use_airsim is not None:
@@ -54,27 +65,24 @@ class DroneController:
         else:
             self.mode = DroneMode.MOCK
 
-        # Keep legacy flag in sync so existing code paths still work
         self.use_airsim = self.mode == DroneMode.AIRSIM
-
-        self.client = None       # AirSim client (if applicable)
-        self._px4 = None         # PX4Adapter instance (if applicable)
+        self.client = None
+        self._px4 = None
         self.connected = False
         self.is_flying = False
         self.paused = False
         self.current_location = "Depot"
         self.position = {"x": 0.0, "y": 0.0, "z": 0.0}
         self.battery = BATTERY_CAPACITY   # percentage
-        self.flight_log = []  # Track all movements
-        self._payload_kg = 0.0   # current payload weight
+        self.flight_log = []
+        self._payload_kg = 0.0
 
-        # Eagerly create PX4 adapter so connect() can use it
         if self.mode == DroneMode.PX4:
             try:
                 from simulation.px4_adapter import PX4Adapter
                 self._px4 = PX4Adapter(connection_url=PX4_CONNECTION)
             except ImportError:
-                logger.warning("mavsdk not installed — falling back to mock mode")
+                logger.warning("mavsdk not installed - falling back to mock mode")
                 self.mode = DroneMode.MOCK
 
     def connect(self):
@@ -142,7 +150,6 @@ class DroneController:
         if location_name not in LOCATIONS:
             raise ValueError(f"Unknown location: {location_name}")
 
-        # Check if paused
         if self.paused:
             logger.info(f"Drone is paused. Waiting to resume before moving to {location_name}...")
             while self.paused:
@@ -151,7 +158,6 @@ class DroneController:
         target = LOCATIONS[location_name]
         logger.info(f"Moving to {location_name} ({target['x']}, {target['y']}, {target['z']})")
 
-        # Calculate distance for battery drain
         dist = math.sqrt(
             (target["x"] - self.position["x"]) ** 2 +
             (target["y"] - self.position["y"]) ** 2
@@ -159,8 +165,6 @@ class DroneController:
 
         if self.mode == DroneMode.PX4:
             self._px4.goto_gps_sync(target["lat"], target["lon"], PX4_ALTITUDE_M)
-            # Get actual position from PX4 telemetry
-            pos = self._px4.get_position_sync()
             self.position = {"x": target["x"], "y": target["y"], "z": target["z"]}
         elif self.use_airsim:
             self.client.moveToPositionAsync(
@@ -168,14 +172,10 @@ class DroneController:
                 DRONE_VELOCITY,
             ).join()
         else:
-            # Mock: simulate travel time based on distance
             travel_time = min(dist / (DRONE_VELOCITY * 10), MOCK_MOVE_DELAY)
             time.sleep(max(travel_time, 0.3))
 
-        # Drain battery
         self._drain_battery(dist)
-
-        # Update position
         self.position = {"x": target["x"], "y": target["y"], "z": target["z"]}
         self.current_location = location_name
         self._log_event(f"arrived:{location_name}")
@@ -234,6 +234,13 @@ class DroneController:
             return self._px4.get_battery_sync()
         return self.battery
 
+    def get_battery_wh(self) -> float:
+        """Get current battery energy in Wh (for physics engine)."""
+        if _physics_available:
+            spec = _DroneSpec()
+            return (self.battery / 100.0) * spec.battery_capacity_wh
+        return (self.battery / 100.0) * 800.0
+
     def release_payload(self):
         """Release the current payload at the delivery location."""
         if self.mode == DroneMode.PX4 and self._px4:
@@ -244,9 +251,6 @@ class DroneController:
     def load_payload(self, supplies: list[str]) -> float:
         """
         Load supplies onto the drone and calculate total payload weight.
-
-        Args:
-            supplies: List of supply names to load.
 
         Returns:
             Total payload weight in kg.
@@ -264,14 +268,27 @@ class DroneController:
         return total_kg
 
     def _drain_battery(self, distance: float):
-        """Drain battery based on distance traveled, accounting for payload weight."""
+        """Drain battery based on distance traveled, accounting for payload weight.
+
+        Uses physics engine if available for more realistic energy computation,
+        otherwise falls back to the simple linear model.
+        """
         payload = getattr(self, '_payload_kg', 0.0)
-        rate = BATTERY_DRAIN_RATE_BASE + (payload * BATTERY_DRAIN_RATE_PER_KG)
-        drain = distance * rate
-        self.battery = max(0.0, self.battery - drain)
+
+        if _physics_available:
+            spec = _DroneSpec()
+            e_per_km = _energy_per_km(spec, payload)
+            dist_km = distance / 1000.0
+            energy_consumed_wh = e_per_km * dist_km
+            drain_pct = (energy_consumed_wh / spec.battery_capacity_wh) * 100.0
+        else:
+            rate = BATTERY_DRAIN_RATE_BASE + (payload * BATTERY_DRAIN_RATE_PER_KG)
+            drain_pct = distance * rate
+
+        self.battery = max(0.0, self.battery - drain_pct)
         if self.battery <= BATTERY_MIN_RESERVE:
             logger.warning(
-                f"[BATTERY] Low battery: {self.battery:.1f}% — emergency return recommended"
+                f"[BATTERY] Low battery: {self.battery:.1f}% - emergency return recommended"
             )
 
     def check_battery_for_return(self) -> bool:
@@ -339,17 +356,16 @@ class FleetController:
                 logger.warning(f"[FLEET] Unknown drone: {drone_id}")
                 continue
 
-            # Skip empty routes (just depot → depot)
             real_stops = [w for w in waypoints if w != "Depot"]
             if not real_stops:
                 continue
 
-            logger.info(f"\n[FLEET] {drone_id} starting route: {' → '.join(waypoints)}")
+            logger.info(f"\n[FLEET] {drone_id} starting route: {' -> '.join(waypoints)}")
             drone.takeoff()
 
             for wp in waypoints:
                 if wp == "Depot" and wp == waypoints[0]:
-                    continue  # Skip starting depot
+                    continue
                 drone.move_to(wp)
 
             drone.land()
