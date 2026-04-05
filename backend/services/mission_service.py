@@ -95,6 +95,9 @@ class MissionService:
                 supply=item.supply,
                 priority=item.priority,
                 time_window_minutes=item.time_window_minutes,
+                recipient=item.recipient,
+                recipient_role=item.recipient_role,
+                patient_count=item.patient_count,
             )
             self._deliveries[d.id] = d
             deliveries.append(d)
@@ -613,6 +616,9 @@ class MissionService:
                     "waypoint_index": i,
                 })
 
+                # ── Payload status update ──
+                self._publish_payload_status(mission_id, mission)
+
                 # ── YOLOv8 CV obstacle detection at ~60% mission progress ──
                 progress = (i + 1) / max(total_waypoints, 1)
                 if not cv_detection_fired and 0.55 <= progress <= 0.85:
@@ -1016,6 +1022,36 @@ class MissionService:
                     "original_mission": mission_id,
                     "new_missions": [m.id for m in new_missions],
                 })
+
+    def _publish_payload_status(self, mission_id: str, mission: Mission) -> None:
+        """Publish live payload temperature/integrity based on elapsed time."""
+        if not mission.started_at:
+            return
+        from backend.services.payload_service import compute_payload_status
+        from backend.weather_service import get_weather_at_location
+
+        elapsed = (datetime.now(timezone.utc) - mission.started_at).total_seconds() / 60.0
+
+        # Get supply type from first delivery
+        payload_type = "blood"
+        for d_id in mission.delivery_ids:
+            d = self._deliveries.get(d_id)
+            if d and d.supply:
+                payload_type = d.supply.split()[0].lower()  # "blood_pack" → "blood_pack"
+                break
+
+        # Get wind at drone location
+        drone = self._drones.get(mission.drone_id)
+        wind = 0.0
+        if drone:
+            w = get_weather_at_location(drone.current_location)
+            wind = w.get("wind_speed", 0)
+
+        status = compute_payload_status(payload_type, elapsed, wind)
+        self._events.publish(EventType.payload_status_updated, {
+            "mission_id": mission_id,
+            **status,
+        })
 
     def _return_to_depot(self, drone_id: str) -> None:
         try:

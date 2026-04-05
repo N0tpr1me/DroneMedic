@@ -89,13 +89,7 @@ export function Deploy() {
         addMessage({ role: 'assistant', content: `Route optimized: ${res.route.ordered_route.join(' → ')}\n\nDistance: ${res.route.total_distance}m | Time: ${res.route.estimated_time}s | Battery: ${res.route.battery_usage}%`, route: res.route });
       } catch (err) {
         console.error('computeRoute failed:', err);
-        const demoRoute: Route = {
-          ordered_route: ['Depot', ...currentTask.locations, 'Depot'],
-          ordered_routes: { Drone1: ['Depot', ...currentTask.locations, 'Depot'] },
-          total_distance: 8400, estimated_time: 180, battery_usage: 42, no_fly_violations: [],
-        };
-        setCurrentRoute(demoRoute);
-        addMessage({ role: 'assistant', content: `Route computed: ${demoRoute.ordered_route.join(' → ')}\n\nDistance: 450m | Est. Time: 120s | Battery: 36%\n\nSay "deploy" to launch the drone, or describe a new mission.`, route: demoRoute });
+        addMessage({ role: 'assistant', content: 'Route computation failed. Please check the backend is running and try again.' });
       }
       setIsLoading(false);
       return;
@@ -117,35 +111,11 @@ export function Deploy() {
         addMessage({ role: 'assistant', content: `Route optimized: ${routeRes.route.ordered_route.join(' → ')}\n\nDistance: ${routeRes.route.total_distance}m | Time: ${routeRes.route.estimated_time}s | Battery: ${routeRes.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: routeRes.route });
       } catch (err) {
         console.error('auto computeRoute failed:', err);
-        const demoRoute: Route = {
-          ordered_route: ['Depot', ...res.task.locations, 'Depot'],
-          ordered_routes: { Drone1: ['Depot', ...res.task.locations, 'Depot'] },
-          total_distance: 8400, estimated_time: 180, battery_usage: 42, no_fly_violations: [],
-        };
-        setCurrentRoute(demoRoute);
-        addMessage({ role: 'assistant', content: `Route computed: ${demoRoute.ordered_route.join(' → ')}\n\nDistance: 450m | Est. Time: 120s | Battery: 36%\n\nSay "deploy" to launch the drone.`, route: demoRoute });
+        addMessage({ role: 'assistant', content: 'Route computation failed. Please check the backend is running and try again.' });
       }
     } catch (err) {
       console.error('parseTask failed:', err);
-      const demoTask: Task = {
-        locations: ['Royal London', 'Homerton', 'Whipps Cross'],
-        priorities: { 'Royal London': 'high' },
-        supplies: { 'Royal London': 'O- plasma (2 units)', 'Homerton': 'insulin pens (10x)', 'Whipps Cross': 'defibrillator pads' },
-        constraints: { avoid_zones: [], weather_concern: '', time_sensitive: true },
-      };
-      setCurrentTask(demoTask);
-      const demoRoute: Route = {
-        ordered_route: ['Depot', 'Royal London', 'Homerton', 'Whipps Cross', 'Depot'],
-        ordered_routes: { Drone1: ['Depot', 'Royal London', 'Homerton', 'Whipps Cross', 'Depot'] },
-        total_distance: 8400, estimated_time: 180, battery_usage: 42, no_fly_violations: [],
-      };
-      setCurrentRoute(demoRoute);
-      addMessage({
-        role: 'assistant',
-        content: `Parsed 3 delivery locations:\n\n• Royal London Hospital (URGENT) — O- plasma, 2 units — Dr. Osei, 3 patients waiting\n• Homerton Hospital — insulin pens, 10x — Dr. Patel, 5 diabetic patients\n• Whipps Cross Hospital — defibrillator pads — Dr. Chen, cardiac unit resupply\n\nRoute: Depot → Royal London → Homerton → Whipps Cross → Depot\nDistance: 8.4km | Est. Time: 3m 00s | Battery: 42%\n\nSay "deploy" to launch the drone.`,
-        task: demoTask,
-        route: demoRoute,
-      });
+      addMessage({ role: 'assistant', content: 'Failed to parse delivery request. Please check the backend is running and try again.' });
     }
 
     setIsLoading(false);
