@@ -2,13 +2,13 @@
 
 ## Project Overview
 
-DroneMedic is an AI-powered drone delivery simulation for medical supplies. It uses Claude for NL task parsing, Google OR-Tools for VRP route optimization, AirSim for drone simulation, and Streamlit + Folium for visualization. The system adapts mid-flight to weather, no-fly zones, obstacles, and new urgent deliveries.
+DroneMedic is an AI-powered drone delivery simulation for medical supplies. It uses GPT-5.3 for NL task parsing, Google OR-Tools for VRP route optimization, AirSim for drone simulation, and Streamlit + Folium for visualization. The system adapts mid-flight to weather, no-fly zones, obstacles, and new urgent deliveries.
 
 ## Tech Stack
 
 - **Python 3.9+** (all modules)
 - **OR-Tools** — VRP/TSP route optimization with priority weighting, battery constraints, no-fly zone penalties
-- **Anthropic SDK** — Claude API for natural language → structured JSON task parsing
+- **OpenAI SDK** — GPT-5.3 for natural language → structured JSON task parsing, reasoning, and chat
 - **AirSim** — drone simulation (with mock mode fallback for dev without AirSim)
 - **Streamlit + Folium** — interactive dashboard with map, metrics, flight log
 - **OpenWeatherMap** — weather data (optional, mock mode default)
@@ -28,7 +28,7 @@ Modules are independent. All share config.py for locations, settings, and consta
 ## Codebase Structure
 
 ```
-ai/task_parser.py          — Claude API: NL → JSON (locations, priorities, supplies, constraints)
+ai/task_parser.py          — LLM (GPT-5.3): NL → JSON (locations, priorities, supplies, constraints)
 backend/route_planner.py   — OR-Tools VRP solver with no-fly/weather penalties + battery dimension
 backend/weather_service.py — OpenWeatherMap API + simulated weather events (storm, wind)
 backend/geofence.py        — No-fly zone point-in-polygon checks, route safety validation
@@ -53,13 +53,13 @@ PYTHONPATH=. python3 main.py --demo-obstacle         # Obstacle avoidance
 PYTHONPATH=. python3 main.py --demo-full             # All scenarios
 PYTHONPATH=. python3 main.py --multi-drone           # 2-drone VRP
 
-# Dashboard (needs ANTHROPIC_API_KEY in .env for Plan Route, or use CLI demos)
+# Dashboard (needs OPENAI_API_KEY in .env for Plan Route, or use CLI demos)
 PYTHONPATH=. streamlit run frontend/dashboard.py --server.headless true
 ```
 
 ## Core Principles
 
-- **Deterministic over AI** — OR-Tools handles routing, Claude handles parsing only
+- **Deterministic over AI** — OR-Tools handles routing, GPT-5.3 handles parsing only
 - **Mock everything** — weather, obstacles, AirSim all have mock modes. Real APIs are optional.
 - **Backward compatible** — new function params always have defaults. Existing calls never break.
 - **Simple over clever** — ray-casting for geofence (no shapely), Euclidean distance (no real maps)
@@ -69,7 +69,7 @@ PYTHONPATH=. streamlit run frontend/dashboard.py --server.headless true
 
 - **Karim** (karim/simulation) — AirSim, drone_control.py
 - **Hakimi** (hakimi/backend) — route_planner.py, OR-Tools tuning
-- **Haseeb** (haseeb/ai) — task_parser.py, Claude prompts, API key management
+- **Haseeb** (haseeb/ai) — task_parser.py, GPT-5.3 prompts, API key management
 - **Zain** (zain/frontend) — dashboard.py, integration, main.py
 
 Branch protection on main — PRs required with 1 approval.
@@ -85,7 +85,7 @@ Branch protection on main — PRs required with 1 approval.
 ## Env Vars (.env)
 
 ```
-ANTHROPIC_API_KEY=   # Required for AI parsing (Haseeb manages)
+OPENAI_API_KEY=      # Required for AI parsing (Haseeb manages)
 AIRSIM_ENABLED=false # Set true when AirSim is running
 OPENWEATHER_API_KEY= # Optional, mock weather works without it
 WEATHER_ENABLED=false

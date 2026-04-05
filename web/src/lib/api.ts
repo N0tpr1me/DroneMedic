@@ -122,6 +122,21 @@ export interface DeliveryConfirmation {
   signature_id: string;
 }
 
+export interface TelemetryData {
+  lat: number;
+  lon: number;
+  alt_m: number;
+  relative_alt_m: number;
+  battery_pct: number;
+  flight_mode: string;
+  is_armed: boolean;
+  is_flying: boolean;
+  heading_deg: number;
+  speed_m_s: number;
+  timestamp: number;
+  source: 'px4' | 'mock';
+}
+
 // ── API Functions ──
 
 export const api = {
@@ -139,6 +154,14 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ locations, priorities, num_drones: numDrones }),
     }),
+
+  /** One-shot deploy: create deliveries + schedule + start. Returns immediately. Live updates via WebSocket. */
+  deploy: (deliveries: Array<{ destination: string; supply?: string; priority?: string; time_window_minutes?: number }>) =>
+    request<{ status: string; deliveries: any[]; missions: any[] }>('/api/deploy', {
+      method: 'POST',
+      body: JSON.stringify({ deliveries }),
+    }),
+
 
   recomputeRoute: (
     currentLocation: string,

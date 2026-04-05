@@ -1,0 +1,584 @@
+[
+  {
+    "name": "大阪市立総合医療センター",
+    "region": "Japan",
+    "phone": "06-6929-1221",
+    "email": ""
+  },
+  {
+    "name": "獨協医科大学埼玉医療センター",
+    "region": "Japan",
+    "phone": "048-965-1111",
+    "email": ""
+  },
+  {
+    "name": "KKR札幌医療センター",
+    "region": "Japan",
+    "phone": "011-822-1811",
+    "email": ""
+  },
+  {
+    "name": "河北リハビリテーション病院",
+    "region": "Japan",
+    "phone": "03-5307-5151",
+    "email": ""
+  },
+  {
+    "name": "医療法人社団竜山会金沢古府記念病院",
+    "region": "Japan",
+    "phone": "076-240-3555",
+    "email": ""
+  },
+  {
+    "name": "(医）立川メディカルセンター柏崎厚生病院",
+    "region": "Japan",
+    "phone": "0257-22-0111",
+    "email": ""
+  },
+  {
+    "name": "16号整形外科",
+    "region": "Japan",
+    "phone": "042-776-2211",
+    "email": ""
+  },
+  {
+    "name": "753歯科",
+    "region": "Japan",
+    "phone": "043-300-1346",
+    "email": ""
+  },
+  {
+    "name": "AOI七沢リハビリテーション病院",
+    "region": "Japan",
+    "phone": "046-402-5511",
+    "email": ""
+  },
+  {
+    "name": "AOI名古屋病院",
+    "region": "Japan",
+    "phone": "052-932-7152",
+    "email": ""
+  },
+  {
+    "name": "AOI国際病院",
+    "region": "Japan",
+    "phone": "044-277-5511",
+    "email": ""
+  },
+  {
+    "name": "AOI広島病院",
+    "region": "Japan",
+    "phone": "082-420-7000",
+    "email": ""
+  },
+  {
+    "name": "AOI湘北病院",
+    "region": "Japan",
+    "phone": "042-861-8800",
+    "email": ""
+  },
+  {
+    "name": "HITO病院",
+    "region": "Japan",
+    "phone": "0896-58-2222",
+    "email": ""
+  },
+  {
+    "name": "JASMIN",
+    "region": "Japan",
+    "phone": "045-910-5292",
+    "email": "info@nakagawaekimae-naika.jp"
+  },
+  {
+    "name": "JAとりで総合医療センター",
+    "region": "Japan",
+    "phone": "0297-74-5551",
+    "email": ""
+  },
+  {
+    "name": "JA北海道厚生連 帯広厚生病院",
+    "region": "Japan",
+    "phone": "0155-65-0101",
+    "email": ""
+  },
+  {
+    "name": "JA北海道厚生連美深厚生病院",
+    "region": "Japan",
+    "phone": "01656-2-1631",
+    "email": ""
+  },
+  {
+    "name": "JA尾道総合病院",
+    "region": "Japan",
+    "phone": "0848-22-8111",
+    "email": ""
+  },
+  {
+    "name": "JA長野厚生連 佐久総合病院小海分院",
+    "region": "Japan",
+    "phone": "0267-92-2077",
+    "email": ""
+  },
+  {
+    "name": "JA長野厚生連 富士見高原医療福祉センター 富士見高原病院",
+    "region": "Japan",
+    "phone": "0266-62-3030",
+    "email": ""
+  },
+  {
+    "name": "JCHO 東京山手メディカルセンター",
+    "region": "Japan",
+    "phone": "03-3364-0251",
+    "email": ""
+  },
+  {
+    "name": "JCHOさいたま北部医療センター",
+    "region": "Japan",
+    "phone": "048-663-1671",
+    "email": ""
+  },
+  {
+    "name": "JCHO仙台南病院",
+    "region": "Japan",
+    "phone": "022-306-1731",
+    "email": ""
+  },
+  {
+    "name": "JCHO仙台病院",
+    "region": "Japan",
+    "phone": "022-378-9111",
+    "email": ""
+  },
+  {
+    "name": "JCHO北海道病院",
+    "region": "Japan",
+    "phone": "011-831-5151",
+    "email": ""
+  },
+  {
+    "name": "JCHO千葉病院",
+    "region": "Japan",
+    "phone": "043-261-2211",
+    "email": ""
+  },
+  {
+    "name": "JCHO大阪病院",
+    "region": "Japan",
+    "phone": "06-6441-5451",
+    "email": ""
+  },
+  {
+    "name": "JCHO東京新宿メディカルセンター",
+    "region": "Japan",
+    "phone": "03-3269-8111",
+    "email": ""
+  },
+  {
+    "name": "JCHO玉造病院",
+    "region": "Japan",
+    "phone": "0852-62-1560",
+    "email": ""
+  },
+  {
+    "name": "JCHO登別病院",
+    "region": "Japan",
+    "phone": "0143-80-1115",
+    "email": ""
+  },
+  {
+    "name": "JCHO相模野病院",
+    "region": "Japan",
+    "phone": "042-752-2025",
+    "email": ""
+  },
+  {
+    "name": "JCHO金沢病院",
+    "region": "Japan",
+    "phone": "076-252-2200",
+    "email": ""
+  },
+  {
+    "name": "Binangonan Lakeview Hospital",
+    "region": "Philippines",
+    "phone": "+63 727-1250",
+    "email": ""
+  },
+  {
+    "name": "Chong Hua Hospital",
+    "region": "Philippines",
+    "phone": "+63 32 255-8000",
+    "email": ""
+  },
+  {
+    "name": "Cagayan Valley Medical Center",
+    "region": "Philippines",
+    "phone": "(078) 304-1414",
+    "email": "cvmcr2@yahoo.com"
+  },
+  {
+    "name": "Mayor Hilarion A. Ramiro Sr. Medical Center",
+    "region": "Philippines",
+    "phone": "(088) 521-0022",
+    "email": "mharsmc@mharsmc.doh.gov.ph"
+  },
+  {
+    "name": "Zamboanga City Medical Center",
+    "region": "Philippines",
+    "phone": "062 991-2934",
+    "email": "doh9_zcmc@yahoo.com"
+  },
+  {
+    "name": "Iloilo Doctors' Hospital",
+    "region": "Philippines",
+    "phone": "+63 33 337-7702",
+    "email": "iloilodoctorshospital.hrd@gmail.com"
+  },
+  {
+    "name": "Maguindanao Provincial Hospital",
+    "region": "Philippines",
+    "phone": "+63 927 613 3954",
+    "email": "iphomaguindanao.mph@gmail.com"
+  },
+  {
+    "name": "Quezon City General Hospital",
+    "region": "Philippines",
+    "phone": "(02) 863-0800",
+    "email": "qcgh@quezoncity.gov.ph"
+  },
+  {
+    "name": "Ospital ng Palawan",
+    "region": "Philippines",
+    "phone": "+63 48 434 8339",
+    "email": "ospital.palawan@yahoo.com"
+  },
+  {
+    "name": "Divine Word Hospital",
+    "region": "Philippines",
+    "phone": "",
+    "email": "dwhtofficial@gmail.com"
+  },
+  {
+    "name": "Misamis Occidental Provincial Hospital",
+    "region": "Philippines",
+    "phone": "+63 88 531-1529",
+    "email": ""
+  },
+  {
+    "name": "North General Hospital",
+    "region": "Philippines",
+    "phone": "+63 32 343-7777",
+    "email": "info@cebudocgroup.com.ph"
+  },
+  {
+    "name": "President Ramon Magsaysay Memorial Hospital",
+    "region": "Philippines",
+    "phone": "+63 47 602-1541",
+    "email": ""
+  },
+  {
+    "name": "Roxas Memorial Provincial Hospital",
+    "region": "Philippines",
+    "phone": "(036) 621-0030",
+    "email": "rmph.capiz@gmail.com"
+  },
+  {
+    "name": "Ciudad Medical de Zamboanga",
+    "region": "Philippines",
+    "phone": "062-992-7337",
+    "email": "humanresource@ciudadmedicalzamboanga.com.ph"
+  },
+  {
+    "name": "Bukidnon Provincial Hospital - Maramag",
+    "region": "Philippines",
+    "phone": "+63 917 109 1372",
+    "email": "bph_maramag@yahoo.com"
+  },
+  {
+    "name": "Lucena MMG General Hospital",
+    "region": "Philippines",
+    "phone": "(042) 373-5925",
+    "email": "lucenammghosp@yahoo.com"
+  },
+  {
+    "name": "The Medical City Iloilo",
+    "region": "Philippines",
+    "phone": "(033) 339-7340",
+    "email": "info@themedicalcityiloilo.com"
+  },
+  {
+    "name": "Biliran Provincial Hospital",
+    "region": "Philippines",
+    "phone": "+63 53 500 9319",
+    "email": ""
+  },
+  {
+    "name": "Gregorio T. Lluch Memorial Hospital",
+    "region": "Philippines",
+    "phone": "(063) 221-2536",
+    "email": ""
+  },
+  {
+    "name": "Mendero Medical Center",
+    "region": "Philippines",
+    "phone": "+63 32 236-0091",
+    "email": ""
+  },
+  {
+    "name": "Metro Iloilo Hospital and Medical Center",
+    "region": "Philippines",
+    "phone": "+63 33 327-1527",
+    "email": ""
+  },
+  {
+    "name": "St. Anthony College Hospital",
+    "region": "Philippines",
+    "phone": "+63 36 621-0431",
+    "email": ""
+  },
+  {
+    "name": "West Metro Medical Center",
+    "region": "Philippines",
+    "phone": "(062) 991-2506",
+    "email": ""
+  },
+  {
+    "name": "Metro Antipolo Hospital and Medical Center",
+    "region": "Philippines",
+    "phone": "+63 2 8722-3208",
+    "email": "metroantipolo@metroantipolo.com"
+  },
+  {
+    "name": "Camarin Doctors Hospital",
+    "region": "Philippines",
+    "phone": "",
+    "email": "info@camarindoctorshospital.ph"
+  },
+  {
+    "name": "Camiguin General Hospital",
+    "region": "Philippines",
+    "phone": "(088) 387 1216",
+    "email": "camiguingenhospital@gmail.com"
+  },
+  {
+    "name": "Pamplona Hospital & Medical Center",
+    "region": "Philippines",
+    "phone": "+63 917 883 4802",
+    "email": "inquiry@pamplonamed.com"
+  },
+  {
+    "name": "ACE Dumaguete Doctors",
+    "region": "Philippines",
+    "phone": "+63 35 523 5957",
+    "email": ""
+  },
+  {
+    "name": "Allah Valley Medical Specialists Center Incorporated",
+    "region": "Philippines",
+    "phone": "(083) 228 3550",
+    "email": "avmscihro@gmail.com"
+  },
+  {
+    "name": "Cebu Provincial Hospital - Carcar City",
+    "region": "Philippines",
+    "phone": "(032) 487-8120",
+    "email": "cphcarcar@yahoo.com"
+  },
+  {
+    "name": "Cebu Provincial Hospital - Danao",
+    "region": "Philippines",
+    "phone": "(032) 262-0816",
+    "email": "cphdanao@gmail.com"
+  },
+  {
+    "name": "Jose B. Lingad Memorial Regional Hospital",
+    "region": "Philippines",
+    "phone": "(045) 961-3181",
+    "email": ""
+  },
+  {
+    "name": "Medina General Hospital",
+    "region": "Philippines",
+    "phone": "+63 981 581 1783",
+    "email": "medinageneralhosp@gmail.com"
+  },
+  {
+    "name": "Mindoro Medical Center Calapan",
+    "region": "Philippines",
+    "phone": "+63 917 567 8103",
+    "email": "mindoromedoffice@gmail.com"
+  },
+  {
+    "name": "Ormoc District Hospital",
+    "region": "Philippines",
+    "phone": "+63 53 255 2449",
+    "email": ""
+  },
+  {
+    "name": "Auckland City Hospital",
+    "region": "New Zealand",
+    "phone": "09 367 0000",
+    "email": "groi@adhb.govt.nz"
+  },
+  {
+    "name": "Kaitaia Hospital",
+    "region": "New Zealand",
+    "phone": "(09) 408 9180",
+    "email": ""
+  },
+  {
+    "name": "Bay of Islands Hospital",
+    "region": "New Zealand",
+    "phone": "(09) 404 0280",
+    "email": ""
+  },
+  {
+    "name": "24 Hour Surgery",
+    "region": "New Zealand",
+    "phone": "03 365 7777",
+    "email": ""
+  },
+  {
+    "name": "Accident and Urgent Medical Centre",
+    "region": "New Zealand",
+    "phone": "04 384 4944",
+    "email": "enquiries@wamc.co.nz"
+  },
+  {
+    "name": "Albany Veterinary Hospital",
+    "region": "New Zealand",
+    "phone": "09 415 8909",
+    "email": ""
+  },
+  {
+    "name": "Alexandra Hospital",
+    "region": "New Zealand",
+    "phone": "03 539 3920",
+    "email": ""
+  },
+  {
+    "name": "Althorp Private Hospital",
+    "region": "New Zealand",
+    "phone": "(07) 543 2912",
+    "email": ""
+  },
+  {
+    "name": "Amberwood Hospital and Rest Home",
+    "region": "New Zealand",
+    "phone": "(09) 832 2728",
+    "email": ""
+  },
+  {
+    "name": "Aranui Rest Home and Hospital",
+    "region": "New Zealand",
+    "phone": "(09) 846 2944",
+    "email": ""
+  },
+  {
+    "name": "Ascot Hospital",
+    "region": "New Zealand",
+    "phone": "09 520 9500",
+    "email": "information@mercyascot.co.nz"
+  },
+  {
+    "name": "Ashburton Hospital",
+    "region": "New Zealand",
+    "phone": "03 307 8450",
+    "email": ""
+  },
+  {
+    "name": "Auckland City Surgical Services Limited",
+    "region": "New Zealand",
+    "phone": "09 522 2800",
+    "email": ""
+  },
+  {
+    "name": "Auckland Skin and Cancer Foundation",
+    "region": "New Zealand",
+    "phone": "09 520 5885",
+    "email": ""
+  },
+  {
+    "name": "Awhinatia Health Centre",
+    "region": "New Zealand",
+    "phone": "09 295 1200",
+    "email": ""
+  },
+  {
+    "name": "Bay Radiology",
+    "region": "New Zealand",
+    "phone": "0800 467 4260",
+    "email": ""
+  },
+  {
+    "name": "Bethesda Home and Hospital",
+    "region": "New Zealand",
+    "phone": "(09) 262 5650",
+    "email": ""
+  },
+  {
+    "name": "Bidwell Hospital",
+    "region": "New Zealand",
+    "phone": "03 687 1230",
+    "email": ""
+  },
+  {
+    "name": "Bluff Medical Centre",
+    "region": "New Zealand",
+    "phone": "(03) 212 7337",
+    "email": "office@bluffmed.co.nz"
+  },
+  {
+    "name": "Bowen Hospital",
+    "region": "New Zealand",
+    "phone": "04 479 2069",
+    "email": "admin@bowen.co.nz"
+  },
+  {
+    "name": "Braemar Hospital",
+    "region": "New Zealand",
+    "phone": "07 843 1899",
+    "email": "reception1@braemarhospital.co.nz"
+  },
+  {
+    "name": "Brightside Hospital",
+    "region": "New Zealand",
+    "phone": "09 925 4200",
+    "email": "brightside@southerncrosshospitals.co.nz"
+  },
+  {
+    "name": "Bupa Hillsborough Care Home",
+    "region": "New Zealand",
+    "phone": "(09) 625 5347",
+    "email": ""
+  },
+  {
+    "name": "Burwood Hospital",
+    "region": "New Zealand",
+    "phone": "(03) 383 6836",
+    "email": ""
+  },
+  {
+    "name": "CHT Highfield Home and Hospital",
+    "region": "New Zealand",
+    "phone": "(09) 522 4585",
+    "email": ""
+  },
+  {
+    "name": "Canterbury Charity Hospital",
+    "region": "New Zealand",
+    "phone": "(03) 360 2266",
+    "email": "reception@ccht.org.nz"
+  },
+  {
+    "name": "Cascades Rest Home and Hospital",
+    "region": "New Zealand",
+    "phone": "(07) 839 2348",
+    "email": ""
+  },
+  {
+    "name": "Christchurch Public Hospital",
+    "region": "New Zealand",
+    "phone": "03 364 0600",
+    "email": ""
+  }
+]

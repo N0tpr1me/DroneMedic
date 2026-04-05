@@ -17,6 +17,7 @@ const STEPS = [
   'Connecting to satellite network',
   'Scanning weather corridors',
   'Checking restricted airspace',
+  'Loading YOLOv8n obstacle detection model',
   'Flight systems nominal',
 ];
 
@@ -48,11 +49,17 @@ export function BootSequence({ locationsLoaded, weatherLoaded, noFlyLoaded, onCo
       } else if (weatherLoaded && !noFlyLoaded && next[2].status === 'pending') {
         next[2] = { ...next[2], status: 'loading' };
       }
-      // Step 3: all clear
-      if (locationsLoaded && weatherLoaded && noFlyLoaded && next[3].status !== 'done') {
+      // Step 3: CV model (auto-completes once no-fly zones are loaded)
+      if (noFlyLoaded && next[3].status !== 'done') {
         next[3] = { ...next[3], status: 'done' };
       } else if (noFlyLoaded && next[3].status === 'pending') {
         next[3] = { ...next[3], status: 'loading' };
+      }
+      // Step 4: all clear
+      if (locationsLoaded && weatherLoaded && noFlyLoaded && next[4].status !== 'done') {
+        next[4] = { ...next[4], status: 'done' };
+      } else if (noFlyLoaded && next[4].status === 'pending') {
+        next[4] = { ...next[4], status: 'loading' };
       }
       return next;
     });

@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PlaneTakeoff, Route as RouteIcon } from 'lucide-react';
+import { PlaneTakeoff, Route as RouteIcon, Zap } from 'lucide-react';
 import { PromptInputBox } from '@/components/ui/ai-prompt-box';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { SideNav } from '../components/layout/SideNav';
 import { PageHeader } from '../components/layout/PageHeader';
 import { api } from '../lib/api';
 import type { Task, Route } from '../lib/api';
+import { DEMO_SCENARIO } from '../data/demo-scenario';
 
 interface ChatMessage {
   id: string;
@@ -245,6 +246,39 @@ export function Deploy() {
 
       {/* Prompt Input */}
       <div style={{ padding: '16px 24px 24px', maxWidth: 720, margin: '0 auto', width: '100%' }}>
+        {/* Demo scenario suggestion chip */}
+        {!currentTask && !isLoading && (
+          <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+            <button
+              onClick={() => handleSend(DEMO_SCENARIO.request)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 14px',
+                borderRadius: 9999,
+                background: 'rgba(0,218,243,0.08)',
+                border: '1px solid rgba(0,218,243,0.25)',
+                color: '#00daf3',
+                fontSize: 12,
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(0,218,243,0.15)';
+                e.currentTarget.style.borderColor = 'rgba(0,218,243,0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(0,218,243,0.08)';
+                e.currentTarget.style.borderColor = 'rgba(0,218,243,0.25)';
+              }}
+            >
+              <Zap size={13} />
+              Demo: Emergency Blood Delivery
+            </button>
+          </div>
+        )}
         <PromptInputBox
           onSend={(msg) => handleSend(msg)}
           isLoading={isLoading}

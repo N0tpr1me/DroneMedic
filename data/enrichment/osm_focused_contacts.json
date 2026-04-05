@@ -1,0 +1,2378 @@
+[
+  {
+    "name": "Ambulatorio Pedro Iturbe",
+    "region": "Venezuela",
+    "phone": "+58-212-4311808",
+    "email": "",
+    "website": "",
+    "lat": 10.4352122,
+    "lon": -66.9848337
+  },
+  {
+    "name": "Módulo de Los Salias",
+    "region": "Venezuela",
+    "phone": "+582123724053",
+    "email": "",
+    "website": "http://www.centrodiagnostico.com.ve/",
+    "lat": 10.3736808,
+    "lon": -66.9680669
+  },
+  {
+    "name": "Centro Medico Docente el Paso",
+    "region": "Venezuela",
+    "phone": "+582127005000",
+    "email": "",
+    "website": "",
+    "lat": 10.3497173,
+    "lon": -67.0501704
+  },
+  {
+    "name": "Hospital Madre Rafols",
+    "region": "Venezuela",
+    "phone": "+582617870480",
+    "email": "acmadrerafols@gmail.com",
+    "website": "https://ssmadrerafols.com/",
+    "lat": 10.6450156,
+    "lon": -71.6628413
+  },
+  {
+    "name": "Distrito Sanitario N° 1",
+    "region": "Venezuela",
+    "phone": "+58-212-8621446",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.5159622,
+    "lon": -66.9174725
+  },
+  {
+    "name": "Distrito Sanitario N° 3",
+    "region": "Venezuela",
+    "phone": "+58-212-4154679",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.4969833,
+    "lon": -66.9280377
+  },
+  {
+    "name": "Distrito Sanitario N° 4",
+    "region": "Venezuela",
+    "phone": "+58-212-4152348",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.459659,
+    "lon": -66.9139481
+  },
+  {
+    "name": "Distrito Sanitario N° 7",
+    "region": "Venezuela",
+    "phone": "+58-212-2411217",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.4901031,
+    "lon": -66.8088242
+  },
+  {
+    "name": "Clínica Leopoldo Aguerrevere",
+    "region": "Venezuela",
+    "phone": "+58-212-9072222",
+    "email": "",
+    "website": "http://leopoldoaguerrevere.com",
+    "lat": 10.4497713,
+    "lon": -66.8704257
+  },
+  {
+    "name": "Hospital San Juan de Dios",
+    "region": "Venezuela",
+    "phone": "+58-212-9070811",
+    "email": "",
+    "website": "http://www.hospitalsanjuandedios.org.ve/",
+    "lat": 10.4677342,
+    "lon": -66.8651148
+  },
+  {
+    "name": "Urológico San Román",
+    "region": "Venezuela",
+    "phone": "+58-212-9990111",
+    "email": "",
+    "website": "http://www.urologico.com/web/default.php",
+    "lat": 10.4721027,
+    "lon": -66.8557664
+  },
+  {
+    "name": "Clínica Dispensario Padre Machado",
+    "region": "Venezuela",
+    "phone": "+58 212-4429025",
+    "email": "",
+    "website": "",
+    "lat": 10.4708681,
+    "lon": -66.9535089
+  },
+  {
+    "name": "Centro Médico Loira",
+    "region": "Venezuela",
+    "phone": "+58-212-4052111",
+    "email": "info@centromedicoloira.com",
+    "website": "http://cmloira.com.ve/",
+    "lat": 10.4811864,
+    "lon": -66.9437777
+  },
+  {
+    "name": "Hospital Pérez Carreño",
+    "region": "Venezuela",
+    "phone": "+58-212-4728471",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal",
+    "lat": 10.480294,
+    "lon": -66.9531774
+  },
+  {
+    "name": "Clínica Vista Alegre",
+    "region": "Venezuela",
+    "phone": "+58-212-4715519",
+    "email": "",
+    "website": "https://www.instagram.com/cvasalud/?hl=en",
+    "lat": 10.4885709,
+    "lon": -66.9486873
+  },
+  {
+    "name": "Hospital Militar Dr. Carlos Arvelo",
+    "region": "Venezuela",
+    "phone": "+58-212-4061111",
+    "email": "",
+    "website": "http://hmcarlosarvelo.mil.ve/",
+    "lat": 10.4985332,
+    "lon": -66.9390503
+  },
+  {
+    "name": "Maternidad Concepción Palacios",
+    "region": "Venezuela",
+    "phone": "+58-212-4518419",
+    "email": "maternidadconcepcionpalacios@gmail.com",
+    "website": "https://hospitales.mpps.gob.ve/distrito_capital/maternidad_concepcion_palacios/",
+    "lat": 10.4952295,
+    "lon": -66.9315153
+  },
+  {
+    "name": "Hospital Materno Infantil Dr. Pastor Oropeza",
+    "region": "Venezuela",
+    "phone": "+58-212-4314763",
+    "email": "",
+    "website": "",
+    "lat": 10.4375628,
+    "lon": -66.9902722
+  },
+  {
+    "name": "Hospital Cardiológico Infantil Latinoamericano",
+    "region": "Venezuela",
+    "phone": "+58-212-4075040",
+    "email": "",
+    "website": "http://www.cardiologicoinfantil.gob.ve/",
+    "lat": 10.4675487,
+    "lon": -66.9725441
+  },
+  {
+    "name": "Hospital José María Vargas",
+    "region": "Venezuela",
+    "phone": "+58-212-8649145",
+    "email": "",
+    "website": "http://hospitalvargas.blogspot.com/",
+    "lat": 10.5164476,
+    "lon": -66.9114389
+  },
+  {
+    "name": "Hospital de Niños J.M. de Los Ríos",
+    "region": "Venezuela",
+    "phone": "+58-212-5743511",
+    "email": "",
+    "website": "https://hospitales.mpps.gob.ve/distrito_capital/maternidad_concepcion_palacios/",
+    "lat": 10.5069625,
+    "lon": -66.899604
+  },
+  {
+    "name": "Hospital Oncológico Padre Machado",
+    "region": "Venezuela",
+    "phone": "+58-212-6312312",
+    "email": "hospitaloncologicopadremachadoi@gmail.com",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal",
+    "lat": 10.4778138,
+    "lon": -66.9180238
+  },
+  {
+    "name": "Hospital Domingo Luciani",
+    "region": "Venezuela",
+    "phone": "+58-212-2056511",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/contenido/localizacion-centros-de-salud-ivss:estado-Miranda",
+    "lat": 10.4712884,
+    "lon": -66.8104205
+  },
+  {
+    "name": "IVSS Ambulatorio de Caricuao",
+    "region": "Venezuela",
+    "phone": "+58-212-4323793",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal-2",
+    "lat": 10.4330954,
+    "lon": -66.9628011
+  },
+  {
+    "name": "Instituto Nacional de Geriatría",
+    "region": "Venezuela",
+    "phone": "+58-212-7611819",
+    "email": "",
+    "website": "",
+    "lat": 10.4351157,
+    "lon": -66.9910655
+  },
+  {
+    "name": "Hospital Ortopédico Infantil",
+    "region": "Venezuela",
+    "phone": "+58-212-5094411",
+    "email": "",
+    "website": "https://www.hospitalortopedicoinfantil.com/",
+    "lat": 10.5053642,
+    "lon": -66.8918576
+  },
+  {
+    "name": "Hospital San José",
+    "region": "Venezuela",
+    "phone": "+58-212-3034451",
+    "email": "",
+    "website": "",
+    "lat": 10.595867,
+    "lon": -66.957123
+  },
+  {
+    "name": "IVSS Hospital José María Vargas",
+    "region": "Venezuela",
+    "phone": "+58 212-3316555",
+    "email": "",
+    "website": "",
+    "lat": 10.6031058,
+    "lon": -66.9217317
+  },
+  {
+    "name": "IVSS Ambulatorio Dr. Armando Castillo Plaza",
+    "region": "Venezuela",
+    "phone": "+58-212-4722834",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal-2",
+    "lat": 10.4655951,
+    "lon": -66.9804218
+  },
+  {
+    "name": "Hospital Pérez de León",
+    "region": "Venezuela",
+    "phone": "+58-212-2381105",
+    "email": "",
+    "website": "",
+    "lat": 10.4777403,
+    "lon": -66.8098326
+  },
+  {
+    "name": "Hospital Materno Infantil del Este \"Joel Valen\"",
+    "region": "Venezuela",
+    "phone": "+58-212-2435155",
+    "email": "",
+    "website": "",
+    "lat": 10.4808754,
+    "lon": -66.8060926
+  },
+  {
+    "name": "IVSS Centro Nacional de Rehabilitación Dr. Alejandro Rhode",
+    "region": "Venezuela",
+    "phone": "+58-212-4722176",
+    "email": "",
+    "website": "",
+    "lat": 10.4811343,
+    "lon": -66.9520477
+  },
+  {
+    "name": "Hospital Psiquiátrico de Caracas",
+    "region": "Venezuela",
+    "phone": "+58-212-8608430",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal",
+    "lat": 10.5234149,
+    "lon": -66.9301814
+  },
+  {
+    "name": "IVSS Hospital Dr. Luis Salazar Domínguez",
+    "region": "Venezuela",
+    "phone": "+58 212 3629860",
+    "email": "",
+    "website": "",
+    "lat": 10.4700801,
+    "lon": -66.6112511
+  },
+  {
+    "name": "Hospital Militar Vicente Sálias Sanoja",
+    "region": "Venezuela",
+    "phone": "+58-212-",
+    "email": "",
+    "website": "",
+    "lat": 10.4543647,
+    "lon": -66.9055225
+  },
+  {
+    "name": "Clinica El Viñedo",
+    "region": "Venezuela",
+    "phone": "0241-3001214",
+    "email": "",
+    "website": "",
+    "lat": 10.2118839,
+    "lon": -68.0122716
+  },
+  {
+    "name": "Maternidad Santa Ana",
+    "region": "Venezuela",
+    "phone": "+58-212-5518924",
+    "email": "",
+    "website": "",
+    "lat": 10.51531,
+    "lon": -66.9031544
+  },
+  {
+    "name": "Hospital José Ignacio Baldó",
+    "region": "Venezuela",
+    "phone": "+58-212-4727797",
+    "email": "alialgodonal@gmail.com",
+    "website": "https://hospitales.mpps.gob.ve/distrito_capital/hospital_jose_ignacio_baldo_algodonal/",
+    "lat": 10.4836768,
+    "lon": -66.972906
+  },
+  {
+    "name": "Hospital Carlos Diez del Ciervo",
+    "region": "Venezuela",
+    "phone": "",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/",
+    "lat": 11.7598981,
+    "lon": -70.1980315
+  },
+  {
+    "name": "Clinica Popular El Espinal",
+    "region": "Venezuela",
+    "phone": "+58 295-2971355",
+    "email": "",
+    "website": "",
+    "lat": 10.9647023,
+    "lon": -63.985906
+  },
+  {
+    "name": "Centro Médico El Valle",
+    "region": "Venezuela",
+    "phone": "+58 295-2652702",
+    "email": "",
+    "website": "https://www.centromedicoelvalle.com/",
+    "lat": 10.9774483,
+    "lon": -63.8695094
+  },
+  {
+    "name": "Hospital Pediátrico Menca de Leoni",
+    "region": "Venezuela",
+    "phone": "+58 286-9321920",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/",
+    "lat": 8.3433621,
+    "lon": -62.6905128
+  },
+  {
+    "name": "IVSS Hospital Dr. Raúl Leoni de Guaiparo",
+    "region": "Venezuela",
+    "phone": "+58 286-9321920",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/",
+    "lat": 8.3425633,
+    "lon": -62.6902829
+  },
+  {
+    "name": "IVSS Centro Médico Dr. Roberto Lozano Villegas",
+    "region": "Venezuela",
+    "phone": "+58 286 9318036",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/",
+    "lat": 8.3363032,
+    "lon": -62.6717256
+  },
+  {
+    "name": "Hospital Pediátrico Julio Criollo Vivas",
+    "region": "Venezuela",
+    "phone": "+58-212-???",
+    "email": "",
+    "website": "",
+    "lat": 10.4770914,
+    "lon": -66.9178218
+  },
+  {
+    "name": "Hospital Jesús Yerena",
+    "region": "Venezuela",
+    "phone": "+58-212-8600646",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal",
+    "lat": 10.5241821,
+    "lon": -66.9301218
+  },
+  {
+    "name": "Hospital Periférico de Coche",
+    "region": "Venezuela",
+    "phone": "+58-212-6813906",
+    "email": "",
+    "website": "",
+    "lat": 10.4411165,
+    "lon": -66.9264898
+  },
+  {
+    "name": "Cruz Roja Seccional El Tigre",
+    "region": "Venezuela",
+    "phone": "0283-2353470",
+    "email": "",
+    "website": "http://www.cruzrojaeltigre.org.ve/",
+    "lat": 8.8813641,
+    "lon": -64.2610618
+  },
+  {
+    "name": "Unidad Sanitaria del Sur",
+    "region": "Venezuela",
+    "phone": "+58-212-4152348",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.4758391,
+    "lon": -66.9174671
+  },
+  {
+    "name": "Hospital Universitario de Caracas",
+    "region": "Venezuela",
+    "phone": "+58-212-6065350",
+    "email": "clinicouniversitarioaldia@hotmail.com",
+    "website": "http://www.huc.gov.ve/",
+    "lat": 10.490469,
+    "lon": -66.8940568
+  },
+  {
+    "name": "IVSS Centro Ambulatorio Dr. Julio Iribarren Borges",
+    "region": "Venezuela",
+    "phone": "+58 212-8700979; +58 212-8704615; +58 212-8704614",
+    "email": "",
+    "website": "",
+    "lat": 10.5076781,
+    "lon": -66.9572242
+  },
+  {
+    "name": "Клиника Кристина",
+    "region": "Kazakhstan",
+    "phone": "8(7212)56 20 02",
+    "email": "robiko1964@rambler.ru",
+    "website": "http://www.krismed.kz/",
+    "lat": 49.8236284,
+    "lon": 73.1059357
+  },
+  {
+    "name": "Стома",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "http://stoma-luxe.kz",
+    "lat": 49.7871216,
+    "lon": 73.1592146
+  },
+  {
+    "name": "EuroDent стоматология",
+    "region": "Kazakhstan",
+    "phone": "+77212518100",
+    "email": "",
+    "website": "",
+    "lat": 49.8124764,
+    "lon": 73.1131538
+  },
+  {
+    "name": "Аркалыкская городская больница",
+    "region": "Kazakhstan",
+    "phone": "+7-71430-7-33-71",
+    "email": "",
+    "website": "",
+    "lat": 50.2535486,
+    "lon": 66.9003546
+  },
+  {
+    "name": "Центр по профилактике и борьбе со СПИД",
+    "region": "Kazakhstan",
+    "phone": "+7(71430) 7-33-10",
+    "email": "",
+    "website": "",
+    "lat": 50.2493976,
+    "lon": 66.9077636
+  },
+  {
+    "name": "Тубдиспансер",
+    "region": "Kazakhstan",
+    "phone": "+7(71430)72958",
+    "email": "",
+    "website": "",
+    "lat": 50.2648973,
+    "lon": 66.9157315
+  },
+  {
+    "name": "Аркалыкский родильный дом",
+    "region": "Kazakhstan",
+    "phone": "+7-71430-7-07-25",
+    "email": "",
+    "website": "",
+    "lat": 50.2539986,
+    "lon": 66.8981346
+  },
+  {
+    "name": "МДС Сервис",
+    "region": "Kazakhstan",
+    "phone": "+71712567778",
+    "email": "",
+    "website": "",
+    "lat": 51.1539104,
+    "lon": 71.4365158
+  },
+  {
+    "name": "Санаторий \"Уба\"",
+    "region": "Kazakhstan",
+    "phone": "8 (72332) 7-41-10; 7-43-33",
+    "email": "",
+    "website": "",
+    "lat": 50.5280151,
+    "lon": 82.1703033
+  },
+  {
+    "name": "Медицинский Центр \"Здоровый позвоночник\"",
+    "region": "Kazakhstan",
+    "phone": "266161 87778266161",
+    "email": "pozvonki@mail.kz",
+    "website": "pozvonki.kz",
+    "lat": 53.1808447,
+    "lon": 63.6059638
+  },
+  {
+    "name": "Городской кожно-венерологический диспансер",
+    "region": "Kazakhstan",
+    "phone": "+7 (727) 274-11-56",
+    "email": "",
+    "website": "https://www.03portal.kz/index.php?option=com_content&task=view&id=8202&Itemid=119",
+    "lat": 43.232757,
+    "lon": 76.9092268
+  },
+  {
+    "name": "Private Clinic",
+    "region": "Kazakhstan",
+    "phone": "+7(727)2-75-99-00",
+    "email": "info@privateclinic.kz",
+    "website": "https://www.privateclinic.kz/",
+    "lat": 43.1885493,
+    "lon": 76.8724616
+  },
+  {
+    "name": "защитинская железнодорожная больница",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "http://mst-zashita.kz/",
+    "lat": 50.0094947,
+    "lon": 82.5637978
+  },
+  {
+    "name": "Противотуберкулезный диспансер",
+    "region": "Kazakhstan",
+    "phone": "31-347",
+    "email": "",
+    "website": "",
+    "lat": 53.5425771,
+    "lon": 71.5462909
+  },
+  {
+    "name": "УЗИ Садыкова",
+    "region": "Kazakhstan",
+    "phone": "+77253342555",
+    "email": "",
+    "website": "",
+    "lat": 43.3004746,
+    "lon": 68.2442573
+  },
+  {
+    "name": "Центр медицины катастроф",
+    "region": "Kazakhstan",
+    "phone": "+7 7232 542696",
+    "email": "vko_cmk_1@mail.ru",
+    "website": "",
+    "lat": 50.0221661,
+    "lon": 82.5027528
+  },
+  {
+    "name": "Областная клиническая больница",
+    "region": "Kazakhstan",
+    "phone": "+7(7212)43-07-43",
+    "email": "okb@karaganda.kz",
+    "website": "http://okb.karaganda.kz/index",
+    "lat": 49.8135826,
+    "lon": 73.0855687
+  },
+  {
+    "name": "Поликлиника Областного онкодиспансера",
+    "region": "Kazakhstan",
+    "phone": "+77142730322",
+    "email": "onkodis@mail.ru",
+    "website": "",
+    "lat": 53.2323721,
+    "lon": 63.6745882
+  },
+  {
+    "name": "Клиника Жумагалиева",
+    "region": "Kazakhstan",
+    "phone": "+7(7262)432170",
+    "email": "",
+    "website": "https://www.urocenter.kz/",
+    "lat": 42.9022051,
+    "lon": 71.3617931
+  },
+  {
+    "name": "Диагностический центр",
+    "region": "Kazakhstan",
+    "phone": "+7 7112 239400",
+    "email": "",
+    "website": "http://kdczko.kz/",
+    "lat": 51.2284673,
+    "lon": 51.4249361
+  },
+  {
+    "name": "КДЛ Олимп",
+    "region": "Kazakhstan",
+    "phone": "597969",
+    "email": "",
+    "website": "http://www.kdl.kz",
+    "lat": 51.1576369,
+    "lon": 71.4753905
+  },
+  {
+    "name": "Medical park",
+    "region": "Kazakhstan",
+    "phone": "3033333",
+    "email": "",
+    "website": "",
+    "lat": 43.2313471,
+    "lon": 76.8902364
+  },
+  {
+    "name": "Городская детская больница № 2",
+    "region": "Kazakhstan",
+    "phone": "+7 (7172) 70-97-86",
+    "email": "",
+    "website": "http://www.gdb2astana.kz/index.php/ru/",
+    "lat": 51.1405629,
+    "lon": 71.5282541
+  },
+  {
+    "name": "Городская больница № 1",
+    "region": "Kazakhstan",
+    "phone": "+7 7172 23 16 01",
+    "email": "",
+    "website": "http://www.auruhana1.kz/index.php/ru/",
+    "lat": 51.1422962,
+    "lon": 71.5294075
+  },
+  {
+    "name": "Многопрофильной городской больницы №3",
+    "region": "Kazakhstan",
+    "phone": "+7 (7172) 39-46-41;+7 (7172) 93-34-02",
+    "email": "",
+    "website": "",
+    "lat": 51.1848594,
+    "lon": 71.410186
+  },
+  {
+    "name": "Многопрофильной городской больницы №3, акушерский блок",
+    "region": "Kazakhstan",
+    "phone": "+7 7172 395819;+7 7172 395739",
+    "email": "pgastana@list.ru",
+    "website": "http://pc3-astana.kz/",
+    "lat": 51.1852041,
+    "lon": 71.4133483
+  },
+  {
+    "name": "Городская поликлиника №14",
+    "region": "Kazakhstan",
+    "phone": "+77172394653",
+    "email": "gospital@emer.kz",
+    "website": "https://med-emer.kz/",
+    "lat": 51.1896944,
+    "lon": 71.4064899
+  },
+  {
+    "name": "Шортанды аудандық орталық ауруханасы",
+    "region": "Kazakhstan",
+    "phone": "+7 (71631) 21511",
+    "email": "shrt-crb@yandex.kz",
+    "website": "http://crbshor.kz/",
+    "lat": 51.687307,
+    "lon": 71.0060227
+  },
+  {
+    "name": "Районная больница",
+    "region": "Kazakhstan",
+    "phone": "8 (71641) 2-32-34",
+    "email": "astr-crb@akmzdrav.kz",
+    "website": "http://astrahancrb.skom.kz",
+    "lat": 51.5270754,
+    "lon": 69.7950697
+  },
+  {
+    "name": "SBS med",
+    "region": "Kazakhstan",
+    "phone": "+7 727 302 59 59, +7 727 302 60 00",
+    "email": "sbsmed@mail.ru",
+    "website": "https://sbsmed.kz/",
+    "lat": 43.2176729,
+    "lon": 76.8803927
+  },
+  {
+    "name": "Клиника \"SBS med\"",
+    "region": "Kazakhstan",
+    "phone": "+7 727 260 98 48, 260 98 58, 260 98 68",
+    "email": "sbsmed@mail.ru",
+    "website": "https://www.sbsmed.kz/",
+    "lat": 43.2338253,
+    "lon": 76.9377837
+  },
+  {
+    "name": "Мақат аудандық орталық ауруханасы",
+    "region": "Kazakhstan",
+    "phone": "87123931605",
+    "email": "",
+    "website": "",
+    "lat": 47.6506003,
+    "lon": 53.3425331
+  },
+  {
+    "name": "Центр дерматологии и профилактики болезней, передающихся половым путем",
+    "region": "Kazakhstan",
+    "phone": "+7 7172 396459;+7 7172 396299;+7 7172 227070",
+    "email": "",
+    "website": "",
+    "lat": 51.1807856,
+    "lon": 71.424796
+  },
+  {
+    "name": "IMC Mukanova",
+    "region": "Kazakhstan",
+    "phone": "(727) 378-64-64",
+    "email": "",
+    "website": "https://imcalmaty.kz",
+    "lat": 43.2474105,
+    "lon": 76.9150345
+  },
+  {
+    "name": "Многопрофильная больница № 1",
+    "region": "Kazakhstan",
+    "phone": "31-07-78",
+    "email": "",
+    "website": "http://karhospital.kz/",
+    "lat": 49.8903612,
+    "lon": 73.2023495
+  },
+  {
+    "name": "Қазақстан Республикасы Денсаулық сақтау министрлігінің «Қазақ республикалық лепрозорийі» мемлекеттік мекемесі",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://leprozorii.kz",
+    "lat": 44.9044568,
+    "lon": 65.3459779
+  },
+  {
+    "name": "Дамбинская врачебная амбулатория",
+    "region": "Kazakhstan",
+    "phone": "+7 7122 247247",
+    "email": "",
+    "website": "https://dambava.kz",
+    "lat": 46.9716696,
+    "lon": 51.7832685
+  },
+  {
+    "name": "Еркинкалинская врачебная амбулатория",
+    "region": "Kazakhstan",
+    "phone": "+7 7122 233028",
+    "email": "",
+    "website": "https://erkin-ambul.kz/",
+    "lat": 47.0249457,
+    "lon": 51.81184
+  },
+  {
+    "name": "Атырауская городская поликлиника №7",
+    "region": "Kazakhstan",
+    "phone": "+7 7122 205346",
+    "email": "",
+    "website": "",
+    "lat": 47.1177652,
+    "lon": 51.942137
+  },
+  {
+    "name": "Атырауская городская поликлиника № 3",
+    "region": "Kazakhstan",
+    "phone": "+7 7122 36-06-17",
+    "email": "",
+    "website": "https://www.gor-pol3.kz",
+    "lat": 47.1306081,
+    "lon": 51.9496938
+  },
+  {
+    "name": "Ауылдық ауруханасы (Тоқжайлау ауылы) Больница",
+    "region": "Kazakhstan",
+    "phone": "+7 (72840) 2 73 03",
+    "email": "",
+    "website": "",
+    "lat": 45.8179934,
+    "lon": 81.0940335
+  },
+  {
+    "name": "КГУ “Реабилитационный центр Каркаралинского района» Карагандинской области",
+    "region": "Kazakhstan",
+    "phone": "32084",
+    "email": "",
+    "website": "",
+    "lat": 49.4119629,
+    "lon": 75.4428076
+  },
+  {
+    "name": "Атырауская областная больница",
+    "region": "Kazakhstan",
+    "phone": "+7 (7122) 28 10 01",
+    "email": "",
+    "website": "https://ohospital.kz/ru/",
+    "lat": 47.0917173,
+    "lon": 51.8724461
+  },
+  {
+    "name": "Восточно-Казахстанская областная больница",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://vkoob.kz/",
+    "lat": 49.9589788,
+    "lon": 82.6312946
+  },
+  {
+    "name": "«Жаңа ұрпақ клиникасы» халықаралық репродукция орталығы – NGC",
+    "region": "Kazakhstan",
+    "phone": "+77010990990",
+    "email": "ngc_kz@gmail.com",
+    "website": "https://ngc.kz/",
+    "lat": 43.2171701,
+    "lon": 76.9296014
+  },
+  {
+    "name": "ЛОР Практика",
+    "region": "Kazakhstan",
+    "phone": "+77750070285, +77750070280",
+    "email": "",
+    "website": "https://taplink.cc/lorpraktika.kz",
+    "lat": 43.2038748,
+    "lon": 76.8931971
+  },
+  {
+    "name": "Erensau",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://erensau.kz",
+    "lat": 43.2107764,
+    "lon": 76.9499539
+  },
+  {
+    "name": "Центральная Районная Больница",
+    "region": "Kazakhstan",
+    "phone": "87164326060",
+    "email": "",
+    "website": "",
+    "lat": 51.8188164,
+    "lon": 68.3625487
+  },
+  {
+    "name": "Павлодар облыстық онкологиялық диспансері",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://onkodispancer.depzdrav.kz/",
+    "lat": 52.2954859,
+    "lon": 77.0058391
+  },
+  {
+    "name": "Городская центральная поликлиника",
+    "region": "Kazakhstan",
+    "phone": "+7 (7252) 40 24 61",
+    "email": "",
+    "website": "",
+    "lat": 42.3173693,
+    "lon": 69.5807018
+  },
+  {
+    "name": "Областной противотуберкулезный диспансер",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://atyrau-opd.kz/",
+    "lat": 47.1607775,
+    "lon": 51.8338408
+  },
+  {
+    "name": "Поликлиника № 2",
+    "region": "Kazakhstan",
+    "phone": "+7 (7142) 50-50-76",
+    "email": "",
+    "website": "http://www.2policlinic.kz/",
+    "lat": 53.1983988,
+    "lon": 63.6184894
+  },
+  {
+    "name": "Психоневрологический диспансер",
+    "region": "Kazakhstan",
+    "phone": "54-19-12",
+    "email": "",
+    "website": "",
+    "lat": 53.2220802,
+    "lon": 63.6315194
+  },
+  {
+    "name": "Қостанай темір жол ауруханасы",
+    "region": "Kazakhstan",
+    "phone": "+7 7142 75 00 89",
+    "email": "",
+    "website": "https://kzhdb.kz/",
+    "lat": 53.2306964,
+    "lon": 63.6220407
+  },
+  {
+    "name": "ГККП \"Костанайский областной наркологический диспансер\"",
+    "region": "Kazakhstan",
+    "phone": "57-73-54",
+    "email": "",
+    "website": "",
+    "lat": 53.2335907,
+    "lon": 63.6342176
+  },
+  {
+    "name": "КГП \"Костанайский областной онкологический диспансер\"",
+    "region": "Kazakhstan",
+    "phone": "+77142730322",
+    "email": "onkodis@mail.ru",
+    "website": "",
+    "lat": 53.2319756,
+    "lon": 63.6758821
+  },
+  {
+    "name": "Станция скорой помощи",
+    "region": "Kazakhstan",
+    "phone": "103",
+    "email": "",
+    "website": "",
+    "lat": 54.8619563,
+    "lon": 69.1346355
+  },
+  {
+    "name": "Облыстық перинаталдық орталығы",
+    "region": "Kazakhstan",
+    "phone": "+7 7152 42-18-95, +7 7152 42-18-97",
+    "email": "",
+    "website": "http://www.opc.sko.kz/",
+    "lat": 54.8889228,
+    "lon": 69.1379747
+  },
+  {
+    "name": "Больница №3",
+    "region": "Kazakhstan",
+    "phone": "+7 7152 47-28-21",
+    "email": "",
+    "website": "",
+    "lat": 54.892071,
+    "lon": 69.1357117
+  },
+  {
+    "name": "СКОФ РГП на ПХВ \"Республиканский центр электронного здравоохранения\" МЗСР РК",
+    "region": "Kazakhstan",
+    "phone": "+77152333981",
+    "email": "office@skof-rcez.kz",
+    "website": "http://skof-rcez.kz",
+    "lat": 54.8575525,
+    "lon": 69.1551166
+  },
+  {
+    "name": "Медикер",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://mediker.kz/",
+    "lat": 51.1660863,
+    "lon": 53.0392757
+  },
+  {
+    "name": "Городская Детская больница",
+    "region": "Kazakhstan",
+    "phone": "+7 (71431) 9-02-32",
+    "email": "",
+    "website": "",
+    "lat": 52.9672971,
+    "lon": 63.1133476
+  },
+  {
+    "name": "Гинекология; Роддом",
+    "region": "Kazakhstan",
+    "phone": "+7 (71431) 9-47-92",
+    "email": "",
+    "website": "",
+    "lat": 52.9668635,
+    "lon": 63.1154575
+  },
+  {
+    "name": "Туберкулезный диспансер",
+    "region": "Kazakhstan",
+    "phone": "+7 (71431) 4-55- 97",
+    "email": "",
+    "website": "",
+    "lat": 52.9578615,
+    "lon": 63.125198
+  },
+  {
+    "name": "Городская Больница",
+    "region": "Kazakhstan",
+    "phone": "+7 (71431) 9-36-64",
+    "email": "",
+    "website": "",
+    "lat": 52.9654839,
+    "lon": 63.1144873
+  },
+  {
+    "name": "Облыстық балалар клиникалық ауруханасы",
+    "region": "Kazakhstan",
+    "phone": "7 (7132) 57 76 77",
+    "email": "aktobe_odkb@mail.ru",
+    "website": "http://odkbaktobe.kz",
+    "lat": 50.2926473,
+    "lon": 57.11376
+  },
+  {
+    "name": "Карасайская районная центральная больница",
+    "region": "Kazakhstan",
+    "phone": "+77277156005;+77277156005",
+    "email": "",
+    "website": "http://crb-karasay.kz/ru/337-medicinskije_uchrezhdenija.html",
+    "lat": 43.1906081,
+    "lon": 76.5338359
+  },
+  {
+    "name": "Областной перинатальный центр",
+    "region": "Kazakhstan",
+    "phone": "+7 7112 266397",
+    "email": "",
+    "website": "http://p-center.kz",
+    "lat": 51.2003141,
+    "lon": 51.3845331
+  },
+  {
+    "name": "№4-ші Қалалық Клиникалық Аурухана",
+    "region": "Kazakhstan",
+    "phone": "+7 727 3003642",
+    "email": "gkb4almaty@med.mail.kz",
+    "website": "https://gkb4.kz/",
+    "lat": 43.3193111,
+    "lon": 76.9627734
+  },
+  {
+    "name": "Жедел медициналық жәрдем ауруханасы",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://www.aktobe-bsmp.kz/ru/",
+    "lat": 50.2983559,
+    "lon": 57.1474903
+  },
+  {
+    "name": "Акмолинская областная больница",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://amob.kz/ru/",
+    "lat": 53.2766439,
+    "lon": 69.3566469
+  },
+  {
+    "name": "Перитональный центр Городская Клиническая Больница №1",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "http://agkb1.kz/index.php/ru/",
+    "lat": 43.2294296,
+    "lon": 76.8016917
+  },
+  {
+    "name": "Городская Клиническая Больница №7",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://www.gkb7.kz/ru/",
+    "lat": 43.2321736,
+    "lon": 76.7998407
+  },
+  {
+    "name": "Степногорская многопрофильная городская больница",
+    "region": "Kazakhstan",
+    "phone": "+7 71645 62373",
+    "email": "",
+    "website": "https://stepgb.akmol.kz/",
+    "lat": 52.3426934,
+    "lon": 71.8685845
+  },
+  {
+    "name": "Больница №1",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://xn--1-wtbpsh.xn--p1ai/index.html",
+    "lat": 45.6150041,
+    "lon": 63.3126302
+  },
+  {
+    "name": "National Center for Tuberculosis Problems",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "https://www.nncf.kz/",
+    "lat": 43.2455276,
+    "lon": 76.9629901
+  },
+  {
+    "name": "№ 3 көпбейінді қалалық балалар ауруханасы",
+    "region": "Kazakhstan",
+    "phone": "+7 (7172) 25-90-53;+7 (7172) 56-13-59;+7 (7172) 25-96-52",
+    "email": "gdib@mail.ru",
+    "website": "http://mgdb-3.kz/",
+    "lat": 51.0828655,
+    "lon": 71.4193851
+  },
+  {
+    "name": "№2 көпбейінді қалалық аурухана",
+    "region": "Kazakhstan",
+    "phone": "+7 7172 577225",
+    "email": "",
+    "website": "http://astanaclinic.kz/",
+    "lat": 51.0841457,
+    "lon": 71.4091586
+  },
+  {
+    "name": "Орталық аудандық аурухана",
+    "region": "Kazakhstan",
+    "phone": "+77233297330",
+    "email": "",
+    "website": "",
+    "lat": 50.5528467,
+    "lon": 81.853655
+  },
+  {
+    "name": "Областной противотуберкулёзный диспансер",
+    "region": "Kazakhstan",
+    "phone": "+7 7152 538116",
+    "email": "",
+    "website": "http://www.optd.sko.kz/rus/index.php",
+    "lat": 54.9172216,
+    "lon": 69.1549566
+  },
+  {
+    "name": "Первомайская врачебная амбулатория",
+    "region": "Kazakhstan",
+    "phone": "+7 (71641) 2 93 95",
+    "email": "perv_sub@mail.ru",
+    "website": "",
+    "lat": 51.2938745,
+    "lon": 70.1255593
+  },
+  {
+    "name": "Хромтау орталық аудандық ауруханасы",
+    "region": "Kazakhstan",
+    "phone": "+7 71336 22260",
+    "email": "chromtaуcrb@mail.ru",
+    "website": "https://khromtaucrb.kz/",
+    "lat": 50.2632883,
+    "lon": 58.4353479
+  },
+  {
+    "name": "Явленка орталық аудандық ауруханасы",
+    "region": "Kazakhstan",
+    "phone": "2-22-18",
+    "email": "",
+    "website": "http://www.yavcrb.sko.kz/rus/index.php",
+    "lat": 54.3492671,
+    "lon": 68.4553787
+  },
+  {
+    "name": "ГКП на ПХВ \"Сельская больница Таукент\"",
+    "region": "Kazakhstan",
+    "phone": "+77254626212",
+    "email": "",
+    "website": "",
+    "lat": 43.8664887,
+    "lon": 68.7479689
+  },
+  {
+    "name": "Ауылдық ауруханасы (Тоқжайлау ауылы) Больница",
+    "region": "Kazakhstan",
+    "phone": "+7 (72840) 2 73 03",
+    "email": "",
+    "website": "",
+    "lat": 45.8180145,
+    "lon": 81.0939908
+  },
+  {
+    "name": "СМП №12",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "http://ssmp-almaty.kz/index.php?lang=ru",
+    "lat": 43.3194285,
+    "lon": 76.8317648
+  },
+  {
+    "name": "ҚР Президенті Әкімшілігінің Медициналық орталығының Ұлттық госпиталі",
+    "region": "Kazakhstan",
+    "phone": "+77273384310",
+    "email": "sovminka@gmail.com",
+    "website": "https://snh.kz/",
+    "lat": 43.2472567,
+    "lon": 76.9455788
+  },
+  {
+    "name": "Viamedis",
+    "region": "Kazakhstan",
+    "phone": "+7 777 868 4151",
+    "email": "",
+    "website": "https://www.viamedis.kz/",
+    "lat": 52.264915,
+    "lon": 76.9474574
+  },
+  {
+    "name": "Қалалық психикалық денсаулық орталығы",
+    "region": "Kazakhstan",
+    "phone": "+7 (7172) 33-14-06 (регистратура)",
+    "email": "narkokon@mail.ru",
+    "website": "https://www.cmsr.kz/",
+    "lat": 51.0815262,
+    "lon": 71.4151754
+  },
+  {
+    "name": "Областная клиническая больница",
+    "region": "Kazakhstan",
+    "phone": "+7 (7252) 53 51 76",
+    "email": "",
+    "website": "",
+    "lat": 42.3142621,
+    "lon": 69.6040295
+  },
+  {
+    "name": "Центральная районная больница Шемонаихинского района",
+    "region": "Kazakhstan",
+    "phone": "+77233230667",
+    "email": "",
+    "website": "http://shcrb.skom.kz",
+    "lat": 50.6329743,
+    "lon": 81.9128402
+  },
+  {
+    "name": "Облыстық туберкулезге қарсы диспансер",
+    "region": "Kazakhstan",
+    "phone": "",
+    "email": "",
+    "website": "http://zko-optd.kz/",
+    "lat": 51.2572969,
+    "lon": 51.4038236
+  },
+  {
+    "name": "Comisia medicală a conducătorilor mijloacelor de transport",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://www.comisieauto.md/",
+    "lat": 47.0180662,
+    "lon": 28.8484489
+  },
+  {
+    "name": "Гинекологический стационар",
+    "region": "Moldova",
+    "phone": "+373 533 79030",
+    "email": "",
+    "website": "",
+    "lat": 46.8354167,
+    "lon": 29.6302158
+  },
+  {
+    "name": "Роддом",
+    "region": "Moldova",
+    "phone": "+373 53379012",
+    "email": "",
+    "website": "",
+    "lat": 46.8309577,
+    "lon": 29.6268764
+  },
+  {
+    "name": "Centrul Medical „Neurogen”",
+    "region": "Moldova",
+    "phone": "+37379858324",
+    "email": "neurogenmoldova@gmail.com",
+    "website": "www.neurogen.md",
+    "lat": 47.0401086,
+    "lon": 28.8891076
+  },
+  {
+    "name": "Centrul de Sănătate Publică",
+    "region": "Moldova",
+    "phone": "024623966",
+    "email": "",
+    "website": "",
+    "lat": 48.1693952,
+    "lon": 27.3027158
+  },
+  {
+    "name": "Centrul Republican de Diagnostică Medicală / Institutul de Pneumologie „Chiril Draganiuc”",
+    "region": "Moldova",
+    "phone": "",
+    "email": "crdm@mednet.md",
+    "website": "http://crdm.ms.md/",
+    "lat": 46.9967617,
+    "lon": 28.8322032
+  },
+  {
+    "name": "Spitalul Clinic al Ministerului Sănătății (Clinica nr. 2 / Secția Consultativ-Diagnostică nr. 2 / Centrul de Recuperare Sanatorială)",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://scms.md/",
+    "lat": 47.0017324,
+    "lon": 28.8305564
+  },
+  {
+    "name": "Institutul de Medicină Urgentă",
+    "region": "Moldova",
+    "phone": "+373 22 25 07 04",
+    "email": "",
+    "website": "https://www.urgenta.md/",
+    "lat": 47.0292571,
+    "lon": 28.8185251
+  },
+  {
+    "name": "Centrul Național de Transfuzie a Sângelui (CNTS)",
+    "region": "Moldova",
+    "phone": "+373 22 109 055",
+    "email": "",
+    "website": "https://cnts.md/",
+    "lat": 47.0033764,
+    "lon": 28.8133772
+  },
+  {
+    "name": "IMSP Spitalul Raional Ialoveni",
+    "region": "Moldova",
+    "phone": "+37326821252",
+    "email": "",
+    "website": "",
+    "lat": 46.9542268,
+    "lon": 28.7709051
+  },
+  {
+    "name": "Spitalul Raional Strășeni",
+    "region": "Moldova",
+    "phone": "0237 22448",
+    "email": "srstraseni@ms.md",
+    "website": "https://imspsrstraseni.md/",
+    "lat": 47.1415914,
+    "lon": 28.6198046
+  },
+  {
+    "name": "Дубоссарская центральная районная больница",
+    "region": "Moldova",
+    "phone": "+373 (215) 3-39-24",
+    "email": "",
+    "website": "",
+    "lat": 47.2740362,
+    "lon": 29.165183
+  },
+  {
+    "name": "Spitalul Clinic Municipal nr. 2 „Sfântul Arhanghel Mihail”",
+    "region": "Moldova",
+    "phone": "+373 22 292 652",
+    "email": "arhanghel_mihail@yahoo.com",
+    "website": "https://www.spital.arhanghelmihail.md/",
+    "lat": 47.0330579,
+    "lon": 28.8416863
+  },
+  {
+    "name": "Spitalul de Dermatologie și Maladii Comunicabile",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://sdmc.md/",
+    "lat": 46.9505527,
+    "lon": 28.8326558
+  },
+  {
+    "name": "Spitalul Raional Cahul",
+    "region": "Moldova",
+    "phone": "+373 299 34 492",
+    "email": "",
+    "website": "",
+    "lat": 45.9161136,
+    "lon": 28.2190873
+  },
+  {
+    "name": "Centrul de Sănătate Soroca",
+    "region": "Moldova",
+    "phone": "+37323022710",
+    "email": "",
+    "website": "",
+    "lat": 48.1542364,
+    "lon": 28.298482
+  },
+  {
+    "name": "Днестровская городская больница",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://minzdrav.gospmr.org/node/312",
+    "lat": 46.6254494,
+    "lon": 29.9054356
+  },
+  {
+    "name": "Госпиталь инвалидов ВОВ",
+    "region": "Moldova",
+    "phone": "+373 533 26 459",
+    "email": "",
+    "website": "https://minzdrav.gospmr.org/node/268",
+    "lat": 46.8352347,
+    "lon": 29.669483
+  },
+  {
+    "name": "Детская поликлиника",
+    "region": "Moldova",
+    "phone": "+373 53392188",
+    "email": "",
+    "website": "",
+    "lat": 46.8315036,
+    "lon": 29.6324614
+  },
+  {
+    "name": "Республиканский кож-вен диспансер",
+    "region": "Moldova",
+    "phone": "+373 533 74411",
+    "email": "",
+    "website": "",
+    "lat": 46.8342735,
+    "lon": 29.6228901
+  },
+  {
+    "name": "Рыбницкая центральная районная больница",
+    "region": "Moldova",
+    "phone": "+373 (555) 4-14-76",
+    "email": "",
+    "website": "http://rcrb.idknet.com",
+    "lat": 47.7712917,
+    "lon": 28.9980575
+  },
+  {
+    "name": "Каменская центраьная районная больница",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://minzdrav.gospmr.org/node/291",
+    "lat": 48.0342797,
+    "lon": 28.705292
+  },
+  {
+    "name": "Медицинский центр «Медин»",
+    "region": "Moldova",
+    "phone": "(+373 533) 61818",
+    "email": "",
+    "website": "http://www.medin.md",
+    "lat": 46.8421795,
+    "lon": 29.5600729
+  },
+  {
+    "name": "Поликлиника для взрослых",
+    "region": "Moldova",
+    "phone": "+373 (555) 4-11-00;+373 (555) 4-12-16",
+    "email": "",
+    "website": "",
+    "lat": 47.7617429,
+    "lon": 29.0043024
+  },
+  {
+    "name": "Слободзейская центральная районная больница",
+    "region": "Moldova",
+    "phone": "+373 557 2 20 98",
+    "email": "slob-bolnica@idknet.com",
+    "website": "https://minzdrav.gospmr.org/node/304",
+    "lat": 46.7172027,
+    "lon": 29.7218726
+  },
+  {
+    "name": "Григориопольская центральная районная больница",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://minzdrav.gospmr.org/node/288",
+    "lat": 47.1579037,
+    "lon": 29.3000684
+  },
+  {
+    "name": "Республиканский центр матери и ребёнка",
+    "region": "Moldova",
+    "phone": "+373 (533) 7-90-12",
+    "email": "",
+    "website": "",
+    "lat": 46.8308737,
+    "lon": 29.627172
+  },
+  {
+    "name": "Centrul Sănătății Familiei „Galaxia”",
+    "region": "Moldova",
+    "phone": "+373-254-25737",
+    "email": "",
+    "website": "https://galaxia.md/",
+    "lat": 47.7504981,
+    "lon": 28.9731381
+  },
+  {
+    "name": "Республиканская клиническая больница",
+    "region": "Moldova",
+    "phone": "+373 53322962",
+    "email": "",
+    "website": "http://rkb-pmr.ru",
+    "lat": 46.8340708,
+    "lon": 29.6458846
+  },
+  {
+    "name": "Республиканский наркологический диспансер",
+    "region": "Moldova",
+    "phone": "+373 (533) 8-18-94",
+    "email": "",
+    "website": "",
+    "lat": 46.848053,
+    "lon": 29.6075797
+  },
+  {
+    "name": "Centrul Medicilor de Familie nr. 5 „Sfânta Maria”",
+    "region": "Moldova",
+    "phone": "+37322592338",
+    "email": "",
+    "website": "",
+    "lat": 47.0349074,
+    "lon": 28.790472
+  },
+  {
+    "name": "Instituția Medico-Sanitară Publică Asociația Medicală Teritorială Buiucani",
+    "region": "Moldova",
+    "phone": "+37322582922",
+    "email": "",
+    "website": "https://amtbuiucani.md/",
+    "lat": 47.0351387,
+    "lon": 28.7891435
+  },
+  {
+    "name": "Centrul de Sănătate „Mileştii Mici”",
+    "region": "Moldova",
+    "phone": "+37326868256",
+    "email": "",
+    "website": "",
+    "lat": 46.9102588,
+    "lon": 28.8072753
+  },
+  {
+    "name": "Centrul de Sănătate Publică, Raionul Ialoveni",
+    "region": "Moldova",
+    "phone": "+37326822142",
+    "email": "",
+    "website": "https://ansp.md/",
+    "lat": 46.9483923,
+    "lon": 28.774897
+  },
+  {
+    "name": "Maternitatea Spitalului Raional Ialoveni",
+    "region": "Moldova",
+    "phone": "+37326822292",
+    "email": "",
+    "website": "",
+    "lat": 46.9480228,
+    "lon": 28.7747316
+  },
+  {
+    "name": "IMSP Spitalul Clinic de Psihiatrie",
+    "region": "Moldova",
+    "phone": "+37378944901",
+    "email": "",
+    "website": "http://scp.md/?fbclid=IwAR2B98UeTVxlvbDiExMIQKcImzUkRhbQoqQsAB_N-nbOcDlAHq2xSyhLx80",
+    "lat": 46.9542935,
+    "lon": 28.8342854
+  },
+  {
+    "name": "Sanatoriul Nufărul Alb",
+    "region": "Moldova",
+    "phone": "+373 299 23 440",
+    "email": "",
+    "website": "https://nufarul.md/",
+    "lat": 45.9023906,
+    "lon": 28.2045483
+  },
+  {
+    "name": "Spitalul Raional Orhei",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "http://srorhei.md/",
+    "lat": 47.3867559,
+    "lon": 28.8224678
+  },
+  {
+    "name": "Centrul de Sănătate Nr. 1 Orhei",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://cs1orhei.md/",
+    "lat": 47.3871671,
+    "lon": 28.8239524
+  },
+  {
+    "name": "Centrul de Sănătate Sîngera",
+    "region": "Moldova",
+    "phone": "+37322413069",
+    "email": "",
+    "website": "",
+    "lat": 46.9175756,
+    "lon": 28.9726524
+  },
+  {
+    "name": "Centrul de Sănătate Bubuieci",
+    "region": "Moldova",
+    "phone": "+373 22 414 958",
+    "email": "cs.bubuieci@ms.md",
+    "website": "https://csbubuieci.md",
+    "lat": 46.9804928,
+    "lon": 28.9352328
+  },
+  {
+    "name": "Spitalul Clinic Republican pentru copii \"Emilian Coțaga\"",
+    "region": "Moldova",
+    "phone": "+373 22 727 776;+373 22 727 739",
+    "email": "",
+    "website": "",
+    "lat": 47.0064223,
+    "lon": 28.8282205
+  },
+  {
+    "name": "Тираспольский психоневрологический дом-интернат",
+    "region": "Moldova",
+    "phone": "0 (533) 7-12-23",
+    "email": "",
+    "website": "https://tpndi.ru/",
+    "lat": 46.8405923,
+    "lon": 29.5640604
+  },
+  {
+    "name": "Spitalul Internațional „Medpark”",
+    "region": "Moldova",
+    "phone": "+373 22 40 00 40",
+    "email": "info@medpark.md",
+    "website": "https://medpark.md/",
+    "lat": 47.0337423,
+    "lon": 28.854226
+  },
+  {
+    "name": "Centrul Republican de Reabilitare pentru Copii (CRRC)",
+    "region": "Moldova",
+    "phone": "(+373) 22 733 083",
+    "email": "",
+    "website": "https://www.crrc.md/",
+    "lat": 46.989604,
+    "lon": 28.8340053
+  },
+  {
+    "name": "Institutul de Cardiologie (Clinica)",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://icardiologie.md/",
+    "lat": 46.9912662,
+    "lon": 28.8340639
+  },
+  {
+    "name": "Spitalul Clinic Republican „Timofei Moșneaga”",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://scr.md/",
+    "lat": 46.9934205,
+    "lon": 28.8342318
+  },
+  {
+    "name": "Institutul Mamei și Copilului",
+    "region": "Moldova",
+    "phone": "+373 22 781 210",
+    "email": "",
+    "website": "https://www.mama-copilul.md/",
+    "lat": 46.9807682,
+    "lon": 28.87169
+  },
+  {
+    "name": "Asociația Medicală Teritorială Ciocana",
+    "region": "Moldova",
+    "phone": "+373022866966",
+    "email": "",
+    "website": "https://amt-ciocana.md/",
+    "lat": 47.0312917,
+    "lon": 28.8866615
+  },
+  {
+    "name": "Spitalul Raional Rîșcani",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://srriscani.md/",
+    "lat": 47.9535923,
+    "lon": 27.5619858
+  },
+  {
+    "name": "Spitalul Raional Fălești",
+    "region": "Moldova",
+    "phone": "+37325922448",
+    "email": "",
+    "website": "",
+    "lat": 47.5779096,
+    "lon": 27.706586
+  },
+  {
+    "name": "Centrul Național de Medicină Sportivă „Atletmed”",
+    "region": "Moldova",
+    "phone": "",
+    "email": "",
+    "website": "https://www.atletmed.md/",
+    "lat": 47.0631296,
+    "lon": 28.8475524
+  },
+  {
+    "name": "Heilsugæslusel Flateyrar",
+    "region": "Iceland",
+    "phone": "",
+    "email": "",
+    "website": "https://hvest.is/starfsstodvar/flateyri/",
+    "lat": 66.0467747,
+    "lon": -23.5123113
+  },
+  {
+    "name": "Sjúkrahúsið og Heilsugæslan á Akranesi",
+    "region": "Iceland",
+    "phone": "",
+    "email": "",
+    "website": "https://www.sha.is/",
+    "lat": 64.3196911,
+    "lon": -22.0818347
+  },
+  {
+    "name": "Landspítali",
+    "region": "Iceland",
+    "phone": "",
+    "email": "",
+    "website": "https://www.landspitali.is/",
+    "lat": 64.1380995,
+    "lon": -21.9275226
+  },
+  {
+    "name": "Barna- og unglingageðdeild Landspítalans",
+    "region": "Iceland",
+    "phone": "03545434300",
+    "email": "",
+    "website": "https://www.landspitali.is/sjuklingar-adstandendur/deildir-og-thjonusta/barna-og-unglingageddeild/",
+    "lat": 64.1486017,
+    "lon": -21.8764202
+  },
+  {
+    "name": "Landspítali Fossvogur",
+    "region": "Iceland",
+    "phone": "",
+    "email": "",
+    "website": "http://landspitali.is",
+    "lat": 64.1220679,
+    "lon": -21.8886982
+  },
+  {
+    "name": "Heilbrigðisstofnun Vesturlands",
+    "region": "Iceland",
+    "phone": "+354 432 1200",
+    "email": "",
+    "website": "",
+    "lat": 65.0773873,
+    "lon": -22.7217547
+  },
+  {
+    "name": "Kingston Open MRI",
+    "region": "Jamaica",
+    "phone": "+1 876 908 1828",
+    "email": "",
+    "website": "http://www.kingstonopenmri.com/",
+    "lat": 18.0220026,
+    "lon": -76.7959453
+  },
+  {
+    "name": "National Chest Hospital",
+    "region": "Jamaica",
+    "phone": "+18769270655",
+    "email": "",
+    "website": "",
+    "lat": 18.0225122,
+    "lon": -76.760979
+  },
+  {
+    "name": "Sir John Golding Rehabilitation Center",
+    "region": "Jamaica",
+    "phone": "+18769272504",
+    "email": "",
+    "website": "",
+    "lat": 18.0052648,
+    "lon": -76.7401958
+  },
+  {
+    "name": "Noel Holmes Hospital",
+    "region": "Jamaica",
+    "phone": "+18769562733",
+    "email": "",
+    "website": "",
+    "lat": 18.4522795,
+    "lon": -78.1678153
+  },
+  {
+    "name": "Hospiten Montego Bay",
+    "region": "Jamaica",
+    "phone": "",
+    "email": "",
+    "website": "https://hospiten.com/hospitales/hospiten-montego-bay",
+    "lat": 18.5210417,
+    "lon": -77.8530852
+  },
+  {
+    "name": "Linstead Hospital",
+    "region": "Jamaica",
+    "phone": "+18769852241",
+    "email": "",
+    "website": "",
+    "lat": 18.1331445,
+    "lon": -77.0316381
+  },
+  {
+    "name": "Bellevue Hospital",
+    "region": "Jamaica",
+    "phone": "+1876 926-1380",
+    "email": "",
+    "website": "",
+    "lat": 17.9704656,
+    "lon": -76.7705094
+  },
+  {
+    "name": "Spanish Town Hospital",
+    "region": "Jamaica",
+    "phone": "+18769843031",
+    "email": "",
+    "website": "https://www.serha.gov.jm/",
+    "lat": 17.9917741,
+    "lon": -76.9471434
+  },
+  {
+    "name": "University Hospital Of The West Indies",
+    "region": "Jamaica",
+    "phone": "+1 (876) 927-1621-9",
+    "email": "",
+    "website": "https://uhwi.gov.jm/",
+    "lat": 18.0110185,
+    "lon": -76.7445204
+  },
+  {
+    "name": "Accident and Urgent Medical Centre",
+    "region": "New Zealand",
+    "phone": "+64 4 384 4944",
+    "email": "",
+    "website": "https://www.wamc.co.nz/",
+    "lat": -41.3019041,
+    "lon": 174.7798775
+  },
+  {
+    "name": "Leeston Medical Centre",
+    "region": "New Zealand",
+    "phone": "+64 3 324 3850",
+    "email": "",
+    "website": "http://www.leestonmc.co.nz/",
+    "lat": -43.7612697,
+    "lon": 172.2992923
+  },
+  {
+    "name": "24 Hour Surgery",
+    "region": "New Zealand",
+    "phone": "+64 3 365 7777",
+    "email": "",
+    "website": "https://www.24hoursurgery.co.nz/",
+    "lat": -43.5216188,
+    "lon": 172.6415322
+  },
+  {
+    "name": "Bay Radiology",
+    "region": "New Zealand",
+    "phone": "+6475780273",
+    "email": "",
+    "website": "https://bayradiology.co.nz/",
+    "lat": -37.742462,
+    "lon": 176.1370835
+  },
+  {
+    "name": "Christchurch Public Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "https://www.cdhb.health.nz/hospitals-health-facilities/christchurch-hospital/",
+    "lat": -43.5343328,
+    "lon": 172.6254892
+  },
+  {
+    "name": "Grace Orthopaedic Centre",
+    "region": "New Zealand",
+    "phone": "+6475431856",
+    "email": "",
+    "website": "",
+    "lat": -37.7420459,
+    "lon": 176.1360928
+  },
+  {
+    "name": "Mackenzie Health Centre",
+    "region": "New Zealand",
+    "phone": "+64 3 976 0503",
+    "email": "twizelreception@kurowmedicalcentre.org.nz",
+    "website": "",
+    "lat": -44.2645057,
+    "lon": 170.1010853
+  },
+  {
+    "name": "Christchurch Public Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "http://www.cdhb.govt.nz/chc/",
+    "lat": -43.533755,
+    "lon": 172.6258307
+  },
+  {
+    "name": "Auckland City Hospital",
+    "region": "New Zealand",
+    "phone": "09 307 8888",
+    "email": "",
+    "website": "https://www.adhb.health.nz/hospitals-and-clinics/auckland-city-hospital/",
+    "lat": -36.8597388,
+    "lon": 174.770482
+  },
+  {
+    "name": "Waitākere Hospital",
+    "region": "New Zealand",
+    "phone": "09 839 0000",
+    "email": "",
+    "website": "https://info.health.nz/waitematadhb-govt-nz/Hospitals-Clinics/Waitakere-Hospital",
+    "lat": -36.8695778,
+    "lon": 174.6306851
+  },
+  {
+    "name": "Tauranga Hospital",
+    "region": "New Zealand",
+    "phone": "+64 7 579 8000",
+    "email": "",
+    "website": "https://info.health.nz/locations/bay-of-plenty/tauranga-hospital",
+    "lat": -37.7078277,
+    "lon": 176.1477798
+  },
+  {
+    "name": "North Shore Hospital",
+    "region": "New Zealand",
+    "phone": "+64 9 486 8900",
+    "email": "",
+    "website": "https://info.health.nz/locations/auckland/auckland-north-west/north-shore-hospital",
+    "lat": -36.781904,
+    "lon": 174.7567765
+  },
+  {
+    "name": "Wellington Regional Hospital",
+    "region": "New Zealand",
+    "phone": "+64 4 385 5999",
+    "email": "",
+    "website": "https://www.ccdhb.org.nz/our-services/wellington-regional-hospital/",
+    "lat": -41.3089205,
+    "lon": 174.7804116
+  },
+  {
+    "name": "Auckland Spinal Rehabilitation Unit",
+    "region": "New Zealand",
+    "phone": "+6492709070",
+    "email": "info@nzspinaltrust.org.nz",
+    "website": "https://nzspinaltrust.org.nz",
+    "lat": -36.9567658,
+    "lon": 174.8553017
+  },
+  {
+    "name": "Waikato Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "http://www.waikatodhb.govt.nz/",
+    "lat": -37.8053768,
+    "lon": 175.2832454
+  },
+  {
+    "name": "Dunedin Hospital",
+    "region": "New Zealand",
+    "phone": "+64 3 474 0999",
+    "email": "",
+    "website": "https://www.southernhealth.nz/services/dunedin-hospital",
+    "lat": -45.8694516,
+    "lon": 170.5087246
+  },
+  {
+    "name": "Hawkes Bay Hospital",
+    "region": "New Zealand",
+    "phone": "+64 6 878 8109",
+    "email": "",
+    "website": "https://www.ourhealthhb.nz/hospital-services/find-a-hospital-or-health-centre-near-you/hawkes-bay-fallen-soldiers-memorial-hospital/",
+    "lat": -39.6285691,
+    "lon": 176.8253602
+  },
+  {
+    "name": "Pukekohe Hospital",
+    "region": "New Zealand",
+    "phone": "+64 9 237 0600",
+    "email": "",
+    "website": "https://www.healthpoint.co.nz/pukekohe-hospital/",
+    "lat": -37.2175179,
+    "lon": 174.9043133
+  },
+  {
+    "name": "Bay of Islands Hospital",
+    "region": "New Zealand",
+    "phone": "+6494040280",
+    "email": "",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/bay-of-islands-hospital-services/",
+    "lat": -35.3862941,
+    "lon": 174.0692556
+  },
+  {
+    "name": "Kaikoura Hospital",
+    "region": "New Zealand",
+    "phone": "+64 3 319 7760",
+    "email": "",
+    "website": "https://www.cdhb.health.nz/Hospitals-Services/hospitals/kaikoura-hospital/Pages/default.aspx",
+    "lat": -42.404705,
+    "lon": 173.6816237
+  },
+  {
+    "name": "Palmerston North Regional Hospital",
+    "region": "New Zealand",
+    "phone": "+64 6 356 9169",
+    "email": "",
+    "website": "https://info.health.nz/locations/manawatu-whanganui/palmerston-north-regional-hospital",
+    "lat": -40.3387997,
+    "lon": 175.619826
+  },
+  {
+    "name": "Greenlane Clinical Centre",
+    "region": "New Zealand",
+    "phone": "+64 9 367 0000",
+    "email": "",
+    "website": "https://www.adhb.health.nz/hospitals-and-clinics/greenlane-clinical-centre/",
+    "lat": -36.8949171,
+    "lon": 174.7800168
+  },
+  {
+    "name": "Hutt Hospital",
+    "region": "New Zealand",
+    "phone": "+64 4 566 6999",
+    "email": "",
+    "website": "https://info.health.nz/locations/wellington-hutt-and-kapiti/hutt-hospital",
+    "lat": -41.2047854,
+    "lon": 174.9242982
+  },
+  {
+    "name": "Te Mana Care Centre",
+    "region": "New Zealand",
+    "phone": "+64 9 483 9209",
+    "email": "",
+    "website": "https://oceaniahealthcare.co.nz/",
+    "lat": -36.8042582,
+    "lon": 174.7016337
+  },
+  {
+    "name": "Wairau Hospital",
+    "region": "New Zealand",
+    "phone": "+64 3 520 9999",
+    "email": "",
+    "website": "https://info.health.nz/locations/nelson-marlborough/wairau-hospital",
+    "lat": -41.535975,
+    "lon": 173.9437678
+  },
+  {
+    "name": "Kapiti Health Centre",
+    "region": "New Zealand",
+    "phone": "+64 4 296 4100",
+    "email": "",
+    "website": "",
+    "lat": -40.9101089,
+    "lon": 175.0074709
+  },
+  {
+    "name": "Kenepuru Community Hospital",
+    "region": "New Zealand",
+    "phone": "+64 4 385 5999",
+    "email": "",
+    "website": "",
+    "lat": -41.1463923,
+    "lon": 174.834607
+  },
+  {
+    "name": "Southern Cross Wellington Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "https://healthcare.southerncross.co.nz/new-plymouth-hospital",
+    "lat": -41.3094343,
+    "lon": 174.7755353
+  },
+  {
+    "name": "Forte Health",
+    "region": "New Zealand",
+    "phone": "+64 3 365 8333",
+    "email": "",
+    "website": "https://www.fortehealth.co.nz/",
+    "lat": -43.5262676,
+    "lon": 172.6377908
+  },
+  {
+    "name": "Southern Cross Hamilton Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "https://healthcare.southerncross.co.nz/hamilton-hospital",
+    "lat": -37.7891503,
+    "lon": 175.2903703
+  },
+  {
+    "name": "Hāwera Hospital",
+    "region": "New Zealand",
+    "phone": "+64 6 278 7109",
+    "email": "",
+    "website": "https://info.health.nz/locations/taranaki/hawera-hospital",
+    "lat": -39.5872506,
+    "lon": 174.266386
+  },
+  {
+    "name": "Alexandra Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "https://www.nmdhb.govt.nz/hospitals-and-community-services/hospitals/alexandra-hospital/",
+    "lat": -41.3406519,
+    "lon": 173.1997335
+  },
+  {
+    "name": "Howick Baptist Home and Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "https://www.hbh.org.nz/",
+    "lat": -36.9016179,
+    "lon": 174.9204507
+  },
+  {
+    "name": "Radius Kensington Resthome & Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "http://www.radiuscare.net.nz/",
+    "lat": -37.7756522,
+    "lon": 175.2596947
+  },
+  {
+    "name": "Taihape Health Centre",
+    "region": "New Zealand",
+    "phone": "+64 6 388 0926",
+    "email": "reception@thl.org.nz",
+    "website": "https://www.wrhn.org.nz/taihape-health-limited",
+    "lat": -39.6805753,
+    "lon": 175.7950824
+  },
+  {
+    "name": "Grace Hospital",
+    "region": "New Zealand",
+    "phone": "+6475775270",
+    "email": "",
+    "website": "",
+    "lat": -37.7424606,
+    "lon": 176.1356687
+  },
+  {
+    "name": "Wanaka Lakes Health Centre",
+    "region": "New Zealand",
+    "phone": "+64 3 443 0432",
+    "email": "",
+    "website": "https://wanakahealthcentre.co.nz/",
+    "lat": -44.7095785,
+    "lon": 169.1374593
+  },
+  {
+    "name": "Christchurch Outpatients",
+    "region": "New Zealand",
+    "phone": "+64 3 364 0490",
+    "email": "",
+    "website": "",
+    "lat": -43.5348842,
+    "lon": 172.627155
+  },
+  {
+    "name": "Christchurch Hospital",
+    "region": "New Zealand",
+    "phone": "+64 3 364 0600",
+    "email": "",
+    "website": "https://www.cdhb.health.nz/Hospitals-Services/hospitals/Christchurch-Hospital/Pages/default.aspx",
+    "lat": -43.533748,
+    "lon": 172.6252379
+  },
+  {
+    "name": "Braemar Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "https://braemarhospital.co.nz/",
+    "lat": -37.807901,
+    "lon": 175.2789843
+  },
+  {
+    "name": "Ormiston Hospital",
+    "region": "New Zealand",
+    "phone": "+64 9 250 1157",
+    "email": "",
+    "website": "https://www.ormistonhospital.co.nz/",
+    "lat": -36.9647296,
+    "lon": 174.9047767
+  },
+  {
+    "name": "Child Development Service",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "https://cdhb.health.nz/childdevelopmentservice",
+    "lat": -43.521313,
+    "lon": 172.6310687
+  },
+  {
+    "name": "Mercy Hospice Auckland",
+    "region": "New Zealand",
+    "phone": "+64 9 361 5966",
+    "email": "hello@mercyhospice.org.nz",
+    "website": "https://mercyhospice.org.nz/",
+    "lat": -36.8473843,
+    "lon": 174.7473293
+  },
+  {
+    "name": "Southern Cross Nelson Hospital",
+    "region": "New Zealand",
+    "phone": "+64 3 548 8566",
+    "email": "administration@manukastreet.org.nz",
+    "website": "https://manukastreet.org.nz/",
+    "lat": -41.2787846,
+    "lon": 173.2904675
+  },
+  {
+    "name": "Golden Bay Community Health",
+    "region": "New Zealand",
+    "phone": "+64 3 525 0060",
+    "email": "",
+    "website": "https://www.gbhealth.org.nz/",
+    "lat": -40.8783789,
+    "lon": 172.8170305
+  },
+  {
+    "name": "Manor Park Private Hospital",
+    "region": "New Zealand",
+    "phone": "+6445635240",
+    "email": "",
+    "website": "https://www.eldernet.co.nz/Facilities/Specialist_Hospital_Dementia_Care/Manor_Park_Private_Hospital/Service/DisplayService/FaStID/2125",
+    "lat": -41.1587758,
+    "lon": 174.9770209
+  },
+  {
+    "name": "Southern Cross Hospital",
+    "region": "New Zealand",
+    "phone": "+64 3 968 3100",
+    "email": "christchurch@southerncrosshospitals.co.nz",
+    "website": "https://healthcare.southerncross.co.nz/",
+    "lat": -43.5200217,
+    "lon": 172.6346514
+  },
+  {
+    "name": "Laura Fergusson Brain Injury Trust",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "https://www.lfbit.co.nz",
+    "lat": -43.5101591,
+    "lon": 172.5816141
+  },
+  {
+    "name": "Canterbury Charity Hospital",
+    "region": "New Zealand",
+    "phone": "",
+    "email": "",
+    "website": "https://charityhospital.org.nz",
+    "lat": -43.4863286,
+    "lon": 172.5832218
+  },
+  {
+    "name": "Crest Hospital",
+    "region": "New Zealand",
+    "phone": "+64 6 953 2480",
+    "email": "",
+    "website": "https://cresthospital.co.nz/",
+    "lat": -40.3489587,
+    "lon": 175.6118998
+  },
+  {
+    "name": "Napier Health Centre",
+    "region": "New Zealand",
+    "phone": "+64 6 834 1815",
+    "email": "",
+    "website": "https://www.ourhealthhb.nz/hospital-services/find-a-hospital-or-health-centre-near-you/napier-health/",
+    "lat": -39.4955085,
+    "lon": 176.9132646
+  },
+  {
+    "name": "Ōamaru Hospital",
+    "region": "New Zealand",
+    "phone": "+64 3 433 0290",
+    "email": "",
+    "website": "",
+    "lat": -45.0991697,
+    "lon": 170.968202
+  },
+  {
+    "name": "Kaitaia Hospital",
+    "region": "New Zealand",
+    "phone": "+6494089180",
+    "email": "",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/kaitaia-hospital-services/",
+    "lat": -35.1192454,
+    "lon": 173.2607014
+  },
+  {
+    "name": "Middlemore Hospital",
+    "region": "New Zealand",
+    "phone": "09 276 0000",
+    "email": "",
+    "website": "https://www.countiesmanukau.health.nz/our-services/a-z/middlemore-hospital/",
+    "lat": -36.9641036,
+    "lon": 174.8413509
+  }
+]

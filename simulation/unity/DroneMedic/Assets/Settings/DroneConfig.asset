@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0739631587bc44653a2bcfbb9de92a97, type: 3}
+  m_Name: DroneConfig
+  m_EditorClassIdentifier: 
+  droneVelocity: 5
+  droneAltitude: 30
+  mockMoveDelay: 1.5
+  batteryCapacity: 100
+  batteryDrainRate: 0.08
+  batteryMinReserve: 20
+  maxWindSpeed: 15
+  maxPrecipitation: 5
+  priorityWeight: 0.3
+  numDrones: 2
+  droneNames:
+  - Drone1
+  - Drone2
+  locations:
+  - name: Depot
+    position: {x: 0, y: 0, z: 0}
+    latitude: 51.5074
+    longitude: -0.1278
+    description: Main drone depot / base station
+    priority: normal
+  - name: Clinic A
+    position: {x: 100, y: 0, z: 50}
+    latitude: 51.5124
+    longitude: -0.12
+    description: General medical clinic
+    priority: normal
+  - name: Clinic B
+    position: {x: -50, y: 0, z: 150}
+    latitude: 51.5174
+    longitude: -0.135
+    description: Emergency care facility
+    priority: normal
+  - name: Clinic C
+    position: {x: 200, y: 0, z: -30}
+    latitude: 51.5044
+    longitude: -0.11
+    description: Rural health outpost
+    priority: normal
+  - name: Clinic D
+    position: {x: -100, y: 0, z: -80}
+    latitude: 51.5
+    longitude: -0.14
+    description: Disaster relief camp
+    priority: normal
+  noFlyZones:
+  - name: Military Zone Alpha
+    polygon:
+    - {x: -20, y: 80}
+    - {x: -20, y: 120}
+    - {x: 30, y: 120}
+    - {x: 30, y: 80}
+  - name: Airport Exclusion
+    polygon:
+    - {x: 120, y: -60}
+    - {x: 120, y: -20}
+    - {x: 180, y: -20}
+    - {x: 180, y: -60}

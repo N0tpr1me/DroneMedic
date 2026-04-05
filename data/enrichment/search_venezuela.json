@@ -1,0 +1,296 @@
+[
+  {
+    "name": "AMBULATORIO SAN MIGUEL",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "ASCARDIO",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Ambulartorio Seguro Social",
+    "region": "Venezuela",
+    "address": "Av. José Rafael Pocaterra, Guacara, 2015",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatio Urbano Tipo I",
+    "region": "Venezuela",
+    "address": "Calle 3, Queniquea, 5054",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "Carretera: Caicara del Orinoco - Ciudad Bolívar",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "Prolongación, Calle Ayacucho, Los Teques",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "Lobatera",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "Calle Benito Marín, Tabay, 5116",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "Calle Juncal, Barcelona, 6001",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio \"Dr. Numa Quevedo\"",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio \"Nuestra Señora de La Paz\";Iglesia Adventista del Séptimo Día",
+    "region": "Venezuela",
+    "address": "Calle 10;Avenida Hospital, Valera",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Adícora",
+    "region": "Venezuela",
+    "address": "Calle Santa Ana, Adícora, 4142",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Alfonzo López Porras",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Alí Romero",
+    "region": "Venezuela",
+    "address": "Avenida Fuerzas Armadas, Barcelona, 6001",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Andres Eloy Blanco",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Atapirire",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Boca de Pozo",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Boyaca V",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Boyaca V",
+    "region": "Venezuela",
+    "address": "Avenida Principal  IV y V, Barcelona, 6001",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Boyacá V",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio CAPI",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio CDI",
+    "region": "Venezuela",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Hospital Dr. Raúl Humberto de Pasquali",
+    "region": "Venezuela",
+    "address": "Ospino",
+    "need_phone": true,
+    "need_email": true
+  }
+]

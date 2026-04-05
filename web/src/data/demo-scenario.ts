@@ -2,8 +2,9 @@
  * DroneMedic — Demo Scenario Data
  *
  * The Story: A 6-year-old at Royal London Hospital needs emergency O-negative blood.
- * The nearest supply is at Edinburgh Royal Infirmary. Helicopter grounded by Midlands storm.
- * Ambulance: 4 hours. The child has 90 minutes. A drone can do it in 52.
+ * The nearest supply is at the East London Blood Centre (our depot).
+ * Ambulance: stuck in traffic, estimated 45+ minutes. Clinical window: 90 minutes.
+ * A drone can do it in 12.
  */
 
 export const DEMO_SCENARIO = {
@@ -17,8 +18,8 @@ export const DEMO_SCENARIO = {
     priorities: { 'Royal London': 'high' },
     supplies: { 'Royal London': 'O- blood (2 units)' },
     constraints: {
-      avoid_zones: ['Midlands storm corridor'],
-      weather_concern: 'storm over Midlands',
+      avoid_zones: ['North London storm corridor'],
+      weather_concern: 'storm over North London',
       time_sensitive: true,
     },
   },
@@ -37,7 +38,7 @@ export const DEMO_SCENARIO = {
     ordered_route: ['Depot', 'Royal London', 'Depot'],
     ordered_routes: { Drone1: ['Depot', 'Royal London', 'Depot'] },
     total_distance: 8400,
-    estimated_time: 180,
+    estimated_time: 560,
     battery_usage: 42,
     no_fly_violations: [],
   },
@@ -47,19 +48,19 @@ export const DEMO_SCENARIO = {
     score: 34,
     level: 'low',
     factors: [
-      'Storm cell over Midlands — Western corridor detour available',
+      'Storm cell over North London — Southern corridor detour available',
       'Battery margin: 58% remaining after delivery',
       'Payload temperature stable at 4.0°C',
     ],
-    recommendation: 'Proceed via Western corridor. Monitor storm movement.',
-    contingency: 'Drone Beta on standby at Birmingham depot, 18 min intercept capability.',
+    recommendation: 'Proceed via Southern corridor. Monitor storm movement.',
+    contingency: 'Drone Beta on standby at Canary Wharf depot, 8 min intercept capability.',
   },
 
   /** Transport comparison */
   comparison: {
-    drone: { time_min: 52, cost_gbp: 340 },
+    drone: { time_min: 12, cost_gbp: 85 },
     helicopter: { time_min: 0, cost_gbp: 8200, available: false },
-    ambulance: { time_min: 252, cost_gbp: 180 },
+    ambulance: { time_min: 47, cost_gbp: 180 },
   },
 
   /** Demo presenter script */
@@ -68,11 +69,11 @@ export const DEMO_SCENARIO = {
     { step: 2, page: 'dashboard', duration: 90, action: 'Drone launches. AI narrates. At ~40%, storm triggers reroute. AI explains. ETA updates. Payload temp holds.' },
     { step: 3, page: 'dashboard', duration: 30, action: 'Drone arrives at Royal London. Delivery confirmation: Dr. Osei, Trauma Surgeon. Chain of custody complete.' },
     { step: 4, page: 'logs', duration: 20, action: 'Show full chain of custody timeline. Payload integrity chart. Click Weather Briefing.' },
-    { step: 5, page: 'analytics', duration: 30, action: 'Show KPIs: 97.3% on-time. Transport comparison: Drone 52min vs Ambulance 4h. Generate AI board report.' },
-    { step: 6, page: 'close', duration: 10, action: 'This child is alive because a drone flew 280km in 52 minutes with blood at 3.8°C.' },
+    { step: 5, page: 'analytics', duration: 30, action: 'Show KPIs: 97.3% on-time. Transport comparison: Drone 12min vs Ambulance 47min. Generate AI board report.' },
+    { step: 6, page: 'close', duration: 10, action: 'This child is alive because a drone flew across London in 12 minutes with blood at 3.8°C while an ambulance sat in traffic.' },
   ],
 
   /** Closing statement */
   closingLine:
-    'This child is alive because a drone flew 280km in 52 minutes with blood at 3.8°C.',
+    'This child is alive because a drone flew across London in 12 minutes with blood at 3.8°C while an ambulance sat in traffic.',
 } as const;

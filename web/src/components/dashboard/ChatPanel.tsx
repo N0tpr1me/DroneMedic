@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUp, Mic, Package, Route, CloudLightning, Plane, CheckCircle, Brain } from 'lucide-react';
+import { ArrowUp, Mic, Package, Route, CloudLightning, Plane, CheckCircle, Brain, Activity } from 'lucide-react';
 import type { Task, Route as RouteType, Metrics, FlightLogEntry } from '../../lib/api';
+import type { AiReasoningMessage } from '../../hooks/useLiveMission';
 
 // ── Message Types ──
 
@@ -15,6 +16,8 @@ interface ChatMessage {
   metrics?: Metrics;
   actions?: ChatAction[];
   flightEvent?: FlightLogEntry;
+  isReasoning?: boolean;
+  reasoningSeverity?: 'info' | 'success' | 'warning' | 'error';
 }
 
 interface ChatAction {
@@ -22,6 +25,25 @@ interface ChatAction {
   icon: string;
   variant: 'primary' | 'danger' | 'secondary';
   onClick: () => void;
+}
+
+// Suggestion chips shown after AI asks a question
+const SUPPLY_CHIPS = ['O-neg Blood', 'Platelets', 'Insulin', 'Surgical Kit', 'Antibiotics', 'Epinephrine'];
+const PRIORITY_CHIPS = ['P1 - Immediate', 'P2 - Urgent', 'P3 - Routine'];
+const QUANTITY_CHIPS = ['2 units', '4 units', '6 units', '10 units'];
+
+function detectSuggestionChips(aiMessage: string): string[] {
+  const lower = aiMessage.toLowerCase();
+  if (lower.includes('blood type') || lower.includes('what supply') || lower.includes('what do you need') || lower.includes('which supplies') || lower.includes('type of')) {
+    return SUPPLY_CHIPS;
+  }
+  if (lower.includes('priority') || lower.includes('urgency') || lower.includes('how urgent')) {
+    return PRIORITY_CHIPS;
+  }
+  if (lower.includes('how many') || lower.includes('quantity') || lower.includes('units')) {
+    return QUANTITY_CHIPS;
+  }
+  return [];
 }
 
 // ── Chat Panel Props ──
@@ -38,6 +60,7 @@ interface ChatPanelProps {
   metrics: Metrics | null;
   flightLog: FlightLogEntry[];
   status: string;
+  aiReasoningMessages?: AiReasoningMessage[];
 }
 
 export function ChatPanel({
@@ -52,6 +75,7 @@ export function ChatPanel({
   metrics,
   flightLog,
   status,
+  aiReasoningMessages = [],
 }: ChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -63,6 +87,7 @@ export function ChatPanel({
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [suggestionChips, setSuggestionChips] = useState<string[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -121,30 +146,121 @@ export function ChatPanel({
     }]);
   }, [metrics, messages]);
 
+  // Watch AI reasoning messages from live mission
+  const reasoningCountRef = useRef(0);
+  useEffect(() => {
+    if (aiReasoningMessages.length <= reasoningCountRef.current) return;
+    const newMessages = aiReasoningMessages.slice(reasoningCountRef.current);
+    reasoningCountRef.current = aiReasoningMessages.length;
+
+    setMessages((prev) => [
+      ...prev,
+      ...newMessages.map((rm, idx) => ({
+        id: `reasoning-${Date.now()}-${idx}`,
+        type: 'ai' as const,
+        content: rm.message,
+        timestamp: new Date(rm.timestamp * 1000),
+        isReasoning: true,
+        reasoningSeverity: rm.severity,
+      })),
+    ]);
+  }, [aiReasoningMessages]);
+
   const addMessage = (msg: Omit<ChatMessage, 'id' | 'timestamp'>) => {
     setMessages((prev) => [...prev, { ...msg, id: `msg-${Date.now()}`, timestamp: new Date() }]);
+  };
+
+  const handleChipClick = (chip: string) => {
+    setSuggestionChips([]);
+    setInput(chip);
+    // Auto-send the chip
+    setTimeout(() => {
+      const fakeInput = chip;
+      setInput('');
+      addMessage({ type: 'user', content: fakeInput });
+      setIsTyping(true);
+      // Route through AI chat
+      if (onAiChat) {
+        onAiChat(fakeInput).then((reply) => {
+          setIsTyping(false);
+          // Check if AI returned a structured task (JSON block in response)
+          const jsonMatch = reply.match(/```json\s*([\s\S]*?)\s*```/);
+          if (jsonMatch) {
+            try {
+              const taskData = JSON.parse(jsonMatch[1]);
+              if (taskData.locations) {
+                onParseTask(reply).then((parsedTask) => {
+                  if (parsedTask) {
+                    addMessage({
+                      type: 'ai',
+                      content: reply.replace(/```json[\s\S]*?```/, '').trim() || `Mission confirmed: ${parsedTask.locations.length} delivery locations ready.`,
+                      task: parsedTask,
+                      actions: [{ label: 'Plan Route', icon: 'route', variant: 'primary', onClick: handlePlanRoute }],
+                    });
+                  }
+                });
+                return;
+              }
+            } catch { /* not valid JSON, fall through */ }
+          }
+          const chips = detectSuggestionChips(reply);
+          setSuggestionChips(chips);
+          addMessage({ type: 'ai', content: reply });
+        }).catch(() => {
+          setIsTyping(false);
+          addMessage({ type: 'ai', content: 'Connection issue. Please try again.' });
+        });
+      }
+    }, 50);
   };
 
   const handleSend = async () => {
     if (!input.trim()) return;
     const userInput = input.trim();
     setInput('');
+    setSuggestionChips([]);
 
     addMessage({ type: 'user', content: userInput });
     setIsTyping(true);
 
-    // If we have onAiChat and either flying or conversational query, use AI
-    if (onAiChat && (status === 'flying' || /^(what|how|can|is|should|why|when|where|show|tell)/i.test(userInput))) {
+    // Always try AI chat first for conversational flow with follow-ups
+    if (onAiChat) {
       try {
         const reply = await onAiChat(userInput);
+        setIsTyping(false);
+
+        // Check if AI returned a structured task (JSON block in response)
+        const jsonMatch = reply.match(/```json\s*([\s\S]*?)\s*```/);
+        if (jsonMatch) {
+          try {
+            const taskData = JSON.parse(jsonMatch[1]);
+            if (taskData.locations) {
+              const parsedTask = await onParseTask(userInput);
+              if (parsedTask) {
+                addMessage({
+                  type: 'ai',
+                  content: reply.replace(/```json[\s\S]*?```/, '').trim() || `Mission confirmed: ${parsedTask.locations.length} delivery locations ready.`,
+                  task: parsedTask,
+                  actions: [{ label: 'Plan Route', icon: 'route', variant: 'primary', onClick: handlePlanRoute }],
+                });
+                return;
+              }
+            }
+          } catch { /* not valid JSON, fall through */ }
+        }
+
+        // Detect if AI is asking a follow-up question → show suggestion chips
+        const chips = detectSuggestionChips(reply);
+        setSuggestionChips(chips);
+
         addMessage({ type: 'ai', content: reply });
+        return;
       } catch {
-        addMessage({ type: 'ai', content: 'I encountered an issue processing your request. Please try again.' });
+        // AI chat failed, fall back to direct parsing
       }
-      setIsTyping(false);
-      return;
     }
 
+    // Fallback: direct task parsing
     try {
       const parsedTask = await onParseTask(userInput);
       setIsTyping(false);
@@ -159,11 +275,11 @@ export function ChatPanel({
           ],
         });
       } else {
-        addMessage({ type: 'ai', content: 'I couldn\'t parse that request. Try something like: "Deliver O- plasma to Royal London urgently, insulin to Homerton"' });
+        addMessage({ type: 'ai', content: 'I couldn\'t parse that request. Try something like: "Deliver O- blood to Royal London urgently"' });
       }
     } catch {
       setIsTyping(false);
-      addMessage({ type: 'ai', content: 'Using demo data — API not connected. Task parsed successfully.' });
+      addMessage({ type: 'ai', content: 'Using demo data — API not connected.' });
     }
   };
 
@@ -200,6 +316,7 @@ export function ChatPanel({
 
   const handleReset = () => {
     onReset();
+    reasoningCountRef.current = 0;
     setMessages([{
       id: 'reset',
       type: 'ai',
@@ -248,9 +365,26 @@ export function ChatPanel({
                 </div>
               ) : (
                 <div className="max-w-[90%] space-y-3">
-                  <div className="px-4 py-3 rounded-2xl rounded-tl-sm bg-surface-container-high/60 border border-outline-variant/10 text-sm text-on-surface-variant leading-relaxed">
-                    {msg.content}
-                  </div>
+                  {msg.isReasoning ? (
+                    <div className={`flex items-start gap-2.5 px-4 py-3 rounded-2xl rounded-tl-sm border text-sm leading-relaxed ${
+                      msg.reasoningSeverity === 'error' ? 'bg-red-500/8 border-red-500/20 text-red-200' :
+                      msg.reasoningSeverity === 'warning' ? 'bg-amber-500/8 border-amber-500/20 text-amber-200' :
+                      msg.reasoningSeverity === 'success' ? 'bg-emerald-500/8 border-emerald-500/20 text-emerald-200' :
+                      'bg-sky-500/8 border-sky-500/20 text-sky-200'
+                    }`}>
+                      <Activity className={`w-4 h-4 mt-0.5 shrink-0 ${
+                        msg.reasoningSeverity === 'error' ? 'text-red-400' :
+                        msg.reasoningSeverity === 'warning' ? 'text-amber-400' :
+                        msg.reasoningSeverity === 'success' ? 'text-emerald-400' :
+                        'text-sky-400'
+                      }`} />
+                      <span>{msg.content}</span>
+                    </div>
+                  ) : (
+                    <div className="px-4 py-3 rounded-2xl rounded-tl-sm bg-surface-container-high/60 border border-outline-variant/10 text-sm text-on-surface-variant leading-relaxed">
+                      {msg.content}
+                    </div>
+                  )}
 
                   {/* Parsed task display */}
                   {msg.task && (
@@ -321,6 +455,25 @@ export function ChatPanel({
           ))}
         </AnimatePresence>
 
+        {/* Suggestion chips */}
+        {suggestionChips.length > 0 && !isTyping && (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-wrap gap-2 px-2 py-1"
+          >
+            {suggestionChips.map((chip) => (
+              <button
+                key={chip}
+                onClick={() => handleChipClick(chip)}
+                className="px-3 py-1.5 rounded-full text-[11px] font-semibold border border-tertiary/25 bg-tertiary/10 text-tertiary hover:bg-tertiary/20 transition-colors cursor-pointer"
+              >
+                {chip}
+              </button>
+            ))}
+          </motion.div>
+        )}
+
         {/* Typing indicator */}
         {isTyping && (
           <motion.div
@@ -349,17 +502,17 @@ export function ChatPanel({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={
-              status === 'flying' ? 'Drone in flight...' :
+              status === 'flying' ? 'Ask about the mission or report an issue...' :
               task && !route ? 'Route ready to plan...' :
               'Describe your delivery mission...'
             }
-            disabled={status === 'flying'}
+            disabled={false}
             className="flex-1 bg-transparent text-sm text-on-surface placeholder:text-on-surface-variant/40 resize-none border-none focus:outline-none focus:ring-0 min-h-[40px] max-h-[120px] py-2 px-2"
             rows={1}
           />
           <button
             onClick={handleSend}
-            disabled={!input.trim() || status === 'flying'}
+            disabled={!input.trim()}
             className={`
               shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer
               ${input.trim()

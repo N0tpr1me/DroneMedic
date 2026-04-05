@@ -1,0 +1,3 @@
+delivery_id,drone_id,origin,destination,supplies,payload_kg,status,country,requested_at,departed_at,arrived_at,duration_s,re_routes,tamper_status,cold_chain_safe,num_positions,num_temp_readings
+2830e940,Drone2,Depot,Clinic B,defibrillator,2.0,failed,DE,2026-04-03T18:08:20.759951+00:00,2026-04-03T18:08:20.864439+00:00,,,1,False,True,1,0
+61b7c5f3,Drone1,Depot,Clinic A,vaccine_kit|blood_pack,0.8,delivered,GB,2026-04-03T18:08:20.759709+00:00,2026-04-03T18:08:20.759987+00:00,2026-04-03T18:08:20.864343+00:00,0.104356,0,False,True,3,5

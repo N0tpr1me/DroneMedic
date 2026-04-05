@@ -1,0 +1,954 @@
+[
+  {
+    "name": "Hospital Dr. Raúl Humberto de Pasquali",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Ospino",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "AMBULATORIO SAN MIGUEL",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "ASCARDIO",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulartorio Seguro Social",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Av. José Rafael Pocaterra, Guacara, 2015",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatio Urbano Tipo I",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Calle 3, Queniquea, 5054",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Carretera: Caicara del Orinoco - Ciudad Bolívar",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Prolongación, Calle Ayacucho, Los Teques",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Lobatera",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Calle Benito Marín, Tabay, 5116",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Calle Juncal, Barcelona, 6001",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio \"Dr. Numa Quevedo\"",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio \"Nuestra Señora de La Paz\";Iglesia Adventista del Séptimo Día",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Calle 10;Avenida Hospital, Valera",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Adícora",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Calle Santa Ana, Adícora, 4142",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Alfonzo López Porras",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Alí Romero",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Avenida Fuerzas Armadas, Barcelona, 6001",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Andres Eloy Blanco",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Atapirire",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Boca de Pozo",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Boyaca V",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Boyaca V",
+    "region": "Venezuela",
+    "website": "",
+    "address": "Avenida Principal  IV y V, Barcelona, 6001",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio Boyacá V",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio CAPI",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatorio CDI",
+    "region": "Venezuela",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "2- больница Теректинского района",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "Ақжайық",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "4-я поликлиника",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "6",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "American Medical Center",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "DOS dental",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "DOS dental",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Dostarmed",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "ERT Station",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Erensau",
+    "region": "Kazakhstan",
+    "website": "https://erensau.kz",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Euro Med",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "61, Кайсенова улица",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "EuroDent стоматология",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Fitness Centre (15)",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "15, Льва Толстого",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Gio Trade",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "2, Сатыбалдина улица",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "ICT Lab",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "IMC Mukanova",
+    "region": "Kazakhstan",
+    "website": "https://imcalmaty.kz",
+    "address": "235 A-1, Mukanov St.",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Interteach",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Medical Assistance Group",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Medical park",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "105Б, Розыбакиев көшесі",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "National Center for Tuberculosis Problems",
+    "region": "Kazakhstan",
+    "website": "https://www.nncf.kz/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "On Clinic",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "30, улица Абдулинных, Алматы",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "President",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "11, Түркістан көшесі",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "RAVIL",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Small hospital",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "TCO Clinic",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "E6",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Viamedis",
+    "region": "Kazakhstan",
+    "website": "https://www.viamedis.kz/",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Vita+",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "39/2, Lenin street, Aksu, 140100",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Zhurek",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "Желтоксан",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "«СЕГРЭС-2» АҚ медициналық пункті",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "АМЦ",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "8е, Жанаконыс мкр",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ай Мед ",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "улица Жандосова",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Айболит",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Айнұрдың үйінде",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "4-й микрорайон",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Айтекебийская центральная районная больница",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Акайская сельская амбулатория",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "1, Гарышкер",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Акимат",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "130а, 1-я зона, Турыш",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Акмарал больница Жуковский",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "24, Г.Муратбаев улица, Туркестан",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "450-й военный госпиталь Министерства обороны РФ",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatoriul Bardar",
+    "region": "Moldova",
+    "website": "",
+    "address": "2, Strada Limba Noastră, Bardar, MD-6811",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatoriul Bușila (abandonat)",
+    "region": "Moldova",
+    "website": "",
+    "address": "1, Strada Speranțelor, Bușila",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatoriul Cărbuna (închis)",
+    "region": "Moldova",
+    "website": "",
+    "address": "Cărbuna",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatoriul Săghieni (abandonat)",
+    "region": "Moldova",
+    "website": "",
+    "address": "16, Strada Ștefan cel Mare și Sfânt, Săghieni",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Asociația Medicală Teritorială Ciocana",
+    "region": "Moldova",
+    "website": "https://amt-ciocana.md/",
+    "address": "80, Strada Vadul lui Vodă, Chișinău, MD-2052",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Azil de batrini",
+    "region": "Moldova",
+    "website": "",
+    "address": "60, Strada 27 August 1989, Rezina, MD-5400",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Azilul de Bătrâni din Cimișlia",
+    "region": "Moldova",
+    "website": "",
+    "address": "27/1, Strada Cetatea Albă, Cimișlia, MD-4101",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Blocul central",
+    "region": "Moldova",
+    "website": "",
+    "address": "17, Strada Vlaicu Pârcălab, Chișinău",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centru Sănătății din sat. Năpădeni",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centru de reabilitare pentru copii",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centru de sănătate satului Copceac",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Clinic Republican „Constructorul”",
+    "region": "Moldova",
+    "website": "",
+    "address": "15, Strada Nikolai Zelinski, Chișinău, MD-2038",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Consultativ",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Consultativ Diagnostic AMT Rîșcani",
+    "region": "Moldova",
+    "website": "",
+    "address": "11, Strada Alecu Russo, Chișinău",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Fiziopneumologic de Reabilitare pentru Copii din Cornești",
+    "region": "Moldova",
+    "website": "",
+    "address": "70, Strada Ștefan cel Mare și Sfânt, Cornești",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medical Consultativ „Lacteia”",
+    "region": "Moldova",
+    "website": "",
+    "address": "2, Strada Vlaicu Pîrcălab, Chișinău, MD-2009",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medical de Urgență Cimișlia / Serviciu de Ambulanță Cimișlia",
+    "region": "Moldova",
+    "website": "",
+    "address": "131/C, Strada Alexandru cel Bun, Cimișlia, MD-4101",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medical „Sfântul Panteleimon”",
+    "region": "Moldova",
+    "website": "",
+    "address": "15, Strada Igor Vieru, Chișinău",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie",
+    "region": "Moldova",
+    "website": "",
+    "address": "Mingir",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie (blocul 2)",
+    "region": "Moldova",
+    "website": "",
+    "address": "Rezina",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie Cantemir",
+    "region": "Moldova",
+    "website": "",
+    "address": "22, Strada Nicolae Testemițanu, Cantemir, MD-7301",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie Căinari",
+    "region": "Moldova",
+    "website": "",
+    "address": "57/A, Strada Trandafirilor, Căinari, MD-7701",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie Căușeni",
+    "region": "Moldova",
+    "website": "",
+    "address": "18, Strada Ana și Alexandru, Căușeni, 4301",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie Rezina",
+    "region": "Moldova",
+    "website": "",
+    "address": "5, Bulevardul Alexei Șciusev, Rezina",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie Vorniceni",
+    "region": "Moldova",
+    "website": "",
+    "address": "Vorniceni",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie de la Soroca Nouă",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie nr. 1",
+    "region": "Moldova",
+    "website": "",
+    "address": "101B, Strada Decebal, Bălți",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie nr. 10",
+    "region": "Moldova",
+    "website": "",
+    "address": "19, Strada Socoleni, Chișinău",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie nr. 12",
+    "region": "Moldova",
+    "website": "",
+    "address": "17, Strada Miron Costin, Chișinău, MD-2068",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie nr. 2",
+    "region": "Moldova",
+    "website": "",
+    "address": "28, Strada Independenței, Chișinău",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie nr. 4",
+    "region": "Moldova",
+    "website": "",
+    "address": "24, Strada Ion Creangă, Chișinău, MD-2064",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie nr. 5 „Sfânta Maria”",
+    "region": "Moldova",
+    "website": "",
+    "address": "1, Strada Ion Luca Caragiale, Chișinău",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medicilor de Familie Ștefan Vodă",
+    "region": "Moldova",
+    "website": "",
+    "address": "2, Strada Nicolae Testemițeanu, Ștefan Vodă",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Național de Asistență Medicală Urgentă Prespitalicească",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Național de Medicină Sportivă „Atletmed”",
+    "region": "Moldova",
+    "website": "https://www.atletmed.md/",
+    "address": "7/1, Stradela Studenților, Chișinău, MD-2020",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Național de Transfuzie a Sângelui (Blocul B)",
+    "region": "Moldova",
+    "website": "",
+    "address": "65, Strada Gheorghe Asachi, Chișinău",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Național de Transfuzie a Sângelui (CNTS)",
+    "region": "Moldova",
+    "website": "https://cnts.md/",
+    "address": "11, Strada Academiei, Chișinău",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Pneumofiziologic",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Republican Experimental de Protezare, Ortopedie și Reabilitare",
+    "region": "Moldova",
+    "website": "",
+    "address": "Chișinău",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Republican de Diagnostică Medicală / Institutul de Pneumologie „Chiril Draganiuc”",
+    "region": "Moldova",
+    "website": "http://crdm.ms.md/",
+    "address": "13, Strada Constantin Vârnav, Chișinău",
+    "need_phone": true,
+    "need_email": false
+  }
+]

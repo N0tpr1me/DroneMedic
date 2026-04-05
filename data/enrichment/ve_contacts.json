@@ -1,0 +1,410 @@
+[
+  {
+    "name": "Ambulatorio Pedro Iturbe",
+    "phone": "+58-212-4311808",
+    "email": "",
+    "website": "",
+    "lat": 10.4352122,
+    "lon": -66.9848337
+  },
+  {
+    "name": "Módulo de Los Salias",
+    "phone": "+582123724053",
+    "email": "",
+    "website": "http://www.centrodiagnostico.com.ve/",
+    "lat": 10.3736808,
+    "lon": -66.9680669
+  },
+  {
+    "name": "Centro Medico Docente el Paso",
+    "phone": "+582127005000",
+    "email": "",
+    "website": "",
+    "lat": 10.3497173,
+    "lon": -67.0501704
+  },
+  {
+    "name": "Hospital Madre Rafols",
+    "phone": "+582617870480",
+    "email": "acmadrerafols@gmail.com",
+    "website": "https://ssmadrerafols.com/",
+    "lat": 10.6450156,
+    "lon": -71.6628413
+  },
+  {
+    "name": "Distrito Sanitario N° 1",
+    "phone": "+58-212-8621446",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.5159622,
+    "lon": -66.9174725
+  },
+  {
+    "name": "Distrito Sanitario N° 3",
+    "phone": "+58-212-4154679",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.4969833,
+    "lon": -66.9280377
+  },
+  {
+    "name": "Distrito Sanitario N° 4",
+    "phone": "+58-212-4152348",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.459659,
+    "lon": -66.9139481
+  },
+  {
+    "name": "Distrito Sanitario N° 7",
+    "phone": "+58-212-2411217",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.4901031,
+    "lon": -66.8088242
+  },
+  {
+    "name": "Clínica Leopoldo Aguerrevere",
+    "phone": "+58-212-9072222",
+    "email": "",
+    "website": "http://leopoldoaguerrevere.com",
+    "lat": 10.4497713,
+    "lon": -66.8704257
+  },
+  {
+    "name": "Hospital San Juan de Dios",
+    "phone": "+58-212-9070811",
+    "email": "",
+    "website": "http://www.hospitalsanjuandedios.org.ve/",
+    "lat": 10.4677342,
+    "lon": -66.8651148
+  },
+  {
+    "name": "Urológico San Román",
+    "phone": "+58-212-9990111",
+    "email": "",
+    "website": "http://www.urologico.com/web/default.php",
+    "lat": 10.4721027,
+    "lon": -66.8557664
+  },
+  {
+    "name": "Clínica Dispensario Padre Machado",
+    "phone": "+58 212-4429025",
+    "email": "",
+    "website": "",
+    "lat": 10.4708681,
+    "lon": -66.9535089
+  },
+  {
+    "name": "Centro Médico Loira",
+    "phone": "+58-212-4052111",
+    "email": "info@centromedicoloira.com",
+    "website": "http://cmloira.com.ve/",
+    "lat": 10.4811864,
+    "lon": -66.9437777
+  },
+  {
+    "name": "Hospital Pérez Carreño",
+    "phone": "+58-212-4728471",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal",
+    "lat": 10.480294,
+    "lon": -66.9531774
+  },
+  {
+    "name": "Clínica Vista Alegre",
+    "phone": "+58-212-4715519",
+    "email": "",
+    "website": "https://www.instagram.com/cvasalud/?hl=en",
+    "lat": 10.4885709,
+    "lon": -66.9486873
+  },
+  {
+    "name": "Hospital Militar Dr. Carlos Arvelo",
+    "phone": "+58-212-4061111",
+    "email": "",
+    "website": "http://hmcarlosarvelo.mil.ve/",
+    "lat": 10.4985332,
+    "lon": -66.9390503
+  },
+  {
+    "name": "Maternidad Concepción Palacios",
+    "phone": "+58-212-4518419",
+    "email": "maternidadconcepcionpalacios@gmail.com",
+    "website": "https://hospitales.mpps.gob.ve/distrito_capital/maternidad_concepcion_palacios/",
+    "lat": 10.4952295,
+    "lon": -66.9315153
+  },
+  {
+    "name": "Hospital Materno Infantil Dr. Pastor Oropeza",
+    "phone": "+58-212-4314763",
+    "email": "",
+    "website": "",
+    "lat": 10.4375628,
+    "lon": -66.9902722
+  },
+  {
+    "name": "Hospital Cardiológico Infantil Latinoamericano",
+    "phone": "+58-212-4075040",
+    "email": "",
+    "website": "http://www.cardiologicoinfantil.gob.ve/",
+    "lat": 10.4675487,
+    "lon": -66.9725441
+  },
+  {
+    "name": "Hospital José María Vargas",
+    "phone": "+58-212-8649145",
+    "email": "",
+    "website": "http://hospitalvargas.blogspot.com/",
+    "lat": 10.5164476,
+    "lon": -66.9114389
+  },
+  {
+    "name": "Hospital de Niños J.M. de Los Ríos",
+    "phone": "+58-212-5743511",
+    "email": "",
+    "website": "https://hospitales.mpps.gob.ve/distrito_capital/maternidad_concepcion_palacios/",
+    "lat": 10.5069625,
+    "lon": -66.899604
+  },
+  {
+    "name": "Hospital Oncológico Padre Machado",
+    "phone": "+58-212-6312312",
+    "email": "hospitaloncologicopadremachadoi@gmail.com",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal",
+    "lat": 10.4778138,
+    "lon": -66.9180238
+  },
+  {
+    "name": "Hospital Domingo Luciani",
+    "phone": "+58-212-2056511",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/contenido/localizacion-centros-de-salud-ivss:estado-Miranda",
+    "lat": 10.4712884,
+    "lon": -66.8104205
+  },
+  {
+    "name": "IVSS Ambulatorio de Caricuao",
+    "phone": "+58-212-4323793",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal-2",
+    "lat": 10.4330954,
+    "lon": -66.9628011
+  },
+  {
+    "name": "Instituto Nacional de Geriatría",
+    "phone": "+58-212-7611819",
+    "email": "",
+    "website": "",
+    "lat": 10.4351157,
+    "lon": -66.9910655
+  },
+  {
+    "name": "Hospital Ortopédico Infantil",
+    "phone": "+58-212-5094411",
+    "email": "",
+    "website": "https://www.hospitalortopedicoinfantil.com/",
+    "lat": 10.5053642,
+    "lon": -66.8918576
+  },
+  {
+    "name": "Hospital San José",
+    "phone": "+58-212-3034451",
+    "email": "",
+    "website": "",
+    "lat": 10.595867,
+    "lon": -66.957123
+  },
+  {
+    "name": "IVSS Hospital José María Vargas",
+    "phone": "+58 212-3316555",
+    "email": "",
+    "website": "",
+    "lat": 10.6031058,
+    "lon": -66.9217317
+  },
+  {
+    "name": "IVSS Ambulatorio Dr. Armando Castillo Plaza",
+    "phone": "+58-212-4722834",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal-2",
+    "lat": 10.4655951,
+    "lon": -66.9804218
+  },
+  {
+    "name": "Hospital Pérez de León",
+    "phone": "+58-212-2381105",
+    "email": "",
+    "website": "",
+    "lat": 10.4777403,
+    "lon": -66.8098326
+  },
+  {
+    "name": "Hospital Materno Infantil del Este \"Joel Valen\"",
+    "phone": "+58-212-2435155",
+    "email": "",
+    "website": "",
+    "lat": 10.4808754,
+    "lon": -66.8060926
+  },
+  {
+    "name": "IVSS Centro Nacional de Rehabilitación Dr. Alejandro Rhode",
+    "phone": "+58-212-4722176",
+    "email": "",
+    "website": "",
+    "lat": 10.4811343,
+    "lon": -66.9520477
+  },
+  {
+    "name": "Hospital Psiquiátrico de Caracas",
+    "phone": "+58-212-8608430",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal",
+    "lat": 10.5234149,
+    "lon": -66.9301814
+  },
+  {
+    "name": "IVSS Hospital Dr. Luis Salazar Domínguez",
+    "phone": "+58 212 3629860",
+    "email": "",
+    "website": "",
+    "lat": 10.4700801,
+    "lon": -66.6112511
+  },
+  {
+    "name": "Hospital Militar Vicente Sálias Sanoja",
+    "phone": "+58-212-",
+    "email": "",
+    "website": "",
+    "lat": 10.4543647,
+    "lon": -66.9055225
+  },
+  {
+    "name": "Clinica El Viñedo",
+    "phone": "0241-3001214",
+    "email": "",
+    "website": "",
+    "lat": 10.2118839,
+    "lon": -68.0122716
+  },
+  {
+    "name": "Maternidad Santa Ana",
+    "phone": "+58-212-5518924",
+    "email": "",
+    "website": "",
+    "lat": 10.51531,
+    "lon": -66.9031544
+  },
+  {
+    "name": "Hospital José Ignacio Baldó",
+    "phone": "+58-212-4727797",
+    "email": "alialgodonal@gmail.com",
+    "website": "https://hospitales.mpps.gob.ve/distrito_capital/hospital_jose_ignacio_baldo_algodonal/",
+    "lat": 10.4836768,
+    "lon": -66.972906
+  },
+  {
+    "name": "Hospital Carlos Diez del Ciervo",
+    "phone": "",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/",
+    "lat": 11.7598981,
+    "lon": -70.1980315
+  },
+  {
+    "name": "Clinica Popular El Espinal",
+    "phone": "+58 295-2971355",
+    "email": "",
+    "website": "",
+    "lat": 10.9647023,
+    "lon": -63.985906
+  },
+  {
+    "name": "Centro Médico El Valle",
+    "phone": "+58 295-2652702",
+    "email": "",
+    "website": "https://www.centromedicoelvalle.com/",
+    "lat": 10.9774483,
+    "lon": -63.8695094
+  },
+  {
+    "name": "Hospital Pediátrico Menca de Leoni",
+    "phone": "+58 286-9321920",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/",
+    "lat": 8.3433621,
+    "lon": -62.6905128
+  },
+  {
+    "name": "IVSS Hospital Dr. Raúl Leoni de Guaiparo",
+    "phone": "+58 286-9321920",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/",
+    "lat": 8.3425633,
+    "lon": -62.6902829
+  },
+  {
+    "name": "IVSS Centro Médico Dr. Roberto Lozano Villegas",
+    "phone": "+58 286 9318036",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/",
+    "lat": 8.3363032,
+    "lon": -62.6717256
+  },
+  {
+    "name": "Hospital Pediátrico Julio Criollo Vivas",
+    "phone": "+58-212-???",
+    "email": "",
+    "website": "",
+    "lat": 10.4770914,
+    "lon": -66.9178218
+  },
+  {
+    "name": "Hospital Jesús Yerena",
+    "phone": "+58-212-8600646",
+    "email": "",
+    "website": "http://www.ivss.gov.ve/Centros-de-Salud-Estado-Distrito-Federal",
+    "lat": 10.5241821,
+    "lon": -66.9301218
+  },
+  {
+    "name": "Hospital Periférico de Coche",
+    "phone": "+58-212-6813906",
+    "email": "",
+    "website": "",
+    "lat": 10.4411165,
+    "lon": -66.9264898
+  },
+  {
+    "name": "Cruz Roja Seccional El Tigre",
+    "phone": "0283-2353470",
+    "email": "",
+    "website": "http://www.cruzrojaeltigre.org.ve/",
+    "lat": 8.8813641,
+    "lon": -64.2610618
+  },
+  {
+    "name": "Unidad Sanitaria del Sur",
+    "phone": "+58-212-4152348",
+    "email": "",
+    "website": "http://www.mpps.gob.ve/",
+    "lat": 10.4758391,
+    "lon": -66.9174671
+  },
+  {
+    "name": "Hospital Universitario de Caracas",
+    "phone": "+58-212-6065350",
+    "email": "clinicouniversitarioaldia@hotmail.com",
+    "website": "http://www.huc.gov.ve/",
+    "lat": 10.490469,
+    "lon": -66.8940568
+  },
+  {
+    "name": "IVSS Centro Ambulatorio Dr. Julio Iribarren Borges",
+    "phone": "+58 212-8700979; +58 212-8704615; +58 212-8704614",
+    "email": "",
+    "website": "",
+    "lat": 10.5076781,
+    "lon": -66.9572242
+  }
+]

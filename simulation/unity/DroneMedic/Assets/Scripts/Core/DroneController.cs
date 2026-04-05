@@ -1,0 +1,286 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace DroneMedic
+{
+    public enum DroneState
+    {
+        Idle,
+        TakingOff,
+        Flying,
+        Hovering,
+        Landing,
+        Landed
+    }
+
+    [Serializable]
+    public class FlightLogEntry
+    {
+        public string eventName;
+        public string location;
+        public Vector3 position;
+        public float battery;
+        public float timestamp;
+
+        public FlightLogEntry(string eventName, string location, Vector3 position, float battery)
+        {
+            this.eventName = eventName;
+            this.location = location;
+            this.position = position;
+            this.battery = battery;
+            this.timestamp = Time.time;
+        }
+    }
+
+    public class DroneController : MonoBehaviour
+    {
+        // -- Events ----------------------------------------------------------
+
+        public event Action<DroneState> OnStateChanged;
+        public event Action<float> OnBatteryChanged;
+        public event Action<string> OnArrivedAtWaypoint;
+        public event Action<float> OnLowBattery;
+
+        // -- Inspector -------------------------------------------------------
+
+        [Header("Configuration")]
+        [SerializeField] private DroneConfig config;
+
+        [Header("Runtime (read-only)")]
+        [SerializeField] private DroneState currentState = DroneState.Idle;
+        [SerializeField] private float battery;
+        [SerializeField] private string currentLocation = "Depot";
+        [SerializeField] private bool isPaused;
+
+        [Header("Flight Log")]
+        [SerializeField] private List<FlightLogEntry> flightLog = new List<FlightLogEntry>();
+
+        // -- Public Properties -----------------------------------------------
+
+        public DroneState CurrentState => currentState;
+        public float Battery => battery;
+        public string CurrentLocation => currentLocation;
+        public bool IsFlying => currentState == DroneState.TakingOff
+                             || currentState == DroneState.Flying
+                             || currentState == DroneState.Hovering;
+        public IReadOnlyList<FlightLogEntry> FlightLog => flightLog;
+
+        // -- Private State ---------------------------------------------------
+
+        private Coroutine activeFlightCoroutine;
+
+        // -- Unity Lifecycle -------------------------------------------------
+
+        private void Awake()
+        {
+            if (config == null)
+            {
+                Debug.LogError("[DroneController] DroneConfig is not assigned.", this);
+                return;
+            }
+
+            battery = config.batteryCapacity;
+        }
+
+        // -- State Management ------------------------------------------------
+
+        private void SetState(DroneState newState)
+        {
+            if (currentState == newState) return;
+            currentState = newState;
+            OnStateChanged?.Invoke(newState);
+        }
+
+        // -- Battery ---------------------------------------------------------
+
+        private void DrainBattery(float distance)
+        {
+            float drain = distance * config.batteryDrainRate;
+            battery = Mathf.Max(0f, battery - drain);
+            OnBatteryChanged?.Invoke(battery);
+
+            if (battery <= config.batteryMinReserve)
+            {
+                OnLowBattery?.Invoke(battery);
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the drone has enough battery to fly to the Depot
+        /// from its current position, accounting for the minimum reserve.
+        /// </summary>
+        public bool CheckBatteryForReturn()
+        {
+            Vector3 depotPos = config.GetWorldPosition("Depot");
+            float distanceToDepot = Vector3.Distance(transform.position, depotPos);
+            float drainNeeded = distanceToDepot * config.batteryDrainRate;
+            return battery - drainNeeded >= config.batteryMinReserve;
+        }
+
+        // -- Logging ---------------------------------------------------------
+
+        private void Log(string eventName, string location)
+        {
+            var entry = new FlightLogEntry(eventName, location, transform.position, battery);
+            flightLog.Add(entry);
+        }
+
+        // -- Pause / Resume --------------------------------------------------
+
+        public void Pause()
+        {
+            if (!IsFlying) return;
+            isPaused = true;
+            SetState(DroneState.Hovering);
+            Log("Paused", currentLocation);
+        }
+
+        public void Resume()
+        {
+            if (!isPaused) return;
+            isPaused = false;
+            SetState(DroneState.Flying);
+            Log("Resumed", currentLocation);
+        }
+
+        // -- Flight Commands -------------------------------------------------
+
+        /// <summary>
+        /// Takeoff: vertical rise to config.droneAltitude over approximately 1 second.
+        /// </summary>
+        public Coroutine Takeoff()
+        {
+            if (currentState != DroneState.Idle && currentState != DroneState.Landed)
+            {
+                Debug.LogWarning("[DroneController] Cannot take off from state: " + currentState);
+                return null;
+            }
+
+            activeFlightCoroutine = StartCoroutine(TakeoffCoroutine());
+            return activeFlightCoroutine;
+        }
+
+        private IEnumerator TakeoffCoroutine()
+        {
+            SetState(DroneState.TakingOff);
+            Log("Takeoff", currentLocation);
+
+            Vector3 startPos = transform.position;
+            Vector3 targetPos = new Vector3(startPos.x, config.droneAltitude, startPos.z);
+            float duration = 1f;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / duration);
+                float smoothT = Mathf.SmoothStep(0f, 1f, t);
+                transform.position = Vector3.Lerp(startPos, targetPos, smoothT);
+                yield return null;
+            }
+
+            transform.position = targetPos;
+            SetState(DroneState.Hovering);
+            Log("Hovering", currentLocation);
+        }
+
+        /// <summary>
+        /// Land: vertical descent to ground over approximately 1 second.
+        /// </summary>
+        public Coroutine Land()
+        {
+            if (!IsFlying)
+            {
+                Debug.LogWarning("[DroneController] Cannot land from state: " + currentState);
+                return null;
+            }
+
+            activeFlightCoroutine = StartCoroutine(LandCoroutine());
+            return activeFlightCoroutine;
+        }
+
+        private IEnumerator LandCoroutine()
+        {
+            SetState(DroneState.Landing);
+            Log("Landing", currentLocation);
+
+            Vector3 startPos = transform.position;
+            Vector3 targetPos = new Vector3(startPos.x, 0f, startPos.z);
+            float duration = 1f;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / duration);
+                float smoothT = Mathf.SmoothStep(0f, 1f, t);
+                transform.position = Vector3.Lerp(startPos, targetPos, smoothT);
+                yield return null;
+            }
+
+            transform.position = targetPos;
+            SetState(DroneState.Landed);
+            Log("Landed", currentLocation);
+        }
+
+        /// <summary>
+        /// Move to a named location from config. The drone must be airborne (Hovering or Flying).
+        /// Battery is drained based on the distance travelled.
+        /// Coordinate mapping: Python (x,y) -> Unity (x,z), Python z -> Unity y (altitude).
+        /// </summary>
+        public Coroutine MoveToLocation(string locationName)
+        {
+            if (currentState != DroneState.Hovering && currentState != DroneState.Flying)
+            {
+                Debug.LogWarning("[DroneController] Must be airborne to move. Current state: " + currentState);
+                return null;
+            }
+
+            LocationData loc = config.GetLocation(locationName);
+            if (loc == null)
+            {
+                Debug.LogError("[DroneController] Unknown location: " + locationName);
+                return null;
+            }
+
+            activeFlightCoroutine = StartCoroutine(MoveToLocationCoroutine(locationName));
+            return activeFlightCoroutine;
+        }
+
+        private IEnumerator MoveToLocationCoroutine(string locationName)
+        {
+            SetState(DroneState.Flying);
+            Log("Moving", locationName);
+
+            Vector3 targetPos = config.GetWorldPosition(locationName);
+            float speed = config.droneVelocity;
+            Vector3 previousPos = transform.position;
+
+            while (Vector3.Distance(transform.position, targetPos) > 0.01f)
+            {
+                // Wait while paused
+                while (isPaused)
+                {
+                    yield return null;
+                }
+
+                previousPos = transform.position;
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+
+                float stepDistance = Vector3.Distance(previousPos, transform.position);
+                DrainBattery(stepDistance);
+
+                yield return null;
+            }
+
+            transform.position = targetPos;
+            currentLocation = locationName;
+
+            SetState(DroneState.Hovering);
+            Log("Arrived", locationName);
+            OnArrivedAtWaypoint?.Invoke(locationName);
+        }
+    }
+}

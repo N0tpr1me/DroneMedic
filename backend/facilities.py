@@ -25,9 +25,9 @@ from config import LOCATIONS, DRONE_ALTITUDE
 
 logger = logging.getLogger("DroneMedic.Facilities")
 
-# Path to the Excel file
+# Path to the curated top hospitals CSV
 _FACILITIES_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)), "data", "facilities.xlsx"
+    os.path.dirname(os.path.dirname(__file__)), "data", "enrichment", "top_hospitals_enriched.csv"
 )
 
 # All loaded facilities (raw data from xlsx)
@@ -50,62 +50,44 @@ def _latlon_to_xy(lat: float, lon: float, ref_lat: float, ref_lon: float) -> tup
 
 def load_facilities() -> list[dict]:
     """
-    Load facilities from Excel. Returns list of raw facility dicts.
-    Each dict has: name, type, phone, email, address, lat, lon, region, website.
+    Load facilities from the curated top hospitals CSV.
+    Each dict has: name, type, phone, email, address, lat, lon, region, beds, website.
     """
     global _facilities
     if _facilities:
         return _facilities
 
-    try:
-        import openpyxl
-    except ImportError:
-        logger.warning("openpyxl not installed — cannot load facilities.xlsx")
-        return []
+    import csv
 
     if not os.path.exists(_FACILITIES_PATH):
         logger.warning(f"Facilities file not found: {_FACILITIES_PATH}")
         return []
 
-    wb = openpyxl.load_workbook(_FACILITIES_PATH, read_only=True)
-    ws = wb.active
+    with open(_FACILITIES_PATH, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            try:
+                lat = float(row.get("Latitude", 0))
+                lon = float(row.get("Longitude", 0))
+            except (TypeError, ValueError):
+                continue
 
-    headers = None
-    for row in ws.iter_rows(values_only=True):
-        if headers is None:
-            # Normalize header names
-            headers = [str(h).strip().lower().replace(" ", "_") for h in row]
-            continue
+            if lat == 0 and lon == 0:
+                continue
 
-        values = list(row)
-        if len(values) < 7:
-            continue
+            _facilities.append({
+                "name": str(row.get("Name", "")).strip(),
+                "type": str(row.get("Type", "")).strip(),
+                "phone": str(row.get("Phone Number", "") or "").strip(),
+                "email": str(row.get("Email", "") or "").strip(),
+                "address": str(row.get("Physical Address", "") or "").strip(),
+                "lat": lat,
+                "lon": lon,
+                "region": str(row.get("Region", "") or "").strip(),
+                "beds": int(row.get("Beds", 0) or 0),
+                "website": str(row.get("Website", "") or "").strip(),
+            })
 
-        record = dict(zip(headers, values))
-
-        # Skip rows with missing lat/lon
-        try:
-            lat = float(record.get("latitude", 0))
-            lon = float(record.get("longitude", 0))
-        except (TypeError, ValueError):
-            continue
-
-        if lat == 0 and lon == 0:
-            continue
-
-        _facilities.append({
-            "name": str(record.get("name", "")).strip(),
-            "type": str(record.get("type", "")).strip(),
-            "phone": str(record.get("phone_number", "") or "").strip(),
-            "email": str(record.get("email", "") or "").strip(),
-            "address": str(record.get("physical_address", "") or "").strip(),
-            "lat": lat,
-            "lon": lon,
-            "region": str(record.get("region", "") or "").strip(),
-            "website": str(record.get("website", "") or "").strip(),
-        })
-
-    wb.close()
     logger.info(f"Loaded {len(_facilities)} facilities from {_FACILITIES_PATH}")
     return _facilities
 

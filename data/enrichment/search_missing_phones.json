@@ -1,0 +1,482 @@
+[
+  {
+    "name": "Adolescent and Young Adult Hospice (AYAH)",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Adult Prevention and Recovery Care (APARC)",
+    "region": "Australia",
+    "website": "",
+    "address": "91, Beach Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Albany Community Hospice",
+    "region": "Australia",
+    "website": "",
+    "address": "30, Warden Avenue",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Albany Regional Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "30, Warden Avenue",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alcohol and Drug Services",
+    "region": "Australia",
+    "website": "",
+    "address": "St Johns Avenue",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alderley Child Health",
+    "region": "Australia",
+    "website": "https://www.childrens.health.qld.gov.au/service-child-health/",
+    "address": "24, South Pine Road, Brisbane, 4051",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alexandria Specialist Day Hospital",
+    "region": "Australia",
+    "website": "https://www.asdh.com.au",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alpine Health [Mount Beauty]",
+    "region": "Australia",
+    "website": "",
+    "address": "10, Hollonds Street, 3699",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulance Victoria",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Anne Caudle Campus",
+    "region": "Australia",
+    "website": "https://www.bendigohealth.org.au/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Anne Leach Wing",
+    "region": "Australia",
+    "website": "https://perthradclinic.com.au",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ardrossan Community Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Armadale Kelmscott District Memorial Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "3056, Albany Highway, 6112",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Armidale Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "226, Rusden Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ashworth House",
+    "region": "Australia",
+    "website": "",
+    "address": "25, Kolberg Street, Brisbane, 4034",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Austin Hospital",
+    "region": "Australia",
+    "website": "https://www.austin.org.au/",
+    "address": "145, Studley Road",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ayr Hospital",
+    "region": "Australia",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Fjórðungssjúkrahúsið í Neskaupstað",
+    "region": "Iceland",
+    "website": "",
+    "address": "20, Mýrargata, Neskaupstaður, 740",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Heilsugæslustöðin Djúpavogi",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Öldrunardeild Vífilsstöðum",
+    "region": "Iceland",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Saint Thomas Infirmary",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "St. Elizabeth's Infirmary",
+    "region": "Jamaica",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "AED設置場所",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "BMC",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "BOWOW",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "E歯科",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Fビレッジ メディカルスクエア",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Hospital General",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "IMS グループ",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "2- больница Теректинского района",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "Ақжайық",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "4-я поликлиника",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "6",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "DOS dental",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "DOS dental",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "ERT Station",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Fitness Centre (15)",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "15, Льва Толстого",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Gio Trade",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "2, Сатыбалдина улица",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "ICT Lab",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "RAVIL",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Small hospital",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "TCO Clinic",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "E6",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Vita+",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "39/2, Lenin street, Aksu, 140100",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "«СЕГРЭС-2» АҚ медициналық пункті",
+    "region": "Kazakhstan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatoriul Bardar",
+    "region": "Moldova",
+    "website": "",
+    "address": "2, Strada Limba Noastră, Bardar, MD-6811",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatoriul Bușila (abandonat)",
+    "region": "Moldova",
+    "website": "",
+    "address": "1, Strada Speranțelor, Bușila",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatoriul Cărbuna (închis)",
+    "region": "Moldova",
+    "website": "",
+    "address": "Cărbuna",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ambulatoriul Săghieni (abandonat)",
+    "region": "Moldova",
+    "website": "",
+    "address": "16, Strada Ștefan cel Mare și Sfânt, Săghieni",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Azil de batrini",
+    "region": "Moldova",
+    "website": "",
+    "address": "60, Strada 27 August 1989, Rezina, MD-5400",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Azilul de Bătrâni din Cimișlia",
+    "region": "Moldova",
+    "website": "",
+    "address": "27/1, Strada Cetatea Albă, Cimișlia, MD-4101",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centru Sănătății din sat. Năpădeni",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centru de sănătate satului Copceac",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Clinic Republican „Constructorul”",
+    "region": "Moldova",
+    "website": "",
+    "address": "15, Strada Nikolai Zelinski, Chișinău, MD-2038",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Medical de Urgență Cimișlia / Serviciu de Ambulanță Cimișlia",
+    "region": "Moldova",
+    "website": "",
+    "address": "131/C, Strada Alexandru cel Bun, Cimișlia, MD-4101",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Național de Asistență Medicală Urgentă Prespitalicească",
+    "region": "Moldova",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Centrul Național de Medicină Sportivă „Atletmed”",
+    "region": "Moldova",
+    "website": "https://www.atletmed.md/",
+    "address": "7/1, Stradela Studenților, Chișinău, MD-2020",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Beach Haven Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Buchanan Rehabilitation and Carrington Haemodialysis",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Chalmers Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Child Development Service",
+    "region": "New Zealand",
+    "website": "https://cdhb.health.nz/childdevelopmentservice",
+    "address": "440, Montreal Street, Christchurch",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Accident & Emergency",
+    "region": "UK",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  }
+]

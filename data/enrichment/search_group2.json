@@ -1,0 +1,954 @@
+[
+  {
+    "name": "大阪市立総合医療センター",
+    "region": "Japan",
+    "website": "https://www.osakacity-hp.or.jp/ocgh/",
+    "address": "22, 大阪市, 534-0021",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "獨協医科大学埼玉医療センター",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "KKR札幌医療センター",
+    "region": "Japan",
+    "website": "https://www.kkr-smc.com/",
+    "address": "40, 札幌市, 062-0931",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "河北リハビリテーション病院",
+    "region": "Japan",
+    "website": "",
+    "address": "166-8588",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "医療法人社団竜山会金沢古府記念病院",
+    "region": "Japan",
+    "website": "https://www.kkm-hp.jp/",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "(医）立川メディカルセンター柏崎厚生病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "16号整形外科",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "753歯科",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "AED設置場所",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "AOI七沢リハビリテーション病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "AOI名古屋病院",
+    "region": "Japan",
+    "website": "https://www.aoikai.jp/aoinagoya/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "AOI国際病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "AOI広島病院",
+    "region": "Japan",
+    "website": "https://www.aoikai.jp/aoihiroshima/",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "AOI湘北病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "BMC",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "BOWOW",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "E歯科",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Fビレッジ メディカルスクエア",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "HITO病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Hospital General",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "IMS グループ",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JASMIN",
+    "region": "Japan",
+    "website": "https://nakagawaekimae-naika.jp",
+    "address": "37号, 横浜市, 224-0001",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "JAとりで総合医療センター",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JA北海道厚生連 帯広厚生病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JA北海道厚生連美深厚生病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JA厚生連健康管理センター",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "JA尾道総合病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JA長野厚生連 佐久総合病院小海分院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JA長野厚生連 富士見高原医療福祉センター 富士見高原病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JCHO 東京山手メディカルセンター",
+    "region": "Japan",
+    "website": "https://yamate.jcho.go.jp/",
+    "address": "1, 新宿区, 169-0073",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JCHOさいたま北部医療センター",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JCHO仙台南病院",
+    "region": "Japan",
+    "website": "",
+    "address": "仙台市, 981-1103",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "JCHO仙台病院",
+    "region": "Japan",
+    "website": "https://sendai.jcho.go.jp/",
+    "address": "1, 仙台市, 981-3281",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "JCHO北海道病院",
+    "region": "Japan",
+    "website": "https://hokkaido.jcho.go.jp/",
+    "address": "18, 札幌市, 062-8618",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JCHO千葉病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JCHO千葉病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JCHO大阪病院",
+    "region": "Japan",
+    "website": "https://osaka.jcho.go.jp/",
+    "address": "78, 553-0003",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "JCHO東京新宿メディカルセンター",
+    "region": "Japan",
+    "website": "https://shinjuku.jcho.go.jp/",
+    "address": "1, 新宿区, 162-8543",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "JCHO玉造病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JCHO登別病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JCHO相模野病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "JCHO金沢病院",
+    "region": "Japan",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Binangonan Lakeview Hospital",
+    "region": "Philippines",
+    "website": "https://www.ourblh.com",
+    "address": "Manila East Road, Binangonan",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Chong Hua Hospital",
+    "region": "Philippines",
+    "website": "www.chonghua.com.ph",
+    "address": "Don Mariano Cui Street, Cebu, 6000",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Cagayan Valley Medical Center",
+    "region": "Philippines",
+    "website": "http://cvmc.doh.gov.ph/",
+    "address": "Dalan na Pagayaya, Tuguegarao",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mayor Hilarion A. Ramiro Sr. Medical Center",
+    "region": "Philippines",
+    "website": "",
+    "address": "Ozamiz-Oroquieta Road, Ozamiz City, 7200",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Zamboanga City Medical Center",
+    "region": "Philippines",
+    "website": "",
+    "address": "Evangelista Street, Zamboanga",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Iloilo Doctors' Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Maguindanao Provincial Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "9624",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Quezon City General Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "Seminary Road, Quezon City",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Ospital ng Palawan",
+    "region": "Philippines",
+    "website": "",
+    "address": "220, Malvar Street, Puerto Princesa, 5300",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Divine Word Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "Avenida Veteranos, Tacloban",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Misamis Occidental Provincial Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "President Elpidio Quirino Street",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "North General Hospital",
+    "region": "Philippines",
+    "website": "https://cdg.cebudocgroup.com.ph/about/hospitals/ngh",
+    "address": "Kauswagan Road",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "President Ramon Magsaysay Memorial Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "J. P. Rizal Street, 2201",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Roxas Memorial Provincial Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "Arnaldo Boulevard",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Ciudad Medical de Zamboanga",
+    "region": "Philippines",
+    "website": "",
+    "address": "Mayor Vitaliano D. Agan Avenue, Zamboanga, 7000",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Bukidnon Provincial Hospital - Maramag",
+    "region": "Philippines",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": false
+  },
+  {
+    "name": "Lucena MMG General Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "Old Manila South Road",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "The Medical City Iloilo",
+    "region": "Philippines",
+    "website": "http://themedicalcityiloilo.com/",
+    "address": "Locsin Street, Iloilo City, 5000",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Biliran Provincial Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "Castin Street, 6560",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Gregorio T. Lluch Memorial Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "Gregorio T. Lluch Sr. Avenue, Iligan City, 9200",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Mendero Medical Center",
+    "region": "Philippines",
+    "website": "",
+    "address": "Consolacion, 6001",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Metro Iloilo Hospital and Medical Center",
+    "region": "Philippines",
+    "website": "",
+    "address": "Metropolis Avenue",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "St. Anthony College Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "San Roque Street Extension",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "West Metro Medical Center",
+    "region": "Philippines",
+    "website": "",
+    "address": "Veterans Avenue Extension, Zamboanga City, 7000",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Metro Antipolo Hospital and Medical Center",
+    "region": "Philippines",
+    "website": "",
+    "address": "Marcos Highway, Antipolo",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Camarin Doctors Hospital",
+    "region": "Philippines",
+    "website": "https://camarindoctorshospital.ph",
+    "address": "1, Camarin Road, Caloocan",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Camiguin General Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "General B. Aranas Street, 9100",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Pamplona Hospital & Medical Center",
+    "region": "Philippines",
+    "website": "",
+    "address": "46, Alabang-Zapote Road",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "ACE Dumaguete Doctors",
+    "region": "Philippines",
+    "website": "",
+    "address": "Claytown Road, Dumaguete, 6200",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Allah Valley Medical Specialists Center Incorporated",
+    "region": "Philippines",
+    "website": "",
+    "address": "General Santos Drive, Koronadal City, 9506",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Cebu Provincial Hospital - Carcar City",
+    "region": "Philippines",
+    "website": "",
+    "address": "Carcar Diversion Road, Carcar",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Cebu Provincial Hospital - Danao",
+    "region": "Philippines",
+    "website": "",
+    "address": "Cebu North Road, Danao, 6004",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Dr. George T. Hofer Medical Center",
+    "region": "Philippines",
+    "website": "",
+    "address": "Pagadian-Zamboanga City Highway, 7001",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Jose B. Lingad Memorial Regional Hospital",
+    "region": "Philippines",
+    "website": "https://jblmgh.doh.gov.ph",
+    "address": "2000, MacArthur Highway, San Fernando, 2000",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Medina General Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "7200, Governor Angel N. Medina Sr. Avenue, Ozamiz",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Mindoro Medical Center Calapan",
+    "region": "Philippines",
+    "website": "",
+    "address": "J. P. Rizal Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ormoc District Hospital",
+    "region": "Philippines",
+    "website": "",
+    "address": "Merida-Ormoc Road, Ormoc",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Auckland City Hospital",
+    "region": "New Zealand",
+    "website": "https://www.adhb.health.nz/hospitals-and-clinics/auckland-city-hospital/",
+    "address": "2, Park Road, Auckland, 1023",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Kaitaia Hospital",
+    "region": "New Zealand",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/kaitaia-hospital-services/",
+    "address": "29, Redan Road, Kaitaia, 0410",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Bay of Islands Hospital",
+    "region": "New Zealand",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/bay-of-islands-hospital-services/",
+    "address": "Hospital Road, Kawakawa, 0210",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "24 Hour Surgery",
+    "region": "New Zealand",
+    "website": "https://www.24hoursurgery.co.nz/",
+    "address": "401, Madras Street, Christchurch, 8013",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Accident and Urgent Medical Centre",
+    "region": "New Zealand",
+    "website": "https://www.wamc.co.nz/",
+    "address": "17, Adelaide Road, Wellington",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Albany Veterinary Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Alexandra Hospital",
+    "region": "New Zealand",
+    "website": "https://www.nmdhb.govt.nz/hospitals-and-community-services/hospitals/alexandra-hospital/",
+    "address": "5, Alexandra Grove, Nelson",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Althorp Private Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Amberwood Hospital and Rest Home",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Aranui Rest Home and Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ascot Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Ashburton Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Auckland City Surgical Services Limited",
+    "region": "New Zealand",
+    "website": "https://www.onehealth.co.nz/",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Auckland Skin and Cancer Foundation",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Awhinatia Health Centre",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Bay Radiology",
+    "region": "New Zealand",
+    "website": "https://bayradiology.co.nz/",
+    "address": "281, Cheyne Road, 3112",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Bay of Islands Hospital",
+    "region": "New Zealand",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/bay-of-islands-hospital-services/",
+    "address": "21, Hospital Road, Kawakawa, 0210",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Beach Haven Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Bethesda Home and Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Bidwell Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Birthright",
+    "region": "New Zealand",
+    "website": "https://www.onehealth.co.nz/",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Bluff Medical Centre",
+    "region": "New Zealand",
+    "website": "",
+    "address": "2, Tone Street",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Botany SuperClinic",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Bowen Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "98, Churchill Drive, Wellington",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Braemar Hospital",
+    "region": "New Zealand",
+    "website": "https://braemarhospital.co.nz/",
+    "address": "24, Ohaupo Road",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Brightside Hospital",
+    "region": "New Zealand",
+    "website": "http://www.endoscopyak.co.nz/",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Buchanan Rehabilitation and Carrington Haemodialysis",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Bupa Hillsborough Care Home",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Burwood Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "300, Burwood Road, Christchurch, 8083",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "CHT Highfield Home and Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Cancer Society",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Canterbury Charity Hospital",
+    "region": "New Zealand",
+    "website": "https://charityhospital.org.nz",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Cascades Rest Home and Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Chalmers Hospital",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Child & Youth Services Te Roopu Kimiora",
+    "region": "New Zealand",
+    "website": "https://www.northlanddhb.org.nz/our-services/our-hospitals/kaitaia-hospital-services/",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Child Development Service",
+    "region": "New Zealand",
+    "website": "https://cdhb.health.nz/childdevelopmentservice",
+    "address": "440, Montreal Street, Christchurch",
+    "need_phone": true,
+    "need_email": true
+  },
+  {
+    "name": "Christchurch Hospital",
+    "region": "New Zealand",
+    "website": "https://www.cdhb.health.nz/Hospitals-Services/hospitals/Christchurch-Hospital/Pages/default.aspx",
+    "address": "Riccarton Avenue, Christchurch, 8011",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Christchurch Outpatients",
+    "region": "New Zealand",
+    "website": "",
+    "address": "2, Oxford Terrace, Christchurch, 8011",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Christchurch Outpatients",
+    "region": "New Zealand",
+    "website": "",
+    "address": "",
+    "need_phone": false,
+    "need_email": true
+  },
+  {
+    "name": "Christchurch Public Hospital",
+    "region": "New Zealand",
+    "website": "https://www.cdhb.health.nz/hospitals-health-facilities/christchurch-hospital/",
+    "address": "2, Riccarton Avenue, Christchurch, 8011",
+    "need_phone": true,
+    "need_email": true
+  }
+]

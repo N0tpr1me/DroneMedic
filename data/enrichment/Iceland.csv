@@ -1,0 +1,52 @@
+Name,Type,Phone Number,Email,Physical Address,Latitude,Longitude,Region
+Heilbrigðisstofnun Suðurlands,Clinic,,,,64.112626,-20.502568,Iceland
+Heilbrigðisstofnun vesturlands,Clinic,+354 432 1300,,"1 Spítalastígur, Hvammstangi, 530",65.398581,-20.94703,Iceland
+Heilsugæsla,Clinic,,,,66.155702,-18.908943,Iceland
+Heilsugæsla,Clinic,,,"25b Breiðamörk, 810",64.001163,-21.186186,Iceland
+Heilsugæsla Suðurnesja,Clinic,,,,63.998984,-22.585581,Iceland
+Heilsugæslan Breiðdalsvík,Clinic,,,"44 Selnes, 760",64.792349,-14.001967,Iceland
+Heilsugæslan Efra-Breiðholti,Clinic,,,,64.105051,-21.814505,Iceland
+Heilsugæslan Garðabæ,Clinic,+354 520 1800,gardabaer@heilsugaeslan.is,"7 Garðatorg, Garðabær, 210",64.088275,-21.918448,Iceland
+Heilsugæslan Hamraborg,Clinic,,,"8 Hamraborg, Kópavogur, 200",64.11191,-21.907474,Iceland
+Heilsugæslan Mosfellsumdæmi,Clinic,+354 513 6050,mosfellsbaer@heilsugaeslan.is,"3 Sunnukriki, Mosfellsbær, 270",64.163573,-21.691281,Iceland
+Heilsugæslan Sólvangi,Clinic,,,2 Sólvangsvegur,64.068946,-21.940103,Iceland
+Heilsugæslan Árbæ,Clinic,,,115 Hraunbær,64.11875,-21.800172,Iceland
+Heilsugæslan Þorlákshöfn,Clinic,,,,63.856829,-21.385843,Iceland
+Heilsugæslan í Grafarvogi,Clinic,,,15 Spöngin,64.150597,-21.785451,Iceland
+Heilsugæslan í Stykkishólmi,Clinic,,,,65.07737,-22.721498,Iceland
+Heilsugæslan í Ólafsvík,Clinic,,,,64.893054,-23.71473,Iceland
+Heilsugæslustöðin Grundarfirði,Clinic,+354 432 1350,,"7 Hrannarstígur, 350",64.925232,-23.258727,Iceland
+Hvammur,Clinic,,,,64.10146,-21.887232,Iceland
+Livio,Clinic,+354 430 4000,reykjavik@livio.is,"74 Álfheimar, Reykjavík, 104",64.133966,-21.868408,Iceland
+Læknastöðin,Clinic,,,"Réttarholtsvegur, 108",64.125767,-21.863223,Iceland
+Meilbrigðisstofnun Vesturlands,Clinic,,,,64.544675,-21.911482,Iceland
+Rauði krossinn,Clinic,,,"9 Efstaleiti, Reykjavík, 103",64.126507,-21.888309,Iceland
+Reynir ráðgjafastofa,Clinic,,,,65.679039,-18.109047,Iceland
+Sunna,Clinic,+354 591 8000,sunna@sunnafrjosemi.is,"8 Urðarhvarf, Kópavogur, 203",64.096895,-21.807139,Iceland
+Barna- og unglingageðdeild Landspítalans,Hospital,03545434300,,"12 Dalbraut, 105",64.148602,-21.87642,Iceland
+Fjórðungssjúkrahúsið í Neskaupstað,Hospital,,,"20 Mýrargata, Neskaupstaður, 740",65.14843,-13.676025,Iceland
+HSN Blönduós,Hospital,,,,65.656474,-20.280292,Iceland
+Heilbrigðisstofnun Suðurlands,Hospital,,,"Selfoss, 800",63.939191,-20.987013,Iceland
+Heilbrigðisstofnun Suðurlands,Hospital,,,,63.420755,-19.006431,Iceland
+Heilbrigðisstofnun Vesturlands,Hospital,+354 432 1200,,"Austurgata, 340",65.077387,-22.721755,Iceland
+Heilbrigðisstofnunin Fjallabyggð,Hospital,,,,66.155647,-18.909295,Iceland
+Heilbrigðisstofun Þingeyinga,Hospital,,,,66.049057,-17.34058,Iceland
+Heilbrigðisstofunin Sauðárkróki,Hospital,,,,65.73937,-19.639755,Iceland
+Heilsugæsla Rangárþings,Hospital,,,"4 Öldubakki, Hvolsvöllur, 860",63.751572,-20.217493,Iceland
+Heilsugæsla Raufarhafnar,Hospital,,,,66.452694,-15.950413,Iceland
+Heilsugæsla Suðurnesja,Hospital,,,"6 Skólavegur, Keflavík, 230",64.001093,-22.555173,Iceland
+Heilsugæsla við Víkurbraut,Hospital,,,,64.258864,-15.213518,Iceland
+Heilsugæslan,Hospital,,,"8 Búðareyri, 730",65.033517,-14.222559,Iceland
+Heilsugæslusel Flateyrar,Hospital,,,,66.046775,-23.512311,Iceland
+Heilsugæslustöðin Djúpavogi,Hospital,,,,64.654415,-14.280435,Iceland
+Kleppsspítali,Hospital,,,"Reykjavík, 104",64.14504,-21.848411,Iceland
+Landakotsspítali,Hospital,,,Reykjavík,64.148418,-21.949093,Iceland
+Landspítali,Hospital,,,,64.138099,-21.927523,Iceland
+Landspítali Fossvogur,Hospital,,,,64.122068,-21.888698,Iceland
+Landspítali Grensás,Hospital,,,"Reykjavík, 108",64.125614,-21.881402,Iceland
+Rauði kross Íslands,Hospital,,,,65.975086,-18.530503,Iceland
+Sjúkrahúsið Vogur,Hospital,,,,64.126256,-21.792991,Iceland
+Sjúkrahúsið og Heilsugæslan á Akranesi,Hospital,,,,64.319691,-22.081835,Iceland
+Sjúkrahúsið og heilsugæslan á Ísafirði,Hospital,,,"Torfnes, Ísafjörður, 400",66.075137,-23.127915,Iceland
+Sjúkrahúsið á Akureyri,Hospital,,,,65.673313,-18.093636,Iceland
+Öldrunardeild Vífilsstöðum,Hospital,,,,64.082131,-21.888015,Iceland

@@ -1,0 +1,494 @@
+[
+  {
+    "name": "Dr George Mukhari",
+    "region": "South Africa",
+    "phone": "012 529 3000",
+    "email": "Manita.Tabane@gauteng.gov.za"
+  },
+  {
+    "name": "Boitumelo Regional Hospital",
+    "region": "South Africa",
+    "phone": "056 216 5200",
+    "email": "Matlij@fshealth.gov.za"
+  },
+  {
+    "name": "Steve Biko Academic Hospital",
+    "region": "South Africa",
+    "phone": "012 354 1000",
+    "email": "info@sbah.org.za"
+  },
+  {
+    "name": "Thelle Mogoerane Hospital",
+    "region": "South Africa",
+    "phone": "011 891 7000",
+    "email": ""
+  },
+  {
+    "name": "Selby Hospital(Solomon Stix Morewa Memorial)",
+    "region": "South Africa",
+    "phone": "011 491 4100",
+    "email": "info@clinix.co.za"
+  },
+  {
+    "name": "Tower Psychiatric Hospital",
+    "region": "South Africa",
+    "phone": "046 645 5000",
+    "email": ""
+  },
+  {
+    "name": "Dora Nginza Hospital",
+    "region": "South Africa",
+    "phone": "041 406 4111",
+    "email": ""
+  },
+  {
+    "name": "Tambo Memorial Hospital",
+    "region": "South Africa",
+    "phone": "011 898 8000",
+    "email": ""
+  },
+  {
+    "name": "Nelson Mandela Academic Hospital",
+    "region": "South Africa",
+    "phone": "+27 47 502 4513",
+    "email": "nomalanga.makwedini@impilo.ecprov.gov.za"
+  },
+  {
+    "name": "Netcare Unitas Hospital",
+    "region": "South Africa",
+    "phone": "012 664 8000",
+    "email": "customercareunitas@netcare.co.za"
+  },
+  {
+    "name": "Netcare St. Augustine's Hospital",
+    "region": "South Africa",
+    "phone": "031 268 5000",
+    "email": "customercarestaugustines@netcare.co.za"
+  },
+  {
+    "name": "Mankweng Hospital",
+    "region": "South Africa",
+    "phone": "015 286 1000",
+    "email": ""
+  },
+  {
+    "name": "Tintswalo Hospital",
+    "region": "South Africa",
+    "phone": "013 795 8606",
+    "email": "MerriamM@mpuhealth.gov.za"
+  },
+  {
+    "name": "Mediclinic Panorama",
+    "region": "South Africa",
+    "phone": "021 938 2111",
+    "email": ""
+  },
+  {
+    "name": "Eugene Marais Hospital",
+    "region": "South Africa",
+    "phone": "012 334 2777",
+    "email": ""
+  },
+  {
+    "name": "Lenmed Ethekwini Hospital & Heart Centre",
+    "region": "South Africa",
+    "phone": "+27 31 581 2400",
+    "email": "info@lenmed.co.za"
+  },
+  {
+    "name": "Netcare Garden City Hospital",
+    "region": "South Africa",
+    "phone": "011 495 5000",
+    "email": "gchenquiries@netcare.co.za"
+  },
+  {
+    "name": "Life Wilgers Hospital",
+    "region": "South Africa",
+    "phone": "012 807 8100",
+    "email": "cherise.meadows@lifehealthcare.co.za"
+  },
+  {
+    "name": "Butterworth Hospital",
+    "region": "South Africa",
+    "phone": "047 491 0810",
+    "email": ""
+  },
+  {
+    "name": "Khayelitsha Hospital",
+    "region": "South Africa",
+    "phone": "021 360 4201",
+    "email": ""
+  },
+  {
+    "name": "Vryheid Hospital",
+    "region": "South Africa",
+    "phone": "034 982 2111",
+    "email": "nqobile.mbatha@kznhealth.gov.za"
+  },
+  {
+    "name": "Mamelodi Hospital",
+    "region": "South Africa",
+    "phone": "012 841 8300",
+    "email": ""
+  },
+  {
+    "name": "Life St George's Hospital",
+    "region": "South Africa",
+    "phone": "041 392 6111",
+    "email": ""
+  },
+  {
+    "name": "Medi clinic Sandton",
+    "region": "South Africa",
+    "phone": "011 709 2000",
+    "email": "pxmsandton@mediclinic.co.za"
+  },
+  {
+    "name": "Northern Cape Mental Healthcare Hospital",
+    "region": "South Africa",
+    "phone": "053 830 2100",
+    "email": ""
+  },
+  {
+    "name": "Dr S.K. Matseke Memorial Hospital.",
+    "region": "South Africa",
+    "phone": "011 933 5000",
+    "email": "info@clinix.co.za"
+  },
+  {
+    "name": "George Provincial Hospital",
+    "region": "South Africa",
+    "phone": "044 874 5122",
+    "email": "Nadia.Ferreira@westerncape.gov.za"
+  },
+  {
+    "name": "Annotto Bay Hospital",
+    "region": "Jamaica",
+    "phone": "876-996-2222",
+    "email": ""
+  },
+  {
+    "name": "Bellevue Hospital",
+    "region": "Jamaica",
+    "phone": "876-928-1380",
+    "email": "info@bvh.gov.jm"
+  },
+  {
+    "name": "Black River Hospital",
+    "region": "Jamaica",
+    "phone": "876-634-1893",
+    "email": "myexperience@srha.gov.jm"
+  },
+  {
+    "name": "Bustamante Children Hospital",
+    "region": "Jamaica",
+    "phone": "876-968-0300",
+    "email": "bhospc@cwjamaica.com"
+  },
+  {
+    "name": "Catherine Hall Health Centre",
+    "region": "Jamaica",
+    "phone": "876-952-0396",
+    "email": ""
+  },
+  {
+    "name": "Cornwall Regional Hospital",
+    "region": "Jamaica",
+    "phone": "876-912-1747",
+    "email": ""
+  },
+  {
+    "name": "Falmouth Hospital",
+    "region": "Jamaica",
+    "phone": "876-954-3250",
+    "email": ""
+  },
+  {
+    "name": "Hargreaves Memorial Hospital",
+    "region": "Jamaica",
+    "phone": "876-962-2040",
+    "email": "info@hargreaveshospital.org"
+  },
+  {
+    "name": "Hospiten Montego Bay",
+    "region": "Jamaica",
+    "phone": "+1 876 618 4455",
+    "email": "montegobay@hospiten.com"
+  },
+  {
+    "name": "Isaac Barrant Clinic",
+    "region": "Jamaica",
+    "phone": "876-982-2766",
+    "email": ""
+  },
+  {
+    "name": "Kingston Open MRI",
+    "region": "Jamaica",
+    "phone": "876-908-1828",
+    "email": ""
+  },
+  {
+    "name": "Kingston Public Hospital",
+    "region": "Jamaica",
+    "phone": "876-922-0210",
+    "email": "kphvjhpatientaffairs@gmail.com"
+  },
+  {
+    "name": "Lincoln Health Centre",
+    "region": "Jamaica",
+    "phone": "876-797-6494",
+    "email": ""
+  },
+  {
+    "name": "Linstead Hospital",
+    "region": "Jamaica",
+    "phone": "876-903-3010",
+    "email": ""
+  },
+  {
+    "name": "Mandeville Memorial Hospital",
+    "region": "Jamaica",
+    "phone": "876-962-2067",
+    "email": "pr@srha.gov.jm"
+  },
+  {
+    "name": "Mandeville Public Hospital",
+    "region": "Jamaica",
+    "phone": "876-962-2067",
+    "email": "pr@srha.gov.jm"
+  },
+  {
+    "name": "May Pen Hospital",
+    "region": "Jamaica",
+    "phone": "876-986-2528",
+    "email": ""
+  },
+  {
+    "name": "National Chest Hospital",
+    "region": "Jamaica",
+    "phone": "876-927-0000",
+    "email": ""
+  },
+  {
+    "name": "Noel Holmes Hospital",
+    "region": "Jamaica",
+    "phone": "876-956-2733",
+    "email": ""
+  },
+  {
+    "name": "Nutall Memorial Hospital",
+    "region": "Jamaica",
+    "phone": "876-926-2139",
+    "email": "nuttallhospital@gmail.com"
+  },
+  {
+    "name": "Percy Junor Hospital",
+    "region": "Jamaica",
+    "phone": "876-964-2322",
+    "email": ""
+  },
+  {
+    "name": "Port Antonio Hospital",
+    "region": "Jamaica",
+    "phone": "876-993-2646",
+    "email": ""
+  },
+  {
+    "name": "Savannah La Mar Public General Hospital",
+    "region": "Jamaica",
+    "phone": "876-955-2133",
+    "email": "savhospital@yahoo.com"
+  },
+  {
+    "name": "Sir John Golding Rehabilitation Center",
+    "region": "Jamaica",
+    "phone": "876-927-2504",
+    "email": ""
+  },
+  {
+    "name": "Spanish Town Hospital",
+    "region": "Jamaica",
+    "phone": "876-984-3031",
+    "email": "sth@serha.gov.jm"
+  },
+  {
+    "name": "St Ann's Bay Hospital",
+    "region": "Jamaica",
+    "phone": "876-972-2272",
+    "email": ""
+  },
+  {
+    "name": "St. Ann's Bay Hospital",
+    "region": "Jamaica",
+    "phone": "876-972-2272",
+    "email": ""
+  },
+  {
+    "name": "St. Jago Park Health Centre",
+    "region": "Jamaica",
+    "phone": "876-907-5282",
+    "email": ""
+  },
+  {
+    "name": "St. Joseph's Hospital Complex",
+    "region": "Jamaica",
+    "phone": "876-928-4955",
+    "email": "info.sjh@gmail.com"
+  },
+  {
+    "name": "University Hospital Of The West Indies",
+    "region": "Jamaica",
+    "phone": "876-927-1620",
+    "email": ""
+  },
+  {
+    "name": "University Hospital of the West Indies",
+    "region": "Jamaica",
+    "phone": "876-927-1620",
+    "email": ""
+  },
+  {
+    "name": "Uwi Health Center",
+    "region": "Jamaica",
+    "phone": "876-970-0017",
+    "email": "healthservs@uwimona.edu.jm"
+  },
+  {
+    "name": "Barna- og unglingageðdeild Landspítalans",
+    "region": "Iceland",
+    "phone": "+354 543 4300",
+    "email": ""
+  },
+  {
+    "name": "HSN Blönduós",
+    "region": "Iceland",
+    "phone": "+354 432 4800",
+    "email": "hsn@hsn.is"
+  },
+  {
+    "name": "Heilbrigðisstofnun Suðurlands",
+    "region": "Iceland",
+    "phone": "+354 432 2000",
+    "email": "hsu@hsu.is"
+  },
+  {
+    "name": "Heilbrigðisstofnun Vesturlands",
+    "region": "Iceland",
+    "phone": "+354 432 1000",
+    "email": "hve@hve.is"
+  },
+  {
+    "name": "Heilbrigðisstofnunin Fjallabyggð",
+    "region": "Iceland",
+    "phone": "+354 432 4800",
+    "email": "hsn@hsn.is"
+  },
+  {
+    "name": "Heilbrigðisstofun Þingeyinga",
+    "region": "Iceland",
+    "phone": "+354 432 4800",
+    "email": "hsn@hsn.is"
+  },
+  {
+    "name": "Heilbrigðisstofunin Sauðárkróki",
+    "region": "Iceland",
+    "phone": "+354 432 4200",
+    "email": "hsn@hsn.is"
+  },
+  {
+    "name": "Heilsugæsla Rangárþings",
+    "region": "Iceland",
+    "phone": "+354 480 5330",
+    "email": "hrhvoll@eyjar.is"
+  },
+  {
+    "name": "Heilsugæsla Raufarhafnar",
+    "region": "Iceland",
+    "phone": "+354 432 4800",
+    "email": "hsn@hsn.is"
+  },
+  {
+    "name": "Heilsugæsla Suðurnesja",
+    "region": "Iceland",
+    "phone": "+354 422 0500",
+    "email": "hss@hss.is"
+  },
+  {
+    "name": "Heilsugæsla við Víkurbraut",
+    "region": "Iceland",
+    "phone": "+354 513 5000",
+    "email": "heilsugaeslan@heilsugaeslan.is"
+  },
+  {
+    "name": "Heilsugæslan",
+    "region": "Iceland",
+    "phone": "+354 470 1400",
+    "email": "heilsarey@hsa.is"
+  },
+  {
+    "name": "Heilsugæslusel Flateyrar",
+    "region": "Iceland",
+    "phone": "+354 450 4500",
+    "email": ""
+  },
+  {
+    "name": "Kleppsspítali",
+    "region": "Iceland",
+    "phone": "+354 543 4252",
+    "email": ""
+  },
+  {
+    "name": "Landakotsspítali",
+    "region": "Iceland",
+    "phone": "+354 543 1000",
+    "email": ""
+  },
+  {
+    "name": "Landspítali",
+    "region": "Iceland",
+    "phone": "+354 543 1000",
+    "email": ""
+  },
+  {
+    "name": "Landspítali Fossvogur",
+    "region": "Iceland",
+    "phone": "+354 543 1000",
+    "email": ""
+  },
+  {
+    "name": "Landspítali Grensás",
+    "region": "Iceland",
+    "phone": "+354 543 1000",
+    "email": ""
+  },
+  {
+    "name": "Rauði kross Íslands",
+    "region": "Iceland",
+    "phone": "+354 570 4000",
+    "email": "info@redcross.is"
+  },
+  {
+    "name": "Sjúkrahúsið Vogur",
+    "region": "Iceland",
+    "phone": "+354 530 7600",
+    "email": ""
+  },
+  {
+    "name": "Sjúkrahúsið og Heilsugæslan á Akranesi",
+    "region": "Iceland",
+    "phone": "+354 432 1000",
+    "email": "hve@hve.is"
+  },
+  {
+    "name": "Sjúkrahúsið og heilsugæslan á Ísafirði",
+    "region": "Iceland",
+    "phone": "+354 450 4500",
+    "email": ""
+  },
+  {
+    "name": "Sjúkrahúsið á Akureyri",
+    "region": "Iceland",
+    "phone": "+354 463 0100",
+    "email": "sak@sak.is"
+  }
+]
