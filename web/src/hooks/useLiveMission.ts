@@ -12,6 +12,23 @@ import type { FlightLogEntry } from '../lib/api';
 const WS_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000')
   .replace(/^http/, 'ws') + '/ws/live';
 
+export interface CVDetection {
+  frame: string;
+  detections: Array<{
+    class: string;
+    confidence: number;
+    bbox: [number, number, number, number]; // [x1, y1, x2, y2]
+    distance_m: number;
+  }>;
+  evasion: {
+    action: string;
+    reason: string;
+  };
+  model: string;
+  inference_ms: number;
+  timestamp: Date;
+}
+
 export interface SafetyDecision {
   battery_state: string;
   action: string;
@@ -19,6 +36,13 @@ export interface SafetyDecision {
   divert_location?: string;
   remaining_battery_pct: number;
   dropped_stops?: string[];
+  timestamp: number;
+}
+
+export interface AiReasoningMessage {
+  message: string;
+  severity: 'info' | 'success' | 'warning' | 'error';
+  context: Record<string, unknown>;
   timestamp: number;
 }
 
@@ -59,6 +83,8 @@ export function useLiveMission(routeStops?: string[]) {
   const [missionStatus, setMissionStatus] = useState('idle');
   const [lastEvent, setLastEvent] = useState<any>(null);
   const [safetyDecisions, setSafetyDecisions] = useState<SafetyDecision[]>([]);
+  const [cvDetection, setCvDetection] = useState<CVDetection | null>(null);
+  const [aiReasoningMessages, setAiReasoningMessages] = useState<AiReasoningMessage[]>([]);
 
   // Track waypoints reached for progress calculation
   const waypointsReachedRef = useRef(0);
@@ -238,10 +264,41 @@ export function useLiveMission(routeStops?: string[]) {
         break;
       }
 
-      case 'obstacle_detected':
-      case 'geofence_violation':
-        // These can be surfaced in the UI via lastEvent
+      case 'obstacle_detected': {
+        const detection: CVDetection = {
+          frame: d.frame || 'live_feed',
+          detections: (d.detections || []).map((det: any) => ({
+            class: det.class || det.label || 'unknown',
+            confidence: det.confidence ?? 0,
+            bbox: det.bbox || [0, 0, 0, 0],
+            distance_m: det.distance_m ?? det.distance ?? 0,
+          })),
+          evasion: {
+            action: d.evasion?.action || d.action || 'HOLD',
+            reason: d.evasion?.reason || d.reason || 'Obstacle detected',
+          },
+          model: d.model || 'YOLOv8n',
+          inference_ms: d.inference_ms ?? 0,
+          timestamp: new Date(d.timestamp ? d.timestamp * 1000 : Date.now()),
+        };
+        setCvDetection(detection);
         break;
+      }
+
+      case 'geofence_violation':
+        // Surfaced in the UI via lastEvent
+        break;
+
+      case 'ai_reasoning': {
+        const reasoning: AiReasoningMessage = {
+          message: d.message || '',
+          severity: d.severity || 'info',
+          context: d.context || {},
+          timestamp: d.timestamp || Date.now() / 1000,
+        };
+        setAiReasoningMessages(prev => [...prev, reasoning]);
+        break;
+      }
     }
   }, []);
 
@@ -253,6 +310,8 @@ export function useLiveMission(routeStops?: string[]) {
     setMissionStatus('idle');
     setDrones({});
     setSafetyDecisions([]);
+    setCvDetection(null);
+    setAiReasoningMessages([]);
     waypointsReachedRef.current = 0;
   }, []);
 
@@ -268,5 +327,8 @@ export function useLiveMission(routeStops?: string[]) {
     missionStatus,
     lastEvent,
     safetyDecisions,
+    cvDetection,
+    clearCvDetection: () => setCvDetection(null),
+    aiReasoningMessages,
   };
 }

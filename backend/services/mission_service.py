@@ -6,12 +6,13 @@ Pause = hover in place. Resume = continue from current position.
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import threading
 import time
 from datetime import datetime, timezone
 
-from config import LOCATIONS
+from config import LOCATIONS, SUPABASE_URL
 from backend.domain.enums import (
     DeliveryStatus, DroneStatus, EventSource, EventType, MissionStatus,
 )
@@ -21,12 +22,42 @@ from backend.domain.errors import (
 from backend.domain.models import (
     Delivery, DeliveryItem, Mission, Waypoint, _new_id, _utcnow,
 )
+from backend.services.cv_service import CVDetectionService
 from backend.services.drone_service import DroneService
 from backend.services.event_service import EventService
 from backend.services.route_service import RouteService
 from backend.adapters.simulator_adapter import SimulatorAdapter
 
 logger = logging.getLogger("DroneMedic.MissionService")
+
+
+# ── DB persistence helpers (fire-and-forget) ──────────────────────────────
+
+def _db_enabled() -> bool:
+    """Return True when Supabase credentials are configured."""
+    return bool(SUPABASE_URL)
+
+
+def _persist(coro) -> None:
+    """Schedule an async DB coroutine as a fire-and-forget task.
+
+    Safe to call from any thread.  If no running event loop is available
+    the coroutine is silently discarded.
+    """
+    if not _db_enabled():
+        return
+    try:
+        loop = asyncio.get_running_loop()
+        loop.create_task(coro)
+    except RuntimeError:
+        # No running event loop (e.g. called from a background thread).
+        # Spin up a tiny event loop to await the coroutine.
+        try:
+            _loop = asyncio.new_event_loop()
+            _loop.run_until_complete(coro)
+            _loop.close()
+        except Exception:
+            logger.debug("DB persist skipped — no event loop available")
 
 
 class MissionService:
@@ -42,6 +73,7 @@ class MissionService:
         self._adapter = simulator_adapter
         self._events = event_service
         self._routes = route_service
+        self._cv = CVDetectionService()
         self._missions: dict[str, Mission] = {}
         self._deliveries: dict[str, Delivery] = {}
         # Back-reference set during app startup
@@ -69,6 +101,14 @@ class MissionService:
                 "destination": d.destination,
                 "priority": d.priority,
             })
+
+        # Persist deliveries to Supabase
+        if deliveries:
+            from backend.db import repository as repo
+            _persist(repo.save_deliveries([
+                d.model_dump(mode="json") for d in deliveries
+            ]))
+
         return deliveries
 
     def get_delivery(self, delivery_id: str) -> Delivery:
@@ -130,6 +170,11 @@ class MissionService:
             "route": route,
             "delivery_count": len(delivery_ids),
         })
+
+        # Persist mission to Supabase
+        from backend.db import repository as repo
+        _persist(repo.save_mission(mission.model_dump(mode="json")))
+
         return mission
 
     # ── Mission queries ────────────────────────────────────────────────
@@ -180,6 +225,11 @@ class MissionService:
             "source": source.value,
             "at_location": self._drones.get(mission.drone_id).current_location,
         })
+
+        # Persist status change
+        from backend.db import repository as repo
+        _persist(repo.update_mission(mission_id, {"status": mission.status.value}))
+
         return mission
 
     def resume_mission(self, mission_id: str) -> Mission:
@@ -196,6 +246,11 @@ class MissionService:
             "mission_id": mission_id,
             "drone_id": mission.drone_id,
         })
+
+        # Persist status change
+        from backend.db import repository as repo
+        _persist(repo.update_mission(mission_id, {"status": mission.status.value}))
+
         return mission
 
     def abort_mission(self, mission_id: str, reason: str = "manual abort") -> Mission:
@@ -218,6 +273,17 @@ class MissionService:
             "mission_id": mission_id,
             "reason": reason,
         })
+
+        # Persist abort + cancelled deliveries
+        from backend.db import repository as repo
+        _persist(repo.update_mission(mission_id, {
+            "status": mission.status.value,
+            "failed_reason": reason,
+        }))
+        for d_id in mission.delivery_ids:
+            d = self._deliveries.get(d_id)
+            if d and d.status == DeliveryStatus.cancelled:
+                _persist(repo.update_delivery(d_id, {"status": d.status.value}))
 
         # Return to depot in background (don't block the API call)
         threading.Thread(
@@ -314,7 +380,45 @@ class MissionService:
             "new_route": mission.planned_route,
             "new_deliveries_added": len(new_locations),
         })
+
+        # AI reasoning: reroute narration
+        new_route_str = " -> ".join(mission.planned_route)
+        bat = self._adapter.get_battery(mission.drone_id)
+        self._publish_reasoning(
+            f"Route recalculated. {reason or 'Conditions changed.'} "
+            f"New route: {new_route_str}. "
+            f"Battery {bat:.0f}% — sufficient for updated plan.",
+            severity="warning",
+            context={"battery": bat, "new_route": mission.planned_route, "action": "reroute"},
+        )
+
+        # Persist reroute updates
+        from backend.db import repository as repo
+        _persist(repo.update_mission(mission_id, {
+            "status": mission.status.value,
+            "planned_route": mission.planned_route,
+            "reroute_count": mission.reroute_count,
+            "route_distance": mission.route_distance,
+            "battery_usage": mission.battery_usage,
+            "estimated_time": mission.estimated_time,
+        }))
+
         return mission
+
+    # ── AI reasoning narration ─────────────────────────────────────────
+
+    def _publish_reasoning(
+        self,
+        message: str,
+        severity: str = "info",
+        context: dict | None = None,
+    ) -> None:
+        """Publish a template-based AI reasoning message to the event bus."""
+        self._events.publish(EventType.ai_reasoning, {
+            "message": message,
+            "severity": severity,
+            "context": context or {},
+        })
 
     # ── Mission execution (blocking, runs in thread) ───────────────────
 
@@ -333,10 +437,33 @@ class MissionService:
             "route": mission.planned_route,
         })
 
+        # Persist mission start
+        from backend.db import repository as repo
+        _persist(repo.update_mission(mission_id, {
+            "status": mission.status.value,
+            "started_at": mission.started_at.isoformat() if mission.started_at else None,
+        }))
+        _persist(repo.update_drone(drone_id, {"status": DroneStatus.takeoff.value}))
+
         try:
             self._adapter.connect(drone_id)
             self._adapter.takeoff(drone_id)
             self._drones.set_status(drone_id, DroneStatus.en_route)
+
+            # AI reasoning: mission launch narration
+            destinations = [w for w in mission.planned_route if w != "Depot"]
+            dest_str = ", ".join(destinations) if destinations else "planned route"
+            bat = self._adapter.get_battery(drone_id)
+            self._publish_reasoning(
+                f"Initiating flight to {dest_str}. Battery {bat:.0f}%. "
+                f"Flight plan nominal with {len(destinations)} delivery stop{'s' if len(destinations) != 1 else ''}. "
+                f"Estimated distance: {mission.route_distance:.0f}m.",
+                severity="success",
+                context={"battery": bat, "stops": len(destinations), "action": "takeoff"},
+            )
+
+            total_waypoints = len(mission.planned_route)
+            cv_detection_fired = False  # ensure CV detection runs at most once
 
             for i, waypoint in enumerate(mission.planned_route):
                 # Skip starting depot
@@ -363,6 +490,12 @@ class MissionService:
 
                 # Battery check
                 if not self._adapter.check_battery_for_return(drone_id):
+                    self._publish_reasoning(
+                        f"Battery critically low. Insufficient charge to reach {waypoint} "
+                        f"and return to Depot. Aborting remaining stops and returning to base.",
+                        severity="error",
+                        context={"battery": self._adapter.get_battery(drone_id), "action": "low_battery"},
+                    )
                     self._handle_low_battery(mission_id)
                     return
 
@@ -372,19 +505,64 @@ class MissionService:
                 self._drones.set_location(drone_id, waypoint)
 
                 mission.current_waypoint_index = i
+                bat = self._adapter.get_battery(drone_id)
 
                 self._events.publish(EventType.waypoint_reached, {
                     "mission_id": mission_id,
                     "drone_id": drone_id,
                     "waypoint": waypoint,
-                    "battery": self._adapter.get_battery(drone_id),
+                    "battery": bat,
                     "waypoint_index": i,
                 })
+
+                # ── YOLOv8 CV obstacle detection at ~60% mission progress ──
+                progress = (i + 1) / max(total_waypoints, 1)
+                if not cv_detection_fired and 0.55 <= progress <= 0.85:
+                    cv_detection_fired = True
+                    try:
+                        cv_result = self._cv.run_detection()
+                        self._events.publish(EventType.obstacle_detected, {
+                            "mission_id": mission_id,
+                            "drone_id": drone_id,
+                            "waypoint": waypoint,
+                            "progress": round(progress, 2),
+                            "detections": cv_result.get("detections", []),
+                            "evasion": cv_result.get("evasion"),
+                            "model": cv_result.get("model", "YOLOv8n"),
+                            "inference_ms": cv_result.get("inference_ms", 0),
+                            "frame": cv_result.get("frame", "unknown"),
+                        })
+                        logger.info(
+                            "[CV] YOLOv8 detection on mission %s at %.0f%% progress: "
+                            "%d detections, model=%s, %.1fms",
+                            mission_id,
+                            progress * 100,
+                            len(cv_result.get("detections", [])),
+                            cv_result.get("model"),
+                            cv_result.get("inference_ms", 0),
+                        )
+                    except Exception as e:
+                        logger.warning("[CV] Detection failed mid-flight: %s", e)
 
                 # Mark waypoint reached
                 if i < len(mission.waypoints):
                     mission.waypoints[i].reached = True
                     mission.waypoints[i].reached_at = _utcnow()
+
+                # AI reasoning: waypoint narration
+                total_stops = len([w for w in mission.planned_route if w != "Depot"])
+                stops_done = i  # index counts from 0 with Depot at 0
+                remaining = total_stops - stops_done
+                bat_state = "GREEN" if bat > 50 else ("AMBER" if bat > 25 else "RED")
+                if waypoint != "Depot":
+                    severity = "success" if bat_state == "GREEN" else ("warning" if bat_state == "AMBER" else "error")
+                    self._publish_reasoning(
+                        f"Arrived at {waypoint}. Battery {bat:.0f}% — state {bat_state}. "
+                        f"{'Delivering payload.' if remaining > 0 else 'Final delivery.'} "
+                        f"{remaining} stop{'s' if remaining != 1 else ''} remaining.",
+                        severity=severity,
+                        context={"battery": bat, "location": waypoint, "remaining": remaining, "action": "waypoint"},
+                    )
 
                 # Mark matching deliveries as delivered
                 if waypoint != "Depot":
@@ -398,6 +576,11 @@ class MissionService:
                                 "delivery_id": d_id,
                                 "location": waypoint,
                             })
+                            # Persist delivery completion
+                            _persist(repo.update_delivery(d_id, {
+                                "status": d.status.value,
+                                "delivered_at": d.delivered_at.isoformat(),
+                            }))
 
             # If we broke out due to reroute, restart execution with new route
             if mission.status == MissionStatus.in_progress and mission.reroute_count > 0:
@@ -410,6 +593,20 @@ class MissionService:
                 self._drones.set_status(drone_id, DroneStatus.landing)
                 self._adapter.land(drone_id)
 
+                final_bat = self._adapter.get_battery(drone_id)
+                delivered_count = sum(
+                    1 for d_id in mission.delivery_ids
+                    if self._deliveries.get(d_id) and self._deliveries[d_id].status == DeliveryStatus.delivered
+                )
+
+                # AI reasoning: mission complete narration
+                self._publish_reasoning(
+                    f"All {delivered_count} deliveries confirmed. Initiating landing sequence at Depot. "
+                    f"Battery {final_bat:.0f}% remaining. Mission complete.",
+                    severity="success",
+                    context={"battery": final_bat, "deliveries": delivered_count, "action": "landing"},
+                )
+
                 mission.status = MissionStatus.completed
                 mission.completed_at = _utcnow()
                 self._drones.set_status(drone_id, DroneStatus.idle)
@@ -419,6 +616,16 @@ class MissionService:
                     "mission_id": mission_id,
                     "drone_id": drone_id,
                 })
+
+                # Persist mission completion
+                _persist(repo.update_mission(mission_id, {
+                    "status": mission.status.value,
+                    "completed_at": mission.completed_at.isoformat() if mission.completed_at else None,
+                }))
+                _persist(repo.update_drone(drone_id, {
+                    "status": DroneStatus.idle.value,
+                    "current_mission_id": None,
+                }))
 
         except Exception as e:
             logger.exception(f"Mission {mission_id} failed: {e}")
@@ -431,10 +638,21 @@ class MissionService:
                 "error": str(e),
             })
 
+            # Persist mission failure
+            _persist(repo.update_mission(mission_id, {
+                "status": mission.status.value,
+                "failed_reason": mission.failed_reason,
+            }))
+            _persist(repo.update_drone(drone_id, {
+                "status": DroneStatus.idle.value,
+                "current_mission_id": None,
+            }))
+
     def _execute_remaining(self, mission_id: str) -> None:
         """Continue executing a mission after reroute replaced the route."""
         mission = self._missions[mission_id]
         drone_id = mission.drone_id
+        from backend.db import repository as repo
 
         try:
             for i, waypoint in enumerate(mission.planned_route):
@@ -473,6 +691,11 @@ class MissionService:
                                 "delivery_id": d_id,
                                 "location": waypoint,
                             })
+                            # Persist delivery completion
+                            _persist(repo.update_delivery(d_id, {
+                                "status": d.status.value,
+                                "delivered_at": d.delivered_at.isoformat(),
+                            }))
 
             # Land
             if mission.status not in (MissionStatus.aborted, MissionStatus.failed):
@@ -487,12 +710,32 @@ class MissionService:
                     "drone_id": drone_id,
                 })
 
+                # Persist mission completion
+                _persist(repo.update_mission(mission_id, {
+                    "status": mission.status.value,
+                    "completed_at": mission.completed_at.isoformat() if mission.completed_at else None,
+                }))
+                _persist(repo.update_drone(drone_id, {
+                    "status": DroneStatus.idle.value,
+                    "current_mission_id": None,
+                }))
+
         except Exception as e:
             logger.exception(f"Mission {mission_id} failed after reroute: {e}")
             mission.status = MissionStatus.failed
             mission.failed_reason = str(e)
             self._drones.set_status(drone_id, DroneStatus.idle)
             self._drones.set_mission(drone_id, None)
+
+            # Persist failure
+            _persist(repo.update_mission(mission_id, {
+                "status": mission.status.value,
+                "failed_reason": mission.failed_reason,
+            }))
+            _persist(repo.update_drone(drone_id, {
+                "status": DroneStatus.idle.value,
+                "current_mission_id": None,
+            }))
 
     # ── Battery recovery ───────────────────────────────────────────────
 
@@ -510,6 +753,14 @@ class MissionService:
             "battery": self._adapter.get_battery(drone_id),
             "mission_id": mission_id,
         })
+
+        # Persist low-battery failure
+        from backend.db import repository as repo
+        _persist(repo.update_mission(mission_id, {
+            "status": mission.status.value,
+            "failed_reason": mission.failed_reason,
+        }))
+        _persist(repo.update_drone(drone_id, {"status": DroneStatus.returning.value}))
 
         self._return_to_depot(drone_id)
 
