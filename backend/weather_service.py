@@ -134,15 +134,22 @@ def _fetch_real_weather(lat: float, lon: float) -> dict:
     """Fetch real weather from OpenWeatherMap API."""
     try:
         import requests
-        url = "https://api.openweathermap.org/data/2.5/weather"
-        params = {
-            "lat": lat,
-            "lon": lon,
-            "appid": OPENWEATHER_API_KEY,
-            "units": "metric",
-        }
-        resp = requests.get(url, params=params, timeout=5)
-        resp.raise_for_status()
+        from backend.utils.resilience import with_retry
+
+        @with_retry(max_attempts=3, min_wait=1, max_wait=10)
+        def _do_request():
+            url = "https://api.openweathermap.org/data/2.5/weather"
+            params = {
+                "lat": lat,
+                "lon": lon,
+                "appid": OPENWEATHER_API_KEY,
+                "units": "metric",
+            }
+            resp = requests.get(url, params=params, timeout=5)
+            resp.raise_for_status()
+            return resp
+
+        resp = _do_request()
         data = resp.json()
 
         wind_speed = data.get("wind", {}).get("speed", 0)

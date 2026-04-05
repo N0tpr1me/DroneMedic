@@ -272,7 +272,7 @@ export function Dashboard() {
         <div style={{display:'flex',alignItems:'center',gap:16}}>
           <span onClick={()=>navigate('/dashboard')} style={{fontSize:18,fontWeight:900,color:'#dfe3e9',textTransform:'uppercase',letterSpacing:'0.1em',fontFamily:'Space Grotesk,sans-serif',cursor:'pointer'}}>DroneMedic</span>
         </div>
-        <div style={{display:'flex',alignItems:'center',gap:32,position:'absolute',left:'50%',transform:'translateX(-50%)'}}>
+        <div className="hidden md:flex" style={{alignItems:'center',gap:32,position:'absolute',left:'50%',transform:'translateX(-50%)'}}>
           <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
             <span style={{fontSize:9,textTransform:'uppercase',letterSpacing:'-0.02em',color:'#8d90a0',fontWeight:700}}>Drone Location</span>
             <span style={{fontSize:14,fontFamily:'Space Grotesk',fontWeight:700,color:'#dfe3e9'}}>
@@ -384,9 +384,15 @@ export function Dashboard() {
         </div>
 
         {/* ── RIGHT HUD ── */}
-        <div style={{position:'fixed',top:88,right:24,zIndex:20,display:'flex',flexDirection:'column',gap:12,overflowY:'auto'}} className="hud-scrollbar w-[280px] max-h-[calc(100vh-300px)] xl:w-[320px] xl:max-h-[calc(100vh-280px)] 2xl:w-[400px] 2xl:max-h-[calc(100vh-240px)]">
+        <div style={{zIndex:20,display:'flex',flexDirection:'column',gap:12,overflowY:'auto'}} className="
+          hud-scrollbar
+          fixed top-auto bottom-[80px] left-4 right-4 max-h-[50vh] flex-col
+          md:fixed md:top-[88px] md:bottom-auto md:left-auto md:right-6 md:max-h-[calc(100vh-300px)] md:w-[280px]
+          xl:w-[320px] xl:max-h-[calc(100vh-280px)]
+          2xl:w-[400px] 2xl:max-h-[calc(100vh-240px)]
+        ">
           {/* Drone Status */}
-          <section style={{background:'rgba(30,35,40,0.85)',backdropFilter:'blur(24px)',WebkitBackdropFilter:'blur(24px)',borderRadius:8,padding:20,border:'1px solid rgba(67,70,84,0.25)'}}>
+          <section role="region" aria-label="Drone status" style={{background:'rgba(30,35,40,0.85)',backdropFilter:'blur(24px)',WebkitBackdropFilter:'blur(24px)',borderRadius:8,padding:20,border:'1px solid rgba(67,70,84,0.25)'}}>
             {/* Drone selector tabs */}
             <div style={{display:'flex',gap:4,marginBottom:12}}>
               {(['Drone1', 'Drone2', 'Fleet'] as const).map((d) => (
@@ -428,7 +434,7 @@ export function Dashboard() {
               </div>
             ) : (
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16}}>
-                <div>
+                <div role="meter" aria-valuenow={selectedDrone === 'Drone2' ? drone2Battery : battery} aria-valuemin={0} aria-valuemax={100} aria-label="Battery level">
                   <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Battery</p>
                   <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: (selectedDrone === 'Drone2' ? drone2Battery : battery) > 50 ? '#dfe3e9' : (selectedDrone === 'Drone2' ? drone2Battery : battery) > 20 ? '#f5a623' : '#ff4444',margin:0}}>
                     {selectedDrone === 'Drone2' ? drone2Battery : battery}<span style={{fontSize:12,marginLeft:2,opacity:0.6}}>%</span>
@@ -449,11 +455,11 @@ export function Dashboard() {
               </div>
             )}
             <div style={{marginTop:16,paddingTop:16,borderTop:'1px solid rgba(67,70,84,0.1)'}}>
-              <div style={{display:'flex',justifyContent:'space-between',fontSize:10,textTransform:'uppercase',fontWeight:700,color:'#c3c6d6',marginBottom:4}}>
+              <div role="status" aria-live="polite" style={{display:'flex',justifyContent:'space-between',fontSize:10,textTransform:'uppercase',fontWeight:700,color:'#c3c6d6',marginBottom:4}}>
                 <span>Mission Progress</span>
                 <span style={{color:'#b3c5ff'}}>{missionProgress}%</span>
               </div>
-              <div style={{height:4,width:'100%',background:'#30353a',borderRadius:9999,overflow:'hidden'}}>
+              <div role="meter" aria-valuenow={missionProgress} aria-valuemin={0} aria-valuemax={100} aria-label="Mission progress" style={{height:4,width:'100%',background:'#30353a',borderRadius:9999,overflow:'hidden'}}>
                 <div style={{height:'100%',background:'#b3c5ff',width:`${missionProgress}%`,borderRadius:9999,transition:'width 0.5s'}} />
               </div>
               <p style={{marginTop:8,fontSize:10,color:'rgba(223,227,233,0.7)'}}>Est. Arrival: <span style={{color:'#b3c5ff',fontWeight:700}}>4m 12s</span></p>
@@ -494,7 +500,7 @@ export function Dashboard() {
         </div>
 
         {/* ── BOTTOM LEFT CARDS ── */}
-        <div style={{position:'fixed',bottom:16,left:16,zIndex:20,display:'flex',gap:12}}>
+        <div className="hidden md:flex" style={{position:'fixed',bottom:16,left:16,zIndex:20,gap:12}}>
           {/* Mission Phase Card */}
           <div style={{background:'rgba(15,20,24,0.50)',backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',padding:'14px 20px',borderRadius:10,border:`1px solid ${status === 'flying' ? 'rgba(0,218,243,0.25)' : status === 'completed' ? 'rgba(34,197,94,0.25)' : 'rgba(67,70,84,0.1)'}`,display:'flex',alignItems:'center',gap:14,minWidth:180}}>
             <div style={{padding:10,background: status === 'flying' ? 'rgba(0,218,243,0.15)' : status === 'rerouting' ? 'rgba(245,166,35,0.15)' : 'rgba(48,53,58,0.6)',borderRadius:8}}>
@@ -556,23 +562,23 @@ export function Dashboard() {
         </div>
 
         {/* ── BOTTOM RIGHT CONTROLS ── */}
-        <div style={{position:'fixed',bottom:24,right:24,zIndex:20,display:'flex',flexDirection:'column',gap:10}}>
+        <div className="hidden md:flex" style={{position:'fixed',bottom:24,right:24,zIndex:20,flexDirection:'column',gap:10}}>
           <LiquidButton size="icon" onClick={() => setShowChat(prev => !prev)} aria-label="Toggle AI Copilot" style={{ color: showChat ? '#00daf3' : '#c3c6d6' }}>
             <Brain size={20} />
           </LiquidButton>
-          <LiquidButton size="icon" onClick={()=>setMapCommand({type:'zoom-in'})} style={{color:'#dfe3e9'}}>
+          <LiquidButton size="icon" onClick={()=>setMapCommand({type:'zoom-in'})} aria-label="Zoom in" style={{color:'#dfe3e9'}}>
             <Plus size={20} />
           </LiquidButton>
-          <LiquidButton size="icon" onClick={()=>setMapCommand({type:'zoom-out'})} style={{color:'#dfe3e9'}}>
+          <LiquidButton size="icon" onClick={()=>setMapCommand({type:'zoom-out'})} aria-label="Zoom out" style={{color:'#dfe3e9'}}>
             <Minus size={20} />
           </LiquidButton>
-          <LiquidButton size="icon" onClick={()=>{
+          <LiquidButton size="icon" aria-label="Center map on depot" onClick={()=>{
             if(userLocation){setMapCommand({type:'center-user',lat:userLocation.lat,lon:userLocation.lon});setIsCentered(true);}
             else{const d=locations['Depot'];if(d){setMapCommand({type:'center-depot',lat:d.lat,lon:d.lon});setIsCentered(true);}}
           }} style={{color:isCentered?'#b3c5ff':'#6b7280',transition:'color 0.3s'}}>
             <LocateFixed size={20} />
           </LiquidButton>
-          <LiquidButton size="icon" onClick={()=>setTileLayerIndex(i=>i+1)} style={{color:'#dfe3e9'}}>
+          <LiquidButton size="icon" onClick={()=>setTileLayerIndex(i=>i+1)} aria-label="Toggle map layer" style={{color:'#dfe3e9'}}>
             <Layers size={20} />
           </LiquidButton>
         </div>

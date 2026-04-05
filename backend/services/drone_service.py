@@ -6,14 +6,35 @@ This service stores the latest cached snapshot for API/UI/logging.
 
 from __future__ import annotations
 
+import asyncio
 import logging
 
+from config import SUPABASE_URL
 from backend.domain.enums import DroneStatus, EventType
 from backend.domain.errors import DroneNotFoundError
 from backend.domain.models import Drone, TelemetrySnapshot
 from backend.services.event_service import EventService
 
 logger = logging.getLogger("DroneMedic.DroneService")
+
+
+def _db_enabled() -> bool:
+    return bool(SUPABASE_URL)
+
+
+def _persist(coro) -> None:
+    if not _db_enabled():
+        return
+    try:
+        loop = asyncio.get_running_loop()
+        loop.create_task(coro)
+    except RuntimeError:
+        try:
+            _loop = asyncio.new_event_loop()
+            _loop.run_until_complete(coro)
+            _loop.close()
+        except Exception:
+            pass
 
 
 class DroneService:
@@ -57,6 +78,10 @@ class DroneService:
             "speed": snapshot.speed,
         })
 
+        # Persist telemetry snapshot to Supabase
+        from backend.db import repository as repo
+        _persist(repo.save_telemetry(snapshot.model_dump(mode="json")))
+
     def set_status(self, drone_id: str, status: DroneStatus) -> None:
         drone = self.get(drone_id)
         old = drone.status
@@ -69,6 +94,10 @@ class DroneService:
             })
             if status == DroneStatus.emergency:
                 logger.warning(f"[DRONE] {drone_id} entered EMERGENCY state")
+
+            # Persist drone status change
+            from backend.db import repository as repo
+            _persist(repo.update_drone(drone_id, {"status": status.value}))
 
     def set_location(self, drone_id: str, location: str) -> None:
         self.get(drone_id).current_location = location

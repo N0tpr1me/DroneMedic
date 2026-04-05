@@ -46,6 +46,7 @@ PHYSICS_MAX_THRUST_PER_MOTOR_N = 60.0     # per motor at full throttle
 PHYSICS_CRUISE_ALTITUDE_M = 80.0          # operating altitude AGL
 PHYSICS_CLIMB_RATE_MS = 3.0
 PHYSICS_DESCENT_RATE_MS = 2.0
+PHYSICS_CRUISE_SPEED_MS = 15.0            # optimal cruise speed (m/s)
 PHYSICS_MAX_SAFE_WIND_MS = 12.0           # sustained wind abort threshold
 PHYSICS_MIN_OPERATING_TEMP_C = -10.0
 PHYSICS_MAX_OPERATING_TEMP_C = 45.0
@@ -159,6 +160,10 @@ NO_FLY_ZONES = [
         ],
     },
 ]
+
+# --- Supabase ---
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
 # --- Multi-Drone ---
 NUM_DRONES = 2

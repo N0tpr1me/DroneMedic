@@ -362,6 +362,9 @@ export function Settings() {
                 <SettingRow label="Animation Speed">
                   <StyledSelect value={settings.display.animationSpeed} onChange={v => updateNested('display', 'animationSpeed', v)} options={['Normal', 'Fast', 'Reduced']} />
                 </SettingRow>
+                <SettingRow label="Dark Mode" description="Switch between dark and light interface theme">
+                  <ToggleSwitch value={settings.display.darkMode} onChange={v => updateNested('display', 'darkMode', v)} />
+                </SettingRow>
               </div>
             </div>
           )}

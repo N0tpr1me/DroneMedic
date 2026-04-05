@@ -1,0 +1,51 @@
+name: "maintenance_lstm"
+platform: "pytorch_libtorch"
+max_batch_size: 32
+
+input [
+  {
+    name: "telemetry_sequence"
+    data_type: TYPE_FP32
+    dims: [ 60, 12 ]
+  }
+]
+
+output [
+  {
+    name: "failure_probability"
+    data_type: TYPE_FP32
+    dims: [ 5 ]
+  },
+  {
+    name: "rul_hours"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+
+instance_group [
+  {
+    count: 1
+    kind: KIND_GPU
+  }
+]
+
+dynamic_batching {
+  preferred_batch_size: [ 1, 8, 32 ]
+  max_queue_delay_microseconds: 500
+}
+
+# Model metadata
+parameters {
+  key: "description"
+  value: {
+    string_value: "LSTM predicting component failure from 60-step telemetry windows (motor_rpm x6, battery_voltage, battery_temp, vibration_xyz, altitude)"
+  }
+}
+
+parameters {
+  key: "output_labels"
+  value: {
+    string_value: "motor_bearing,esc_failure,battery_degradation,propeller_damage,sensor_drift"
+  }
+}

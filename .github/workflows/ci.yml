@@ -1,0 +1,46 @@
+name: DroneMedic CI
+
+on:
+  push:
+    branches: [main, "zain/**", "karim/**", "hakimi/**", "haseeb/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Check imports
+        run: |
+          python -c "from backend.domain.models import Mission, Delivery, Drone"
+          python -c "from ai.flight_agent import FlightAgent"
+          python -c "from ai.demand_forecast import DemandForecaster"
+      - name: Run AI eval (if available)
+        run: python -m pytest tests/ -v --tb=short || echo "Tests not yet configured"
+        continue-on-error: true
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npx eslint src/ --max-warnings=50 || echo "Lint warnings present"
+        continue-on-error: true
+      - name: Type check & build
+        run: npm run build

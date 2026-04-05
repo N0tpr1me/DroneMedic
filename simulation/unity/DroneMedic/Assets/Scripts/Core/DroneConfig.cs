@@ -21,6 +21,9 @@ namespace DroneMedic
         public float maxWindSpeed = 15f;
         public float maxPrecipitation = 5f;
 
+        [Header("Payload")]
+        public float maxPayloadKg = 5f;
+
         [Header("Priority")]
         [Range(0f, 1f)]
         public float priorityWeight = 0.3f;

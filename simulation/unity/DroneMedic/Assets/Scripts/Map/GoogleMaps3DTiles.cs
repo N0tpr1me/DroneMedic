@@ -8,6 +8,7 @@ namespace DroneMedic
     /// Sets up Google Maps Photorealistic 3D Tiles via Cesium for Unity.
     /// Attach to a root GameObject — it creates the full Cesium hierarchy at runtime.
     /// </summary>
+    [ExecuteInEditMode]
     public class GoogleMaps3DTiles : MonoBehaviour
     {
         [Header("Google Maps")]
@@ -23,13 +24,32 @@ namespace DroneMedic
 
         private CesiumGeoreference _georeference;
         private Cesium3DTileset _tileset;
+        private string _lastApiKey;
 
         public CesiumGeoreference Georeference => _georeference;
 
         private void Awake()
         {
             SetupGeoreference();
-            SetupTileset();
+            FindOrCreateTileset();
+        }
+
+        private void OnValidate()
+        {
+            // Re-apply when API key or origin changes in the Inspector
+            if (_georeference != null)
+            {
+                _georeference.latitude = originLatitude;
+                _georeference.longitude = originLongitude;
+                _georeference.height = originHeight;
+            }
+
+            if (_tileset != null && apiKey != _lastApiKey)
+            {
+                _lastApiKey = apiKey;
+                _tileset.url = $"https://tile.googleapis.com/v1/3dtiles/root.json?key={apiKey}";
+                Debug.Log("[GoogleMaps3DTiles] API key updated — reloading tiles.");
+            }
         }
 
         private void SetupGeoreference()
@@ -43,9 +63,19 @@ namespace DroneMedic
             _georeference.height = originHeight;
         }
 
-        private void SetupTileset()
+        private void FindOrCreateTileset()
         {
-            // Create tileset as child
+            // Check if a tileset child already exists (avoid duplicates)
+            var existing = GetComponentInChildren<Cesium3DTileset>();
+            if (existing != null)
+            {
+                _tileset = existing;
+                _tileset.url = $"https://tile.googleapis.com/v1/3dtiles/root.json?key={apiKey}";
+                _lastApiKey = apiKey;
+                Debug.Log("[GoogleMaps3DTiles] Found existing tileset — updated URL.");
+                return;
+            }
+
             var tilesetObj = new GameObject("Google3DTiles");
             tilesetObj.transform.SetParent(transform, false);
 
@@ -53,6 +83,7 @@ namespace DroneMedic
             _tileset.url = $"https://tile.googleapis.com/v1/3dtiles/root.json?key={apiKey}";
             _tileset.maximumScreenSpaceError = maximumScreenSpaceError;
             _tileset.showCreditsOnScreen = true;
+            _lastApiKey = apiKey;
 
             Debug.Log("[GoogleMaps3DTiles] Tileset configured — loading Google Photorealistic 3D Tiles.");
         }

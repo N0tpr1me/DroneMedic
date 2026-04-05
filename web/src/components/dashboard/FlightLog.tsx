@@ -32,7 +32,7 @@ function formatEvent(event: string): string {
 
 export function FlightLog({ log }: FlightLogProps) {
   return (
-    <GlassPanel className="flex flex-col gap-3">
+    <GlassPanel className="flex flex-col gap-3" role="log" aria-label="Flight events">
       <div className="flex items-center gap-2 text-text-muted">
         <Activity className="w-4 h-4" />
         <span className="text-sm font-medium">Flight Log</span>
