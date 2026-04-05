@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { HeartPulse, PlaneTakeoff, Cpu, Rocket, ClipboardList, BarChart3, Settings, Shield } from 'lucide-react';
+import { HeartPulse, PlaneTakeoff, Cpu, ClipboardList, BarChart3, Settings, Shield } from 'lucide-react';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { NotificationCenter } from '../dashboard/NotificationCenter';
 import { useRole } from '../../hooks/useRole';
 
 interface SideNavProps {
-  currentPage: 'dashboard' | 'deploy' | 'fleet' | 'simulation' | 'logs' | 'analytics' | 'settings';
+  currentPage: 'dashboard' | 'deploy' | 'fleet' | 'logs' | 'analytics' | 'settings';
 }
 
 const NAV_ITEMS = [
   { icon: HeartPulse, label: 'Dashboard', page: 'dashboard' as const, path: '/dashboard' },
   { icon: PlaneTakeoff, label: 'Deploy', page: 'deploy' as const, path: '/deploy' },
   { icon: Cpu, label: 'Fleet', page: 'fleet' as const, path: '/fleet' },
-  { icon: Rocket, label: 'Simulation', page: 'simulation' as const, path: '/simulation' },
   { icon: ClipboardList, label: 'Logs', page: 'logs' as const, path: '/logs' },
   { icon: BarChart3, label: 'Analytics', page: 'analytics' as const, path: '/analytics' },
 ] as const;
