@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { BarChart3, Package, CheckCircle, Clock, TrendingUp, ShieldCheck, FileText, Loader2 } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { BarChart3, Package, CheckCircle, Clock, TrendingUp, ShieldCheck, FileText, Loader2, DollarSign } from 'lucide-react';
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
@@ -11,81 +11,74 @@ import { PageHeader } from '../components/layout/PageHeader';
 import { EmptyState } from '../components/analytics/EmptyState';
 import { api } from '../lib/api';
 import type { Metrics } from '../lib/api';
+import { useLiveMission } from '../hooks/useLiveMission';
 
-// ── Demo Data ──
+// ── localStorage Key ──
 
-const DEMO_MISSIONS = [
-  { id: 1, name: 'Royal London Emergency', deliveryTime: 52, clinicalDeadline: 90, distance: 8400, naiveDistance: 12600, battery: 42, status: 'completed', facility: 'Royal London', priority: 'high' },
-  { id: 2, name: 'Homerton Insulin Run', deliveryTime: 38, clinicalDeadline: 120, distance: 5200, naiveDistance: 7800, battery: 31, status: 'completed', facility: 'Homerton', priority: 'normal' },
-  { id: 3, name: 'Whipps Cross Defibrillator', deliveryTime: 65, clinicalDeadline: 60, distance: 9100, naiveDistance: 14200, battery: 58, status: 'rerouted', facility: 'Whipps Cross', priority: 'high' },
-  { id: 4, name: 'Clinic A Bandages', deliveryTime: 28, clinicalDeadline: 180, distance: 3400, naiveDistance: 5100, battery: 22, status: 'completed', facility: 'Clinic A', priority: 'normal' },
-  { id: 5, name: 'Clinic B Blood Bank', deliveryTime: 71, clinicalDeadline: 90, distance: 10200, naiveDistance: 15300, battery: 61, status: 'completed', facility: 'Clinic B', priority: 'high' },
-  { id: 6, name: 'Royal London Plasma', deliveryTime: 45, clinicalDeadline: 75, distance: 7200, naiveDistance: 10800, battery: 38, status: 'completed', facility: 'Royal London', priority: 'high' },
-  { id: 7, name: 'Homerton Vaccines', deliveryTime: 33, clinicalDeadline: 240, distance: 4800, naiveDistance: 7200, battery: 27, status: 'completed', facility: 'Homerton', priority: 'normal' },
-  { id: 8, name: 'Whipps Cross Emergency', deliveryTime: 88, clinicalDeadline: 80, distance: 11500, naiveDistance: 17200, battery: 65, status: 'failed', facility: 'Whipps Cross', priority: 'high' },
-  { id: 9, name: 'Clinic C Surgical Kit', deliveryTime: 41, clinicalDeadline: 120, distance: 6100, naiveDistance: 9200, battery: 35, status: 'completed', facility: 'Clinic C', priority: 'normal' },
-  { id: 10, name: 'Royal London Antibiotics', deliveryTime: 48, clinicalDeadline: 150, distance: 7800, naiveDistance: 11700, battery: 40, status: 'completed', facility: 'Royal London', priority: 'normal' },
-];
+const STORAGE_KEY = 'dronemedic_completed_missions';
 
-// ── Derived Metrics ──
+// ── Types ──
 
-const totalMissions = DEMO_MISSIONS.length;
-const onTimeMissions = DEMO_MISSIONS.filter(m => m.deliveryTime < m.clinicalDeadline);
-const onTimeRate = Math.round((onTimeMissions.length / totalMissions) * 100);
-const avgDeliveryTime = Math.round(DEMO_MISSIONS.reduce((s, m) => s + m.deliveryTime, 0) / totalMissions);
-const avgDroneTime = DEMO_MISSIONS.reduce((s, m) => s + m.deliveryTime, 0) / totalMissions;
-const avgAmbulanceTime = avgDroneTime * 5;
-const timeSavedPct = Math.round(((avgAmbulanceTime - avgDroneTime) / avgAmbulanceTime) * 100);
-
-// ── Chart Data ──
-
-const transportComparisonData = [
-  { metric: 'Avg Time (min)', Drone: Math.round(avgDroneTime), Helicopter: Math.round(avgDroneTime * 1.8), Ambulance: Math.round(avgAmbulanceTime) },
-  { metric: 'Avg Cost (£)', Drone: 12, Helicopter: 2800, Ambulance: 95 },
-];
-
-const statusCounts = {
-  completed: DEMO_MISSIONS.filter(m => m.status === 'completed').length,
-  rerouted: DEMO_MISSIONS.filter(m => m.status === 'rerouted').length,
-  failed: DEMO_MISSIONS.filter(m => m.status === 'failed').length,
-};
-const statusData = [
-  { name: 'Completed', value: statusCounts.completed, color: '#4ade80' },
-  { name: 'Rerouted', value: statusCounts.rerouted, color: '#fbbf24' },
-  { name: 'Failed', value: statusCounts.failed, color: '#ff4444' },
-];
-
-const deliveryVsDeadlineData = DEMO_MISSIONS.map(m => ({
-  name: m.name.length > 14 ? m.name.slice(0, 14) + '...' : m.name,
-  deliveryTime: m.deliveryTime,
-  clinicalDeadline: m.clinicalDeadline,
-  onTime: m.deliveryTime < m.clinicalDeadline,
-}));
-
-const routeEfficiencyData = DEMO_MISSIONS.map(m => ({
-  name: m.name.length > 14 ? m.name.slice(0, 14) + '...' : m.name,
-  optimized: m.distance,
-  naive: m.naiveDistance,
-}));
-
-const batteryData = DEMO_MISSIONS.map(m => ({
-  name: m.name.length > 10 ? m.name.slice(0, 10) + '...' : m.name,
-  battery: m.battery,
-}));
-
-const reliabilityData = DEMO_MISSIONS.map((_, i) => {
-  const slice = DEMO_MISSIONS.slice(0, i + 1);
-  const onTime = slice.filter(m => m.deliveryTime < m.clinicalDeadline).length;
-  return { name: `M${i + 1}`, rate: Math.round((onTime / slice.length) * 100) };
-});
-
-const facilityMap: Record<string, number> = {};
-for (const m of DEMO_MISSIONS) {
-  facilityMap[m.facility] = (facilityMap[m.facility] || 0) + 1;
+interface StoredMission {
+  id: number;
+  name: string;
+  deliveryTime: number;
+  clinicalDeadline: number;
+  distance: number;
+  naiveDistance: number;
+  battery: number;
+  status: string;
+  facility: string;
+  priority: string;
+  completedAt: string;
+  supplies?: string;
+  costEstimate?: number;
+  safetyEventsCount?: number;
+  rerouteCount?: number;
 }
-const heatmapData = Object.entries(facilityMap)
-  .map(([facility, count]) => ({ facility, count }))
-  .sort((a, b) => b.count - a.count);
+
+// ── Demo Data (fallback) ──
+
+const DEMO_MISSIONS: StoredMission[] = [
+  { id: 1, name: 'Royal London Emergency', deliveryTime: 52, clinicalDeadline: 90, distance: 8400, naiveDistance: 12600, battery: 42, status: 'completed', facility: 'Royal London', priority: 'high', completedAt: '2026-03-28T10:00:00Z' },
+  { id: 2, name: 'Homerton Insulin Run', deliveryTime: 38, clinicalDeadline: 120, distance: 5200, naiveDistance: 7800, battery: 31, status: 'completed', facility: 'Homerton', priority: 'normal', completedAt: '2026-03-28T11:00:00Z' },
+  { id: 3, name: 'Whipps Cross Defibrillator', deliveryTime: 65, clinicalDeadline: 60, distance: 9100, naiveDistance: 14200, battery: 58, status: 'rerouted', facility: 'Whipps Cross', priority: 'high', completedAt: '2026-03-29T09:00:00Z' },
+  { id: 4, name: 'Clinic A Bandages', deliveryTime: 28, clinicalDeadline: 180, distance: 3400, naiveDistance: 5100, battery: 22, status: 'completed', facility: 'Clinic A', priority: 'normal', completedAt: '2026-03-29T14:00:00Z' },
+  { id: 5, name: 'Clinic B Blood Bank', deliveryTime: 71, clinicalDeadline: 90, distance: 10200, naiveDistance: 15300, battery: 61, status: 'completed', facility: 'Clinic B', priority: 'high', completedAt: '2026-03-30T08:00:00Z' },
+  { id: 6, name: 'Royal London Plasma', deliveryTime: 45, clinicalDeadline: 75, distance: 7200, naiveDistance: 10800, battery: 38, status: 'completed', facility: 'Royal London', priority: 'high', completedAt: '2026-03-30T12:00:00Z' },
+  { id: 7, name: 'Homerton Vaccines', deliveryTime: 33, clinicalDeadline: 240, distance: 4800, naiveDistance: 7200, battery: 27, status: 'completed', facility: 'Homerton', priority: 'normal', completedAt: '2026-03-31T10:00:00Z' },
+  { id: 8, name: 'Whipps Cross Emergency', deliveryTime: 88, clinicalDeadline: 80, distance: 11500, naiveDistance: 17200, battery: 65, status: 'failed', facility: 'Whipps Cross', priority: 'high', completedAt: '2026-03-31T15:00:00Z' },
+  { id: 9, name: 'Clinic C Surgical Kit', deliveryTime: 41, clinicalDeadline: 120, distance: 6100, naiveDistance: 9200, battery: 35, status: 'completed', facility: 'Clinic C', priority: 'normal', completedAt: '2026-04-01T09:00:00Z' },
+  { id: 10, name: 'Royal London Antibiotics', deliveryTime: 48, clinicalDeadline: 150, distance: 7800, naiveDistance: 11700, battery: 40, status: 'completed', facility: 'Royal London', priority: 'normal', completedAt: '2026-04-01T13:00:00Z' },
+];
+
+// ── localStorage helpers ──
+
+function loadMissions(): StoredMission[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+function saveMissions(missions: StoredMission[]): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(missions));
+  } catch {
+    // localStorage full or unavailable - silently ignore
+  }
+}
+
+// ── Cost Constants ──
+
+const COST_PER_DRONE_DELIVERY = 25;
+const COST_PER_AMBULANCE_TRIP = 2500;
+const COST_PER_HELICOPTER_TRIP = 35000;
 
 // ── Styles ──
 
@@ -141,6 +134,174 @@ export function Analytics() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [report, setReport] = useState<string | null>(null);
   const [displayedReport, setDisplayedReport] = useState('');
+  const [storedMissions, setStoredMissions] = useState<StoredMission[]>([]);
+
+  // Live mission hook to detect completed missions
+  const liveMission = useLiveMission();
+
+  // Load missions from localStorage on mount
+  useEffect(() => {
+    const loaded = loadMissions();
+    setStoredMissions(loaded);
+  }, []);
+
+  // Auto-connect to watch for mission completion
+  useEffect(() => {
+    liveMission.connect();
+    return () => {
+      liveMission.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // When a mission completes, save its metrics to localStorage
+  useEffect(() => {
+    if (liveMission.missionStatus !== 'completed') return;
+
+    const flightLog = liveMission.flightLog;
+    if (flightLog.length === 0) return;
+
+    // Compute metrics from the completed mission
+    const firstEntry = flightLog[0];
+    const lastEntry = flightLog[flightLog.length - 1];
+    const startTime = typeof firstEntry.timestamp === 'number' ? firstEntry.timestamp : 0;
+    const endTime = typeof lastEntry.timestamp === 'number' ? lastEntry.timestamp : 0;
+    const deliveryTimeSec = Math.round(endTime - startTime);
+    const batteryUsed = Math.max(0, (firstEntry.battery ?? 100) - (lastEntry.battery ?? 0));
+
+    // Count safety-related events
+    const safetyEventsCount = flightLog.filter((e) => {
+      const ev = (e.event || '').toLowerCase();
+      return ev.includes('reroute') || ev.includes('divert') || ev.includes('abort') ||
+             ev.includes('weather') || ev.includes('obstacle') || ev.includes('geofence');
+    }).length;
+
+    const rerouteCount = flightLog.filter((e) =>
+      (e.event || '').toLowerCase().includes('reroute')
+    ).length;
+
+    // Estimate distance from waypoints visited
+    const waypointsVisited = flightLog.filter((e) =>
+      (e.event || '').toLowerCase().includes('arrived') || (e.event || '').toLowerCase().includes('landed')
+    ).length;
+    const estimatedDistance = waypointsVisited * 3000; // rough estimate
+
+    const newMission: StoredMission = {
+      id: Date.now(),
+      name: `Mission ${lastEntry.location || 'Unknown'}`,
+      deliveryTime: deliveryTimeSec,
+      clinicalDeadline: Math.round(deliveryTimeSec * 1.5), // estimate
+      distance: estimatedDistance,
+      naiveDistance: Math.round(estimatedDistance * 1.5),
+      battery: batteryUsed,
+      status: 'completed',
+      facility: lastEntry.location || 'Unknown',
+      priority: 'normal',
+      completedAt: new Date().toISOString(),
+      supplies: lastEntry.event || 'Medical Supplies',
+      costEstimate: COST_PER_DRONE_DELIVERY,
+      safetyEventsCount,
+      rerouteCount,
+    };
+
+    setStoredMissions((prev) => {
+      // Avoid duplicates - check if a mission was already saved in the last 30 seconds
+      const recentDupe = prev.some(
+        (m) => Math.abs(new Date(m.completedAt).getTime() - Date.now()) < 30000
+      );
+      if (recentDupe) return prev;
+
+      const updated = [...prev, newMission];
+      saveMissions(updated);
+      return updated;
+    });
+  }, [liveMission.missionStatus, liveMission.flightLog]);
+
+  // Use stored missions if available, otherwise demo
+  const missions = useMemo(
+    () => (storedMissions.length > 0 ? storedMissions : DEMO_MISSIONS),
+    [storedMissions]
+  );
+
+  // ── Derived Metrics ──
+  const totalMissions = missions.length;
+  const onTimeMissions = missions.filter((m) => m.deliveryTime < m.clinicalDeadline);
+  const onTimeRate = Math.round((onTimeMissions.length / totalMissions) * 100);
+  const avgDeliveryTime = Math.round(missions.reduce((s, m) => s + m.deliveryTime, 0) / totalMissions);
+  const avgDroneTime = missions.reduce((s, m) => s + m.deliveryTime, 0) / totalMissions;
+  const avgAmbulanceTime = avgDroneTime * 5;
+  const timeSavedPct = Math.round(((avgAmbulanceTime - avgDroneTime) / avgAmbulanceTime) * 100);
+
+  // ── Chart Data ──
+  const transportComparisonData = [
+    { metric: 'Avg Time (min)', Drone: Math.round(avgDroneTime), Helicopter: Math.round(avgDroneTime * 1.8), Ambulance: Math.round(avgAmbulanceTime) },
+    { metric: 'Avg Cost (\u00a3)', Drone: 12, Helicopter: 2800, Ambulance: 95 },
+  ];
+
+  const statusCounts = {
+    completed: missions.filter((m) => m.status === 'completed').length,
+    rerouted: missions.filter((m) => m.status === 'rerouted').length,
+    failed: missions.filter((m) => m.status === 'failed').length,
+  };
+  const statusData = [
+    { name: 'Completed', value: statusCounts.completed, color: '#4ade80' },
+    { name: 'Rerouted', value: statusCounts.rerouted, color: '#fbbf24' },
+    { name: 'Failed', value: statusCounts.failed, color: '#ff4444' },
+  ];
+
+  const deliveryVsDeadlineData = missions.map((m) => ({
+    name: m.name.length > 14 ? m.name.slice(0, 14) + '...' : m.name,
+    deliveryTime: m.deliveryTime,
+    clinicalDeadline: m.clinicalDeadline,
+    onTime: m.deliveryTime < m.clinicalDeadline,
+  }));
+
+  const routeEfficiencyData = missions.map((m) => ({
+    name: m.name.length > 14 ? m.name.slice(0, 14) + '...' : m.name,
+    optimized: m.distance,
+    naive: m.naiveDistance,
+  }));
+
+  const batteryData = missions.map((m) => ({
+    name: m.name.length > 10 ? m.name.slice(0, 10) + '...' : m.name,
+    battery: m.battery,
+  }));
+
+  const reliabilityData = missions.map((_, i) => {
+    const slice = missions.slice(0, i + 1);
+    const onTime = slice.filter((m) => m.deliveryTime < m.clinicalDeadline).length;
+    return { name: `M${i + 1}`, rate: Math.round((onTime / slice.length) * 100) };
+  });
+
+  const facilityMap: Record<string, number> = {};
+  for (const m of missions) {
+    facilityMap[m.facility] = (facilityMap[m.facility] || 0) + 1;
+  }
+  const heatmapData = Object.entries(facilityMap)
+    .map(([facility, count]) => ({ facility, count }))
+    .sort((a, b) => b.count - a.count);
+
+  // ── Cost Comparison Data ──
+  const totalDroneCost = totalMissions * COST_PER_DRONE_DELIVERY;
+  const totalAmbulanceCost = totalMissions * COST_PER_AMBULANCE_TRIP;
+  const totalHelicopterCost = totalMissions * COST_PER_HELICOPTER_TRIP;
+  const ambulanceSavings = totalAmbulanceCost - totalDroneCost;
+  const helicopterSavings = totalHelicopterCost - totalDroneCost;
+
+  const costComparisonData = [
+    { method: 'Drone', cost: totalDroneCost, color: '#00daf3' },
+    { method: 'Ambulance', cost: totalAmbulanceCost, color: '#6b7280' },
+    { method: 'Helicopter', cost: totalHelicopterCost, color: '#434654' },
+  ];
+
+  const cumulativeSavingsData = missions.map((_, i) => {
+    const count = i + 1;
+    return {
+      name: `M${count}`,
+      vsAmbulance: count * (COST_PER_AMBULANCE_TRIP - COST_PER_DRONE_DELIVERY),
+      vsHelicopter: count * (COST_PER_HELICOPTER_TRIP - COST_PER_DRONE_DELIVERY),
+    };
+  });
 
   // Typewriter effect
   useEffect(() => {
@@ -170,15 +331,15 @@ export function Analytics() {
         distance_reduction: 33,
         throughput: totalMissions,
         reroute_success_rate: 100,
-        total_distance_optimized: DEMO_MISSIONS.reduce((s, m) => s + m.distance, 0),
-        total_distance_naive: DEMO_MISSIONS.reduce((s, m) => s + m.naiveDistance, 0),
-        battery_used: Math.round(DEMO_MISSIONS.reduce((s, m) => s + m.battery, 0) / totalMissions),
+        total_distance_optimized: missions.reduce((s, m) => s + m.distance, 0),
+        total_distance_naive: missions.reduce((s, m) => s + m.naiveDistance, 0),
+        battery_used: Math.round(missions.reduce((s, m) => s + m.battery, 0) / totalMissions),
         robustness_score: 90,
-        actual_flight_time_seconds: DEMO_MISSIONS.reduce((s, m) => s + m.deliveryTime, 0),
-        estimated_time_seconds: DEMO_MISSIONS.reduce((s, m) => s + m.deliveryTime, 0),
-        naive_time_seconds: DEMO_MISSIONS.reduce((s, m) => s + m.deliveryTime * 5, 0),
+        actual_flight_time_seconds: missions.reduce((s, m) => s + m.deliveryTime, 0),
+        estimated_time_seconds: missions.reduce((s, m) => s + m.deliveryTime, 0),
+        naive_time_seconds: missions.reduce((s, m) => s + m.deliveryTime * 5, 0),
       };
-      const res = await api.generateReport(metrics, { missions: DEMO_MISSIONS });
+      const res = await api.generateReport(metrics, { missions });
       setReport(res.report);
     } catch {
       setReport(DEMO_REPORT);
@@ -186,7 +347,7 @@ export function Analytics() {
     setIsGenerating(false);
   };
 
-  if (DEMO_MISSIONS.length === 0) {
+  if (missions.length === 0) {
     return (
       <div style={{ height: '100vh', background: '#0a0f13', display: 'flex', flexDirection: 'column', color: '#dfe3e9', fontFamily: 'Inter, sans-serif' }}>
         <PageHeader title="Analytics" icon={BarChart3} statusVariant="idle" />
@@ -206,6 +367,52 @@ export function Analytics() {
       {/* Scrollable Content */}
       <div style={{ flex: 1, overflowY: 'auto', marginLeft: 96, padding: '24px 32px 48px' }}>
 
+        {/* Data Source Indicator */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          marginBottom: 16,
+          padding: '6px 12px',
+          borderRadius: 6,
+          background: storedMissions.length > 0 ? 'rgba(0,218,243,0.06)' : 'rgba(141,144,160,0.06)',
+          border: `1px solid ${storedMissions.length > 0 ? 'rgba(0,218,243,0.15)' : 'rgba(141,144,160,0.1)'}`,
+          fontSize: 11,
+          color: '#7a7e8c',
+        }}>
+          <div style={{
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            background: storedMissions.length > 0 ? '#00daf3' : '#7a7e8c',
+          }} />
+          {storedMissions.length > 0
+            ? `Showing ${storedMissions.length} real mission${storedMissions.length !== 1 ? 's' : ''} from localStorage`
+            : 'Showing demo data (no completed missions saved yet)'}
+          {storedMissions.length > 0 && (
+            <button
+              onClick={() => {
+                if (window.confirm('Clear all saved mission data? This cannot be undone.')) {
+                  localStorage.removeItem(STORAGE_KEY);
+                  setStoredMissions([]);
+                }
+              }}
+              style={{
+                marginLeft: 'auto',
+                background: 'none',
+                border: '1px solid rgba(255,68,68,0.2)',
+                color: '#ff4444',
+                borderRadius: 4,
+                padding: '2px 8px',
+                fontSize: 10,
+                cursor: 'pointer',
+              }}
+            >
+              Clear Data
+            </button>
+          )}
+        </div>
+
         {/* Row 1: KPI Cards */}
         <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
           {[
@@ -214,7 +421,7 @@ export function Analytics() {
             { icon: <Clock size={16} style={{ color: '#fbbf24' }} />, label: 'Avg Delivery Time', value: avgDeliveryTime, suffix: 's' },
             { icon: <TrendingUp size={16} style={{ color: '#00daf3' }} />, label: 'Time Saved vs Road', value: timeSavedPct, suffix: '%' },
             { icon: <ShieldCheck size={16} style={{ color: '#4ade80' }} />, label: 'Payload Integrity', value: 100, suffix: '%' },
-          ].map(card => (
+          ].map((card) => (
             <div key={card.label} style={{ ...glassCard, padding: '16px 20px', flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                 {card.icon}
@@ -275,6 +482,88 @@ export function Analytics() {
                   missions
                 </text>
               </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Row 2.5: Mission Cost Comparison */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
+          {/* Cost per Method */}
+          <div style={glassCard}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+              <DollarSign size={14} style={{ color: '#4ade80' }} />
+              <div style={sectionTitle}>Mission Cost Comparison</div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
+              {costComparisonData.map((item) => (
+                <div key={item.method} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ fontSize: 12, color: '#c3c6d6', width: 80 }}>{item.method}</span>
+                  <div style={{ flex: 1, height: 8, borderRadius: 4, background: 'rgba(67,70,84,0.2)', overflow: 'hidden' }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${Math.min((item.cost / totalHelicopterCost) * 100, 100)}%`,
+                      borderRadius: 4,
+                      background: item.color,
+                      transition: 'width 0.6s ease',
+                    }} />
+                  </div>
+                  <span style={{ fontSize: 12, fontFamily: 'monospace', color: item.color, minWidth: 80, textAlign: 'right' }}>
+                    ${item.cost.toLocaleString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: 16, borderTop: '1px solid rgba(67,70,84,0.15)', paddingTop: 12 }}>
+              <div style={{ flex: 1 }}>
+                <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7a7e8c' }}>Per Delivery</span>
+                <div style={{ display: 'flex', gap: 12, fontSize: 12, marginTop: 4 }}>
+                  <span style={{ color: '#00daf3' }}>Drone: ${COST_PER_DRONE_DELIVERY}</span>
+                  <span style={{ color: '#6b7280' }}>Ambulance: ${COST_PER_AMBULANCE_TRIP.toLocaleString()}</span>
+                  <span style={{ color: '#434654' }}>Heli: ${COST_PER_HELICOPTER_TRIP.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Cumulative Savings */}
+          <div style={glassCard}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+              <TrendingUp size={14} style={{ color: '#4ade80' }} />
+              <div style={sectionTitle}>Cumulative Savings</div>
+            </div>
+            <div style={{ display: 'flex', gap: 16, marginBottom: 12 }}>
+              <div style={{ padding: '8px 14px', borderRadius: 8, background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.15)' }}>
+                <div style={{ fontSize: 10, textTransform: 'uppercase', color: '#7a7e8c', marginBottom: 2 }}>vs Ambulance</div>
+                <div style={{ fontSize: 20, fontFamily: 'Space Grotesk', fontWeight: 700, color: '#4ade80' }}>
+                  ${ambulanceSavings.toLocaleString()}
+                </div>
+              </div>
+              <div style={{ padding: '8px 14px', borderRadius: 8, background: 'rgba(0,218,243,0.08)', border: '1px solid rgba(0,218,243,0.15)' }}>
+                <div style={{ fontSize: 10, textTransform: 'uppercase', color: '#7a7e8c', marginBottom: 2 }}>vs Helicopter</div>
+                <div style={{ fontSize: 20, fontFamily: 'Space Grotesk', fontWeight: 700, color: '#00daf3' }}>
+                  ${helicopterSavings.toLocaleString()}
+                </div>
+              </div>
+            </div>
+            <ResponsiveContainer width="100%" height={140}>
+              <AreaChart data={cumulativeSavingsData}>
+                <defs>
+                  <linearGradient id="savingsGreen" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#4ade80" stopOpacity={0.2} />
+                    <stop offset="100%" stopColor="#4ade80" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="savingsCyan" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#00daf3" stopOpacity={0.2} />
+                    <stop offset="100%" stopColor="#00daf3" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(67,70,84,0.2)" />
+                <XAxis dataKey="name" tick={{ fill: '#c3c6d6', fontSize: 9 }} stroke="#434654" />
+                <YAxis tick={{ fill: '#c3c6d6', fontSize: 9 }} stroke="#434654" />
+                <Tooltip contentStyle={tooltipStyle} formatter={(value: unknown) => `$${Number(value ?? 0).toLocaleString()}`} />
+                <Area type="monotone" dataKey="vsAmbulance" name="vs Ambulance" stroke="#4ade80" strokeWidth={2} fill="url(#savingsGreen)" />
+                <Area type="monotone" dataKey="vsHelicopter" name="vs Helicopter" stroke="#00daf3" strokeWidth={2} fill="url(#savingsCyan)" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>

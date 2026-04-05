@@ -7,14 +7,16 @@ Exposes route planning, weather, geofence, drone control, and AI parsing as HTTP
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import json
 import logging
+import time
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from pydantic import BaseModel
@@ -49,6 +51,13 @@ logger = logging.getLogger("DroneMedic.API")
 # --- Active drone session (single-user hackathon demo) ---
 _drone: DroneController | None = None
 _mission_state: dict[str, Any] = {}
+_mission_ctrl: MissionController = MissionController()
+
+# --- WebSocket live clients ---
+ws_clients: set[WebSocket] = set()
+
+# --- AI chat session persistence ---
+_coordinators: dict[str, "MissionCoordinator"] = {}  # noqa: F821
 
 
 @asynccontextmanager
@@ -117,6 +126,7 @@ class MetricsRequest(BaseModel):
 class ChatRequest(BaseModel):
     message: str
     context: dict = {}
+    session_id: str = "main"
 
 
 class GenerateReportRequest(BaseModel):
@@ -140,6 +150,17 @@ class PayloadStatusRequest(BaseModel):
     payload_type: str = "blood"
     elapsed_minutes: float = 0.0
     conditions: dict = {}
+
+
+class DeployItem(BaseModel):
+    destination: str
+    supply: str = "medical_supplies"
+    priority: str = "normal"
+    time_window_minutes: float = 60.0
+
+
+class DeployRequest(BaseModel):
+    deliveries: list[DeployItem]
 
 
 class MissionComparisonRequest(BaseModel):
@@ -307,12 +328,17 @@ def api_naive_baseline(locations: str) -> dict:
 
 @app.post("/api/chat")
 def api_chat(req: ChatRequest) -> dict:
-    """Chat with the AI Mission Coordinator."""
+    """Chat with the AI Mission Coordinator. Reuses coordinator per session_id."""
     try:
         from ai.coordinator import MissionCoordinator
-        coordinator = MissionCoordinator()
+
+        session_id = req.session_id or "main"
+        if session_id not in _coordinators:
+            _coordinators[session_id] = MissionCoordinator()
+
+        coordinator = _coordinators[session_id]
         result = coordinator.converse(req.message)
-        return {"reply": result["response"]}
+        return {"reply": result["response"], "session_id": session_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Chat failed: {e}")
 
@@ -517,6 +543,31 @@ class WeatherPenaltyRequest(BaseModel):
     turbulence: str = "calm"
 
 
+class PrepareMissionRequest(BaseModel):
+    route: list[str]
+    payload_kg: float = 2.5
+    supplies: dict[str, str] = {}
+    priorities: dict[str, str] = {}
+    headwind_ms: float = 0.0
+    crosswind_ms: float = 0.0
+    precipitation_mmh: float = 0.0
+    temperature_c: float = 18.0
+    turbulence: str = "calm"
+
+
+class ControlTickRequest(BaseModel):
+    lat: float = 51.5074
+    lon: float = -0.1278
+    battery_wh: float = 544.0
+    battery_pct: float = 100.0
+    current_location: str = "Depot"
+    headwind_ms: float = 0.0
+    crosswind_ms: float = 0.0
+    precipitation_mmh: float = 0.0
+    temperature_c: float = 18.0
+    turbulence: str = "calm"
+
+
 # ── Physics / Safety Endpoints ────────────────────────────────────────
 
 @app.post("/api/physics/preflight")
@@ -641,6 +692,287 @@ def api_power_profile(payload_kg: float = 2.5) -> dict:
         "energy_per_km_wh": round(compute_energy_per_km(spec, payload_kg), 1),
         "hover_cost_per_min_wh": round(compute_hover_energy_per_minute(spec, payload_kg), 1),
     }
+
+
+# ── Mission Controller Endpoints ─────────────────────────────────────
+
+@app.post("/api/mission/prepare")
+def api_prepare_mission(req: PrepareMissionRequest) -> dict:
+    """Prepare mission with full go/no-go preflight check via MissionController."""
+    conditions = FlightConditions(
+        headwind_ms=req.headwind_ms,
+        crosswind_ms=req.crosswind_ms,
+        precipitation_mmh=req.precipitation_mmh,
+        temperature_c=req.temperature_c,
+        turbulence=req.turbulence,
+    )
+    result = _mission_ctrl.prepare_mission(
+        route=req.route,
+        payload_kg=req.payload_kg,
+        supplies=req.supplies,
+        priorities=req.priorities,
+        conditions=conditions,
+    )
+    return {
+        "decision": result.decision,
+        "battery_state": result.battery_state.value if result.battery_state else None,
+        "checks": result.checks,
+        "failed_checks": result.failed_checks,
+        "recommendations": result.recommendations,
+        "energy_budget": result.energy_budget.__dict__ if result.energy_budget else None,
+    }
+
+
+@app.post("/api/mission/launch")
+def api_launch_mission() -> dict:
+    """Launch the prepared mission."""
+    return _mission_ctrl.launch()
+
+
+@app.post("/api/mission/control-tick")
+def api_control_tick(req: ControlTickRequest) -> dict:
+    """Real-time control loop tick — call every ~1s during flight."""
+    conditions = FlightConditions(
+        headwind_ms=req.headwind_ms,
+        crosswind_ms=req.crosswind_ms,
+        precipitation_mmh=req.precipitation_mmh,
+        temperature_c=req.temperature_c,
+        turbulence=req.turbulence,
+    )
+    return _mission_ctrl.control_tick(
+        current_position={"lat": req.lat, "lon": req.lon},
+        battery_wh=req.battery_wh,
+        battery_pct=req.battery_pct,
+        conditions=conditions,
+        current_location=req.current_location,
+    )
+
+
+@app.post("/api/mission/waypoint/{location}")
+def api_mark_waypoint(location: str) -> dict:
+    """Mark a waypoint as visited."""
+    _mission_ctrl.mark_waypoint_visited(location)
+    return _mission_ctrl.get_state()
+
+
+@app.post("/api/mission/complete")
+def api_complete_mission() -> dict:
+    """Finalize the mission and get summary."""
+    return _mission_ctrl.complete_mission()
+
+
+@app.get("/api/mission/state")
+def api_mission_state() -> dict:
+    """Get current mission state."""
+    return _mission_ctrl.get_state()
+
+
+# ── WebSocket Live Feed ─────────────────────────────────────────────
+
+
+@app.websocket("/ws/live")
+async def ws_live(ws: WebSocket):
+    """Real-time event stream for the React dashboard."""
+    await ws.accept()
+    ws_clients.add(ws)
+    try:
+        while True:
+            await ws.receive_text()  # keep connection alive; ignore inbound messages
+    except WebSocketDisconnect:
+        ws_clients.discard(ws)
+
+
+async def broadcast_event(event: dict) -> None:
+    """Send an event dict to every connected WebSocket client."""
+    dead: set[WebSocket] = set()
+    for ws in ws_clients:
+        try:
+            await ws.send_json(event)
+        except Exception:
+            dead.add(ws)
+    ws_clients -= dead
+
+
+# ── Deploy Endpoint ─────────────────────────────────────────────────
+
+
+async def _run_deploy_flight(
+    route: list[str],
+    supplies: dict[str, str],
+    priorities: dict[str, str],
+) -> None:
+    """Background coroutine that simulates a deploy flight with WS broadcasts."""
+    drone_id = _mission_ctrl.state.drone_id
+    mission_id = _mission_ctrl.state.mission_id
+
+    # Broadcast mission_started
+    await broadcast_event({
+        "type": "mission_started",
+        "drone_id": drone_id,
+        "route": route,
+        "timestamp": time.time(),
+    })
+
+    await broadcast_event({
+        "type": "drone_status_changed",
+        "drone_id": drone_id,
+        "status": "flying",
+        "timestamp": time.time(),
+    })
+
+    # Launch via mission controller
+    _mission_ctrl.launch()
+
+    # Simulate flight through each waypoint
+    total_stops = len(route)
+    battery_pct = 100.0
+    for idx, location in enumerate(route):
+        if location == "Depot" and idx == 0:
+            continue
+
+        # Simulate flight time to this waypoint
+        await asyncio.sleep(3)
+
+        # Drain battery proportionally
+        battery_pct = max(5.0, battery_pct - (80.0 / max(total_stops - 1, 1)))
+
+        # Get location coords if available
+        loc_data = LOCATIONS.get(location, {})
+        lat = loc_data.get("lat", 51.5074)
+        lon = loc_data.get("lon", -0.1278)
+
+        # Run control tick
+        tick_result = _mission_ctrl.control_tick(
+            current_position={"lat": lat, "lon": lon},
+            battery_wh=battery_pct / 100.0 * 544.0,
+            battery_pct=battery_pct,
+            current_location=location,
+        )
+
+        _mission_ctrl.mark_waypoint_visited(location)
+
+        # Broadcast waypoint_reached
+        await broadcast_event({
+            "type": "waypoint_reached",
+            "drone_id": drone_id,
+            "location": location,
+            "waypoint": location,
+            "position": {"lat": lat, "lon": lon},
+            "battery": battery_pct,
+            "timestamp": time.time(),
+        })
+
+        # Broadcast drone_position_updated
+        await broadcast_event({
+            "type": "drone_position_updated",
+            "drone_id": drone_id,
+            "lat": lat,
+            "lon": lon,
+            "alt": 120.0,
+            "battery_pct": battery_pct,
+            "battery": battery_pct,
+            "speed": 15.0,
+            "heading": 0.0,
+            "current_location": location,
+            "position": {"x": lat, "y": lon, "z": 120.0},
+            "status": "flying",
+            "timestamp": time.time(),
+        })
+
+        # Broadcast safety_decision from control tick
+        await broadcast_event({
+            "type": "safety_decision",
+            "battery_state": tick_result.get("battery_state", "GREEN"),
+            "action": tick_result.get("action", "CONTINUE"),
+            "reasons": tick_result.get("reasons", []),
+            "divert_location": tick_result.get("divert_location"),
+            "remaining_battery_pct": battery_pct,
+            "timestamp": time.time(),
+        })
+
+        # Check for low battery
+        if battery_pct < 20.0:
+            await broadcast_event({
+                "type": "drone_battery_low",
+                "drone_id": drone_id,
+                "battery_pct": battery_pct,
+                "timestamp": time.time(),
+            })
+
+        # Broadcast delivery_completed for non-depot stops
+        await broadcast_event({
+            "type": "delivery_completed",
+            "drone_id": drone_id,
+            "location": location,
+            "timestamp": time.time(),
+        })
+
+    # Complete mission
+    summary = _mission_ctrl.complete_mission()
+
+    await broadcast_event({
+        "type": "drone_status_changed",
+        "drone_id": drone_id,
+        "status": "completed",
+        "timestamp": time.time(),
+    })
+
+    await broadcast_event({
+        "type": "mission_completed",
+        "drone_id": drone_id,
+        "summary": summary,
+        "timestamp": time.time(),
+    })
+
+
+@app.post("/api/deploy")
+async def api_deploy(req: DeployRequest) -> dict:
+    """
+    One-shot mission deployment.
+    Prepares a mission, kicks off a background flight simulation with WS broadcasts,
+    and returns immediately.
+    """
+    # Build route from delivery items
+    destinations = [item.destination for item in req.deliveries]
+    route = ["Depot"] + destinations + ["Depot"]
+
+    supplies = {item.destination: item.supply for item in req.deliveries}
+    priorities = {item.destination: item.priority for item in req.deliveries}
+
+    # Prepare mission via mission controller
+    _mission_ctrl.prepare_mission(
+        route=route,
+        payload_kg=2.5,
+        supplies=supplies,
+        priorities=priorities,
+    )
+
+    # Launch flight loop as a background task
+    asyncio.create_task(
+        _run_deploy_flight(route, supplies, priorities)
+    )
+
+    return {
+        "status": "deploying",
+        "deliveries": [
+            {
+                "destination": item.destination,
+                "supply": item.supply,
+                "priority": item.priority,
+            }
+            for item in req.deliveries
+        ],
+        "missions": [
+            {
+                "mission_id": _mission_ctrl.state.mission_id,
+                "drone_id": _mission_ctrl.state.drone_id,
+                "route": route,
+            }
+        ],
+    }
+
+
+# ── Health ──────────────────────────────────────────────────────────
 
 
 @app.get("/api/health")
