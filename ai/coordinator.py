@@ -9,6 +9,7 @@ conversation support.
 import json
 import re
 from openai import OpenAI
+from pydantic import BaseModel
 
 from config import OPENAI_API_KEY, OPENAI_BASE_URL
 from ai.prompts import (
@@ -17,6 +18,7 @@ from ai.prompts import (
     REPLAN_SYSTEM_PROMPT,
     INTENT_CLASSIFICATION_PROMPT,
 )
+from ai.schemas import ParsedDeliveryTask
 from ai.conversation import ConversationState, detect_intent
 from ai.preprocessor import normalize_input
 
@@ -56,10 +58,12 @@ class MissionCoordinator:
         response = self._call_llm(
             system=COORDINATOR_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": user_input}],
+            schema=ParsedDeliveryTask,
+            temperature=0.1,
         )
 
-        # Extract JSON from response (strip <thinking> block)
-        task = self._extract_json(response)
+        # With structured output the response is guaranteed valid JSON
+        task = json.loads(response)
 
         # Update conversation state
         self._conversation.add_user_message(user_input)
@@ -222,16 +226,47 @@ class MissionCoordinator:
 
     # --- Internal methods ---
 
-    def _call_llm(self, system: str, messages: list[dict]) -> str:
-        """Make an API call to GPT-5.3."""
-        try:
+    def _call_llm(
+        self,
+        system: str,
+        messages: list[dict],
+        schema: type[BaseModel] | None = None,
+        temperature: float | None = None,
+    ) -> str:
+        """Make an API call to GPT-5.3 with retry on transient failures.
+
+        Args:
+            system: System prompt.
+            messages: Conversation messages.
+            schema: Optional Pydantic model for structured output (strict mode).
+            temperature: Optional temperature override.
+        """
+        from backend.utils.resilience import with_retry
+
+        @with_retry(max_attempts=2, min_wait=1, max_wait=5)
+        def _do_call():
             openai_messages = [{"role": "system", "content": system}] + messages
-            response = self._client.chat.completions.create(
-                model=self._model,
-                max_tokens=2048,
-                messages=openai_messages,
-            )
+            kwargs: dict = {
+                "model": self._model,
+                "max_tokens": 2048,
+                "messages": openai_messages,
+            }
+            if temperature is not None:
+                kwargs["temperature"] = temperature
+            if schema is not None:
+                kwargs["response_format"] = {
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": schema.__name__,
+                        "strict": True,
+                        "schema": schema.model_json_schema(),
+                    },
+                }
+            response = self._client.chat.completions.create(**kwargs)
             return response.choices[0].message.content.strip()
+
+        try:
+            return _do_call()
         except Exception as e:
             from ai.error_analysis import log_error, ErrorType
             input_text = messages[-1]["content"] if messages else ""

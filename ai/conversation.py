@@ -5,6 +5,8 @@ Manages multi-turn conversation history and intent detection
 for the LLM Mission Coordinator.
 """
 
+from __future__ import annotations
+
 import re
 
 

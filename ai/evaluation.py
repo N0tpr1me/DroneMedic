@@ -5,6 +5,9 @@ Runs golden test cases against the NLP parser and computes field-level
 accuracy metrics. Supports both live (API) and mock (cached) evaluation.
 """
 
+from __future__ import annotations
+
+
 import json
 import sys
 import os

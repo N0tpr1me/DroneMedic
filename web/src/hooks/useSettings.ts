@@ -35,6 +35,7 @@ export interface DroneMedicSettings {
     hudPosition: 'Right' | 'Left';
     showMissionProgress: boolean;
     animationSpeed: 'Normal' | 'Fast' | 'Reduced';
+    darkMode: boolean;
   };
   landingZone: {
     lat: number;
@@ -83,6 +84,7 @@ const DEFAULT_SETTINGS: DroneMedicSettings = {
     hudPosition: 'Right',
     showMissionProgress: true,
     animationSpeed: 'Normal',
+    darkMode: true,
   },
   landingZone: {
     lat: 51.5074,

@@ -15,6 +15,10 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://chat.kxsb.org/api/v1")
 AIRSIM_ENABLED = os.getenv("AIRSIM_ENABLED", "false").lower() == "true"
 
+# --- Supabase ---
+SUPABASE_URL = os.getenv("VITE_SUPABASE_URL", "")
+SUPABASE_KEY = os.getenv("VITE_SUPABASE_ANON_KEY", "")
+
 # --- PX4 SITL ---
 PX4_ENABLED = os.getenv("PX4_ENABLED", "false").lower() == "true"
 PX4_CONNECTION = os.getenv("PX4_CONNECTION", "udp://:14540")
@@ -46,6 +50,7 @@ PHYSICS_MAX_THRUST_PER_MOTOR_N = 60.0     # per motor at full throttle
 PHYSICS_CRUISE_ALTITUDE_M = 80.0          # operating altitude AGL
 PHYSICS_CLIMB_RATE_MS = 3.0
 PHYSICS_DESCENT_RATE_MS = 2.0
+PHYSICS_CRUISE_SPEED_MS = 15.0            # optimal cruise speed (m/s)
 PHYSICS_MAX_SAFE_WIND_MS = 12.0           # sustained wind abort threshold
 PHYSICS_MIN_OPERATING_TEMP_C = -10.0
 PHYSICS_MAX_OPERATING_TEMP_C = 45.0
@@ -159,6 +164,10 @@ NO_FLY_ZONES = [
         ],
     },
 ]
+
+# --- Supabase ---
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
 # --- Multi-Drone ---
 NUM_DRONES = 2

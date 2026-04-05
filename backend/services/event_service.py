@@ -6,10 +6,30 @@ import asyncio
 import logging
 from collections import deque
 
+from config import SUPABASE_URL
 from backend.domain.enums import EventSource, EventType
 from backend.domain.models import Event
 
 logger = logging.getLogger("DroneMedic.Events")
+
+
+def _db_enabled() -> bool:
+    return bool(SUPABASE_URL)
+
+
+def _persist(coro) -> None:
+    if not _db_enabled():
+        return
+    try:
+        loop = asyncio.get_running_loop()
+        loop.create_task(coro)
+    except RuntimeError:
+        try:
+            _loop = asyncio.new_event_loop()
+            _loop.run_until_complete(coro)
+            _loop.close()
+        except Exception:
+            pass
 
 _MAX_HISTORY = 10_000
 
@@ -46,6 +66,11 @@ class EventService:
         self._history.append(event)
         logger.info(f"[EVENT] {event_type.value}: {data}")
         self._broadcast(event)
+
+        # Persist event to Supabase
+        from backend.db import repository as repo
+        _persist(repo.save_event(event.model_dump(mode="json")))
+
         return event
 
     # ── Subscribe ──────────────────────────────────────────────────────

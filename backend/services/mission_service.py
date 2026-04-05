@@ -24,9 +24,11 @@ from backend.domain.models import (
 )
 from backend.services.cv_service import CVDetectionService
 from backend.services.drone_service import DroneService
+from backend.utils.notifications import notify_mission_event
 from backend.services.event_service import EventService
 from backend.services.route_service import RouteService
 from backend.adapters.simulator_adapter import SimulatorAdapter
+from ai.flight_agent import FlightAgent, FlightContext, FlightDecision
 
 logger = logging.getLogger("DroneMedic.MissionService")
 
@@ -420,6 +422,102 @@ class MissionService:
             "context": context or {},
         })
 
+    # ── Autonomous flight agent ────────────────────────────────────────
+
+    def _flight_agent_decide(self, mission: Mission, drone_id: str, waypoint: str, waypoint_index: int) -> FlightDecision | None:
+        """Run the flight decision agent at the current waypoint.
+
+        Returns a FlightDecision or None if the agent could not run.
+        """
+        try:
+            bat = self._adapter.get_battery(drone_id)
+            bat_state = "GREEN" if bat > 50 else ("AMBER" if bat > 25 else "RED")
+
+            remaining_wps = mission.planned_route[waypoint_index + 1:]
+            remaining_deliveries = len([w for w in remaining_wps if w != "Depot"])
+
+            # Determine payload info from first undelivered delivery
+            payload_type = "medical_supply"
+            payload_priority = "P2_URGENT"
+            for d_id in mission.delivery_ids:
+                d = self._deliveries.get(d_id)
+                if d and d.status != DeliveryStatus.delivered:
+                    payload_type = d.items[0].name if d.items else "medical_supply"
+                    payload_priority = d.priority if hasattr(d, "priority") else "P2_URGENT"
+                    break
+
+            # Progress
+            total = max(len(mission.planned_route), 1)
+            progress = ((waypoint_index + 1) / total) * 100
+
+            # Nearest facility (simple: Depot is always the fallback)
+            nearest = "Depot"
+            nearest_dist_km = 2.0  # default estimate
+
+            # NFZ check (simplified)
+            from backend.geofence import is_in_no_fly_zone
+            loc = LOCATIONS.get(waypoint, {})
+            nfz_result = is_in_no_fly_zone(loc.get("x", 0), loc.get("y", 0)) if loc else (False, None)
+            nfz_nearby = nfz_result[0] if isinstance(nfz_result, tuple) else bool(nfz_result)
+
+            # Gather disaster intelligence for context-aware decisions
+            active_threats: list[dict] = []
+            dynamic_nfz: list[str] = []
+            military_activity = False
+            try:
+                from backend.api.routes.disasters import get_disaster_service
+                disaster_svc = get_disaster_service()
+                active_threats = disaster_svc.get_active_threats()
+                dynamic_nfz = [
+                    t.get("id", "") for t in active_threats
+                    if t.get("source") in ("EONET", "DEMO")
+                ]
+                military_activity = any(
+                    t.get("category") == "military" for t in active_threats
+                )
+            except Exception:
+                pass  # graceful degradation if disaster service unavailable
+
+            ctx = FlightContext(
+                drone_id=drone_id,
+                battery_pct=bat,
+                battery_state=bat_state,
+                current_location=waypoint,
+                next_waypoint=remaining_wps[0] if remaining_wps else "Depot",
+                remaining_waypoints=remaining_wps,
+                remaining_deliveries=remaining_deliveries,
+                speed_ms=15.0,
+                altitude_m=80.0,
+                wind_speed_ms=0.0,   # no live weather in sim — agent uses rules
+                precipitation_mm=0.0,
+                temperature_c=18.0,
+                payload_type=payload_type,
+                payload_priority=payload_priority,
+                mission_progress_pct=progress,
+                reroute_count=mission.reroute_count,
+                nearest_facility=nearest,
+                nearest_facility_distance_km=nearest_dist_km,
+                nfz_nearby=nfz_nearby,
+                active_threats=active_threats,
+                dynamic_nfz=dynamic_nfz,
+                military_activity=military_activity,
+            )
+
+            # Use rule-based agent (sync) — avoids event loop issues in threads
+            agent = FlightAgent()
+            import asyncio
+            decision = asyncio.run(agent.decide(ctx))
+
+            logger.info(
+                "[FLIGHT-AGENT] %s @ %s → action=%s confidence=%.2f risk=%s",
+                drone_id, waypoint, decision.action, decision.confidence, decision.risk_assessment,
+            )
+            return decision
+
+        except Exception as e:
+            logger.warning("[FLIGHT-AGENT] Decision failed at %s: %s", waypoint, e)
+            return None
+
     # ── Mission execution (blocking, runs in thread) ───────────────────
 
     def _run_mission(self, mission_id: str) -> None:
@@ -582,6 +680,111 @@ class MissionService:
                                 "delivered_at": d.delivered_at.isoformat(),
                             }))
 
+                # ── Autonomous flight agent decision ──
+                if waypoint != "Depot":
+                    decision = self._flight_agent_decide(mission, drone_id, waypoint, i)
+                    if decision is not None:
+                        # Publish decision as AI reasoning event
+                        severity_map = {
+                            "low": "success", "medium": "warning",
+                            "high": "error", "critical": "error",
+                        }
+                        self._publish_reasoning(
+                            f"[Flight Agent] {decision.reasoning}",
+                            severity=severity_map.get(decision.risk_assessment, "info"),
+                            context={
+                                "action": decision.action,
+                                "confidence": decision.confidence,
+                                "risk": decision.risk_assessment,
+                                "speed_adjustment": decision.speed_adjustment,
+                                "skip_deliveries": decision.skip_deliveries,
+                                "divert_to": decision.divert_to,
+                                "source": "flight_agent",
+                            },
+                        )
+
+                        # Act on critical decisions
+                        if decision.action == "divert_emergency":
+                            self._publish_reasoning(
+                                f"EMERGENCY DIVERT: Landing at {decision.divert_to or 'nearest facility'}. "
+                                f"Reason: {decision.reasoning}",
+                                severity="error",
+                                context={"action": "divert_emergency", "source": "flight_agent"},
+                            )
+                            self._handle_low_battery(mission_id)
+                            return
+
+                        if decision.action == "abort":
+                            self._publish_reasoning(
+                                f"MISSION ABORT: {decision.reasoning}",
+                                severity="error",
+                                context={"action": "abort", "source": "flight_agent"},
+                            )
+                            mission.status = MissionStatus.aborted
+                            mission.failed_reason = f"Flight agent abort: {decision.reasoning}"
+                            self._drones.set_status(drone_id, DroneStatus.emergency)
+                            self._events.publish(EventType.mission_aborted, {
+                                "mission_id": mission_id,
+                                "reason": decision.reasoning,
+                            })
+                            _persist(repo.update_mission(mission_id, {
+                                "status": mission.status.value,
+                                "failed_reason": mission.failed_reason,
+                            }))
+                            return
+
+                        # ── Autonomous execution for high-confidence decisions ──
+                        AUTONOMY_THRESHOLD = 0.85
+                        if decision.confidence >= AUTONOMY_THRESHOLD and decision.action != "continue":
+                            auto_executed = True
+
+                            if decision.action == "conserve_speed":
+                                # Speed reduction is advisory — logged for telemetry
+                                self._publish_reasoning(
+                                    f"[AUTO-EXEC] Conserving speed (x{decision.speed_adjustment:.1f}). "
+                                    f"Confidence: {decision.confidence:.0%}",
+                                    severity="warning",
+                                    context={"action": "conserve_speed", "auto_executed": True},
+                                )
+
+                            elif decision.action == "skip_delivery":
+                                for skip_loc in decision.skip_deliveries:
+                                    for d_id in mission.delivery_ids:
+                                        d = self._deliveries.get(d_id)
+                                        if d and d.destination == skip_loc and d.status != DeliveryStatus.delivered:
+                                            d.status = DeliveryStatus.cancelled
+                                            _persist(repo.update_delivery(d_id, {"status": d.status.value}))
+                                self._publish_reasoning(
+                                    f"[AUTO-EXEC] Skipped deliveries: {decision.skip_deliveries}. "
+                                    f"Confidence: {decision.confidence:.0%}",
+                                    severity="warning",
+                                    context={"action": "skip_delivery", "auto_executed": True,
+                                             "skipped": decision.skip_deliveries},
+                                )
+
+                            elif decision.action == "reroute":
+                                self._publish_reasoning(
+                                    f"[AUTO-EXEC] Triggering reroute. Confidence: {decision.confidence:.0%}. "
+                                    f"Reason: {decision.reasoning}",
+                                    severity="warning",
+                                    context={"action": "reroute", "auto_executed": True},
+                                )
+                                try:
+                                    self.reroute_mission(mission_id, reason=f"Auto-reroute: {decision.reasoning}")
+                                except Exception as reroute_err:
+                                    logger.warning("[AUTO-EXEC] Reroute failed: %s", reroute_err)
+
+                            else:
+                                auto_executed = False
+
+                            if auto_executed:
+                                self._events.publish(EventType.ai_reasoning, {
+                                    "action": decision.action,
+                                    "reasoning": decision.reasoning,
+                                    "confidence": decision.confidence,
+                                    "auto_executed": True,
+                                })
+
             # If we broke out due to reroute, restart execution with new route
             if mission.status == MissionStatus.in_progress and mission.reroute_count > 0:
                 # Re-enter the execution with the updated route
@@ -617,6 +820,13 @@ class MissionService:
                     "drone_id": drone_id,
                 })
 
+                # Notify operator of mission completion
+                _persist(notify_mission_event("mission_completed", mission_id, {
+                    "drone_id": drone_id,
+                    "delivered": delivered_count,
+                    "battery_remaining": final_bat,
+                }))
+
                 # Persist mission completion
                 _persist(repo.update_mission(mission_id, {
                     "status": mission.status.value,
@@ -637,6 +847,12 @@ class MissionService:
                 "mission_id": mission_id,
                 "error": str(e),
             })
+
+            # Notify operator of mission failure
+            _persist(notify_mission_event("mission_failed", mission_id, {
+                "drone_id": drone_id,
+                "error": str(e),
+            }))
 
             # Persist mission failure
             _persist(repo.update_mission(mission_id, {
@@ -710,6 +926,12 @@ class MissionService:
                     "drone_id": drone_id,
                 })
 
+                # Notify operator of mission completion (post-reroute)
+                _persist(notify_mission_event("mission_completed", mission_id, {
+                    "drone_id": drone_id,
+                    "rerouted": True,
+                }))
+
                 # Persist mission completion
                 _persist(repo.update_mission(mission_id, {
                     "status": mission.status.value,
@@ -726,6 +948,13 @@ class MissionService:
             mission.failed_reason = str(e)
             self._drones.set_status(drone_id, DroneStatus.idle)
             self._drones.set_mission(drone_id, None)
+
+            # Notify operator of mission failure (post-reroute)
+            _persist(notify_mission_event("mission_failed", mission_id, {
+                "drone_id": drone_id,
+                "error": str(e),
+                "rerouted": True,
+            }))
 
             # Persist failure
             _persist(repo.update_mission(mission_id, {

@@ -57,6 +57,22 @@ namespace DroneMedic
         [Header("Flight Log")]
         [SerializeField] private List<FlightLogEntry> flightLog = new List<FlightLogEntry>();
 
+        // -- Weather & Physics Modifiers --------------------------------------
+
+        /// <summary>Speed multiplier applied by mission controller (1.0 = normal, 0.73 = conservation).</summary>
+        public float SpeedMultiplier { get; set; } = 1f;
+
+        /// <summary>Battery drain multiplier from weather/conditions.</summary>
+        public float BatteryDrainMultiplier { get; set; } = 1f;
+
+        // -- Payload ---------------------------------------------------------
+
+        private float payloadWeightKg;
+        private string payloadType = "";
+
+        public float PayloadWeight => payloadWeightKg;
+        public string PayloadType => payloadType;
+
         // -- Public Properties -----------------------------------------------
 
         public DroneState CurrentState => currentState;
@@ -66,6 +82,9 @@ namespace DroneMedic
                              || currentState == DroneState.Flying
                              || currentState == DroneState.Hovering;
         public IReadOnlyList<FlightLogEntry> FlightLog => flightLog;
+
+        /// <summary>Battery in Wh for physics engine (800Wh * 0.80 usable * 0.85 non-reserve = 544Wh at 100%).</summary>
+        public float BatteryWh => (battery / 100f) * 544f;
 
         // -- Private State ---------------------------------------------------
 
@@ -97,7 +116,8 @@ namespace DroneMedic
 
         private void DrainBattery(float distance)
         {
-            float drain = distance * config.batteryDrainRate;
+            float weightFactor = 1f + (payloadWeightKg * 0.15f);
+            float drain = distance * config.batteryDrainRate * weightFactor * BatteryDrainMultiplier;
             battery = Mathf.Max(0f, battery - drain);
             OnBatteryChanged?.Invoke(battery);
 
@@ -117,6 +137,30 @@ namespace DroneMedic
             float distanceToDepot = Vector3.Distance(transform.position, depotPos);
             float drainNeeded = distanceToDepot * config.batteryDrainRate;
             return battery - drainNeeded >= config.batteryMinReserve;
+        }
+
+        // -- Payload ---------------------------------------------------------
+
+        public bool LoadPayload(string type, float weightKg)
+        {
+            if (weightKg > config.maxPayloadKg)
+            {
+                Debug.LogWarning($"[DroneController] Payload {weightKg}kg exceeds max {config.maxPayloadKg}kg");
+                return false;
+            }
+
+            payloadWeightKg = weightKg;
+            payloadType = type;
+            Log($"PayloadLoaded:{weightKg:F1}kg", currentLocation);
+            return true;
+        }
+
+        public void ReleasePayload()
+        {
+            if (payloadWeightKg <= 0f) return;
+            Log("PayloadReleased", currentLocation);
+            payloadWeightKg = 0f;
+            payloadType = "";
         }
 
         // -- Logging ---------------------------------------------------------
@@ -255,7 +299,7 @@ namespace DroneMedic
             Log("Moving", locationName);
 
             Vector3 targetPos = config.GetWorldPosition(locationName);
-            float speed = config.droneVelocity;
+            float speed = config.droneVelocity * SpeedMultiplier;
             Vector3 previousPos = transform.position;
 
             while (Vector3.Distance(transform.position, targetPos) > 0.01f)

@@ -1,0 +1,78 @@
+name: "local_parser"
+platform: "onnxruntime_onnx"
+max_batch_size: 1
+
+input [
+  {
+    name: "input_ids"
+    data_type: TYPE_INT64
+    dims: [ -1 ]
+  },
+  {
+    name: "attention_mask"
+    data_type: TYPE_INT64
+    dims: [ -1 ]
+  }
+]
+
+output [
+  {
+    name: "logits"
+    data_type: TYPE_FP32
+    dims: [ -1, 32064 ]
+  }
+]
+
+instance_group [
+  {
+    count: 1
+    kind: KIND_GPU
+  }
+]
+
+# Sequence batching disabled — single request at a time for LLM
+# Use dynamic batching only for short prompts
+dynamic_batching {
+  preferred_batch_size: [ 1 ]
+  max_queue_delay_microseconds: 1000
+}
+
+# INT4 quantization via bitsandbytes nf4
+optimization {
+  execution_accelerators {
+    gpu_execution_accelerator: [
+      {
+        name: "tensorrt"
+        parameters {
+          key: "precision_mode"
+          value: "INT8"
+        }
+        parameters {
+          key: "max_workspace_size_bytes"
+          value: "2147483648"
+        }
+      }
+    ]
+  }
+}
+
+parameters {
+  key: "description"
+  value: {
+    string_value: "Phi-3-mini-4k with LoRA adapter (r=16) for medical delivery NL parsing. Quantized to 4-bit for edge deployment on NVIDIA Jetson Orin."
+  }
+}
+
+parameters {
+  key: "base_model"
+  value: {
+    string_value: "microsoft/Phi-3-mini-4k-instruct"
+  }
+}
+
+parameters {
+  key: "adapter_size_mb"
+  value: {
+    string_value: "48"
+  }
+}

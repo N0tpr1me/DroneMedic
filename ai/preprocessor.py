@@ -5,6 +5,9 @@ Normalizes user input, extracts keywords, and provides fuzzy location matching
 to improve parsing accuracy and support confidence scoring.
 """
 
+from __future__ import annotations
+
+
 import re
 from config import VALID_LOCATIONS
 

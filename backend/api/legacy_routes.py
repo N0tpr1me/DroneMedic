@@ -9,7 +9,8 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
-from datetime import datetime
+import time
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
@@ -104,8 +105,67 @@ class ConfirmDeliveryRequest(BaseModel):
 # ── Endpoints ──────────────────────────────────────────────────────────
 
 @router.get("/api/health")
-def health():
-    return {"status": "ok", "service": "DroneMedic API"}
+async def health_check():
+    """Enhanced health check with dependency status."""
+    from backend.app import APP_START_TIME
+    from backend.api.dependencies import get_drones
+
+    checks: dict = {}
+
+    # Check Supabase
+    try:
+        from backend.db.supabase_client import get_supabase
+        sb = get_supabase()
+        if sb:
+            start = time.time()
+            sb.table("drones").select("id").limit(1).execute()
+            checks["database"] = {"status": "connected", "latency_ms": round((time.time() - start) * 1000)}
+        else:
+            checks["database"] = {"status": "not_configured"}
+    except Exception as e:
+        checks["database"] = {"status": "error", "error": str(e)}
+
+    # Check weather API
+    try:
+        from config import WEATHER_ENABLED, OPENWEATHER_API_KEY
+        if WEATHER_ENABLED and OPENWEATHER_API_KEY:
+            checks["weather_api"] = {"status": "configured", "enabled": True}
+        else:
+            checks["weather_api"] = {"status": "mock_mode", "enabled": False}
+    except Exception:
+        checks["weather_api"] = {"status": "unknown"}
+
+    # Check LLM API
+    try:
+        from config import OPENAI_API_KEY
+        checks["llm_api"] = {"status": "configured" if OPENAI_API_KEY else "not_configured"}
+    except Exception:
+        checks["llm_api"] = {"status": "unknown"}
+
+    # Check simulator mode
+    from config import AIRSIM_ENABLED, PX4_ENABLED
+    sim_mode = "airsim" if AIRSIM_ENABLED else "px4" if PX4_ENABLED else "mock"
+    checks["simulator"] = {"status": "active", "mode": sim_mode}
+
+    # Fleet status
+    drone_svc = get_drones()
+    drones = drone_svc.get_all() if drone_svc else []
+    checks["fleet"] = {
+        "total_drones": len(drones),
+        "available": len([d for d in drones if d.status.value == "idle"]),
+    }
+
+    overall = "healthy" if all(
+        c.get("status") not in ("error",) for c in checks.values()
+    ) else "degraded"
+
+    return {
+        "status": overall,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "uptime_seconds": round(time.time() - APP_START_TIME),
+        "version": "2.0.0",
+        "dependencies": checks,
+    }
 
 
 @router.get("/api/locations")
