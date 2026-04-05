@@ -33,16 +33,16 @@ export function usePX4Telemetry(): UsePX4TelemetryReturn {
   const [source, setSource] = useState<'px4' | 'mock' | 'unity' | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectDelay = useRef(1000);
-  const reconnectTimer = useRef<ReturnType<typeof setTimeout>>();
+  const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestData = useRef<PX4Telemetry | null>(null);
-  const rafId = useRef<number>();
+  const rafId = useRef<number | null>(null);
   const mountedRef = useRef(true);
 
   // Throttle state updates to ~30 fps via requestAnimationFrame
   const scheduleUpdate = useCallback(() => {
     if (rafId.current) return;
     rafId.current = requestAnimationFrame(() => {
-      rafId.current = undefined;
+      rafId.current = null;
       if (latestData.current && mountedRef.current) {
         setTelemetry(latestData.current);
       }

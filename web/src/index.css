@@ -68,6 +68,11 @@
   }
 }
 
+/* Hide Google Maps billing warning dialog (remove once billing is linked) */
+.dismissButton, .gm-err-container, .gm-style-mot {
+  display: none !important;
+}
+
 html, body, #root {
   width: 100%;
   height: 100%;
@@ -194,56 +199,7 @@ html, body, #root {
 .mode-sunset .drone-chassis { background: linear-gradient(135deg, #4c1d95, #f59e0b); border-color: #fbbf24; }
 .mode-night .drone-chassis { background: linear-gradient(135deg, #0f172a, #1e293b); border-color: #38bdf8; }
 
-/* ── Animated route lines ── */
-
-.animated-route {
-  animation: route-flow 1.5s linear infinite;
-}
-
-@keyframes route-flow {
-  to { stroke-dashoffset: -20; }
-}
-
-.route-completed path {
-  filter: drop-shadow(0 0 6px rgba(0,218,243,0.6));
-}
-
-.route-remaining path {
-  animation: route-flow 1.5s linear infinite;
-}
-
-/* ── Leaflet z-index override — keep map below HUD overlays ── */
-
-.leaflet-container {
-  z-index: 0 !important;
-}
-.leaflet-pane {
-  z-index: 0 !important;
-}
-.leaflet-top, .leaflet-bottom {
-  z-index: 5 !important;
-}
-.leaflet-popup-pane {
-  z-index: 10 !important;
-}
-
-/* ── Danger zone (no-fly) pulsing glow ── */
-
-.danger-zone path {
-  animation: danger-pulse 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 4px rgba(255, 68, 68, 0.4));
-}
-
-@keyframes danger-pulse {
-  0%, 100% { fill-opacity: 0.1; stroke-opacity: 0.3; }
-  50% { fill-opacity: 0.25; stroke-opacity: 0.6; }
-}
-
-/* ── Pulsing delivery rings ── */
-
-.pulse-ring path {
-  animation: ring-pulse 3s ease-in-out infinite;
-}
+/* ── Pulsing delivery rings (used by AdvancedMarker children) ── */
 
 @keyframes ring-pulse {
   0%, 100% { opacity: 0.3; transform-origin: center; transform: scale(1); }

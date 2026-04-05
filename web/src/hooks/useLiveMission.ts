@@ -12,6 +12,16 @@ import type { FlightLogEntry } from '../lib/api';
 const WS_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000')
   .replace(/^http/, 'ws') + '/ws/live';
 
+export interface SafetyDecision {
+  battery_state: string;
+  action: string;
+  reasons: string[];
+  divert_location?: string;
+  remaining_battery_pct: number;
+  dropped_stops?: string[];
+  timestamp: number;
+}
+
 export interface LiveDroneState {
   droneId: string;
   status: string;
@@ -48,6 +58,7 @@ export function useLiveMission(routeStops?: string[]) {
   const [missionProgress, setMissionProgress] = useState(0);
   const [missionStatus, setMissionStatus] = useState('idle');
   const [lastEvent, setLastEvent] = useState<any>(null);
+  const [safetyDecisions, setSafetyDecisions] = useState<SafetyDecision[]>([]);
 
   // Track waypoints reached for progress calculation
   const waypointsReachedRef = useRef(0);
@@ -199,7 +210,34 @@ export function useLiveMission(routeStops?: string[]) {
         break;
       }
 
-      case 'weather_alert':
+      case 'safety_decision': {
+        const decision: SafetyDecision = {
+          battery_state: d.battery_state || 'GREEN',
+          action: d.action || 'CONTINUE',
+          reasons: d.reasons || [],
+          divert_location: d.divert_location,
+          remaining_battery_pct: d.remaining_battery_pct ?? 0,
+          dropped_stops: d.dropped_stops,
+          timestamp: d.timestamp || Date.now() / 1000,
+        };
+        setSafetyDecisions(prev => [...prev, decision]);
+        break;
+      }
+
+      case 'weather_alert': {
+        const weatherDecision: SafetyDecision = {
+          battery_state: 'AMBER',
+          action: 'REROUTE',
+          reasons: [d.message || d.description || 'Weather alert received'],
+          divert_location: d.affected_location,
+          remaining_battery_pct: d.remaining_battery_pct ?? 0,
+          dropped_stops: d.dropped_stops,
+          timestamp: d.timestamp || Date.now() / 1000,
+        };
+        setSafetyDecisions(prev => [...prev, weatherDecision]);
+        break;
+      }
+
       case 'obstacle_detected':
       case 'geofence_violation':
         // These can be surfaced in the UI via lastEvent
@@ -214,6 +252,7 @@ export function useLiveMission(routeStops?: string[]) {
     setMissionProgress(0);
     setMissionStatus('idle');
     setDrones({});
+    setSafetyDecisions([]);
     waypointsReachedRef.current = 0;
   }, []);
 
@@ -228,5 +267,6 @@ export function useLiveMission(routeStops?: string[]) {
     missionProgress,
     missionStatus,
     lastEvent,
-  } satisfies LiveMissionState & { connect: () => void; disconnect: () => void; reset: () => void };
+    safetyDecisions,
+  };
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ClipboardList,
@@ -14,19 +14,25 @@ import {
   ChevronDown,
   ChevronUp,
   Radio,
+  Wifi,
+  WifiOff,
+  Shield,
 } from 'lucide-react';
 import { SideNav } from '../components/layout/SideNav';
 import { PageHeader } from '../components/layout/PageHeader';
 import { SlidingNumber } from '@/components/ui/sliding-number';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { api } from '../lib/api';
+import { useLiveMission } from '../hooks/useLiveMission';
+import { usePX4Telemetry } from '../hooks/usePX4Telemetry';
+import type { FlightLogEntry } from '../lib/api';
 
 // ── Types ──
 
 interface LogEvent {
   id: string;
   timestamp: string;
-  type: 'flight' | 'weather' | 'system' | 'delivery' | 'error';
+  type: 'flight' | 'weather' | 'system' | 'delivery' | 'error' | 'safety';
   severity: 'info' | 'warning' | 'critical';
   event: string;
   location: string;
@@ -34,6 +40,9 @@ interface LogEvent {
   battery: number;
   payload: string;
   position: { x: number; y: number; z: number };
+  safetyAction?: string;
+  safetyReasons?: string[];
+  affectedStops?: string[];
 }
 
 interface CustodyStep {
@@ -86,7 +95,10 @@ const TYPE_COLORS: Record<string, string> = {
   system: '#3b82f6',
   delivery: '#4ade80',
   error: '#ff4444',
+  safety: '#a855f7',
 };
+
+type SafetyFilter = 'all' | 'safety' | 'warnings' | 'critical' | 'waypoints';
 
 function formatTime(iso: string): string {
   const d = new Date(iso);
@@ -104,18 +116,172 @@ function glassPanel(extra: React.CSSProperties = {}): React.CSSProperties {
   };
 }
 
+/** Convert a FlightLogEntry from the live WebSocket into a LogEvent */
+function flightLogToLogEvent(entry: FlightLogEntry, index: number): LogEvent {
+  const eventLower = (entry.event || '').toLowerCase();
+
+  let type: LogEvent['type'] = 'flight';
+  let severity: LogEvent['severity'] = 'info';
+  let safetyAction: string | undefined;
+  let safetyReasons: string[] | undefined;
+  let affectedStops: string[] | undefined;
+
+  // Detect safety decision events
+  if (eventLower.includes('divert') || eventLower.includes('abort')) {
+    type = 'safety';
+    severity = 'critical';
+    safetyAction = entry.event;
+    safetyReasons = ['Safety system triggered'];
+  } else if (eventLower.includes('reroute') || eventLower.includes('red')) {
+    type = 'safety';
+    severity = 'critical';
+    safetyAction = entry.event;
+    safetyReasons = ['Route deviation required'];
+  } else if (eventLower.includes('amber') || eventLower.includes('caution')) {
+    type = 'safety';
+    severity = 'warning';
+    safetyAction = entry.event;
+    safetyReasons = ['Caution level safety event'];
+  } else if (eventLower.includes('green') || eventLower.includes('safe') || eventLower.includes('clear')) {
+    type = 'safety';
+    severity = 'info';
+    safetyAction = entry.event;
+  } else if (eventLower.includes('weather') || eventLower.includes('wind') || eventLower.includes('storm')) {
+    type = 'weather';
+    severity = 'warning';
+  } else if (eventLower.includes('battery_low') || eventLower.includes('low_battery')) {
+    type = 'system';
+    severity = 'warning';
+  } else if (eventLower.includes('arrived') || eventLower.includes('waypoint') || eventLower.includes('landed')) {
+    type = 'delivery';
+    severity = 'info';
+  } else if (eventLower.includes('error') || eventLower.includes('fail')) {
+    type = 'error';
+    severity = 'critical';
+  }
+
+  // Extract affected stops if present in event string (e.g. "arrived:Hospital A")
+  if (eventLower.includes('arrived:')) {
+    const stopName = entry.event.split(':')[1]?.trim();
+    if (stopName) {
+      affectedStops = [stopName];
+    }
+  }
+
+  const ts = entry.timestamp
+    ? new Date(typeof entry.timestamp === 'number' ? entry.timestamp * 1000 : entry.timestamp).toISOString()
+    : new Date().toISOString();
+
+  return {
+    id: `live-${index}-${Date.now()}`,
+    timestamp: ts,
+    type,
+    severity,
+    event: entry.event,
+    location: entry.location || 'Unknown',
+    details: `Battery: ${entry.battery ?? 'N/A'}% | Position: (${entry.position?.x?.toFixed(1) ?? 0}, ${entry.position?.y?.toFixed(1) ?? 0}, ${entry.position?.z?.toFixed(1) ?? 0})`,
+    battery: entry.battery ?? 100,
+    payload: 'Active Mission',
+    position: entry.position || { x: 0, y: 0, z: 0 },
+    safetyAction,
+    safetyReasons,
+    affectedStops,
+  };
+}
+
 // ── Component ──
 
 export function Logs() {
   const [filters, setFilters] = useState({ type: 'all', severity: 'all', search: '' });
+  const [safetyFilter, setSafetyFilter] = useState<SafetyFilter>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [showBriefing, setShowBriefing] = useState(false);
   const [briefingText, setBriefingText] = useState('');
   const [isLoadingBriefing, setIsLoadingBriefing] = useState(false);
+  const [liveEvents, setLiveEvents] = useState<LogEvent[]>([]);
 
-  // ── Filtering ──
-  const filteredEvents = DEMO_EVENTS.filter((ev) => {
+  // Live data hooks
+  const liveMission = useLiveMission();
+  const px4 = usePX4Telemetry();
+  const prevFlightLogLenRef = useRef(0);
+
+  // Auto-connect WebSocket on mount
+  useEffect(() => {
+    liveMission.connect();
+    return () => {
+      liveMission.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Convert new flight log entries into LogEvents and prepend them
+  useEffect(() => {
+    const currentLen = liveMission.flightLog.length;
+    if (currentLen > prevFlightLogLenRef.current) {
+      const newEntries = liveMission.flightLog.slice(prevFlightLogLenRef.current);
+      const newLogEvents = newEntries.map((entry, i) =>
+        flightLogToLogEvent(entry, prevFlightLogLenRef.current + i)
+      );
+      setLiveEvents((prev) => [...newLogEvents, ...prev]);
+    }
+    prevFlightLogLenRef.current = currentLen;
+  }, [liveMission.flightLog]);
+
+  // Also capture lastEvent for safety/weather/obstacle events not in flightLog
+  useEffect(() => {
+    const evt = liveMission.lastEvent;
+    if (!evt) return;
+
+    const eventType = evt.type;
+    const d = evt.data || evt;
+
+    if (eventType === 'weather_alert' || eventType === 'obstacle_detected' || eventType === 'geofence_violation') {
+      const safetyEvent: LogEvent = {
+        id: `live-safety-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        type: 'safety',
+        severity: eventType === 'weather_alert' ? 'warning' : 'critical',
+        event: eventType.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+        location: d.location || d.waypoint || 'Unknown',
+        details: d.message || d.details || JSON.stringify(d),
+        battery: d.battery ?? 100,
+        payload: 'Active Mission',
+        position: d.position || { x: 0, y: 0, z: 0 },
+        safetyAction: eventType === 'geofence_violation' ? 'DIVERT' : eventType === 'obstacle_detected' ? 'REROUTE' : 'CAUTION',
+        safetyReasons: [d.message || d.details || eventType],
+        affectedStops: d.affected_stops || [],
+      };
+      setLiveEvents((prev) => [safetyEvent, ...prev]);
+    }
+  }, [liveMission.lastEvent]);
+
+  // Merge live events (prepended) with demo fallback
+  const allEvents: LogEvent[] = liveEvents.length > 0
+    ? [...liveEvents, ...DEMO_EVENTS]
+    : DEMO_EVENTS;
+
+  // ── Safety filter logic ──
+  const safetyFilteredEvents = allEvents.filter((ev) => {
+    switch (safetyFilter) {
+      case 'safety':
+        return ev.type === 'safety';
+      case 'warnings':
+        return ev.severity === 'warning';
+      case 'critical':
+        return ev.severity === 'critical' || ev.safetyAction === 'DIVERT' || ev.safetyAction === 'ABORT';
+      case 'waypoints':
+        return ev.event.toLowerCase().includes('arrived') ||
+               ev.event.toLowerCase().includes('checkpoint') ||
+               ev.event.toLowerCase().includes('waypoint') ||
+               ev.event.toLowerCase().includes('landed');
+      default:
+        return true;
+    }
+  });
+
+  // ── Standard filtering ──
+  const filteredEvents = safetyFilteredEvents.filter((ev) => {
     if (filters.type !== 'all' && ev.type !== filters.type) return false;
     if (filters.severity !== 'all' && ev.severity !== filters.severity) return false;
     if (filters.search) {
@@ -202,11 +368,23 @@ export function Logs() {
     );
   };
 
+  // ── Safety event styling ──
+  const getSafetyBorderColor = (ev: LogEvent): string => {
+    if (ev.type !== 'safety') return TYPE_COLORS[ev.type] || '#6b7280';
+    const action = (ev.safetyAction || '').toUpperCase();
+    if (action.includes('RED') || action.includes('DIVERT') || action.includes('ABORT')) return '#ff4444';
+    if (action.includes('AMBER') || action.includes('CAUTION') || action.includes('REROUTE')) return '#fbbf24';
+    return '#4ade80'; // GREEN
+  };
+
   // ── Temp bar position ──
   const tempValue = 4.6;
   const tempMin = 2;
   const tempMax = 6;
   const tempPercent = ((tempValue - tempMin) / (tempMax - tempMin)) * 100;
+
+  // Connection status indicator
+  const isLiveConnected = liveMission.connected || px4.connected;
 
   return (
     <div style={{ height: '100vh', background: '#0a0f13', display: 'flex', flexDirection: 'column', color: '#dfe3e9', fontFamily: 'Inter, sans-serif' }}>
@@ -215,6 +393,80 @@ export function Logs() {
 
       <main style={{ flex: 1, overflowY: 'auto', marginLeft: 96, padding: 24 }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+          {/* ═══ Connection Status ═══ */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '8px 16px',
+            borderRadius: 8,
+            background: isLiveConnected ? 'rgba(74,222,128,0.08)' : 'rgba(255,68,68,0.08)',
+            border: `1px solid ${isLiveConnected ? 'rgba(74,222,128,0.2)' : 'rgba(255,68,68,0.2)'}`,
+            fontSize: 12,
+          }}>
+            {isLiveConnected ? (
+              <>
+                <Wifi size={14} style={{ color: '#4ade80' }} />
+                <span style={{ color: '#4ade80', fontWeight: 600 }}>Live</span>
+                <span style={{ color: '#7a7e8c' }}>
+                  {liveMission.connected && 'Mission WS'}
+                  {liveMission.connected && px4.connected && ' + '}
+                  {px4.connected && `PX4 Telemetry (${px4.source || 'connecting'})`}
+                </span>
+                {liveEvents.length > 0 && (
+                  <span style={{ marginLeft: 'auto', color: '#00daf3', fontFamily: 'monospace' }}>
+                    {liveEvents.length} live event{liveEvents.length !== 1 ? 's' : ''}
+                  </span>
+                )}
+              </>
+            ) : (
+              <>
+                <WifiOff size={14} style={{ color: '#ff4444' }} />
+                <span style={{ color: '#ff4444', fontWeight: 600 }}>Offline</span>
+                <span style={{ color: '#7a7e8c' }}>Using demo data</span>
+              </>
+            )}
+          </div>
+
+          {/* ═══ Safety Filter Bar ═══ */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '6px 8px',
+            borderRadius: 10,
+            background: 'rgba(30,35,40,0.6)',
+            border: '1px solid rgba(67,70,84,0.15)',
+          }}>
+            <Shield size={14} style={{ color: '#a855f7', marginLeft: 8 }} />
+            <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7a7e8c', marginRight: 4 }}>Filter:</span>
+            {([
+              { key: 'all' as SafetyFilter, label: 'All', color: '#dfe3e9' },
+              { key: 'safety' as SafetyFilter, label: 'Safety', color: '#a855f7' },
+              { key: 'warnings' as SafetyFilter, label: 'Warnings', color: '#fbbf24' },
+              { key: 'critical' as SafetyFilter, label: 'Critical', color: '#ff4444' },
+              { key: 'waypoints' as SafetyFilter, label: 'Waypoints', color: '#00daf3' },
+            ]).map((btn) => (
+              <button
+                key={btn.key}
+                onClick={() => { setSafetyFilter(btn.key); setCurrentPage(1); }}
+                style={{
+                  background: safetyFilter === btn.key ? `${btn.color}18` : 'transparent',
+                  border: safetyFilter === btn.key ? `1px solid ${btn.color}40` : '1px solid transparent',
+                  color: safetyFilter === btn.key ? btn.color : '#7a7e8c',
+                  borderRadius: 6,
+                  padding: '6px 14px',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                }}
+              >
+                {btn.label}
+              </button>
+            ))}
+          </div>
 
           {/* ═══ Section 1: Active Mission Banner ═══ */}
           <div
@@ -253,6 +505,20 @@ export function Logs() {
                 </div>
               </div>
             </div>
+
+            {/* PX4 Telemetry overlay */}
+            {px4.telemetry && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 160 }}>
+                <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#7a7e8c' }}>PX4 Telemetry</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontFamily: 'monospace', color: '#c3c6d6' }}>
+                  <span>{px4.telemetry.speed_m_s.toFixed(1)} m/s</span>
+                  <span style={{ color: '#7a7e8c' }}>|</span>
+                  <span>{px4.telemetry.alt_m.toFixed(0)}m</span>
+                  <span style={{ color: '#7a7e8c' }}>|</span>
+                  <span style={{ color: px4.telemetry.battery_pct < 30 ? '#ff4444' : '#4ade80' }}>{px4.telemetry.battery_pct}%</span>
+                </div>
+              </div>
+            )}
 
             {/* Clinical Deadline */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 260 }}>
@@ -406,6 +672,7 @@ export function Logs() {
               <option value="weather">Weather</option>
               <option value="system">System</option>
               <option value="delivery">Delivery</option>
+              <option value="safety">Safety</option>
               <option value="error">Error</option>
             </select>
 
@@ -537,7 +804,7 @@ export function Logs() {
               </div>
             ) : (
               pagedEvents.map((ev) => {
-                const accentColor = TYPE_COLORS[ev.type] || '#6b7280';
+                const accentColor = ev.type === 'safety' ? getSafetyBorderColor(ev) : (TYPE_COLORS[ev.type] || '#6b7280');
                 const isExpanded = expandedId === ev.id;
 
                 return (
@@ -610,6 +877,43 @@ export function Logs() {
                               </div>
                             </div>
                             <p style={{ margin: 0, fontSize: 13, lineHeight: 1.7, color: '#c3c6d6' }}>{ev.details}</p>
+
+                            {/* Safety event details */}
+                            {ev.type === 'safety' && (
+                              <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 8,
+                                padding: '10px 14px',
+                                borderRadius: 8,
+                                background: ev.severity === 'critical'
+                                  ? 'rgba(255,68,68,0.06)'
+                                  : ev.severity === 'warning'
+                                    ? 'rgba(251,191,36,0.06)'
+                                    : 'rgba(74,222,128,0.06)',
+                                border: `1px solid ${accentColor}25`,
+                              }}>
+                                {ev.safetyAction && (
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+                                    <Shield size={13} style={{ color: accentColor }} />
+                                    <span style={{ fontWeight: 700, color: accentColor }}>Action: {ev.safetyAction}</span>
+                                  </div>
+                                )}
+                                {ev.safetyReasons && ev.safetyReasons.length > 0 && (
+                                  <div style={{ fontSize: 12, color: '#c3c6d6' }}>
+                                    <span style={{ color: '#7a7e8c' }}>Reasons: </span>
+                                    {ev.safetyReasons.join(', ')}
+                                  </div>
+                                )}
+                                {ev.affectedStops && ev.affectedStops.length > 0 && (
+                                  <div style={{ fontSize: 12, color: '#c3c6d6' }}>
+                                    <span style={{ color: '#7a7e8c' }}>Affected Stops: </span>
+                                    {ev.affectedStops.join(', ')}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
                             {ev.event.toLowerCase().includes('reroute') || ev.event.toLowerCase().includes('recalculation') ? (
                               <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#fbbf24', padding: '8px 12px', borderRadius: 8, background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.15)' }}>
                                 <AlertTriangle size={13} />

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { APIProvider } from '@vis.gl/react-google-maps';
 import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/layout/Navbar';
 import { Landing } from './pages/Landing';
@@ -45,9 +46,11 @@ function AppRoutes() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? ''} libraries={['marker']}>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </APIProvider>
   );
 }
 
