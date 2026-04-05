@@ -36,10 +36,10 @@ export function Dashboard() {
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [flightLog, setFlightLog] = useState<FlightLogEntry[]>([]);
   const [status, setStatus] = useState<MissionStatus>('idle');
-  const [battery, setBattery] = useState(85);
+  const [battery, setBattery] = useState(100);
   const [_currentLocation, setCurrentLocation] = useState('Depot');
   const [droneProgress, setDroneProgress] = useState(0);
-  const [missionProgress, setMissionProgress] = useState(72);
+  const [missionProgress, setMissionProgress] = useState(0);
   const [mapCommand, setMapCommand] = useState<MapCommand | null>(null);
   const [tileLayerIndex, setTileLayerIndex] = useState(1);
   const [isCentered, setIsCentered] = useState(true);
@@ -187,33 +187,19 @@ export function Dashboard() {
       }));
       await api.deploy(deliveryItems);
       // Live updates now arrive via WebSocket → useLiveMission → useEffect sync above
-    } catch {
+    } catch (err) {
       // Fallback: try the blocking start-delivery endpoint
       try {
         const r = await api.startDelivery(route.ordered_route);
         setFlightLog(r.flight_log); setBattery(r.battery); setStatus('completed'); setDroneProgress(1); setMissionProgress(100);
       } catch {
-        // Final fallback: cinematic demo
-        let bat = 100;
-        const fakeLog: FlightLogEntry[] = [{event:'takeoff',location:'Depot',position:{x:0,y:0,z:-30},battery:100,timestamp:Date.now()/1000}];
-        for(let i=1; i<stops.length; i++) {
-          bat -= 8;
-          const startP = (i-1)/(stops.length-1), endP = i/(stops.length-1);
-          for(let s=0; s<=20; s++) { setDroneProgress(startP + (endP-startP)*(s/20)); setMissionProgress(Math.round((startP + (endP-startP)*(s/20))*100)); await new Promise(r=>setTimeout(r,75)); }
-          const loc = locations[stops[i]];
-          if(loc) setMapCommand({type:'fly-to', lat:loc.lat, lon:loc.lon, zoom:15});
-          setCurrentLocation(stops[i]); setBattery(bat);
-          fakeLog.push({event: stops[i]==='Depot'?'landed':`arrived:${stops[i]}`, location:stops[i], position:{x:0,y:0,z:-30}, battery:bat, timestamp:Date.now()/1000});
-          setFlightLog([...fakeLog]); playWaypoint();
-          await new Promise(r=>setTimeout(r,800));
-        }
-        setMapCommand({type:'zoom-out-overview'}); playComplete(); setStatus('completed');
-        setMetrics({delivery_time_reduction:28.5,distance_reduction:22.3,throughput:stops.length-2,reroute_success_rate:100,total_distance_optimized:8400,total_distance_naive:12600,battery_used:100-bat,robustness_score:1.0,actual_flight_time_seconds:(stops.length-1)*1.5,estimated_time_seconds:180,naive_time_seconds:268});
+        console.error('Deploy failed:', err);
+        setStatus('idle');
       }
     }
   }, [route, task, reroute, locations, live]);
 
-  const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(85);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(72); }, []);
+  const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(100);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(0);live.reset(); }, [live]);
 
   const handleAiChat = useCallback(async (message: string): Promise<string> => {
     try {
@@ -300,7 +286,7 @@ export function Dashboard() {
       {/* ═══ MAIN MAP AREA ═══ */}
       <main onClick={() => { if (showChat) setShowChat(false); }} style={{marginLeft:0,paddingTop:0,height:'100vh',width:'100vw',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,zIndex:0}}>
-          <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={noFlyZones} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} onMapReady={setMapInstance} />
+          <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={noFlyZones} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} onMapReady={setMapInstance} naturalEvents={naturalEvents} />
           <DroneMapOverlay
             map={mapInstance}
             drones={(() => {
@@ -456,7 +442,7 @@ export function Dashboard() {
               <div style={{height:4,width:'100%',background:'#30353a',borderRadius:9999,overflow:'hidden'}}>
                 <div style={{height:'100%',background:'#b3c5ff',width:`${missionProgress}%`,borderRadius:9999,transition:'width 0.5s'}} />
               </div>
-              <p style={{marginTop:8,fontSize:10,color:'rgba(223,227,233,0.7)'}}>Est. Arrival: <span style={{color:'#b3c5ff',fontWeight:700}}>4m 12s</span></p>
+              <p style={{marginTop:8,fontSize:10,color:'rgba(223,227,233,0.7)'}}>Est. Arrival: <span style={{color:'#b3c5ff',fontWeight:700}}>{route ? `${Math.ceil(route.estimated_time / 60)}m ${route.estimated_time % 60}s` : '—'}</span></p>
             </div>
           </section>
 
@@ -538,10 +524,8 @@ export function Dashboard() {
             <div>
               <p style={{fontSize:9,textTransform:'uppercase',fontWeight:800,color:'#c3c6d6',letterSpacing:'0.08em',margin:'0 0 4px'}}>Internal Temp</p>
               <p style={{fontFamily:'Space Grotesk',fontSize:17,fontWeight:700,margin:0}}>
-                {status === 'flying' || status === 'rerouting' ? (
-                  <>4.2°C <span style={{color:'#22c55e',fontSize:13}}>STABLE</span></>
-                ) : status === 'completed' ? (
-                  <>4.1°C <span style={{color:'#22c55e',fontSize:13}}>VERIFIED</span></>
+                {live.payloadStatus ? (
+                  <>{live.payloadStatus.temperature_c.toFixed(1)}°C <span style={{color: live.payloadStatus.integrity === 'nominal' ? '#22c55e' : live.payloadStatus.integrity === 'warning' ? '#f5a623' : '#ff4444', fontSize:13}}>{live.payloadStatus.integrity.toUpperCase()}</span></>
                 ) : (
                   <>—°C <span style={{color:'#8d90a0',fontSize:13}}>STANDBY</span></>
                 )}

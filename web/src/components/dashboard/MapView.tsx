@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import type { Location, Weather, NoFlyZone } from '../../lib/api';
+import type { EONETEvent } from '../../hooks/useEONET';
 
 function toLatLng(coord: [number, number]): google.maps.LatLngLiteral {
   return { lat: coord[0], lng: coord[1] };
@@ -51,19 +52,21 @@ interface MapViewProps {
   onCenteredChange?: (centered: boolean) => void;
   onUserLocation?: (lat: number, lon: number) => void;
   onMapReady?: (map: google.maps.Map) => void;
+  naturalEvents?: EONETEvent[];
 }
 
 export function MapView({
   locations, route, reroute, priorities = {}, noFlyZones = [], weather = {},
   droneProgress = 0, isFlying = false, mapCommand = null,
   onCommandHandled, tileLayerIndex = 0, onCenteredChange, onUserLocation,
-  onMapReady,
+  onMapReady, naturalEvents = [],
 }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
   const polylinesRef = useRef<google.maps.Polyline[]>([]);
   const polygonsRef = useRef<google.maps.Polygon[]>([]);
+  const eonetMarkersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const droneMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
   const trailMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
@@ -93,15 +96,20 @@ export function MapView({
         return;
       }
 
-      const map = new google.maps.Map(containerRef.current!, {
+      const mapOptions: google.maps.MapOptions = {
         center,
         zoom: 14,
-        mapId: MAP_ID,
         disableDefaultUI: true,
         gestureHandling: 'greedy',
         minZoom: 3,
         tilt: 45,
         heading: 0,
+      };
+      // Only set mapId if explicitly configured — empty string causes errors
+      if (MAP_ID) mapOptions.mapId = MAP_ID;
+
+      const map = new google.maps.Map(containerRef.current!, {
+        ...mapOptions,
         restriction: {
           latLngBounds: { north: 89.9, south: -89.9, east: 180, west: -180 },
           strictBounds: false,
@@ -434,6 +442,82 @@ export function MapView({
       droneMarkerRef.current = null; trailMarkerRef.current = null; prevDronePosRef.current = null;
     };
   }, [routeCoords, droneProgress, isFlying]);
+
+  // ── EONET natural disaster markers ──
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !google?.maps?.marker?.AdvancedMarkerElement) return;
+
+    // Clear old markers
+    eonetMarkersRef.current.forEach(m => m.remove());
+    eonetMarkersRef.current = [];
+
+    if (!naturalEvents || naturalEvents.length === 0) return;
+
+    const categoryStyles: Record<string, { emoji: string; color: string }> = {
+      wildfires: { emoji: '🔥', color: '#ff4444' },
+      severeStorms: { emoji: '🌪️', color: '#9333ea' },
+      volcanoes: { emoji: '🌋', color: '#f97316' },
+      floods: { emoji: '🌊', color: '#3b82f6' },
+      earthquakes: { emoji: '📳', color: '#eab308' },
+      seaLakeIce: { emoji: '🧊', color: '#06b6d4' },
+      drought: { emoji: '☀️', color: '#f59e0b' },
+      landslides: { emoji: '⛰️', color: '#78716c' },
+    };
+
+    for (const event of naturalEvents) {
+      const geo = event.geometry?.[0];
+      if (!geo?.coordinates) continue;
+
+      const [lon, lat] = geo.coordinates;
+      if (!lat || !lon) continue;
+
+      const catId = event.categories?.[0]?.id || '';
+      const style = categoryStyles[catId] || { emoji: '⚠️', color: '#f5a623' };
+
+      // Create marker element
+      const el = document.createElement('div');
+      el.style.cssText = `
+        display:flex;align-items:center;justify-content:center;
+        width:32px;height:32px;font-size:18px;
+        background:rgba(0,0,0,0.6);border:2px solid ${style.color};
+        border-radius:50%;cursor:pointer;
+        box-shadow:0 0 12px ${style.color}80;
+        transition:transform 0.2s;
+      `;
+      el.textContent = style.emoji;
+      el.title = event.title;
+      el.onmouseenter = () => { el.style.transform = 'scale(1.3)'; };
+      el.onmouseleave = () => { el.style.transform = 'scale(1)'; };
+
+      const marker = new google.maps.marker.AdvancedMarkerElement({
+        map,
+        position: { lat, lng: lon },
+        content: el,
+        title: event.title,
+      });
+
+      // Info window on click
+      marker.addListener('click', () => {
+        if (!infoWindowRef.current) {
+          infoWindowRef.current = new google.maps.InfoWindow();
+        }
+        const catName = event.categories?.map(c => c.title).join(', ') || 'Unknown';
+        const date = geo.date ? new Date(geo.date).toLocaleDateString() : '';
+        infoWindowRef.current.setContent(`
+          <div style="font-family:Inter,sans-serif;max-width:220px;padding:4px">
+            <div style="font-weight:700;font-size:13px;margin-bottom:4px">${style.emoji} ${event.title}</div>
+            <div style="font-size:11px;color:#666">${catName}</div>
+            ${date ? `<div style="font-size:10px;color:#999;margin-top:2px">${date}</div>` : ''}
+            <div style="font-size:10px;color:#999;margin-top:2px">${lat.toFixed(2)}°, ${lon.toFixed(2)}°</div>
+          </div>
+        `);
+        infoWindowRef.current.open({ map, anchor: marker });
+      });
+
+      eonetMarkersRef.current.push(marker);
+    }
+  }, [naturalEvents]);
 
 
   return <div ref={containerRef} style={{ width: '100%', height: '100%' }} />;

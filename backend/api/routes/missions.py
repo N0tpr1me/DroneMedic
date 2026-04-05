@@ -124,3 +124,63 @@ def reroute_mission(
         return {"status": "rerouting", "mission_id": mission_id}
     except DomainError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
+
+
+@router.get("/api/missions/{mission_id}/payload")
+def get_payload_status(
+    mission_id: str,
+    mission_service=Depends(get_missions),
+):
+    """Get live payload temperature and integrity for an active mission."""
+    from datetime import datetime, timezone
+    from backend.services.payload_service import compute_payload_status
+    from backend.weather_service import get_weather_at_location
+
+    try:
+        mission = mission_service.get_mission(mission_id)
+    except DomainError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+    if not mission.started_at:
+        return {"temperature_c": None, "integrity": "standby", "time_remaining_minutes": None, "payload_type": None}
+
+    elapsed = (datetime.now(timezone.utc) - mission.started_at).total_seconds() / 60.0
+
+    # Get supply type from first delivery
+    payload_type = "blood"
+    deliveries = []
+    for d_id in mission.delivery_ids:
+        try:
+            d = mission_service.get_delivery(d_id)
+            deliveries.append(d)
+            if d.supply:
+                payload_type = d.supply.split()[0].lower()
+        except Exception:
+            pass
+
+    # Get wind at drone's current location
+    wind = 0.0
+    try:
+        from backend.api.dependencies import get_drones
+        drone_svc = get_drones()
+        drone = drone_svc.get(mission.drone_id)
+        w = get_weather_at_location(drone.current_location)
+        wind = w.get("wind_speed", 0)
+    except Exception:
+        pass
+
+    status = compute_payload_status(payload_type, elapsed, wind)
+
+    # Include delivery recipient info
+    recipient_info = {}
+    if deliveries:
+        d = deliveries[0]
+        recipient_info = {
+            "recipient": d.recipient,
+            "recipient_role": d.recipient_role,
+            "patient_count": d.patient_count,
+            "destination": d.destination,
+            "supply": d.supply,
+        }
+
+    return {**status, **recipient_info}

@@ -45,7 +45,7 @@ export function CustodyTimeline({ task, route, flightLog, status, battery }: Cus
     },
     {
       label: 'Temperature Verified',
-      detail: task ? '4.1°C — within safe range' : 'Awaiting verification',
+      detail: task ? 'Temperature within safe range' : 'Awaiting verification',
       status: task ? 'complete' : 'pending',
       timestamp: task ? (takeoffLog?.timestamp ? takeoffLog.timestamp - 3 : undefined) : undefined,
     },

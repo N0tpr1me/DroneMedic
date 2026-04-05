@@ -70,6 +70,9 @@ class Delivery(BaseModel):
     supply: str = ""
     priority: Literal["high", "normal"] = "normal"
     time_window_minutes: int | None = None
+    recipient: str | None = None           # "Dr. Amara Osei"
+    recipient_role: str | None = None      # "Trauma Surgeon"
+    patient_count: int | None = None       # 3
     status: DeliveryStatus = DeliveryStatus.pending
     assigned_drone: str | None = None
     assigned_mission: str | None = None
@@ -101,6 +104,9 @@ class DeliveryItem(BaseModel):
     supply: str = ""
     priority: Literal["high", "normal"] = "normal"
     time_window_minutes: int | None = None
+    recipient: str | None = None
+    recipient_role: str | None = None
+    patient_count: int | None = None
 
 
 class CreateBatchRequest(BaseModel):

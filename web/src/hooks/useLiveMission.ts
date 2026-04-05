@@ -85,6 +85,7 @@ export function useLiveMission(routeStops?: string[]) {
   const [safetyDecisions, setSafetyDecisions] = useState<SafetyDecision[]>([]);
   const [cvDetection, setCvDetection] = useState<CVDetection | null>(null);
   const [aiReasoningMessages, setAiReasoningMessages] = useState<AiReasoningMessage[]>([]);
+  const [payloadStatus, setPayloadStatus] = useState<{temperature_c: number; integrity: string; time_remaining_minutes: number; payload_type: string} | null>(null);
 
   // Track waypoints reached for progress calculation
   const waypointsReachedRef = useRef(0);
@@ -285,6 +286,16 @@ export function useLiveMission(routeStops?: string[]) {
         break;
       }
 
+      case 'payload_status_updated': {
+        setPayloadStatus({
+          temperature_c: d.temperature_c ?? 0,
+          integrity: d.integrity || 'nominal',
+          time_remaining_minutes: d.time_remaining_minutes ?? 0,
+          payload_type: d.payload_type || 'blood',
+        });
+        break;
+      }
+
       case 'geofence_violation':
         // Surfaced in the UI via lastEvent
         break;
@@ -312,6 +323,7 @@ export function useLiveMission(routeStops?: string[]) {
     setSafetyDecisions([]);
     setCvDetection(null);
     setAiReasoningMessages([]);
+    setPayloadStatus(null);
     waypointsReachedRef.current = 0;
   }, []);
 
@@ -330,5 +342,6 @@ export function useLiveMission(routeStops?: string[]) {
     cvDetection,
     clearCvDetection: () => setCvDetection(null),
     aiReasoningMessages,
+    payloadStatus,
   };
 }

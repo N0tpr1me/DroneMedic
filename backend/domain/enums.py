@@ -71,6 +71,8 @@ class EventType(str, Enum):
     obstacle_detected = "obstacle_detected"
     # AI reasoning narration
     ai_reasoning = "ai_reasoning"
+    # Payload
+    payload_status_updated = "payload_status_updated"
     # Demo / scenario
     scenario_triggered = "scenario_triggered"
 

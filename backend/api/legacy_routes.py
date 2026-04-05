@@ -259,27 +259,12 @@ def api_narrate(req: NarrateRequest, ai=Depends(get_ai)):
 
 @router.post("/api/payload-status")
 def api_payload_status(req: PayloadStatusRequest):
-    profiles = {
-        "blood": {"safe_min": 2.0, "safe_max": 6.0, "max_time": 240, "base_temp": 4.0, "drift": 0.005},
-        "insulin": {"safe_min": 2.0, "safe_max": 8.0, "max_time": 480, "base_temp": 5.0, "drift": 0.003},
-    }
-    default_profile = {"safe_min": 15.0, "safe_max": 25.0, "max_time": 600, "base_temp": 20.0, "drift": 0.002}
-    profile = profiles.get(req.payload_type, default_profile)
-    wind_speed = req.conditions.get("wind", 0)
-    wind_factor = 2.0 if wind_speed > 15 else 1.0
-    temp = profile["base_temp"] + (profile["drift"] * req.elapsed_minutes * wind_factor)
-    safe_min, safe_max = profile["safe_min"], profile["safe_max"]
-    if temp < safe_min or temp > safe_max:
-        integrity = "compromised"
-    elif temp < (safe_min + 1.0) or temp > (safe_max - 1.0):
-        integrity = "warning"
-    else:
-        integrity = "nominal"
-    return {
-        "temperature_c": round(temp, 1),
-        "integrity": integrity,
-        "time_remaining_minutes": round(profile["max_time"] - req.elapsed_minutes, 1),
-    }
+    from backend.services.payload_service import compute_payload_status
+    return compute_payload_status(
+        payload_type=req.payload_type,
+        elapsed_minutes=req.elapsed_minutes,
+        wind_speed=req.conditions.get("wind", 0),
+    )
 
 
 @router.post("/api/mission-comparison")
