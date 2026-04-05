@@ -15,6 +15,10 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://chat.kxsb.org/api/v1")
 AIRSIM_ENABLED = os.getenv("AIRSIM_ENABLED", "false").lower() == "true"
 
+# --- Supabase ---
+SUPABASE_URL = os.getenv("VITE_SUPABASE_URL", "")
+SUPABASE_KEY = os.getenv("VITE_SUPABASE_ANON_KEY", "")
+
 # --- PX4 SITL ---
 PX4_ENABLED = os.getenv("PX4_ENABLED", "false").lower() == "true"
 PX4_CONNECTION = os.getenv("PX4_CONNECTION", "udp://:14540")
