@@ -9,6 +9,7 @@ import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { SideNav } from '../components/layout/SideNav';
 import { PageHeader } from '../components/layout/PageHeader';
 import { EmptyState } from '../components/analytics/EmptyState';
+import { TransportComparison } from '../components/analytics/TransportComparison';
 import { api } from '../lib/api';
 import type { Metrics } from '../lib/api';
 import { useLiveMission } from '../hooks/useLiveMission';
@@ -40,16 +41,31 @@ interface StoredMission {
 // ── Demo Data (fallback) ──
 
 const DEMO_MISSIONS: StoredMission[] = [
-  { id: 1, name: 'Royal London Emergency', deliveryTime: 52, clinicalDeadline: 90, distance: 8400, naiveDistance: 12600, battery: 42, status: 'completed', facility: 'Royal London', priority: 'high', completedAt: '2026-03-28T10:00:00Z' },
-  { id: 2, name: 'Homerton Insulin Run', deliveryTime: 38, clinicalDeadline: 120, distance: 5200, naiveDistance: 7800, battery: 31, status: 'completed', facility: 'Homerton', priority: 'normal', completedAt: '2026-03-28T11:00:00Z' },
-  { id: 3, name: 'Whipps Cross Defibrillator', deliveryTime: 65, clinicalDeadline: 60, distance: 9100, naiveDistance: 14200, battery: 58, status: 'rerouted', facility: 'Whipps Cross', priority: 'high', completedAt: '2026-03-29T09:00:00Z' },
-  { id: 4, name: 'Clinic A Bandages', deliveryTime: 28, clinicalDeadline: 180, distance: 3400, naiveDistance: 5100, battery: 22, status: 'completed', facility: 'Clinic A', priority: 'normal', completedAt: '2026-03-29T14:00:00Z' },
-  { id: 5, name: 'Clinic B Blood Bank', deliveryTime: 71, clinicalDeadline: 90, distance: 10200, naiveDistance: 15300, battery: 61, status: 'completed', facility: 'Clinic B', priority: 'high', completedAt: '2026-03-30T08:00:00Z' },
-  { id: 6, name: 'Royal London Plasma', deliveryTime: 45, clinicalDeadline: 75, distance: 7200, naiveDistance: 10800, battery: 38, status: 'completed', facility: 'Royal London', priority: 'high', completedAt: '2026-03-30T12:00:00Z' },
-  { id: 7, name: 'Homerton Vaccines', deliveryTime: 33, clinicalDeadline: 240, distance: 4800, naiveDistance: 7200, battery: 27, status: 'completed', facility: 'Homerton', priority: 'normal', completedAt: '2026-03-31T10:00:00Z' },
-  { id: 8, name: 'Whipps Cross Emergency', deliveryTime: 88, clinicalDeadline: 80, distance: 11500, naiveDistance: 17200, battery: 65, status: 'failed', facility: 'Whipps Cross', priority: 'high', completedAt: '2026-03-31T15:00:00Z' },
-  { id: 9, name: 'Clinic C Surgical Kit', deliveryTime: 41, clinicalDeadline: 120, distance: 6100, naiveDistance: 9200, battery: 35, status: 'completed', facility: 'Clinic C', priority: 'normal', completedAt: '2026-04-01T09:00:00Z' },
-  { id: 10, name: 'Royal London Antibiotics', deliveryTime: 48, clinicalDeadline: 150, distance: 7800, naiveDistance: 11700, battery: 40, status: 'completed', facility: 'Royal London', priority: 'normal', completedAt: '2026-04-01T13:00:00Z' },
+  // Day 1 — Mar 29
+  { id: 1, name: 'Royal London O- Blood', deliveryTime: 12, clinicalDeadline: 90, distance: 8400, naiveDistance: 12600, battery: 42, status: 'completed', facility: 'Royal London', priority: 'high', completedAt: '2026-03-29T07:14:00Z', supplies: 'blood_pack', costEstimate: 85 },
+  { id: 2, name: 'Homerton Insulin Resupply', deliveryTime: 9, clinicalDeadline: 120, distance: 5200, naiveDistance: 7800, battery: 28, status: 'completed', facility: 'Homerton', priority: 'normal', completedAt: '2026-03-29T11:32:00Z', supplies: 'insulin', costEstimate: 65 },
+  { id: 3, name: 'Whipps Cross Defib', deliveryTime: 18, clinicalDeadline: 60, distance: 11200, naiveDistance: 16800, battery: 55, status: 'rerouted', facility: 'Whipps Cross', priority: 'high', completedAt: '2026-03-29T15:48:00Z', supplies: 'defibrillator', costEstimate: 120, rerouteCount: 1, safetyEventsCount: 2 },
+  // Day 2 — Mar 30
+  { id: 4, name: 'Clinic A Surgical Kit', deliveryTime: 8, clinicalDeadline: 180, distance: 3400, naiveDistance: 5100, battery: 20, status: 'completed', facility: 'Clinic A', priority: 'normal', completedAt: '2026-03-30T09:05:00Z', supplies: 'surgical_kit', costEstimate: 55 },
+  { id: 5, name: 'Newham General Blood', deliveryTime: 15, clinicalDeadline: 90, distance: 9800, naiveDistance: 14700, battery: 48, status: 'completed', facility: 'Newham General', priority: 'high', completedAt: '2026-03-30T12:22:00Z', supplies: 'blood_pack', costEstimate: 95 },
+  { id: 6, name: 'Royal London Plasma', deliveryTime: 11, clinicalDeadline: 75, distance: 7200, naiveDistance: 10800, battery: 38, status: 'completed', facility: 'Royal London', priority: 'high', completedAt: '2026-03-30T16:40:00Z', supplies: 'blood_pack', costEstimate: 80 },
+  // Day 3 — Mar 31
+  { id: 7, name: 'Homerton Vaccine Batch', deliveryTime: 10, clinicalDeadline: 240, distance: 4800, naiveDistance: 7200, battery: 25, status: 'completed', facility: 'Homerton', priority: 'normal', completedAt: '2026-03-31T08:15:00Z', supplies: 'vaccine_kit', costEstimate: 60 },
+  { id: 8, name: 'Clinic B Insulin', deliveryTime: 14, clinicalDeadline: 120, distance: 8200, naiveDistance: 12300, battery: 40, status: 'completed', facility: 'Clinic B', priority: 'normal', completedAt: '2026-03-31T13:50:00Z', supplies: 'insulin', costEstimate: 75 },
+  { id: 9, name: 'Whipps Cross Emergency', deliveryTime: 25, clinicalDeadline: 20, distance: 14500, naiveDistance: 21700, battery: 65, status: 'failed', facility: 'Whipps Cross', priority: 'high', completedAt: '2026-03-31T22:10:00Z', supplies: 'blood_pack', costEstimate: 140, safetyEventsCount: 3 },
+  // Day 4 — Apr 1
+  { id: 10, name: 'Clinic C Surgical Kit', deliveryTime: 11, clinicalDeadline: 150, distance: 6100, naiveDistance: 9200, battery: 33, status: 'completed', facility: 'Clinic C', priority: 'normal', completedAt: '2026-04-01T10:20:00Z', supplies: 'surgical_kit', costEstimate: 70 },
+  { id: 11, name: 'Royal London Antibiotics', deliveryTime: 13, clinicalDeadline: 120, distance: 7800, naiveDistance: 11700, battery: 39, status: 'completed', facility: 'Royal London', priority: 'normal', completedAt: '2026-04-01T14:45:00Z', supplies: 'surgical_kit', costEstimate: 78 },
+  { id: 12, name: 'Newham Night Delivery', deliveryTime: 17, clinicalDeadline: 90, distance: 10400, naiveDistance: 15600, battery: 52, status: 'completed', facility: 'Newham General', priority: 'high', completedAt: '2026-04-01T23:30:00Z', supplies: 'blood_pack', costEstimate: 105 },
+  // Day 5 — Apr 2
+  { id: 13, name: 'Homerton Defibrillator', deliveryTime: 10, clinicalDeadline: 60, distance: 5500, naiveDistance: 8250, battery: 30, status: 'completed', facility: 'Homerton', priority: 'high', completedAt: '2026-04-02T09:00:00Z', supplies: 'defibrillator', costEstimate: 68 },
+  { id: 14, name: 'Clinic A Vaccine Run', deliveryTime: 8, clinicalDeadline: 240, distance: 3200, naiveDistance: 4800, battery: 21, status: 'completed', facility: 'Clinic A', priority: 'normal', completedAt: '2026-04-02T15:12:00Z', supplies: 'vaccine_kit', costEstimate: 52 },
+  // Day 6 — Apr 3 (weather event)
+  { id: 15, name: 'Royal London Storm Run', deliveryTime: 19, clinicalDeadline: 90, distance: 9200, naiveDistance: 13800, battery: 50, status: 'rerouted', facility: 'Royal London', priority: 'high', completedAt: '2026-04-03T11:05:00Z', supplies: 'blood_pack', costEstimate: 110, rerouteCount: 2, safetyEventsCount: 4 },
+  { id: 16, name: 'Whipps Cross Insulin', deliveryTime: 16, clinicalDeadline: 120, distance: 10800, naiveDistance: 16200, battery: 53, status: 'completed', facility: 'Whipps Cross', priority: 'normal', completedAt: '2026-04-03T17:28:00Z', supplies: 'insulin', costEstimate: 92 },
+  // Day 7 — Apr 4 & 5
+  { id: 17, name: 'Clinic B Night Surgical', deliveryTime: 13, clinicalDeadline: 180, distance: 7500, naiveDistance: 11250, battery: 37, status: 'completed', facility: 'Clinic B', priority: 'normal', completedAt: '2026-04-04T02:15:00Z', supplies: 'surgical_kit', costEstimate: 74 },
+  { id: 18, name: 'Newham General Defib', deliveryTime: 14, clinicalDeadline: 45, distance: 8900, naiveDistance: 13350, battery: 44, status: 'completed', facility: 'Newham General', priority: 'high', completedAt: '2026-04-05T08:40:00Z', supplies: 'defibrillator', costEstimate: 88 },
 ];
 
 // ── localStorage helpers ──
@@ -106,27 +122,40 @@ const tooltipStyle = {
   borderRadius: 8,
 };
 
-const DEMO_REPORT = `# DroneMedic Board Report — March 2026
+const DEMO_REPORT = `# DroneMedic Board Report — March/April 2026
 
 ## Executive Summary
-Over the reporting period, the DroneMedic fleet completed **10 missions** across 5 facilities in East London, achieving a **90% on-time delivery rate** against clinical deadlines. Average delivery time was **51 seconds**, representing an **80% improvement** over road-based ambulance transport.
+Over the reporting period (29 Mar – 5 Apr), the DroneMedic fleet completed **18 missions** across 7 facilities in East London, achieving a **94% on-time delivery rate** against clinical deadlines. Average delivery time was **13.5 minutes**, representing a **73% improvement** over road-based ambulance transport (est. 50 min avg).
 
 ## Key Performance Indicators
-- **On-Time Rate:** 90% (9/10 missions met clinical deadline)
-- **Average Delivery Time:** 51s (vs ~255s by road)
-- **Route Optimisation Savings:** 33% average distance reduction vs naive routing
+- **On-Time Rate:** 94% (17/18 missions met clinical deadline)
+- **Average Delivery Time:** 13.5 min (vs ~50 min by road)
+- **Route Optimisation Savings:** 28% average distance reduction vs naive routing
 - **Payload Integrity:** 100% — zero temperature excursions or damage events
-- **Fleet Availability:** 100% uptime during operational hours
+- **Fleet Availability:** 96% uptime during operational hours
+- **Reroute Success Rate:** 100% — 2 reroutes completed without mission failure
+
+## Supply Breakdown
+- Blood packs: 7 deliveries (39%)
+- Insulin: 3 deliveries (17%)
+- Surgical kits: 4 deliveries (22%)
+- Defibrillators: 3 deliveries (17%)
+- Vaccine kits: 2 deliveries (11%)
 
 ## Incidents
-- **Mission #3 (Whipps Cross Defibrillator):** Delivered in 65s against a 60s deadline. Root cause: headwind on approach. Rerouted successfully but 5s over SLA.
-- **Mission #8 (Whipps Cross Emergency):** Failed delivery (88s vs 80s deadline). Post-incident review identified congested airspace corridor. Recommendation: add secondary route via Hackney Marshes.
+- **Mission #3 (Whipps Cross Defib):** Rerouted due to North London storm corridor. Delivered in 18 min against 60 min deadline — well within SLA despite detour.
+- **Mission #9 (Whipps Cross Emergency):** Failed delivery — 25 min vs 20 min deadline. Night operation in severe weather. Post-incident review: congested airspace + low visibility. Recommendation: add secondary route via Hackney Marshes.
+- **Mission #15 (Royal London Storm Run):** Successfully rerouted twice during active storm cell. Delivered in 19 min against 90 min deadline.
+
+## Night Operations
+3 missions conducted between 22:00–06:00, all successful. Night capability confirmed for emergency deployments.
 
 ## Recommendations
-1. Add redundant flight corridor for Whipps Cross deliveries
-2. Pre-position a second drone at Homerton for surge capacity
-3. Integrate real-time wind shear data into route planner
-4. Expand to 3 additional NHS facilities in Q2 2026`;
+1. Add redundant flight corridor for Whipps Cross deliveries (addresses only facility with failed mission)
+2. Pre-position a second drone at Homerton for surge capacity during storm events
+3. Integrate real-time wind shear data into route planner — would have prevented Mission #9 delay
+4. Expand to 3 additional NHS facilities in Q2 2026
+5. Formalise night operations protocol based on successful Mar 31 / Apr 1 / Apr 4 night runs`;
 
 // ── Component ──
 
@@ -411,6 +440,11 @@ export function Analytics() {
               Clear Data
             </button>
           )}
+        </div>
+
+        {/* Row 0: Transport Comparison (Why Drones?) */}
+        <div style={{ marginBottom: 24 }}>
+          <TransportComparison />
         </div>
 
         {/* Row 1: KPI Cards */}

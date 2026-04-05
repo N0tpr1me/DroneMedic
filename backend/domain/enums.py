@@ -69,6 +69,8 @@ class EventType(str, Enum):
     weather_alert = "weather_alert"
     geofence_violation = "geofence_violation"
     obstacle_detected = "obstacle_detected"
+    # AI reasoning narration
+    ai_reasoning = "ai_reasoning"
     # Demo / scenario
     scenario_triggered = "scenario_triggered"
 

@@ -12,6 +12,7 @@ import { WeatherPanel } from '../components/dashboard/WeatherPanel';
 import { MetricsPanel } from '../components/dashboard/MetricsPanel';
 import { NaturalEventsPanel } from '../components/dashboard/NaturalEventsPanel';
 import { BootSequence } from '../components/dashboard/BootSequence';
+import { CVDetectionPanel } from '../components/dashboard/CVDetectionPanel';
 import { HudStatus } from '../components/ui/hud-status';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { SideNav } from '../components/layout/SideNav';
@@ -549,6 +550,11 @@ export function Dashboard() {
           </div>
         </div>
 
+        {/* ── CV DETECTION OVERLAY ── */}
+        <div style={{ position: 'fixed', bottom: 100, right: 24, zIndex: 25 }}>
+          <CVDetectionPanel detection={live.cvDetection} onDismiss={live.clearCvDetection} />
+        </div>
+
         {/* ── BOTTOM RIGHT CONTROLS ── */}
         <div style={{position:'fixed',bottom:24,right:24,zIndex:20,display:'flex',flexDirection:'column',gap:10}}>
           <LiquidButton size="icon" onClick={() => setShowChat(prev => !prev)} aria-label="Toggle AI Copilot" style={{ color: showChat ? '#00daf3' : '#c3c6d6' }}>
@@ -590,6 +596,7 @@ export function Dashboard() {
           metrics={metrics}
           flightLog={flightLog}
           status={status}
+          aiReasoningMessages={live.aiReasoningMessages}
         />
       </motion.div>
 

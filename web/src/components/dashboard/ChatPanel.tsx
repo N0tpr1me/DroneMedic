@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUp, Mic, Package, Route, CloudLightning, Plane, CheckCircle, Brain } from 'lucide-react';
+import { ArrowUp, Mic, Package, Route, CloudLightning, Plane, CheckCircle, Brain, Activity } from 'lucide-react';
 import type { Task, Route as RouteType, Metrics, FlightLogEntry } from '../../lib/api';
+import type { AiReasoningMessage } from '../../hooks/useLiveMission';
 
 // ── Message Types ──
 
@@ -15,6 +16,8 @@ interface ChatMessage {
   metrics?: Metrics;
   actions?: ChatAction[];
   flightEvent?: FlightLogEntry;
+  isReasoning?: boolean;
+  reasoningSeverity?: 'info' | 'success' | 'warning' | 'error';
 }
 
 interface ChatAction {
@@ -57,6 +60,7 @@ interface ChatPanelProps {
   metrics: Metrics | null;
   flightLog: FlightLogEntry[];
   status: string;
+  aiReasoningMessages?: AiReasoningMessage[];
 }
 
 export function ChatPanel({
@@ -71,6 +75,7 @@ export function ChatPanel({
   metrics,
   flightLog,
   status,
+  aiReasoningMessages = [],
 }: ChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -140,6 +145,26 @@ export function ChatPanel({
       actions: [{ label: 'New Mission', icon: 'refresh', variant: 'secondary', onClick: handleReset }],
     }]);
   }, [metrics, messages]);
+
+  // Watch AI reasoning messages from live mission
+  const reasoningCountRef = useRef(0);
+  useEffect(() => {
+    if (aiReasoningMessages.length <= reasoningCountRef.current) return;
+    const newMessages = aiReasoningMessages.slice(reasoningCountRef.current);
+    reasoningCountRef.current = aiReasoningMessages.length;
+
+    setMessages((prev) => [
+      ...prev,
+      ...newMessages.map((rm, idx) => ({
+        id: `reasoning-${Date.now()}-${idx}`,
+        type: 'ai' as const,
+        content: rm.message,
+        timestamp: new Date(rm.timestamp * 1000),
+        isReasoning: true,
+        reasoningSeverity: rm.severity,
+      })),
+    ]);
+  }, [aiReasoningMessages]);
 
   const addMessage = (msg: Omit<ChatMessage, 'id' | 'timestamp'>) => {
     setMessages((prev) => [...prev, { ...msg, id: `msg-${Date.now()}`, timestamp: new Date() }]);
@@ -291,6 +316,7 @@ export function ChatPanel({
 
   const handleReset = () => {
     onReset();
+    reasoningCountRef.current = 0;
     setMessages([{
       id: 'reset',
       type: 'ai',
@@ -339,9 +365,26 @@ export function ChatPanel({
                 </div>
               ) : (
                 <div className="max-w-[90%] space-y-3">
-                  <div className="px-4 py-3 rounded-2xl rounded-tl-sm bg-surface-container-high/60 border border-outline-variant/10 text-sm text-on-surface-variant leading-relaxed">
-                    {msg.content}
-                  </div>
+                  {msg.isReasoning ? (
+                    <div className={`flex items-start gap-2.5 px-4 py-3 rounded-2xl rounded-tl-sm border text-sm leading-relaxed ${
+                      msg.reasoningSeverity === 'error' ? 'bg-red-500/8 border-red-500/20 text-red-200' :
+                      msg.reasoningSeverity === 'warning' ? 'bg-amber-500/8 border-amber-500/20 text-amber-200' :
+                      msg.reasoningSeverity === 'success' ? 'bg-emerald-500/8 border-emerald-500/20 text-emerald-200' :
+                      'bg-sky-500/8 border-sky-500/20 text-sky-200'
+                    }`}>
+                      <Activity className={`w-4 h-4 mt-0.5 shrink-0 ${
+                        msg.reasoningSeverity === 'error' ? 'text-red-400' :
+                        msg.reasoningSeverity === 'warning' ? 'text-amber-400' :
+                        msg.reasoningSeverity === 'success' ? 'text-emerald-400' :
+                        'text-sky-400'
+                      }`} />
+                      <span>{msg.content}</span>
+                    </div>
+                  ) : (
+                    <div className="px-4 py-3 rounded-2xl rounded-tl-sm bg-surface-container-high/60 border border-outline-variant/10 text-sm text-on-surface-variant leading-relaxed">
+                      {msg.content}
+                    </div>
+                  )}
 
                   {/* Parsed task display */}
                   {msg.task && (
