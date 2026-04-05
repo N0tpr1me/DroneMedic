@@ -31,7 +31,7 @@ CHAT_TOOLS = [
             "destination": {"type": "string"},
             "supply": {"type": "string"},
             "priority": {"type": "string", "enum": ["high", "normal"]},
-        }, "required": ["destination", "supply"], "additionalProperties": False},
+        }, "required": ["destination", "supply", "priority"], "additionalProperties": False},
         "strict": True,
     }},
     {"type": "function", "function": {
@@ -81,8 +81,18 @@ CHAT_TOOLS = [
 ]
 
 
+MAX_CHAT_HISTORY = 20
+
+
 class AIAdapter:
     """Interface for AI features. Override methods to swap LLM backend."""
+
+    def __init__(self):
+        self._chat_history: list[dict] = []
+
+    def clear_chat_history(self) -> None:
+        """Reset conversation history (e.g. on mission reset)."""
+        self._chat_history.clear()
 
     def parse_task(self, user_input: str) -> dict:
         """Parse natural language delivery request into structured task."""
@@ -96,26 +106,83 @@ class AIAdapter:
     def chat(self, message: str, context: dict | None = None) -> str:
         """Chat with the mission coordinator using function calling.
 
-        Sends the user message to GPT with tool definitions. If GPT requests
-        tool calls, executes them against real backend services, feeds results
-        back, and returns the final synthesised response.
+        Maintains conversation history across calls and injects session context
+        (active task, route, weather, flight log) into the system prompt so the
+        model stays grounded in the current mission state.
         """
         try:
             from config import OPENAI_API_KEY, OPENAI_BASE_URL
             from openai import OpenAI
+            from ai.prompts import CHAT_SYSTEM_PROMPT
+            from ai.conversation import detect_intent
 
             client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
 
-            system_msg = (
-                "You are DroneMedic's mission control AI. You help hospital staff "
-                "deploy drones, check fleet status, review weather, and plan routes. "
-                "Use the provided tools to query real-time backend data before answering. "
-                "Be concise and actionable."
-            )
-            messages = [
-                {"role": "system", "content": system_msg},
-                {"role": "user", "content": message},
-            ]
+            # --- Build system prompt with context injection ---
+            system_msg = CHAT_SYSTEM_PROMPT
+
+            # Intent-aware behavioural hint
+            intent = detect_intent(message)
+            if intent == "delivery_request":
+                system_msg += (
+                    "\n[The user appears to be requesting a delivery. Confirm "
+                    "destination, supply type, and priority before deploying.]\n"
+                )
+            elif intent == "what_if":
+                system_msg += (
+                    "\n[The user is exploring a hypothetical scenario. Analyze "
+                    "the impact on any active mission and give a clear recommendation.]\n"
+                )
+            elif intent == "replan":
+                system_msg += (
+                    "\n[The user wants to change the current plan. Acknowledge "
+                    "the change and explain what will be different.]\n"
+                )
+
+            # Inject live session context
+            if context:
+                ctx_parts = []
+                if context.get("task"):
+                    t = context["task"]
+                    locs = ", ".join(t.get("locations", []))
+                    ctx_parts.append(f"Active task — locations: {locs}")
+                    if t.get("priorities"):
+                        urgent = [k for k, v in t["priorities"].items() if v == "high"]
+                        if urgent:
+                            ctx_parts.append(f"  Urgent: {', '.join(urgent)}")
+                    if t.get("supplies"):
+                        sup = "; ".join(f"{k}: {v}" for k, v in t["supplies"].items())
+                        ctx_parts.append(f"  Supplies: {sup}")
+                if context.get("route"):
+                    r = context["route"]
+                    stops = r.get("ordered_route") or r.get("orderedRoute") or []
+                    if stops:
+                        ctx_parts.append(f"Planned route: {' → '.join(stops)}")
+                if context.get("weather"):
+                    lines = []
+                    for loc, w in context["weather"].items():
+                        cond = w.get("condition", "?")
+                        wind = w.get("wind_speed", w.get("windSpeed", "?"))
+                        flyable = w.get("flyable", True)
+                        flag = "" if flyable else " [NOT FLYABLE]"
+                        lines.append(f"  {loc}: {cond}, wind {wind}m/s{flag}")
+                    ctx_parts.append("Weather:\n" + "\n".join(lines))
+                if context.get("flightLog"):
+                    recent = context["flightLog"][-3:]
+                    log_lines = []
+                    for e in recent:
+                        ev = e.get("event", "")
+                        loc = e.get("location", "?")
+                        bat = e.get("battery", "?")
+                        log_lines.append(f"  {ev} at {loc}, battery={bat}%")
+                    ctx_parts.append("Recent flight events:\n" + "\n".join(log_lines))
+                if ctx_parts:
+                    system_msg += "\n\n## CURRENT SESSION CONTEXT\n" + "\n".join(ctx_parts)
+
+            # --- Build message list: system + history + new user message ---
+            messages = [{"role": "system", "content": system_msg}]
+            messages.extend(self._chat_history[-MAX_CHAT_HISTORY:])
+            messages.append({"role": "user", "content": message})
 
             # Allow up to 5 rounds of tool calls before forcing a final answer
             for _ in range(5):
@@ -128,11 +195,11 @@ class AIAdapter:
                 )
                 assistant_msg = response.choices[0].message
 
-                # No tool calls — return the text response
+                # No tool calls — we have the final answer
                 if not assistant_msg.tool_calls:
-                    return (assistant_msg.content or "").strip()
+                    break
 
-                # Append the assistant message (with tool_calls) to history
+                # Append the assistant message (with tool_calls) to the request
                 messages.append(assistant_msg)
 
                 # Execute each tool call and feed results back
@@ -146,8 +213,15 @@ class AIAdapter:
                         "content": json.dumps(result),
                     })
 
-            # If we exhaust rounds, return the last content
-            return (assistant_msg.content or "Tool execution limit reached.").strip()
+            reply = (assistant_msg.content or "Tool execution limit reached.").strip()
+
+            # Persist user + assistant to conversation history (not tool round-trips)
+            self._chat_history.append({"role": "user", "content": message})
+            self._chat_history.append({"role": "assistant", "content": reply})
+            if len(self._chat_history) > MAX_CHAT_HISTORY * 2:
+                self._chat_history = self._chat_history[-(MAX_CHAT_HISTORY * 2):]
+
+            return reply
 
         except Exception as e:
             logger.error(f"AI chat failed: {e}")

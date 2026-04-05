@@ -32,15 +32,17 @@ const SUPPLY_CHIPS = ['O-neg Blood', 'Platelets', 'Insulin', 'Surgical Kit', 'An
 const PRIORITY_CHIPS = ['P1 - Immediate', 'P2 - Urgent', 'P3 - Routine'];
 const QUANTITY_CHIPS = ['2 units', '4 units', '6 units', '10 units'];
 
-function detectSuggestionChips(aiMessage: string): string[] {
+function detectSuggestionChips(aiMessage: string, answered: Set<string>): string[] {
   const lower = aiMessage.toLowerCase();
-  if (lower.includes('blood type') || lower.includes('what supply') || lower.includes('what do you need') || lower.includes('which supplies') || lower.includes('type of')) {
+  // Only show chips when the AI is asking a question, not confirming
+  if (!lower.includes('?')) return [];
+  if (!answered.has('supply') && (lower.includes('blood type') || lower.includes('what supply') || lower.includes('what do you need') || lower.includes('which supplies') || lower.includes('type of'))) {
     return SUPPLY_CHIPS;
   }
-  if (lower.includes('priority') || lower.includes('urgency') || lower.includes('how urgent')) {
+  if (!answered.has('priority') && (lower.includes('priority') || lower.includes('urgency') || lower.includes('how urgent'))) {
     return PRIORITY_CHIPS;
   }
-  if (lower.includes('how many') || lower.includes('quantity') || lower.includes('units')) {
+  if (!answered.has('quantity') && (lower.includes('how many') || lower.includes('quantity') || lower.includes('units'))) {
     return QUANTITY_CHIPS;
   }
   return [];
@@ -90,6 +92,7 @@ export function ChatPanel({
   const [suggestionChips, setSuggestionChips] = useState<string[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const answeredChipTypes = useRef<Set<string>>(new Set());
 
   // Auto-scroll on new messages
   useEffect(() => {
@@ -172,6 +175,10 @@ export function ChatPanel({
 
   const handleChipClick = (chip: string) => {
     setSuggestionChips([]);
+    // Track which category was answered so it doesn't reappear
+    if (SUPPLY_CHIPS.includes(chip)) answeredChipTypes.current.add('supply');
+    if (PRIORITY_CHIPS.includes(chip)) answeredChipTypes.current.add('priority');
+    if (QUANTITY_CHIPS.includes(chip)) answeredChipTypes.current.add('quantity');
     setInput(chip);
     // Auto-send the chip
     setTimeout(() => {
@@ -203,7 +210,7 @@ export function ChatPanel({
               }
             } catch { /* not valid JSON, fall through */ }
           }
-          const chips = detectSuggestionChips(reply);
+          const chips = detectSuggestionChips(reply, answeredChipTypes.current);
           setSuggestionChips(chips);
           addMessage({ type: 'ai', content: reply });
         }).catch(() => {
@@ -250,7 +257,7 @@ export function ChatPanel({
         }
 
         // Detect if AI is asking a follow-up question → show suggestion chips
-        const chips = detectSuggestionChips(reply);
+        const chips = detectSuggestionChips(reply, answeredChipTypes.current);
         setSuggestionChips(chips);
 
         addMessage({ type: 'ai', content: reply });
@@ -317,6 +324,7 @@ export function ChatPanel({
   const handleReset = () => {
     onReset();
     reasoningCountRef.current = 0;
+    answeredChipTypes.current.clear();
     setMessages([{
       id: 'reset',
       type: 'ai',
