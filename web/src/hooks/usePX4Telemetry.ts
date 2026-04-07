@@ -24,7 +24,7 @@ interface UsePX4TelemetryReturn {
   source: 'px4' | 'mock' | 'unity' | null;
 }
 
-const WS_URL = 'ws://localhost:8765';
+const WS_URL = import.meta.env.VITE_MAVLINK_WS_URL || 'ws://144.202.12.168:8080/ws/telemetry';
 const MAX_RECONNECT_DELAY = 5000;
 
 export function usePX4Telemetry(): UsePX4TelemetryReturn {
@@ -63,10 +63,31 @@ export function usePX4Telemetry(): UsePX4TelemetryReturn {
 
       ws.onmessage = (event) => {
         try {
-          const data = JSON.parse(event.data);
-          if (data.type === 'telemetry') {
-            latestData.current = data as PX4Telemetry;
-            if (data.source && data.source !== source) setSource(data.source);
+          const raw = JSON.parse(event.data);
+          if (raw.type === 'telemetry' && raw.data) {
+            const d = raw.data;
+            const vel = d.velocity || {};
+            const speed = Math.sqrt(
+              (vel.north_m_s || 0) ** 2 +
+              (vel.east_m_s || 0) ** 2 +
+              (vel.down_m_s || 0) ** 2
+            );
+            const mapped: PX4Telemetry = {
+              lat: d.position?.lat ?? 0,
+              lon: d.position?.lon ?? 0,
+              alt_m: d.position?.abs_alt_m ?? 0,
+              relative_alt_m: d.position?.alt_m ?? 0,
+              battery_pct: d.battery?.remaining ?? 0,
+              flight_mode: d.flight_mode ?? 'UNKNOWN',
+              is_armed: d.flight_mode !== 'HOLD' && d.flight_mode !== 'MANUAL',
+              is_flying: (d.position?.alt_m ?? 0) > 0.5,
+              heading_deg: d.heading_deg ?? 0,
+              speed_m_s: speed,
+              timestamp: raw.ts ?? Date.now() / 1000,
+              source: 'px4',
+            };
+            latestData.current = mapped;
+            if (source !== 'px4') setSource('px4');
             scheduleUpdate();
           }
         } catch {

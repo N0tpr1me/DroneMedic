@@ -57,6 +57,15 @@ namespace DroneMedic
         [Header("Flight Log")]
         [SerializeField] private List<FlightLogEntry> flightLog = new List<FlightLogEntry>();
 
+        // -- External Telemetry (PX4 Live Mode) ---------------------------------
+
+        /// <summary>When true, position/state are driven by external PX4 telemetry, not coroutines.</summary>
+        public bool IsExternallyDriven { get; set; }
+
+        private Vector3 _externalTargetPos;
+        private Quaternion _externalTargetRot;
+        private const float ExternalLerpSpeed = 5f;
+
         // -- Weather & Physics Modifiers --------------------------------------
 
         /// <summary>Speed multiplier applied by mission controller (1.0 = normal, 0.73 = conservation).</summary>
@@ -94,13 +103,68 @@ namespace DroneMedic
 
         private void Awake()
         {
-            if (config == null)
-            {
-                Debug.LogError("[DroneController] DroneConfig is not assigned.", this);
-                return;
-            }
+            if (config != null)
+                battery = config.batteryCapacity;
+            else
+                battery = 100f; // default for externally driven drones
+        }
 
-            battery = config.batteryCapacity;
+        /// <summary>Assign config at runtime (used by SimulationManager when spawning).</summary>
+        public void SetConfig(DroneConfig cfg)
+        {
+            config = cfg;
+            if (config != null)
+                battery = config.batteryCapacity;
+        }
+
+        private void Update()
+        {
+            if (!IsExternallyDriven) return;
+
+            transform.position = Vector3.Lerp(transform.position, _externalTargetPos, Time.deltaTime * ExternalLerpSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, _externalTargetRot, Time.deltaTime * ExternalLerpSpeed);
+        }
+
+        // -- External Telemetry API ------------------------------------------
+
+        /// <summary>
+        /// Called by SimulationManager in PX4Live mode to feed real telemetry.
+        /// Smoothly interpolates position/rotation in Update().
+        /// </summary>
+        public void SetExternalTelemetry(Vector3 worldPos, float heading, float batteryPct, string flightMode, float speed)
+        {
+            if (!IsExternallyDriven) return;
+
+            _externalTargetPos = worldPos;
+            _externalTargetRot = Quaternion.Euler(0f, heading, 0f);
+
+            // Update battery from real PX4 data
+            float previousBattery = battery;
+            battery = batteryPct;
+            if (Mathf.Abs(previousBattery - battery) > 0.1f)
+                OnBatteryChanged?.Invoke(battery);
+
+            float reserve = config != null ? config.batteryMinReserve : 20f;
+            if (battery <= reserve)
+                OnLowBattery?.Invoke(battery);
+
+            // Map PX4 flight mode to DroneState
+            DroneState mapped = MapFlightMode(flightMode);
+            if (mapped != currentState)
+                SetState(mapped);
+        }
+
+        private static DroneState MapFlightMode(string px4Mode)
+        {
+            if (string.IsNullOrEmpty(px4Mode)) return DroneState.Idle;
+
+            string upper = px4Mode.ToUpperInvariant();
+            if (upper.Contains("TAKEOFF")) return DroneState.TakingOff;
+            if (upper.Contains("LAND")) return DroneState.Landing;
+            if (upper.Contains("HOLD") || upper.Contains("LOITER")) return DroneState.Hovering;
+            if (upper.Contains("MISSION") || upper.Contains("OFFBOARD") || upper.Contains("POSCTL") || upper.Contains("ALTCTL"))
+                return DroneState.Flying;
+            return DroneState.Idle;
         }
 
         // -- State Management ------------------------------------------------
@@ -133,6 +197,7 @@ namespace DroneMedic
         /// </summary>
         public bool CheckBatteryForReturn()
         {
+            if (config == null) return false;
             Vector3 depotPos = config.GetWorldPosition("Depot");
             float distanceToDepot = Vector3.Distance(transform.position, depotPos);
             float drainNeeded = distanceToDepot * config.batteryDrainRate;
@@ -196,6 +261,12 @@ namespace DroneMedic
         /// </summary>
         public Coroutine Takeoff()
         {
+            if (IsExternallyDriven)
+            {
+                Debug.Log("[DroneController] Takeoff ignored — externally driven by PX4.");
+                return null;
+            }
+
             if (currentState != DroneState.Idle && currentState != DroneState.Landed)
             {
                 Debug.LogWarning("[DroneController] Cannot take off from state: " + currentState);
@@ -235,6 +306,12 @@ namespace DroneMedic
         /// </summary>
         public Coroutine Land()
         {
+            if (IsExternallyDriven)
+            {
+                Debug.Log("[DroneController] Land ignored — externally driven by PX4.");
+                return null;
+            }
+
             if (!IsFlying)
             {
                 Debug.LogWarning("[DroneController] Cannot land from state: " + currentState);
@@ -276,6 +353,12 @@ namespace DroneMedic
         /// </summary>
         public Coroutine MoveToLocation(string locationName)
         {
+            if (IsExternallyDriven)
+            {
+                Debug.Log("[DroneController] MoveToLocation ignored — externally driven by PX4.");
+                return null;
+            }
+
             if (currentState != DroneState.Hovering && currentState != DroneState.Flying)
             {
                 Debug.LogWarning("[DroneController] Must be airborne to move. Current state: " + currentState);

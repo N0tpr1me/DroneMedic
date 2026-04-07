@@ -12,7 +12,8 @@ namespace DroneMedic
         Weather,
         Obstacle,
         Full,
-        MultiDrone
+        MultiDrone,
+        PX4Live
     }
 
     public class SimulationManager : MonoBehaviour
@@ -21,8 +22,8 @@ namespace DroneMedic
 
         [Header("Configuration")]
         [SerializeField] private DroneConfig config;
-        [SerializeField] private DemoMode demoMode = DemoMode.Basic;
-        [SerializeField] private bool autoStart = false;
+        [SerializeField] private DemoMode demoMode = DemoMode.PX4Live;
+        [SerializeField] private bool autoStart = true;
         [SerializeField] private GameObject dronePrefab;
 
         [Header("Map")]
@@ -36,6 +37,7 @@ namespace DroneMedic
         [SerializeField] private ROSBridge rosBridge;
         [SerializeField] private WebSocketBridge wsBridge;
         [SerializeField] private BackendAPIClient apiClient;
+        [SerializeField] private PX4TelemetryClient px4Client;
 
         private readonly List<DroneController> activeDrones = new List<DroneController>();
         private bool isRunning;
@@ -146,6 +148,7 @@ namespace DroneMedic
                 case DemoMode.Obstacle:   StartCoroutine(RunBackendDemo(enableWeather: false, enableObstacles: true));  break;
                 case DemoMode.Full:       StartCoroutine(RunBackendDemo(enableWeather: true,  enableObstacles: true));  break;
                 case DemoMode.MultiDrone: StartCoroutine(RunMultiDroneDemo()); break;
+                case DemoMode.PX4Live:   StartCoroutine(RunPX4LiveMode()); break;
             }
         }
 
@@ -488,7 +491,7 @@ namespace DroneMedic
             currentAction = tickResult.action ?? "CONTINUE";
 
             // Apply speed from backend policy
-            if (tickResult.cruise_speed_ms > 0)
+            if (tickResult.cruise_speed_ms > 0 && config != null && config.droneVelocity > 0)
                 drone.SpeedMultiplier = tickResult.cruise_speed_ms / config.droneVelocity;
 
             // Broadcast safety status
@@ -526,6 +529,122 @@ namespace DroneMedic
             }
         }
 
+        // ==== PX4 Live Mode ====
+
+        private IEnumerator RunPX4LiveMode()
+        {
+            // Find or validate PX4 client
+            if (px4Client == null)
+                px4Client = FindAnyObjectByType<PX4TelemetryClient>();
+
+            if (px4Client == null)
+            {
+                Debug.LogError("[SimulationManager] PX4TelemetryClient not found — cannot run PX4Live mode.");
+                isRunning = false;
+                yield break;
+            }
+
+            Debug.Log($"[PX4Live] Connecting to telemetry bridge at {px4Client.BridgeUrl}");
+
+            // Wait for connection (up to 10 seconds)
+            float timeout = 10f;
+            float waited = 0f;
+            while (!px4Client.IsConnected && waited < timeout)
+            {
+                waited += Time.deltaTime;
+                yield return null;
+            }
+
+            if (!px4Client.IsConnected)
+            {
+                Debug.LogWarning("[PX4Live] Telemetry bridge not connected — will keep trying in background.");
+            }
+
+            // Wait for Cesium georeference to be ready before spawning
+            if (mapTiles != null)
+            {
+                Debug.Log("[PX4Live] Waiting for Cesium georeference...");
+                yield return mapTiles.WaitForReady();
+                Debug.Log("[PX4Live] Cesium ready.");
+            }
+            else
+            {
+                // No Cesium — wait 1 frame for scene setup
+                yield return null;
+            }
+
+            // Spawn drone at depot
+            DroneController drone = SpawnDrone("PX4Drone");
+            drone.IsExternallyDriven = true;
+
+            Debug.Log("[PX4Live] Drone spawned — listening for PX4 telemetry.");
+
+            // Set up camera to follow the drone
+            var cam = Camera.main;
+            if (cam != null)
+            {
+                var droneCam = cam.GetComponent<DroneCamera>();
+                if (droneCam == null)
+                    droneCam = cam.gameObject.AddComponent<DroneCamera>();
+                droneCam.SetTarget(drone.transform);
+                droneCam.SetDroneList(new[] { drone.transform });
+                Debug.Log("[PX4Live] Camera following PX4Drone.");
+            }
+
+            if (wsBridge != null)
+                wsBridge.BroadcastEvent("px4live_started", "PX4Drone");
+
+            // Subscribe to telemetry and drive drone position
+            px4Client.OnTelemetryReceived += (data) =>
+            {
+                if (drone == null) return;
+
+                // Convert GPS to Unity world coordinates via Cesium georeference
+                Vector3 worldPos;
+                if (mapTiles != null)
+                {
+                    worldPos = mapTiles.GeoToUnity(data.lat, data.lon, data.alt_m);
+                }
+                else
+                {
+                    // Flat-earth fallback using depot as origin
+                    double depotLat = 51.5074;
+                    double depotLon = -0.1278;
+                    if (config != null)
+                    {
+                        var depot = config.GetLocation("Depot");
+                        if (depot != null)
+                        {
+                            depotLat = depot.latitude;
+                            depotLon = depot.longitude;
+                        }
+                    }
+                    double cosLat = System.Math.Cos(depotLat * System.Math.PI / 180.0);
+                    float x = (float)((data.lon - depotLon) * 111320.0 * cosLat);
+                    float z = (float)((data.lat - depotLat) * 111320.0);
+                    worldPos = new Vector3(x, data.alt_m, z);
+                }
+
+                drone.SetExternalTelemetry(
+                    worldPos,
+                    data.heading_deg,
+                    data.battery_pct,
+                    data.flight_mode,
+                    data.speed_m_s
+                );
+            };
+
+            // Keep running until stopped
+            while (isRunning)
+            {
+                yield return null;
+            }
+
+            // Cleanup
+            drone.IsExternallyDriven = false;
+            Debug.Log("[PX4Live] Mode stopped.");
+        }
+
         // ==== Helpers ====
 
         private string[] BuildFullRoute(string[] locations)
@@ -538,7 +657,21 @@ namespace DroneMedic
 
         private DroneController SpawnDrone(string droneName, Vector3 offset = default)
         {
-            Vector3 depotPos = config.GetWorldPosition("Depot") + offset;
+            // Use Cesium geo-conversion if available (critical for 3D tiles alignment)
+            Vector3 depotPos;
+            if (mapTiles != null)
+            {
+                depotPos = mapTiles.GeoToUnity(51.5074, -0.1278, 50.0) + offset;
+                Debug.Log($"[SpawnDrone] Using Cesium coords: {depotPos}");
+            }
+            else if (config != null)
+            {
+                depotPos = config.GetWorldPosition("Depot") + offset;
+            }
+            else
+            {
+                depotPos = offset;
+            }
             GameObject droneObj;
 
             if (dronePrefab != null)
@@ -555,7 +688,14 @@ namespace DroneMedic
             }
 
             droneObj.name = droneName;
+
+            // Ensure drone has a 3D model
+            if (droneObj.GetComponent<DroneModelBuilder>() == null)
+                droneObj.AddComponent<DroneModelBuilder>();
+
             var dc = droneObj.GetComponent<DroneController>();
+            if (dc != null && config != null)
+                dc.SetConfig(config);
             activeDrones.Add(dc);
 
             // Forward drone events to WebSocket
