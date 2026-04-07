@@ -316,6 +316,12 @@ namespace DroneMedic
 
         private void WorldToGeo(Vector3 worldPos, out double lat, out double lon)
         {
+            if (config == null)
+            {
+                lat = 0;
+                lon = 0;
+                return;
+            }
             var depot = config.GetLocation("Depot");
             if (depot == null)
             {

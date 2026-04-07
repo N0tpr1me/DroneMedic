@@ -106,6 +106,7 @@ namespace DroneMedic
 
             // Fallback: flat Mercator approximation (1 degree lat ≈ 111320m)
             var depot = GetLocation("Depot");
+            if (depot == null) return new Vector3(0, droneAltitude, 0);
             float dx = (float)((loc.longitude - depot.longitude) * 111320.0 * System.Math.Cos(depot.latitude * System.Math.PI / 180.0));
             float dz = (float)((loc.latitude - depot.latitude) * 111320.0);
             return new Vector3(dx, droneAltitude, dz);
@@ -120,6 +121,7 @@ namespace DroneMedic
                 return _mapRef.GeoToUnity(latitude, longitude, height);
 
             var depot = GetLocation("Depot");
+            if (depot == null) return new Vector3(0, (float)height, 0);
             float dx = (float)((longitude - depot.longitude) * 111320.0 * System.Math.Cos(depot.latitude * System.Math.PI / 180.0));
             float dz = (float)((latitude - depot.latitude) * 111320.0);
             return new Vector3(dx, (float)height, dz);

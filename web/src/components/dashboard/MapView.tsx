@@ -102,19 +102,15 @@ export function MapView({
         disableDefaultUI: true,
         gestureHandling: 'greedy',
         minZoom: 3,
+        maxZoom: 22,
         tilt: 45,
         heading: 0,
+        backgroundColor: '#0a0f13',
       };
       // Only set mapId if explicitly configured — empty string causes errors
       if (MAP_ID) mapOptions.mapId = MAP_ID;
 
-      const map = new google.maps.Map(containerRef.current!, {
-        ...mapOptions,
-        restriction: {
-          latLngBounds: { north: 89.9, south: -89.9, east: 180, west: -180 },
-          strictBounds: false,
-        },
-      });
+      const map = new google.maps.Map(containerRef.current!, mapOptions);
 
       mapRef.current = map;
       infoWindowRef.current = new google.maps.InfoWindow();
@@ -364,27 +360,45 @@ export function MapView({
       const rp = [ip, ...routeCoords.slice(si + 1)].map(toLatLng);
 
       if (cp.length >= 2) {
-        polylinesRef.current.push(new google.maps.Polyline({ path: cp, strokeColor: '#00daf3', strokeWeight: 10, strokeOpacity: 0.15, map }));
-        polylinesRef.current.push(new google.maps.Polyline({ path: cp, strokeColor: '#00daf3', strokeWeight: 4, strokeOpacity: 1, map }));
+        // Completed: wide glow + solid line
+        polylinesRef.current.push(new google.maps.Polyline({ path: cp, strokeColor: '#00daf3', strokeWeight: 14, strokeOpacity: 0.08, map }));
+        polylinesRef.current.push(new google.maps.Polyline({ path: cp, strokeColor: '#00daf3', strokeWeight: 6, strokeOpacity: 0.25, map }));
+        polylinesRef.current.push(new google.maps.Polyline({ path: cp, strokeColor: '#00daf3', strokeWeight: 3, strokeOpacity: 1, map }));
       }
       if (rp.length >= 2) {
+        // Remaining: animated dashes with glow
+        polylinesRef.current.push(new google.maps.Polyline({ path: rp, strokeColor: '#00daf3', strokeWeight: 8, strokeOpacity: 0.06, map }));
         polylinesRef.current.push(new google.maps.Polyline({
           path: rp, strokeColor: '#00daf3', strokeWeight: 2, strokeOpacity: 0,
-          icons: [{ icon: { path: 'M 0,-1 0,1', strokeOpacity: 0.3, scale: 3 }, offset: '0', repeat: '16px' }], map,
+          icons: [{ icon: { path: 'M 0,-1 0,1', strokeOpacity: 0.5, strokeColor: '#00daf3', scale: 3 }, offset: '0', repeat: '14px' }], map,
         }));
       }
     } else if (routeCoords.length >= 2) {
       const path = routeCoords.map(toLatLng);
       const color = hasReroute ? '#ffb3ac' : '#00daf3';
+      // Outer glow
+      polylinesRef.current.push(new google.maps.Polyline({
+        path, strokeColor: color, strokeWeight: 12, strokeOpacity: 0.08, map,
+      }));
+      // Middle glow
+      polylinesRef.current.push(new google.maps.Polyline({
+        path, strokeColor: color, strokeWeight: 6, strokeOpacity: 0.15, map,
+      }));
+      // Animated dashes
       polylinesRef.current.push(new google.maps.Polyline({
         path, strokeColor: color, strokeWeight: hasReroute ? 2 : 3, strokeOpacity: 0,
-        icons: [{ icon: { path: 'M 0,-1 0,1', strokeOpacity: hasReroute ? 0.3 : 0.8, scale: 3 }, offset: '0', repeat: '16px' }], map,
+        icons: [{ icon: { path: 'M 0,-1 0,1', strokeOpacity: hasReroute ? 0.4 : 0.9, scale: 3 }, offset: '0', repeat: '14px' }], map,
       }));
     }
     if (rerouteCoords.length >= 2) {
+      const rp = rerouteCoords.map(toLatLng);
+      // Reroute glow
       polylinesRef.current.push(new google.maps.Polyline({
-        path: rerouteCoords.map(toLatLng), strokeColor: '#00daf3', strokeWeight: 3, strokeOpacity: 0,
-        icons: [{ icon: { path: 'M 0,-1 0,1', strokeOpacity: 0.9, scale: 3 }, offset: '0', repeat: '16px' }], map,
+        path: rp, strokeColor: '#22c55e', strokeWeight: 10, strokeOpacity: 0.1, map,
+      }));
+      polylinesRef.current.push(new google.maps.Polyline({
+        path: rp, strokeColor: '#22c55e', strokeWeight: 3, strokeOpacity: 0,
+        icons: [{ icon: { path: 'M 0,-1 0,1', strokeOpacity: 0.9, scale: 3 }, offset: '0', repeat: '14px' }], map,
       }));
     }
 
@@ -427,13 +441,41 @@ export function MapView({
 
     if (!droneMarkerRef.current) {
       const el = document.createElement('div');
-      el.style.cssText = 'width:20px;height:20px;background:#b3c5ff;transform:rotate(45deg);border-radius:2px;box-shadow:0 0 20px rgba(179,197,255,0.6),0 0 40px rgba(179,197,255,0.3);';
+      el.style.cssText = 'position:relative;width:48px;height:48px;';
+      // Pulsing outer ring
+      const pulse = document.createElement('div');
+      pulse.style.cssText = 'position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(0,218,243,0.4);animation:dronePulse 2s ease-in-out infinite;';
+      // Heading arrow
+      const arrow = document.createElement('div');
+      arrow.className = 'drone-heading';
+      arrow.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease;';
+      arrow.innerHTML = '<svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="14" fill="rgba(0,218,243,0.15)" stroke="#00daf3" stroke-width="2"/><circle cx="24" cy="24" r="6" fill="#00daf3" filter="url(#glow)"/><polygon points="24,6 28,16 20,16" fill="#00daf3" opacity="0.9"/><defs><filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg>';
+      el.appendChild(pulse);
+      el.appendChild(arrow);
+      // Inject keyframes
+      if (!document.getElementById('drone-pulse-style')) {
+        const style = document.createElement('style');
+        style.id = 'drone-pulse-style';
+        style.textContent = '@keyframes dronePulse{0%,100%{transform:scale(1);opacity:0.4}50%{transform:scale(1.5);opacity:0}}';
+        document.head.appendChild(style);
+      }
       droneMarkerRef.current = new google.maps.marker.AdvancedMarkerElement({ position: pos, map, content: el, zIndex: 100 });
-    } else { droneMarkerRef.current.position = pos; }
+    } else {
+      droneMarkerRef.current.position = pos;
+      // Update heading rotation
+      const headingEl = (droneMarkerRef.current.content as HTMLElement)?.querySelector('.drone-heading') as HTMLElement;
+      if (headingEl) {
+        const prevPos = prevDronePosRef.current;
+        if (prevPos) {
+          const angle = Math.atan2(pos.lng - prevPos.lng, pos.lat - prevPos.lat) * (180 / Math.PI);
+          headingEl.style.transform = `rotate(${angle}deg)`;
+        }
+      }
+    }
 
     if (!trailMarkerRef.current) {
       const el = document.createElement('div');
-      el.style.cssText = 'width:24px;height:24px;background:rgba(179,197,255,0.3);transform:rotate(45deg);border-radius:2px;filter:blur(2px);';
+      el.style.cssText = 'width:32px;height:32px;border-radius:50%;background:radial-gradient(circle,rgba(0,218,243,0.3),transparent 70%);filter:blur(3px);';
       trailMarkerRef.current = new google.maps.marker.AdvancedMarkerElement({ position: trail, map, content: el, zIndex: 99 });
     } else { trailMarkerRef.current.position = trail; }
 

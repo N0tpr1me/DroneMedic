@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: CesiumForUnity::CesiumForUnity.Cesium3DTileset
   _showCreditsOnScreen: 0
   _tilesetSource: 0
-  _url: 
+  _url: 'https://tile.googleapis.com/v1/3dtiles/root.json?key=AIzaSyB_4_Z4DiDUSsiSExQCo0J5boTMFDumnVQ '
   _ionAssetID: 2275207
   _ionAccessToken: 
   _ionServer: {fileID: 11400000, guid: 045bece1924dc4e55b4b6e0f594e6bbd, type: 2}
@@ -193,6 +193,52 @@ MonoBehaviour:
   _updateInEditor: 1
   _logSelectionStats: 0
   _createPhysicsMeshes: 1
+--- !u!1 &567386982
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 567386984}
+  - component: {fileID: 567386983}
+  m_Layer: 0
+  m_Name: '[PX4TelemetryClient]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &567386983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567386982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45b977e9d503a4a9a8e211440d901e70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.PX4TelemetryClient
+  telemetryBridgeUrl: ws://localhost:8765
+  reconnectDelay: 2
+--- !u!4 &567386984
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567386982}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &804179294
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +348,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 817233471}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8b0cfe402664400abef7071fb42bfe9, type: 3}
   m_Name: 
@@ -366,7 +412,7 @@ MonoBehaviour:
   _ecefY: -8873.053401790552
   _ecefZ: 4968874.937267014
   _scale: 1
---- !u!1 &856296265
+--- !u!1 &922910901
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -374,198 +420,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 856296278}
-  - component: {fileID: 856296277}
-  - component: {fileID: 856296276}
-  - component: {fileID: 856296275}
-  - component: {fileID: 856296274}
-  - component: {fileID: 856296273}
-  - component: {fileID: 856296272}
-  - component: {fileID: 856296271}
-  - component: {fileID: 856296270}
-  - component: {fileID: 856296269}
-  - component: {fileID: 856296268}
-  - component: {fileID: 856296267}
-  - component: {fileID: 856296266}
+  - component: {fileID: 922910903}
+  - component: {fileID: 922910902}
   m_Layer: 0
-  m_Name: SimulationManager
+  m_Name: '[DroneControlPanel]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &856296266
+--- !u!114 &922910902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
+  m_GameObject: {fileID: 922910901}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d9ec9d799147468b878a7d1f78318dd, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e75e0ac45e184c9ea886b95e2bc5bfd, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.StreetDetails
---- !u!114 &856296267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5f545f6b1b4046699fe80b5f066aff8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.AtmosphereSystem
---- !u!114 &856296268
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18549041121534f3681a34a387e42df6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.RealisticTrees
---- !u!114 &856296269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e12ddc7ecf3b41a89240b05d0498385, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.RealisticTerrain
---- !u!114 &856296270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2de401874adc64616b7454b8e26280b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.OSMBuildingLoader
---- !u!114 &856296271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 229f519f3e97a4dab82c70b8049b7e89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.ProceduralCity
---- !u!114 &856296272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03622dd74a506424b9e5f309cd7573e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.ROSBridge
-  config: {fileID: 0}
-  rosIPAddress: 127.0.0.1
-  rosPort: 10000
---- !u!114 &856296273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f4982ced973d4182a5c5ff3309fa149, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.ObstacleDetector
-  config: {fileID: 0}
---- !u!114 &856296274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 189616e0aa0334e3384e7b51e032f77e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.WeatherSystem
-  config: {fileID: 0}
---- !u!114 &856296275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4c6f67c6de144ae581e1201f4d107ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.GeofenceManager
-  config: {fileID: 0}
---- !u!114 &856296276
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e0374ffeefbd4a3e81a2edf74ec460d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.FleetController
-  config: {fileID: 0}
-  dronePrefab: {fileID: 0}
-  spawnPoint: {fileID: 0}
---- !u!114 &856296277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb03340e0c1094077b6a224f13841711, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.SimulationManager
-  config: {fileID: 0}
-  demoMode: 0
-  autoStart: 0
-  dronePrefab: {fileID: 0}
-  mapTiles: {fileID: 0}
-  fleetController: {fileID: 0}
-  geofenceManager: {fileID: 0}
-  weatherSystem: {fileID: 0}
-  obstacleDetector: {fileID: 0}
-  rosBridge: {fileID: 0}
-  wsBridge: {fileID: 0}
-  apiClient: {fileID: 0}
---- !u!4 &856296278
+  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.DroneControlPanel
+  px4Client: {fileID: 567386983}
+  config: {fileID: 11400000, guid: ad455886b74924e7cb6519bef63fd5a3, type: 2}
+  panelWidth: 260
+  panelX: 10
+--- !u!4 &922910903
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856296265}
+  m_GameObject: {fileID: 922910901}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -621,6 +507,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1029744696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1029744698}
+  - component: {fileID: 1029744697}
+  m_Layer: 0
+  m_Name: '[SimulationManager]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1029744697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029744696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb03340e0c1094077b6a224f13841711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.SimulationManager
+  config: {fileID: 11400000, guid: ad455886b74924e7cb6519bef63fd5a3, type: 2}
+  demoMode: 5
+  autoStart: 1
+  dronePrefab: {fileID: 1763317669520144873, guid: b6e2d3ff0a293481ebabd67e2c5836cb, type: 3}
+  mapTiles: {fileID: 817233472}
+  fleetController: {fileID: 0}
+  geofenceManager: {fileID: 0}
+  weatherSystem: {fileID: 0}
+  obstacleDetector: {fileID: 0}
+  rosBridge: {fileID: 0}
+  wsBridge: {fileID: 0}
+  apiClient: {fileID: 0}
+  px4Client: {fileID: 567386983}
+--- !u!4 &1029744698
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029744696}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!21 &1042906569
 Material:
   serializedVersion: 8
@@ -657,6 +600,102 @@ Material:
     - _SkyTint: {r: 0.52, g: 0.62, b: 0.78, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+--- !u!1 &1380797180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1380797182}
+  - component: {fileID: 1380797181}
+  m_Layer: 0
+  m_Name: '[MissionMetricsOverlay]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1380797181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380797180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32295df0369434443a9412e55830b8c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.MissionMetricsOverlay
+  panelWidth: 300
+  panelMargin: 10
+--- !u!4 &1380797182
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380797180}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1621305184
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1621305186}
+  - component: {fileID: 1621305185}
+  m_Layer: 0
+  m_Name: '[GazeboWorldRenderer]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1621305185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621305184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00d6163da04243fcb265265d68344e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.GazeboWorldRenderer
+  mapTiles: {fileID: 817233472}
+  geofenceManager: {fileID: 0}
+  weatherSystem: {fileID: 0}
+  buildingOpacity: 0.6
+  nfzOpacity: 0.25
+  showGazeboBuildings: 1
+--- !u!4 &1621305186
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621305184}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1797311781
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,7 +797,11 @@ Light:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 856296278}
   - {fileID: 817233473}
   - {fileID: 804179296}
   - {fileID: 981611839}
+  - {fileID: 567386984}
+  - {fileID: 922910903}
+  - {fileID: 1380797182}
+  - {fileID: 1621305186}
+  - {fileID: 1029744698}

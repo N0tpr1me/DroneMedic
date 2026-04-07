@@ -1,0 +1,332 @@
+<?xml version="1.0" ?>
+<!--
+  DroneMedic Gazebo Harmonic World — Medical Drone Delivery Simulation
+  ====================================================================
+  Coordinate system: ENU (East-North-Up)
+  Home / origin position: 51.5074 N, 0.1278 W  (Central London)
+
+  GPS-to-ENU conversion from home:
+    east  = (lon - (-0.1278)) * cos(51.5074 * pi/180) * 111320
+    north = (lat - 51.5074)  * 111320
+
+  The x500 drone model is NOT included — PX4 SITL spawns it automatically
+  via `make px4_sitl gz_x500`.
+-->
+<sdf version="1.9">
+  <world name="dronemedic">
+
+    <!-- ============================================================ -->
+    <!-- Spherical coordinates — aligns PX4 GPS with config.py        -->
+    <!-- ============================================================ -->
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>51.5074</latitude_deg>
+      <longitude_deg>-0.1278</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+
+    <!-- ============================================================ -->
+    <!-- System plugins                                                -->
+    <!-- ============================================================ -->
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors"/>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+
+    <!-- ============================================================ -->
+    <!-- Physics                                                       -->
+    <!-- ============================================================ -->
+    <physics type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <!-- ============================================================ -->
+    <!-- Sun — directional light                                       -->
+    <!-- ============================================================ -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <direction>0.5 0.1 -0.9</direction>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+    </light>
+
+    <!-- ============================================================ -->
+    <!-- Ground plane — 25 km x 15 km grass surface                    -->
+    <!-- ============================================================ -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>25000 15000</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>25000 15000</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.3 0.5 0.3 1</ambient>
+            <diffuse>0.3 0.5 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ============================================================ -->
+    <!-- Buildings — static box models at delivery locations            -->
+    <!-- Pose: <east> <north> <half_height> 0 0 0                      -->
+    <!-- ============================================================ -->
+
+    <!-- Depot (51.5074, -0.1278) — origin -->
+    <model name="depot">
+      <static>true</static>
+      <pose>0 0 3 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>10 10 6</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>10 10 6</size></box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.3 0.8 1</ambient>
+            <diffuse>0.2 0.3 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Clinic A (51.5124, -0.1200) -->
+    <model name="clinic_a">
+      <static>true</static>
+      <pose>542 556 2.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>8 8 5</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>8 8 5</size></box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.2 0.2 1</ambient>
+            <diffuse>0.9 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Clinic B (51.5174, -0.1350) -->
+    <model name="clinic_b">
+      <static>true</static>
+      <pose>-501 1112 2.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>8 8 5</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>8 8 5</size></box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.5 0.5 1</ambient>
+            <diffuse>0.9 0.5 0.5 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Clinic C (51.5044, -0.1100) -->
+    <model name="clinic_c">
+      <static>true</static>
+      <pose>1237 -334 2 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>8 8 4</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>8 8 4</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.7 0.3 1</ambient>
+            <diffuse>0.3 0.7 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Clinic D (51.5000, -0.1400) -->
+    <model name="clinic_d">
+      <static>true</static>
+      <pose>-848 -823 2 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>8 8 4</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>8 8 4</size></box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.6 0.2 1</ambient>
+            <diffuse>0.9 0.6 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Royal London Hospital (51.5185, -0.0590) -->
+    <model name="royal_london">
+      <static>true</static>
+      <pose>4783 1234 6 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>20 15 12</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>20 15 12</size></box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Homerton Hospital (51.5468, -0.0456) -->
+    <model name="homerton">
+      <static>true</static>
+      <pose>5715 4381 5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>15 12 10</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>15 12 10</size></box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Newham General Hospital (51.5155, 0.0285) -->
+    <model name="newham_general">
+      <static>true</static>
+      <pose>10860 900 5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>15 12 10</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>15 12 10</size></box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Whipps Cross Hospital (51.5690, 0.0066) -->
+    <model name="whipps_cross">
+      <static>true</static>
+      <pose>9337 6850 5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>15 12 10</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>15 12 10</size></box>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ============================================================ -->
+    <!-- No-fly zones — semi-transparent red flat boxes at z=0.5       -->
+    <!-- ============================================================ -->
+
+    <!-- No-fly zone 1: Military Zone Alpha -->
+    <!-- GPS corners: (51.513, -0.132) to (51.516, -0.126) -->
+    <!-- ENU center: ~(-209, 500) -->
+    <model name="nfz_military_zone_alpha">
+      <static>true</static>
+      <pose>-209 500 0.5 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box><size>417 334 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.1 0.1 0.3</ambient>
+            <diffuse>0.9 0.1 0.1 0.3</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- No-fly zone 2: Airport Exclusion -->
+    <!-- GPS corners: (51.503, -0.115) to (51.506, -0.108) -->
+    <!-- ENU center: ~(1132, -390) -->
+    <model name="nfz_airport_exclusion">
+      <static>true</static>
+      <pose>1132 -390 0.5 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box><size>487 334 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.1 0.1 0.3</ambient>
+            <diffuse>0.9 0.1 0.1 0.3</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
