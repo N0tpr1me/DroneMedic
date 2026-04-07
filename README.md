@@ -171,10 +171,10 @@ DroneMedic/
 
 ## Authors
 
-- **Zain Ali** -- Frontend, Integration, Simulation Setup
-- **Haseeb Janjua** -- AI Coordination, LLM Prompts
-- **Usman Hakimi** -- Backend, Route Planning, OR-Tools
-- **Karim Khalifa** -- PX4, Gazebo, Drone Control
+- **Zain Ali** -- Project Lead, Full Stack Engineering, Systems Integration
+- **Haseeb Janjua** -- AI Engineering, LLM Orchestration, Prompt Design
+- **Usman Hakimi** -- Backend Engineering, Route Optimisation, OR-Tools
+- **Karim Khalifa** -- Simulation Engineering, PX4 Autopilot, Gazebo
 
 ## License
 
