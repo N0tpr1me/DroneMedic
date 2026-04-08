@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Sparkles, OrbitControls, Line } from '@react-three/drei';
+import { Float, Sparkles, OrbitControls, Line, useGLTF } from '@react-three/drei';
 import { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import type { PX4Telemetry } from '../../hooks/usePX4Telemetry';
@@ -143,9 +143,13 @@ function HexaDroneModel({ scale = 1 }: { scale?: number }) {
   );
 }
 
-// Keep backward-compatible name
+// Keep backward-compatible name — now uses custom GLB model
 function DroneModel({ scale = 1 }: { scale?: number }) {
-  return <HexaDroneModel scale={scale} />;
+  return (
+    <Float speed={2} rotationIntensity={0.2} floatIntensity={0.8}>
+      <CustomDroneModel scale={scale * 0.5} />
+    </Float>
+  );
 }
 
 // ── Route Lines (for routes scene) ──
@@ -242,12 +246,22 @@ function GroundPlane() {
   );
 }
 
+// ── Custom GLB Drone Model ──
+
+function CustomDroneModel({ scale = 1 }: { scale?: number }) {
+  const { scene } = useGLTF('/models/drone.glb');
+  const cloned = useMemo(() => scene.clone(), [scene]);
+  return <primitive object={cloned} scale={scale} />;
+}
+
+// Preload the model
+useGLTF.preload('/models/drone.glb');
+
 // ── Simulation Drone (positioned by telemetry) ──
 
 function SimDrone({ telemetry }: { telemetry: PX4Telemetry | null }) {
   const groupRef = useRef<THREE.Group>(null);
   const targetPos = useRef(new THREE.Vector3(0, 0, 0));
-  const propRefs = useRef<THREE.Mesh[]>([]);
 
   useFrame((_state, delta) => {
     if (!groupRef.current) return;
@@ -266,76 +280,14 @@ function SimDrone({ telemetry }: { telemetry: PX4Telemetry | null }) {
       const targetRot = -telemetry.heading_deg * (Math.PI / 180);
       groupRef.current.rotation.y += (targetRot - groupRef.current.rotation.y) * Math.min(delta * 3, 1);
     }
-
-    // Spin propellers
-    propRefs.current.forEach((prop) => {
-      if (prop) prop.rotation.y += delta * 30;
-    });
   });
 
   return (
     <group ref={groupRef}>
-      {/* Central body — rounded cylinder */}
-      <mesh>
-        <cylinderGeometry args={[0.35, 0.38, 0.18, 24]} />
-        <meshStandardMaterial color="#0d1020" metalness={0.6} roughness={0.3} />
-      </mesh>
-      {/* Dome sensor housing */}
-      <mesh position={[0, 0.15, 0]}>
-        <sphereGeometry args={[0.22, 20, 20, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshStandardMaterial color="#00daf3" metalness={0.6} roughness={0.3} transparent opacity={0.55} />
-      </mesh>
-
-      {/* 6 motor arms + motors + prop discs */}
-      {HEX_ARMS.map((arm, i) => (
-        <group key={i}>
-          <mesh position={[arm.x * 0.5, 0, arm.z * 0.5]} rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[0.035, 0.035, 0.9, 8]} />
-            <meshStandardMaterial color="#1a1a30" metalness={0.7} roughness={0.3} />
-          </mesh>
-          <mesh position={[arm.x, 0.08, arm.z]}>
-            <cylinderGeometry args={[0.07, 0.07, 0.12, 12]} />
-            <meshStandardMaterial color="#222" metalness={0.9} roughness={0.1} />
-          </mesh>
-          <mesh
-            ref={(el) => { if (el) propRefs.current[i] = el; }}
-            position={[arm.x, 0.16, arm.z]}
-            rotation={[Math.PI / 2, 0, 0]}
-          >
-            <circleGeometry args={[0.3, 24]} />
-            <meshStandardMaterial color="#00daf3" transparent opacity={0.1} side={THREE.DoubleSide} />
-          </mesh>
-        </group>
-      ))}
-
-      {/* Landing gear — 3 legs */}
-      {[0, 2, 4].map((idx) => {
-        const arm = HEX_ARMS[idx];
-        return (
-          <group key={`leg-${idx}`}>
-            <mesh position={[arm.x * 0.6, -0.2, arm.z * 0.6]}>
-              <cylinderGeometry args={[0.02, 0.02, 0.25, 6]} />
-              <meshStandardMaterial color="#1a1a30" metalness={0.7} roughness={0.3} />
-            </mesh>
-            <mesh position={[arm.x * 0.6, -0.32, arm.z * 0.6]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.015, 0.015, 0.15, 6]} />
-              <meshStandardMaterial color="#1a1a30" metalness={0.7} roughness={0.3} />
-            </mesh>
-          </group>
-        );
-      })}
-
-      {/* LED lights */}
+      <CustomDroneModel scale={0.5} />
+      {/* LED lights for visibility */}
       <pointLight position={[0, -0.25, 0]} intensity={0.6} color="#00daf3" distance={2.5} />
-      <mesh position={[0, -0.1, 0]}>
-        <cylinderGeometry args={[0.15, 0.15, 0.015, 16]} />
-        <meshStandardMaterial color="#00daf3" emissive="#00daf3" emissiveIntensity={0.5} />
-      </mesh>
       <pointLight position={[0, 0, -0.4]} intensity={0.3} color="#ff3333" distance={1.5} />
-      <mesh position={[0, 0.02, -0.38]}>
-        <sphereGeometry args={[0.04, 8, 8]} />
-        <meshStandardMaterial color="#ff3333" emissive="#ff3333" emissiveIntensity={0.6} />
-      </mesh>
     </group>
   );
 }
@@ -498,7 +450,7 @@ export function DroneScene({ scene = 'hero', telemetry }: DroneSceneProps) {
   return (
     <Canvas
       camera={{ position: isSim ? [5, 4, 5] : [3.5, 2.5, 3.5], fov: isSim ? 50 : 42 }}
-      style={{ position: 'absolute', inset: 0 }}
+      style={{ width: '100%', height: '100%' }}
     >
       <color attach="background" args={['#06060f']} />
       <fog attach="fog" args={['#06060f', isSim ? 20 : 8, isSim ? 50 : 22]} />

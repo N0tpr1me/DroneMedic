@@ -211,3 +211,30 @@ node_modules/
 web/dist/
 web/.env
 .mcp.json
+
+# macOS
+.DS_Store
+
+# IDE / Editor
+.vscode/
+.vs/
+
+# Claude Code
+.claude/
+.agents/
+skills-lock.json
+
+# Unity build artifacts
+simulation/unity/DroneMedic/Library/
+simulation/unity/DroneMedic/Logs/
+simulation/unity/DroneMedic/obj/
+simulation/unity/DroneMedic/UserSettings/
+simulation/unity/DroneMedic/.vs/
+simulation/unity/DroneMedic/.claude/
+*.csproj
+
+# Model weights
+*.pt
+
+# Virtual environments
+simulation/px4-env/

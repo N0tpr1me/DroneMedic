@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, LocateFixed, Layers, Siren, Thermometer, Brain } from 'lucide-react';
+import { Plus, Minus, LocateFixed, Layers, Siren, Thermometer, Brain, Box, X, Maximize2, Minimize2 } from 'lucide-react';
 import { ChatPanel } from '../components/dashboard/ChatPanel';
 import { MapView } from '../components/dashboard/MapView';
 import type { MapCommand } from '../components/dashboard/MapView';
@@ -16,6 +16,7 @@ import { CVDetectionPanel } from '../components/dashboard/CVDetectionPanel';
 import { HudStatus } from '../components/ui/hud-status';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { SideNav } from '../components/layout/SideNav';
+import { DroneScene } from '../components/three/DroneScene';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useLiveMission } from '../hooks/useLiveMission';
 import { usePX4Telemetry } from '../hooks/usePX4Telemetry';
@@ -49,6 +50,8 @@ export function Dashboard() {
   const { telemetry: px4Telemetry, connected: px4Connected, sendCommand: px4Command, source: telemetrySource } = usePX4Telemetry();
   const { events: naturalEvents, loading: eonetLoading, error: eonetError, refetch: refetchEonet } = useEONET({ limit: 30, days: 60 });
   const [showChat, setShowChat] = useState(false);
+  const [show3dSim, setShow3dSim] = useState(false);
+  const [sim3dExpanded, setSim3dExpanded] = useState(false);
   const [bootComplete, setBootComplete] = useState(false);
   const [locationsLoaded, setLocationsLoaded] = useState(false);
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -545,8 +548,48 @@ export function Dashboard() {
           <CVDetectionPanel detection={live.cvDetection} onDismiss={live.clearCvDetection} />
         </div>
 
+        {/* ── 3D DRONE SIM PANEL ── */}
+        <AnimatePresence>
+          {show3dSim && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              style={{
+                position: 'fixed',
+                bottom: sim3dExpanded ? 0 : 80,
+                left: sim3dExpanded ? 0 : 16,
+                width: sim3dExpanded ? '100vw' : 480,
+                height: sim3dExpanded ? '100vh' : 320,
+                zIndex: sim3dExpanded ? 100 : 35,
+                borderRadius: sim3dExpanded ? 0 : 12,
+                overflow: 'hidden',
+                border: sim3dExpanded ? 'none' : '1px solid rgba(179,197,255,0.3)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+                background: '#06060f',
+              }}
+            >
+              <div style={{ position: 'absolute', top: 8, right: 8, zIndex: 10, display: 'flex', gap: 4 }}>
+                <button onClick={() => setSim3dExpanded(p => !p)} style={{ background: 'rgba(0,0,0,0.7)', border: 'none', borderRadius: 6, padding: 6, cursor: 'pointer', color: '#dfe3e9' }}>
+                  {sim3dExpanded ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+                </button>
+                <button onClick={() => { setShow3dSim(false); setSim3dExpanded(false); }} style={{ background: 'rgba(0,0,0,0.7)', border: 'none', borderRadius: 6, padding: 6, cursor: 'pointer', color: '#dfe3e9' }}>
+                  <X size={14} />
+                </button>
+              </div>
+              <div style={{ position: 'absolute', top: 8, left: 12, zIndex: 10, fontSize: 10, fontWeight: 700, color: '#b3c5ff', textTransform: 'uppercase', letterSpacing: '0.08em', background: 'rgba(0,0,0,0.7)', padding: '4px 8px', borderRadius: 4 }}>
+                3D Simulation {px4Connected && <span style={{ color: '#22c55e', marginLeft: 4 }}>● LIVE</span>}
+              </div>
+              <DroneScene scene="sim" telemetry={px4Telemetry} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* ── BOTTOM RIGHT CONTROLS ── */}
         <div className="hidden md:flex" style={{position:'fixed',bottom:24,right:24,zIndex:20,flexDirection:'column',gap:10}}>
+          <LiquidButton size="icon" onClick={() => setShow3dSim(prev => !prev)} aria-label="Toggle 3D simulation" style={{ color: show3dSim ? '#b3c5ff' : '#c3c6d6' }}>
+            <Box size={20} />
+          </LiquidButton>
           <LiquidButton size="icon" onClick={() => setShowChat(prev => !prev)} aria-label="Toggle AI Copilot" style={{ color: showChat ? '#00daf3' : '#c3c6d6' }}>
             <Brain size={20} />
           </LiquidButton>

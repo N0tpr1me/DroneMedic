@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Mathematics;
 using CesiumForUnity;
+using System.Collections;
 
 namespace DroneMedic
 {
@@ -25,18 +26,44 @@ namespace DroneMedic
         private CesiumGeoreference _georeference;
         private Cesium3DTileset _tileset;
         private string _lastApiKey;
+        private bool _ready;
 
         public CesiumGeoreference Georeference => _georeference;
 
+        /// <summary>True once the georeference is initialized and GeoToUnity returns valid positions.</summary>
+        public bool IsReady => _ready && _georeference != null;
+
         private void Awake()
         {
-            SetupGeoreference();
+            // Get existing georeference (may already exist in the scene)
+            _georeference = GetComponent<CesiumGeoreference>();
             FindOrCreateTileset();
+        }
+
+        private void Start()
+        {
+            SetupGeoreference();
+            // Mark ready after one frame to let Cesium process the georeference
+            StartCoroutine(MarkReadyNextFrame());
+        }
+
+        private IEnumerator MarkReadyNextFrame()
+        {
+            yield return null; // wait one frame
+            yield return null; // wait second frame for safety
+            _ready = true;
+            Debug.Log("[GoogleMaps3DTiles] Georeference ready — GeoToUnity is now valid.");
+        }
+
+        /// <summary>Wait until GeoToUnity will return valid positions.</summary>
+        public IEnumerator WaitForReady()
+        {
+            while (!IsReady)
+                yield return null;
         }
 
         private void OnValidate()
         {
-            // Re-apply when API key or origin changes in the Inspector
             if (_georeference != null)
             {
                 _georeference.latitude = originLatitude;
@@ -48,13 +75,13 @@ namespace DroneMedic
             {
                 _lastApiKey = apiKey;
                 _tileset.url = $"https://tile.googleapis.com/v1/3dtiles/root.json?key={apiKey}";
-                Debug.Log("[GoogleMaps3DTiles] API key updated — reloading tiles.");
             }
         }
 
         private void SetupGeoreference()
         {
-            _georeference = GetComponent<CesiumGeoreference>();
+            if (_georeference == null)
+                _georeference = GetComponent<CesiumGeoreference>();
             if (_georeference == null)
                 _georeference = gameObject.AddComponent<CesiumGeoreference>();
 
@@ -65,14 +92,12 @@ namespace DroneMedic
 
         private void FindOrCreateTileset()
         {
-            // Check if a tileset child already exists (avoid duplicates)
             var existing = GetComponentInChildren<Cesium3DTileset>();
             if (existing != null)
             {
                 _tileset = existing;
                 _tileset.url = $"https://tile.googleapis.com/v1/3dtiles/root.json?key={apiKey}";
                 _lastApiKey = apiKey;
-                Debug.Log("[GoogleMaps3DTiles] Found existing tileset — updated URL.");
                 return;
             }
 
@@ -84,12 +109,11 @@ namespace DroneMedic
             _tileset.maximumScreenSpaceError = maximumScreenSpaceError;
             _tileset.showCreditsOnScreen = true;
             _lastApiKey = apiKey;
-
-            Debug.Log("[GoogleMaps3DTiles] Tileset configured — loading Google Photorealistic 3D Tiles.");
         }
 
         /// <summary>
         /// Convert WGS84 lat/lon/height to Unity world position via the georeference.
+        /// Returns Vector3.zero if not ready — use IsReady or WaitForReady() first.
         /// </summary>
         public Vector3 GeoToUnity(double latitude, double longitude, double height)
         {
