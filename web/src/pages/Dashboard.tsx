@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, LocateFixed, Layers, Siren, Thermometer, Brain, Box, X, Maximize2, Minimize2 } from 'lucide-react';
 import { ChatPanel } from '../components/dashboard/ChatPanel';
@@ -29,7 +29,7 @@ type MissionStatus = 'idle' | 'planning' | 'flying' | 'rerouting' | 'completed';
 
 export function Dashboard() {
   const navigate = useNavigate();
-  const { fleetPhysics, liveFlightLog, dispatchDelivery, droneAlerts, fleetSummary } = useMissionContext();
+  const { fleetPhysics, liveFlightLog, dispatchDelivery, droneAlerts, fleetSummary, activeTask, activeRoute, setActiveTask, setActiveRoute, activeDroneId, missionStatus: ctxMissionStatus } = useMissionContext();
   const [locations, setLocations] = useState<Record<string, Location>>({});
   const [task, setTask] = useState<Task | null>(null);
   const [route, setRoute] = useState<Route | null>(null);
@@ -56,6 +56,7 @@ export function Dashboard() {
   const [sim3dExpanded, setSim3dExpanded] = useState(false);
   const [bootComplete, setBootComplete] = useState(false);
   const [locationsLoaded, setLocationsLoaded] = useState(false);
+  const routerLocation = useLocation();
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   const [selectedDrone, setSelectedDrone] = useState<'Drone1' | 'Drone2' | 'Drone3' | 'Fleet'>('Drone1');
   const [drone2Battery, setDrone2Battery] = useState(95);
@@ -155,6 +156,57 @@ export function Dashboard() {
       }
     })();
   }, []);
+
+  // Restore mission state from context when Dashboard mounts (persists across navigation)
+  useEffect(() => {
+    if (activeTask && !task) setTask(activeTask);
+    if (activeRoute && !route) setRoute(activeRoute);
+    if (ctxMissionStatus === 'flying' && status === 'idle') setStatus('flying');
+    if (ctxMissionStatus === 'completed' && status !== 'completed') {
+      setStatus('completed');
+      setDroneProgress(1);
+      setMissionProgress(100);
+    }
+  }, [activeTask, activeRoute, ctxMissionStatus]);
+
+  // Auto-dispatch from Deploy page handoff
+  useEffect(() => {
+    const state = routerLocation.state as { task?: Task; route?: Route } | null;
+    if (state?.task && state?.route && status === 'idle' && Object.keys(locations).length > 0) {
+      setTask(state.task);
+      setRoute(state.route);
+      // Auto-start delivery
+      const depot = locations['Depot'];
+      if (depot) setMapCommand({ type: 'fly-to', lat: depot.lat, lon: depot.lon, zoom: 15 });
+      setTimeout(() => {
+        playDeploy();
+        setStatus('flying');
+        setDroneProgress(0);
+        setMissionProgress(0);
+        try {
+          dispatchDelivery(state.task!, state.route!, userLocation ?? undefined);
+        } catch { /* fallback handled by dispatchDelivery */ }
+      }, 1000);
+      // Clear the router state so it doesn't re-trigger
+      window.history.replaceState({}, document.title);
+    }
+  }, [routerLocation.state, locations, status]);
+
+  // Sync drone progress from fleet physics at ~10Hz
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const mapData = fleetPhysics.getDroneMapData();
+      const flyingDrone = mapData.find(d => d.status !== 'idle' && d.status !== 'preflight');
+      if (flyingDrone) {
+        const tel = fleetPhysics.getTelemetry(flyingDrone.id);
+        if (tel) {
+          setBattery(Math.round(tel.battery_pct));
+        }
+        if (status !== 'flying' && status !== 'completed') setStatus('flying');
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, [fleetPhysics, status]);
 
   const handleParseTask = useCallback(async (input: string): Promise<Task|null> => {
     try { const r = await api.parseTask(input); setTask(r.task); return r.task; }
@@ -284,18 +336,28 @@ export function Dashboard() {
       {/* ═══ MAIN MAP AREA ═══ */}
       <main onClick={() => { if (showChat) setShowChat(false); }} style={{marginLeft:0,paddingTop:0,height:'100vh',width:'100vw',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,zIndex:0}}>
-          <MapView locations={status !== 'idle' ? locations : {}} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={status !== 'idle' ? noFlyZones : []} weather={status !== 'idle' ? weather : {}} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} onMapReady={setMapInstance} naturalEvents={naturalEvents} />
+          <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={noFlyZones} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} onMapReady={setMapInstance} naturalEvents={naturalEvents} />
           <DroneMapOverlay
             map={mapInstance}
             drones={fleetPhysics.getDroneMapData()}
-            routes={route ? [{
-              droneId: 'Drone1',
-              waypoints: route.ordered_route
+            routes={(() => {
+              if (!route) return undefined;
+              const waypoints = route.ordered_route
                 .filter(n => locations[n])
-                .map(n => ({ lat: locations[n].lat, lng: locations[n].lon })),
-              color: '#00daf3',
-              progress: droneProgress,
-            }] : undefined}
+                .map(n => ({ lat: locations[n].lat, lng: locations[n].lon }));
+              if (waypoints.length < 2) return undefined;
+              const mapData = fleetPhysics.getDroneMapData();
+              const flyingDrone = mapData.find(d => d.status !== 'idle' && d.status !== 'preflight');
+              const progress = flyingDrone
+                ? (fleetPhysics.getTelemetry(flyingDrone.id)?.battery_pct !== undefined ? droneProgress : droneProgress)
+                : droneProgress;
+              return [{
+                droneId: flyingDrone?.id ?? 'drone-1',
+                waypoints,
+                color: '#00daf3',
+                progress: typeof progress === 'number' ? progress : 0,
+              }];
+            })()}
             depots={[
               { lat: 51.5074, lng: -0.1278, name: 'Central Depot', rangeKm: 50 },
               { lat: 51.5176, lng: -0.0580, name: 'Royal London', rangeKm: 50 },

@@ -106,6 +106,13 @@ export interface MissionContextValue {
   // Current overall mission status
   missionStatus: 'idle' | 'planning' | 'flying' | 'rerouting' | 'completed';
 
+  // Active mission state — persists across page navigation
+  activeTask: Task | null;
+  activeRoute: Route | null;
+  setActiveTask: (task: Task | null) => void;
+  setActiveRoute: (route: Route | null) => void;
+  activeDroneId: string | null;
+
   // Cross-page reactive alerts
   droneAlerts: DroneAlert[];
   acknowledgeAlert: (alertId: string) => void;
@@ -165,6 +172,9 @@ export function MissionProvider({
   const [completedMissions, setCompletedMissions] = useState<StoredMission[]>(loadCompletedMissions);
   const [missionStatus, setMissionStatus] = useState<MissionContextValue['missionStatus']>('idle');
   const [droneAlerts, setDroneAlerts] = useState<DroneAlert[]>([]);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [activeRoute, setActiveRoute] = useState<Route | null>(null);
+  const [activeDroneId, setActiveDroneId] = useState<string | null>(null);
 
   // Location cache for building waypoints from route names
   const locationsCache = useRef<Record<string, Location>>({});
@@ -387,6 +397,9 @@ export function MissionProvider({
       // Dispatch
       fleetPhysics.dispatchDrone(closestId, waypoints, payloadKg);
       setMissionStatus('flying');
+      setActiveTask(task);
+      setActiveRoute(route);
+      setActiveDroneId(closestId);
 
       return closestId;
     },
@@ -488,6 +501,11 @@ export function MissionProvider({
       completedMissions,
       dispatchDelivery,
       missionStatus,
+      activeTask,
+      activeRoute,
+      setActiveTask,
+      setActiveRoute,
+      activeDroneId,
       droneAlerts,
       acknowledgeAlert,
       fleetSummary,
@@ -499,6 +517,9 @@ export function MissionProvider({
       completedMissions,
       dispatchDelivery,
       missionStatus,
+      activeTask,
+      activeRoute,
+      activeDroneId,
       droneAlerts,
       acknowledgeAlert,
       fleetSummary,
