@@ -136,8 +136,8 @@ class GoogleMapsService:
                 type=place_type,
             )
         except (ApiError, TransportError, Timeout) as exc:
-            logger.error("Places nearby (%s) failed: %s", place_type, exc)
-            raise GoogleMapsError(f"Places nearby request failed: {exc}") from exc
+            logger.error("Places nearby (%s) failed: %s", place_type, type(exc).__name__)
+            raise GoogleMapsError(f"Places nearby request failed: {type(exc).__name__}") from exc
 
         results: list[dict] = []
         for place in resp.get("results", []):

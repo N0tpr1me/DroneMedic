@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: CesiumForUnity::CesiumForUnity.Cesium3DTileset
   _showCreditsOnScreen: 0
   _tilesetSource: 0
-  _url: 'https://tile.googleapis.com/v1/3dtiles/root.json?key=AIzaSyB_4_Z4DiDUSsiSExQCo0J5boTMFDumnVQ '
+  _url: 'https://tile.googleapis.com/v1/3dtiles/root.json?key=YOUR_GOOGLE_API_KEY '
   _ionAssetID: 2275207
   _ionAccessToken: 
   _ionServer: {fileID: 11400000, guid: 045bece1924dc4e55b4b6e0f594e6bbd, type: 2}
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8b0cfe402664400abef7071fb42bfe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DroneMedic.GoogleMaps3DTiles
-  apiKey: 'AIzaSyB_4_Z4DiDUSsiSExQCo0J5boTMFDumnVQ '
+  apiKey: 'YOUR_GOOGLE_API_KEY '
   originLatitude: 51.5074
   originLongitude: -0.1278
   originHeight: 0

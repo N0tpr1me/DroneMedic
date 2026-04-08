@@ -37,18 +37,21 @@ def coordinate_submit(
     The coordinator decides whether to batch it onto an existing mission
     or dispatch a new drone.
     """
-    item = DeliveryItem(
-        destination=req.destination,
-        supply=req.supply,
-        priority=req.priority,
-        time_window_minutes=req.time_window_minutes,
-    )
-    decision = coordinator.submit_request(item)
-    return {
-        "action": decision.action,
-        "mission_id": decision.mission_id,
-        "reason": decision.reason,
-    }
+    try:
+        item = DeliveryItem(
+            destination=req.destination,
+            supply=req.supply,
+            priority=req.priority,
+            time_window_minutes=req.time_window_minutes,
+        )
+        decision = coordinator.submit_request(item)
+        return {
+            "action": decision.action,
+            "mission_id": decision.mission_id,
+            "reason": decision.reason,
+        }
+    except Exception:
+        raise HTTPException(status_code=500, detail="Coordination request failed")
 
 
 @router.post("/submit-batch")
@@ -57,27 +60,30 @@ def coordinate_batch(
     coordinator: DeliveryCoordinator = Depends(get_coordinator),
 ):
     """Submit multiple delivery requests.  Each is evaluated for batching."""
-    items = [
-        DeliveryItem(
-            destination=r.destination,
-            supply=r.supply,
-            priority=r.priority,
-            time_window_minutes=r.time_window_minutes,
-        )
-        for r in req.deliveries
-    ]
-    decisions = coordinator.submit_batch(items)
-    return {
-        "decisions": [
-            {
-                "action": d.action,
-                "mission_id": d.mission_id,
-                "reason": d.reason,
-                "destinations": [i.destination for i in d.items],
-            }
-            for d in decisions
-        ],
-    }
+    try:
+        items = [
+            DeliveryItem(
+                destination=r.destination,
+                supply=r.supply,
+                priority=r.priority,
+                time_window_minutes=r.time_window_minutes,
+            )
+            for r in req.deliveries
+        ]
+        decisions = coordinator.submit_batch(items)
+        return {
+            "decisions": [
+                {
+                    "action": d.action,
+                    "mission_id": d.mission_id,
+                    "reason": d.reason,
+                    "destinations": [i.destination for i in d.items],
+                }
+                for d in decisions
+            ],
+        }
+    except Exception:
+        raise HTTPException(status_code=500, detail="Batch coordination failed")
 
 
 @router.get("/active/{location}")

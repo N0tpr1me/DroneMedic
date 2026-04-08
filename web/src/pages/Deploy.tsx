@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PlaneTakeoff, Route as RouteIcon, Zap } from 'lucide-react';
 import { PromptInputBox } from '@/components/ui/ai-prompt-box';
@@ -39,6 +39,20 @@ export function Deploy() {
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [currentRoute, setCurrentRoute] = useState<Route | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const deployLocation = useLocation();
+  const prefillHandled = useRef(false);
+
+  // Auto-fill from Dashboard location click
+  useEffect(() => {
+    if (prefillHandled.current) return;
+    const state = deployLocation.state as { prefill?: string } | null;
+    if (state?.prefill) {
+      prefillHandled.current = true;
+      window.history.replaceState({}, document.title);
+      // Auto-send the prefilled message after a short delay
+      setTimeout(() => handleSend(state.prefill!), 300);
+    }
+  }, [deployLocation.state]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -275,7 +289,7 @@ export function Deploy() {
       <div style={{ padding: '16px 24px 24px', maxWidth: 720, margin: '0 auto', width: '100%' }}>
         {/* Demo scenario suggestion chip */}
         {!currentTask && !isLoading && (
-          <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 10, position: 'relative', zIndex: 20 }}>
             <button
               onClick={() => handleSend(DEMO_SCENARIO.request)}
               style={{

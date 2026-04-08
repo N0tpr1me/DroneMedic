@@ -54,7 +54,7 @@ export function Dashboard() {
   const [showChat, setShowChat] = useState(false);
   const [show3dSim, setShow3dSim] = useState(false);
   const [sim3dExpanded, setSim3dExpanded] = useState(false);
-  const [bootComplete, setBootComplete] = useState(false);
+  const [bootComplete, setBootComplete] = useState(ctxMissionStatus !== 'idle');
   const [locationsLoaded, setLocationsLoaded] = useState(false);
   const routerLocation = useLocation();
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -249,11 +249,11 @@ export function Dashboard() {
     }
   }, [route, task, locations, dispatchDelivery, userLocation]);
 
-  const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(100);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(0);live.reset(); }, [live]);
+  const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(100);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(0);live.reset();setActiveTask(null);setActiveRoute(null); }, [live, setActiveTask, setActiveRoute]);
 
-  const handleAiChat = useCallback(async (message: string): Promise<string> => {
+  const handleAiChat = useCallback(async (message: string, sessionId?: string): Promise<string> => {
     try {
-      const r = await api.chat(message, { task: task ?? undefined, route: route ?? undefined, weather, flightLog });
+      const r = await api.chat(message, { task: task ?? undefined, route: route ?? undefined, weather, flightLog }, sessionId);
       return r.reply;
     } catch {
       return 'I\'m having trouble connecting to the AI service. Please try again.';
@@ -336,7 +336,7 @@ export function Dashboard() {
       {/* ═══ MAIN MAP AREA ═══ */}
       <main onClick={() => { if (showChat) setShowChat(false); }} style={{marginLeft:0,paddingTop:0,height:'100vh',width:'100vw',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,zIndex:0}}>
-          <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={noFlyZones} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} onMapReady={setMapInstance} naturalEvents={naturalEvents} />
+          <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={[]} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} onMapReady={setMapInstance} naturalEvents={naturalEvents} onLocationClick={(name, desc) => navigate('/deploy', { state: { prefill: `Deliver medical supplies to ${name} urgently` } })} />
           <DroneMapOverlay
             map={mapInstance}
             drones={fleetPhysics.getDroneMapData()}
