@@ -255,11 +255,12 @@ export function Analytics() {
     });
   }, [liveMission.missionStatus, liveMission.flightLog]);
 
-  // Use stored missions if available, otherwise demo
-  const missions = useMemo(
-    () => (storedMissions.length > 0 ? storedMissions : DEMO_MISSIONS),
-    [storedMissions]
-  );
+  // Always include demo missions as baseline, append live missions on top
+  const missions = useMemo(() => {
+    const demoIds = new Set(DEMO_MISSIONS.map(m => m.id));
+    const liveMissions = storedMissions.filter(m => !demoIds.has(m.id));
+    return [...DEMO_MISSIONS, ...liveMissions];
+  }, [storedMissions]);
 
   // ── Derived Metrics ──
   const totalMissions = missions.length;
@@ -461,7 +462,7 @@ export function Analytics() {
           {[
             { icon: <Package size={16} style={{ color: '#00daf3' }} />, label: 'Total Missions', value: totalMissions },
             { icon: <CheckCircle size={16} style={{ color: '#4ade80' }} />, label: 'On-Time Rate', value: onTimeRate, suffix: '%' },
-            { icon: <Clock size={16} style={{ color: '#fbbf24' }} />, label: 'Avg Delivery Time', value: avgDeliveryTime, suffix: 's' },
+            { icon: <Clock size={16} style={{ color: '#fbbf24' }} />, label: 'Avg Delivery Time', value: avgDeliveryTime > 120 ? Math.round(avgDeliveryTime / 60) : avgDeliveryTime, suffix: avgDeliveryTime > 120 ? 'min' : 'min' },
             { icon: <TrendingUp size={16} style={{ color: '#00daf3' }} />, label: 'Time Saved vs Road', value: timeSavedPct, suffix: '%' },
             { icon: <ShieldCheck size={16} style={{ color: '#4ade80' }} />, label: 'Payload Integrity', value: 100, suffix: '%' },
           ].map((card) => (
