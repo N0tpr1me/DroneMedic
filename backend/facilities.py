@@ -29,9 +29,14 @@ logger = logging.getLogger("DroneMedic.Facilities")
 _FACILITIES_PATH = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), "data", "enrichment", "top_hospitals_enriched.csv"
 )
+# NHS hospitals CSV (1,179 UK hospitals)
+_NHS_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), "data", "enrichment", "nhs_hospitals.csv"
+)
 
 # All loaded facilities (raw data from xlsx)
 _facilities: list[dict] = []
+_nhs_facilities: list[dict] = []
 
 # Meters per degree (approximate at mid-latitudes)
 _M_PER_DEG_LAT = 111_320
@@ -144,27 +149,98 @@ def register_facilities_as_locations(
     return count
 
 
+def load_nhs_facilities() -> list[dict]:
+    """Load NHS hospitals from the NHS CSV (1,179 UK hospitals)."""
+    global _nhs_facilities
+    if _nhs_facilities:
+        return _nhs_facilities
+
+    import csv
+
+    if not os.path.exists(_NHS_PATH):
+        logger.warning(f"NHS facilities file not found: {_NHS_PATH}")
+        return []
+
+    # NHS CSV uses ¬ (0xAC) as delimiter and latin-1 encoding
+    with open(_NHS_PATH, newline="", encoding="latin-1") as f:
+        reader = csv.DictReader(f, delimiter="\xac")
+        for row in reader:
+            try:
+                lat = float(row.get("Latitude", 0))
+                lon = float(row.get("Longitude", 0))
+            except (TypeError, ValueError):
+                continue
+
+            if lat == 0 and lon == 0:
+                continue
+
+            name = str(row.get("OrganisationName", "")).strip()
+            if not name:
+                continue
+
+            city = str(row.get("City", "") or "").strip()
+            postcode = str(row.get("Postcode", "") or "").strip()
+            address1 = str(row.get("Address1", "") or "").strip()
+            address2 = str(row.get("Address2", "") or "").strip()
+            address_parts = [p for p in [address1, address2, city, postcode] if p]
+
+            _nhs_facilities.append({
+                "name": name,
+                "type": str(row.get("SubType", "Hospital")).strip(),
+                "phone": str(row.get("Phone", "") or "").strip(),
+                "email": str(row.get("Email", "") or "").strip(),
+                "address": ", ".join(address_parts),
+                "lat": lat,
+                "lon": lon,
+                "region": "UK",
+                "beds": 0,
+                "website": str(row.get("Website", "") or "").strip(),
+                "sector": str(row.get("Sector", "") or "").strip(),
+                "nhs_code": str(row.get("OrganisationCode", "") or "").strip(),
+            })
+
+    logger.info(f"Loaded {len(_nhs_facilities)} NHS facilities from {_NHS_PATH}")
+    return _nhs_facilities
+
+
 def search_facilities(
     query: str = "",
     region: str = "",
     limit: int = 50,
 ) -> list[dict]:
     """
-    Search loaded facilities by name or region.
-    Returns raw facility dicts (not LOCATIONS format).
+    Search facilities by name or region across all data sources.
+    Searches the curated database (489 hospitals) + NHS database (1,179 UK hospitals).
     """
-    facilities = load_facilities()
     results = []
+    seen_names: set[str] = set()
 
     query_lower = query.lower()
     region_lower = region.lower()
 
-    for f in facilities:
+    # Search curated facilities first
+    for f in load_facilities():
         if query_lower and query_lower not in f["name"].lower():
-            continue
+            if not (query_lower and query_lower in f.get("address", "").lower()):
+                continue
         if region_lower and region_lower not in f["region"].lower():
             continue
-        results.append(f)
+        if f["name"] not in seen_names:
+            seen_names.add(f["name"])
+            results.append(f)
+        if len(results) >= limit:
+            return results
+
+    # Search NHS facilities
+    for f in load_nhs_facilities():
+        if query_lower and query_lower not in f["name"].lower():
+            if not (query_lower and query_lower in f.get("address", "").lower()):
+                continue
+        if region_lower and region_lower not in f["region"].lower():
+            continue
+        if f["name"] not in seen_names:
+            seen_names.add(f["name"])
+            results.append(f)
         if len(results) >= limit:
             break
 
@@ -172,9 +248,12 @@ def search_facilities(
 
 
 def get_facility_by_name(name: str) -> dict | None:
-    """Get a single facility by exact name."""
-    facilities = load_facilities()
-    for f in facilities:
-        if f["name"] == name:
+    """Get a single facility by exact name (searches all sources)."""
+    name_lower = name.lower()
+    for f in load_facilities():
+        if f["name"].lower() == name_lower:
+            return f
+    for f in load_nhs_facilities():
+        if f["name"].lower() == name_lower:
             return f
     return None

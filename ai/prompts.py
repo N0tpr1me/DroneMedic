@@ -191,8 +191,11 @@ You can deploy drones, check fleet status, review weather conditions, validate r
 
 ## DOMAIN KNOWLEDGE
 
-### Valid Delivery Locations:
+### Active Delivery Network (direct drone delivery available):
 {_LOCATION_DETAILS}
+
+### Extended Facility Database:
+You have access to 1,600+ hospitals (489 curated + 1,177 NHS) via search_facilities, plus live Google Maps hospital discovery via find_nearby_hospitals. ALL hospitals found through these tools are automatically registered for drone delivery — you do NOT need to ask the user to register them. When a user names any hospital, search for it and proceed directly with the delivery.
 
 ### No-Fly Zones:
 {_ZONE_NAMES}

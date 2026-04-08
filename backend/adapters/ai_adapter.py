@@ -72,10 +72,21 @@ CHAT_TOOLS = [
     }},
     {"type": "function", "function": {
         "name": "search_facilities",
-        "description": "Search hospitals and clinics by name",
+        "description": "Search hospitals and clinics from a database of 489+ facilities worldwide. Use this when the user mentions a hospital name. Returns name, address, lat, lon, region, beds.",
         "parameters": {"type": "object", "properties": {
-            "query": {"type": "string"},
-        }, "required": ["query"], "additionalProperties": False},
+            "query": {"type": "string", "description": "Hospital or clinic name to search for (partial match)"},
+            "region": {"type": "string", "description": "Filter by region/country, e.g. 'London', 'UK', 'England'"},
+        }, "required": ["query", "region"], "additionalProperties": False},
+        "strict": True,
+    }},
+    {"type": "function", "function": {
+        "name": "find_nearby_hospitals",
+        "description": "Find hospitals near GPS coordinates using Google Maps Places API. Use when the user asks about hospitals near a location or wants to discover facilities in an area.",
+        "parameters": {"type": "object", "properties": {
+            "lat": {"type": "number", "description": "Latitude"},
+            "lon": {"type": "number", "description": "Longitude"},
+            "radius_m": {"type": "number", "description": "Search radius in metres (default 5000)"},
+        }, "required": ["lat", "lon", "radius_m"], "additionalProperties": False},
         "strict": True,
     }},
 ]
@@ -262,6 +273,8 @@ class AIAdapter:
                 return self._tool_get_demand_forecast(args)
             elif name == "search_facilities":
                 return self._tool_search_facilities(args)
+            elif name == "find_nearby_hospitals":
+                return self._tool_find_nearby_hospitals(args)
             else:
                 return {"error": f"Unknown tool: {name}"}
         except Exception as e:
@@ -272,6 +285,19 @@ class AIAdapter:
         destination = args["destination"]
         supply = args["supply"]
         priority = args.get("priority", "normal")
+
+        # Auto-register the facility if not already in LOCATIONS
+        from config import LOCATIONS
+        if destination not in LOCATIONS:
+            self._auto_register_facility(destination)
+
+        if destination not in LOCATIONS:
+            return {
+                "status": "failed",
+                "destination": destination,
+                "message": f"Could not register {destination}. Location not found in any database.",
+            }
+
         return {
             "status": "queued",
             "destination": destination,
@@ -279,6 +305,49 @@ class AIAdapter:
             "priority": priority,
             "message": f"Mission to {destination} with {supply} ({priority} priority) queued.",
         }
+
+    def _auto_register_facility(self, name: str) -> bool:
+        """Find a facility by name and register it in config.LOCATIONS."""
+        import math
+        from config import LOCATIONS, DRONE_ALTITUDE
+        from backend.facilities import search_facilities, get_facility_by_name
+
+        # 1. Try exact match
+        facility = get_facility_by_name(name)
+
+        # 2. Try partial search
+        if not facility:
+            results = search_facilities(query=name, limit=5)
+            if results:
+                # Pick best match — prefer exact name match, then first result
+                for r in results:
+                    if r["name"].lower() == name.lower():
+                        facility = r
+                        break
+                if not facility:
+                    facility = results[0]
+                    name = facility["name"]  # Use the actual facility name
+
+        if not facility:
+            return False
+
+        # Register into LOCATIONS
+        depot = LOCATIONS["Depot"]
+        ref_lat, ref_lon = depot["lat"], depot["lon"]
+        x = (facility["lat"] - ref_lat) * 111_320
+        y = (facility["lon"] - ref_lon) * 111_320 * math.cos(math.radians(ref_lat))
+
+        LOCATIONS[name] = {
+            "x": round(x, 1),
+            "y": round(y, 1),
+            "z": DRONE_ALTITUDE,
+            "lat": facility["lat"],
+            "lon": facility["lon"],
+            "description": facility.get("address", facility.get("type", "Hospital")),
+        }
+
+        logger.info(f"Auto-registered facility: {name} ({facility['lat']}, {facility['lon']})")
+        return True
 
     def _tool_get_fleet_status(self) -> dict:
         from backend.services.drone_service import DroneService
@@ -322,14 +391,127 @@ class AIAdapter:
         }
 
     def _tool_search_facilities(self, args: dict) -> dict:
+        """Search the full facilities database (489+ hospitals), not just config.LOCATIONS."""
+        from backend.facilities import search_facilities
         from config import LOCATIONS
-        query = args["query"].lower()
-        matches = [
-            {"name": name, "lat": loc.get("lat"), "lon": loc.get("lon")}
+
+        query = args.get("query", "")
+        region = args.get("region", "")
+
+        # Search the full CSV database first
+        db_results = search_facilities(query=query, region=region, limit=10)
+
+        # Also search config.LOCATIONS for the hardcoded delivery locations
+        query_lower = query.lower()
+        config_matches = [
+            {"name": name, "lat": loc.get("lat"), "lon": loc.get("lon"),
+             "address": loc.get("description", ""), "region": "London",
+             "type": "Delivery Location", "beds": 0, "in_delivery_network": True}
             for name, loc in LOCATIONS.items()
-            if query in name.lower()
+            if query_lower in name.lower() and name != "Depot"
         ]
-        return {"query": args["query"], "results": matches}
+
+        # Format DB results
+        formatted = []
+        seen_names = {m["name"] for m in config_matches}
+        for f in db_results:
+            if f["name"] in seen_names:
+                continue
+            seen_names.add(f["name"])
+            formatted.append({
+                "name": f["name"],
+                "lat": f["lat"],
+                "lon": f["lon"],
+                "address": f.get("address", ""),
+                "region": f.get("region", ""),
+                "type": f.get("type", ""),
+                "beds": f.get("beds", 0),
+                "in_delivery_network": f["name"] in LOCATIONS,
+            })
+
+        all_results = config_matches + formatted
+
+        # Auto-register all found facilities so they can receive deliveries
+        for f in db_results:
+            if f["name"] not in LOCATIONS:
+                self._auto_register_facility(f["name"])
+
+        return {
+            "query": query,
+            "region_filter": region,
+            "total_results": len(all_results),
+            "results": all_results[:15],
+            "note": "All found facilities have been registered and can receive drone deliveries. Use deploy_mission to send supplies.",
+        }
+
+    def _tool_find_nearby_hospitals(self, args: dict) -> dict:
+        """Find hospitals near coordinates using Google Maps Places API."""
+        lat = args["lat"]
+        lon = args["lon"]
+        radius = int(args.get("radius_m", 5000))
+
+        try:
+            from simulation.backend.google_maps import GoogleMapsService
+            from config import GOOGLE_MAPS_API_KEY
+            if not GOOGLE_MAPS_API_KEY:
+                return {"error": "Google Maps API key not configured."}
+
+            svc = GoogleMapsService(api_key=GOOGLE_MAPS_API_KEY)
+            hospitals = svc.find_hospitals(lat, lon, radius_m=radius)
+
+            # Auto-register all found hospitals
+            import math
+            from config import LOCATIONS, DRONE_ALTITUDE
+            depot = LOCATIONS["Depot"]
+            for h in hospitals:
+                if h["name"] not in LOCATIONS and h.get("lat") and h.get("lon"):
+                    x = (h["lat"] - depot["lat"]) * 111_320
+                    y = (h["lon"] - depot["lon"]) * 111_320 * math.cos(math.radians(depot["lat"]))
+                    LOCATIONS[h["name"]] = {
+                        "x": round(x, 1), "y": round(y, 1), "z": DRONE_ALTITUDE,
+                        "lat": h["lat"], "lon": h["lon"],
+                        "description": h.get("address", "Hospital"),
+                    }
+
+            return {
+                "search_center": {"lat": lat, "lon": lon},
+                "radius_m": radius,
+                "total_found": len(hospitals),
+                "hospitals": hospitals[:15],
+                "note": "All hospitals have been registered for drone delivery.",
+            }
+        except Exception as e:
+            # Fall back to CSV database with distance filter
+            from backend.facilities import load_facilities
+            import math
+
+            facilities = load_facilities()
+            R = 6_371_000
+            nearby = []
+            for f in facilities:
+                dlat = math.radians(f["lat"] - lat)
+                dlon = math.radians(f["lon"] - lon)
+                a = (math.sin(dlat/2)**2 +
+                     math.cos(math.radians(lat)) * math.cos(math.radians(f["lat"])) *
+                     math.sin(dlon/2)**2)
+                dist = R * 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+                if dist <= radius:
+                    nearby.append({
+                        "name": f["name"],
+                        "lat": f["lat"],
+                        "lon": f["lon"],
+                        "address": f.get("address", ""),
+                        "distance_m": round(dist),
+                    })
+            nearby.sort(key=lambda x: x["distance_m"])
+            return {
+                "search_center": {"lat": lat, "lon": lon},
+                "radius_m": radius,
+                "source": "facility_database",
+                "note": f"Google Maps Places API unavailable ({e}). Using facility database.",
+                "total_found": len(nearby),
+                "hospitals": nearby[:15],
+            }
 
     def generate_report(self, metrics: dict, mission_summary: dict | None = None) -> str:
         """Generate a post-flight mission report using structured output."""
