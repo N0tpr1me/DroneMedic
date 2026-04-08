@@ -53,6 +53,7 @@ export function Dashboard() {
   const live = useLiveMission(route?.ordered_route);
   const { telemetry: px4Telemetry, connected: px4Connected, sendCommand: px4Command, source: telemetrySource } = usePX4Telemetry();
   const { events: naturalEvents, loading: eonetLoading, error: eonetError, refetch: refetchEonet } = useEONET({ limit: 30, days: 60 });
+  const [simPayload, setSimPayload] = useState<{temperature_c: number; integrity: string} | null>(null);
   const [showChat, setShowChat] = useState(false);
   const [show3dSim, setShow3dSim] = useState(false);
   const [sim3dExpanded, setSim3dExpanded] = useState(false);
@@ -170,6 +171,28 @@ export function Dashboard() {
       setMissionProgress(100);
     }
   }, [activeTask, activeRoute, ctxMissionStatus]);
+
+  // Simulated cold-chain payload temperature when no real WebSocket data
+  useEffect(() => {
+    if (live.payloadStatus) { setSimPayload(null); return; }
+    if (status === 'idle') { setSimPayload(null); return; }
+    // Start at 4.0°C (standard blood storage) with realistic fluctuation
+    const base = 4.0;
+    setSimPayload({ temperature_c: base, integrity: 'nominal' });
+    const iv = setInterval(() => {
+      setSimPayload(prev => {
+        if (!prev) return { temperature_c: base, integrity: 'nominal' };
+        // Random walk: slight upward drift (ambient warming) + noise
+        const drift = 0.008; // slow warming per tick
+        const noise = (Math.random() - 0.45) * 0.15; // slight upward bias
+        const next = Math.round((prev.temperature_c + drift + noise) * 100) / 100;
+        const clamped = Math.max(2.0, Math.min(7.5, next));
+        const integrity = clamped > 6.0 ? 'warning' : clamped > 7.0 ? 'critical' : 'nominal';
+        return { temperature_c: clamped, integrity };
+      });
+    }, 2000);
+    return () => clearInterval(iv);
+  }, [status, live.payloadStatus]);
 
   // Auto-dispatch from Deploy page handoff
   useEffect(() => {
@@ -566,11 +589,12 @@ export function Dashboard() {
             <div>
               <p style={{fontSize:9,textTransform:'uppercase',fontWeight:800,color:'#c3c6d6',letterSpacing:'0.08em',margin:'0 0 4px'}}>Internal Temp</p>
               <p style={{fontFamily:'Space Grotesk',fontSize:17,fontWeight:700,margin:0}}>
-                {live.payloadStatus ? (
-                  <>{live.payloadStatus.temperature_c.toFixed(1)}°C <span style={{color: live.payloadStatus.integrity === 'nominal' ? '#22c55e' : live.payloadStatus.integrity === 'warning' ? '#f5a623' : '#ff4444', fontSize:13}}>{live.payloadStatus.integrity.toUpperCase()}</span></>
-                ) : (
-                  <>—°C <span style={{color:'#8d90a0',fontSize:13}}>STANDBY</span></>
-                )}
+                {(() => {
+                  const ps = live.payloadStatus ?? simPayload;
+                  if (!ps) return <>—°C <span style={{color:'#8d90a0',fontSize:13}}>STANDBY</span></>;
+                  const color = ps.integrity === 'nominal' ? '#22c55e' : ps.integrity === 'warning' ? '#f5a623' : '#ff4444';
+                  return <>{ps.temperature_c.toFixed(1)}°C <span style={{color, fontSize:13}}>{ps.integrity.toUpperCase()}</span></>;
+                })()}
               </p>
             </div>
           </div>
