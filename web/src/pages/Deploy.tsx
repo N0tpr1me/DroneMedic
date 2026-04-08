@@ -289,7 +289,7 @@ export function Deploy() {
       <div style={{ padding: '16px 24px 24px', maxWidth: 720, margin: '0 auto', width: '100%' }}>
         {/* Demo scenario suggestion chip */}
         {!currentTask && !isLoading && (
-          <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 10, position: 'relative', zIndex: 20 }}>
             <button
               onClick={() => handleSend(DEMO_SCENARIO.request)}
               style={{
