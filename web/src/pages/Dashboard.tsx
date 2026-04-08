@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, LocateFixed, Layers, Siren, Thermometer, Brain, Box, X, Maximize2, Minimize2 } from 'lucide-react';
@@ -43,6 +43,8 @@ export function Dashboard() {
   const [_currentLocation, setCurrentLocation] = useState('Depot');
   const [droneProgress, setDroneProgress] = useState(0);
   const [missionProgress, setMissionProgress] = useState(0);
+  const [smoothSpeed, setSmoothSpeed] = useState(0);
+  const smoothSpeedRef = useRef(0);
   const [mapCommand, setMapCommand] = useState<MapCommand | null>(null);
   const [tileLayerIndex, setTileLayerIndex] = useState(1);
   const [isCentered, setIsCentered] = useState(true);
@@ -202,7 +204,14 @@ export function Dashboard() {
         if (tel) {
           setBattery(Math.round(tel.battery_pct));
           setMissionProgress(Math.round(tel.missionProgress));
-          setDroneProgress(tel.totalWaypoints > 1 ? tel.currentWaypointIdx / (tel.totalWaypoints - 1) : 0);
+          setDroneProgress(tel.totalWaypoints > 1
+            ? Math.min((tel.currentWaypointIdx + (tel.missionProgress / 100 * (tel.totalWaypoints - 1) - tel.currentWaypointIdx)) / (tel.totalWaypoints - 1), 1)
+            : 0);
+          // Exponential smoothing for speed — prevents flickering
+          const rawSpeed = Math.round(tel.speed_ms * 3.6);
+          const alpha = 0.15; // smoothing factor (lower = smoother)
+          smoothSpeedRef.current = smoothSpeedRef.current + alpha * (rawSpeed - smoothSpeedRef.current);
+          setSmoothSpeed(Math.round(smoothSpeedRef.current));
         }
         if (status !== 'flying') setStatus('flying');
       } else if (status === 'flying') {
@@ -444,7 +453,7 @@ export function Dashboard() {
                 const droneIdMap: Record<string, string> = { Drone1: 'drone-1', Drone2: 'drone-2', Drone3: 'drone-3' };
                 const tel = fleetPhysics.getTelemetry(droneIdMap[selectedDrone] ?? 'drone-1');
                 const hudBattery = tel ? Math.round(tel.battery_pct) : (selectedDrone === 'Drone2' ? drone2Battery : battery);
-                const hudSpeed = tel ? Math.round(tel.speed_ms * 3.6) : (px4Telemetry ? Math.round(px4Telemetry.speed_m_s * 3.6) : status === 'flying' ? 54 : 0);
+                const hudSpeed = tel && tel.missionActive ? smoothSpeed : (px4Telemetry ? Math.round(px4Telemetry.speed_m_s * 3.6) : status === 'flying' ? 54 : 0);
                 const hudLink = (live.connected || px4Connected) ? (telemetrySource === 'unity' ? 'Unity 3D' : 'Live') : (tel && tel.phase !== 'preflight' ? 'SIM' : 'Idle');
                 const hudLinkColor = (live.connected || px4Connected) ? '#00daf3' : (tel && tel.phase !== 'preflight' ? '#8b5cf6' : '#8d90a0');
                 return (
