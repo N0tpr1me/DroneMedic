@@ -130,8 +130,28 @@ export function Deploy() {
         } catch { /* not valid JSON, show as conversational reply */ }
       }
 
-      // Show as a normal conversational response (clarifying question, suggestion, etc.)
+      // Show conversational response, then also try structured parse in background
       addMessage({ role: 'assistant', content: reply });
+
+      // If we don't have a task yet, try to parse one from the original input
+      if (!currentTask) {
+        try {
+          const res = await api.parseTask(input);
+          if (res.task && res.task.locations.length > 0) {
+            setCurrentTask(res.task);
+            // Auto-compute route
+            try {
+              const routeRes = await api.computeRoute(res.task.locations, res.task.priorities);
+              setCurrentRoute(routeRes.route);
+              addMessage({ role: 'assistant', content: `Route optimized: ${routeRes.route.ordered_route.join(' → ')}\n\nDistance: ${routeRes.route.total_distance}m | Time: ${routeRes.route.estimated_time}s | Battery: ${routeRes.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: routeRes.route });
+            } catch {
+              // Route failed — task is set, user can retry
+            }
+          }
+        } catch {
+          // Parse failed — that's fine, AI already responded conversationally
+        }
+      }
     } catch {
       // Chat failed — fall back to direct parse
       try {
