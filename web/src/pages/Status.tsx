@@ -5,6 +5,7 @@ import { Activity, Package, Clock, Building2, Radio } from 'lucide-react';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { SlidingNumber } from '../components/ui/sliding-number';
 import { useFacilities } from '../hooks/useSupabase';
+import { useMissionContext } from '../context/MissionContext';
 
 // ── Demo fallback data ────────────────────────────────────────────────────────
 
@@ -181,12 +182,39 @@ function NoFlyZoneOverlay({ map }: { map: google.maps.Map | null }) {
 
 export function Status() {
   const { facilities } = useFacilities();
-  const [status] = useState<StatusData>(DEMO_STATUS);
-  const [drones] = useState<DroneDot[]>(DEMO_DRONES);
+  const { fleetPhysics, fleetSummary, liveFlightLog } = useMissionContext();
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
 
+  // Build status from fleetSummary, fall back to DEMO_STATUS when no live data
+  const hasLiveData = fleetSummary.totalDrones > 0;
+  const status: StatusData = hasLiveData
+    ? {
+        active_drones: fleetSummary.activeDrones,
+        deliveries_today: fleetSummary.deliveriesToday,
+        avg_delivery_time_min: fleetSummary.avgDeliveryTimeMin,
+        facilities_served: fleetSummary.facilitiesServed,
+        recent_events: fleetSummary.recentEvents.length > 0
+          ? fleetSummary.recentEvents.map((e) => ({ text: e.text, time: e.time }))
+          : DEMO_STATUS.recent_events,
+      }
+    : DEMO_STATUS;
+
+  // Build drone dots from physics, fall back to DEMO_DRONES
+  const liveDroneDots: DroneDot[] = fleetPhysics.getDroneMapData().map((d) => ({
+    id: d.id,
+    lat: d.lat,
+    lng: d.lng,
+    color: d.status === 'flying' ? '#00e5ff' : d.status === 'offline' ? '#ff4444' : '#6b7280',
+  }));
+  const baseDrones = liveDroneDots.length > 0 ? liveDroneDots : DEMO_DRONES;
+
   // Animate drone positions slightly for realism
-  const [animatedDrones, setAnimatedDrones] = useState<DroneDot[]>(DEMO_DRONES);
+  const [animatedDrones, setAnimatedDrones] = useState<DroneDot[]>(baseDrones);
+
+  // Re-sync animated drones when base source changes
+  useEffect(() => {
+    setAnimatedDrones(baseDrones);
+  }, [baseDrones.length, fleetPhysics]);
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -492,3 +492,269 @@ export function createInitialState(
     payloadKg,
   };
 }
+
+// ===================================================================
+// Flight conditions & weather penalty model
+// (Ported from backend/physics.py)
+// ===================================================================
+
+export interface FlightConditions {
+  headwind_ms: number;
+  crosswind_ms: number;
+  precipitation_mmh: number;
+  temperature_c: number;
+  turbulence: 'calm' | 'light' | 'moderate' | 'severe';
+  air_density: number;
+}
+
+export const DEFAULT_CONDITIONS: FlightConditions = {
+  headwind_ms: 0,
+  crosswind_ms: 0,
+  precipitation_mmh: 0,
+  temperature_c: 18,
+  turbulence: 'calm',
+  air_density: 1.225,
+};
+
+export interface WeatherPenalty {
+  k_wind: number;
+  k_crosswind: number;
+  k_precip: number;
+  k_temp: number;
+  k_turbulence: number;
+  k_total: number;
+  flyable: boolean;
+  reasons: string[];
+}
+
+const MAX_SAFE_WIND = 12.0;
+const MAX_WEATHER_PENALTY = 3.0;
+const MIN_OPERATING_TEMP = -10;
+const MAX_OPERATING_TEMP = 45;
+const MAX_FLIGHT_TIME_S = 2400; // 40 min hard cap for LiPo health
+
+/**
+ * Compute compound weather penalty factor.
+ * Matches backend/physics.py compute_weather_penalty exactly.
+ */
+export function computeWeatherPenalty(conditions: FlightConditions): WeatherPenalty {
+  const reasons: string[] = [];
+  const vCruise = DRONE.cruiseSpeed;
+  const vHead = Math.abs(conditions.headwind_ms);
+
+  // Wind penalty — headwind
+  if (vHead >= vCruise) {
+    return { k_wind: Infinity, k_crosswind: 1, k_precip: 1, k_temp: 1, k_turbulence: 1, k_total: Infinity, flyable: false, reasons: ['Headwind exceeds cruise speed — no forward progress'] };
+  }
+  if (vHead >= MAX_SAFE_WIND) {
+    return { k_wind: Infinity, k_crosswind: 1, k_precip: 1, k_temp: 1, k_turbulence: 1, k_total: Infinity, flyable: false, reasons: [`Wind ${vHead.toFixed(1)} m/s exceeds safe limit ${MAX_SAFE_WIND} m/s`] };
+  }
+
+  let k_wind = (vCruise / (vCruise - vHead)) ** 2;
+
+  // Crosswind adds smaller penalty
+  const vCross = Math.abs(conditions.crosswind_ms);
+  const k_crosswind = 1.0 + 0.3 * (vCross / vCruise) ** 2;
+  k_wind *= k_crosswind;
+
+  if (k_wind > 1.05) {
+    reasons.push(`Wind penalty ×${k_wind.toFixed(2)} (head=${vHead.toFixed(1)}, cross=${vCross.toFixed(1)} m/s)`);
+  }
+
+  // Precipitation penalty
+  const precip = conditions.precipitation_mmh;
+  let k_precip = 1.0;
+  if (precip > 10.0) {
+    return { k_wind, k_crosswind, k_precip: Infinity, k_temp: 1, k_turbulence: 1, k_total: Infinity, flyable: false, reasons: ['Storm/heavy precipitation — NO-GO'] };
+  } else if (precip > 5.0) {
+    k_precip = 1.30;
+    reasons.push(`Heavy rain (${precip.toFixed(1)} mm/h): ×1.30 penalty`);
+  } else if (precip > 2.0) {
+    k_precip = 1.15;
+    reasons.push(`Moderate rain (${precip.toFixed(1)} mm/h): ×1.15 penalty`);
+  } else if (precip > 0.5) {
+    k_precip = 1.05;
+    reasons.push(`Light rain (${precip.toFixed(1)} mm/h): ×1.05 penalty`);
+  }
+
+  // Temperature penalty
+  const temp = conditions.temperature_c;
+  let k_temp = 1.0;
+  if (temp < MIN_OPERATING_TEMP || temp > MAX_OPERATING_TEMP) {
+    return { k_wind, k_crosswind, k_precip, k_temp: Infinity, k_turbulence: 1, k_total: Infinity, flyable: false, reasons: [`Temperature ${temp.toFixed(1)}°C outside safe range [${MIN_OPERATING_TEMP}, ${MAX_OPERATING_TEMP}]`] };
+  } else if (temp < 0) {
+    k_temp = 1.25;
+    reasons.push(`Sub-zero (${temp.toFixed(1)}°C): ×1.25 (battery capacity loss + icing risk)`);
+  } else if (temp < 10) {
+    k_temp = 1.12;
+    reasons.push(`Cold (${temp.toFixed(1)}°C): ×1.12 (battery capacity reduced ~10–15%)`);
+  } else if (temp < 20) {
+    k_temp = 1.05;
+    reasons.push(`Cool (${temp.toFixed(1)}°C): ×1.05 (mild cold penalty)`);
+  } else if (temp > 40) {
+    k_temp = 1.08;
+    reasons.push(`Hot (${temp.toFixed(1)}°C): ×1.08 (lower air density, motor heat)`);
+  }
+
+  // Turbulence penalty
+  const turbMap: Record<string, number> = { calm: 1.0, light: 1.05, moderate: 1.15, severe: Infinity };
+  const k_turbulence = turbMap[conditions.turbulence] ?? 1.0;
+
+  if (conditions.turbulence === 'severe') {
+    return { k_wind, k_crosswind, k_precip, k_temp, k_turbulence: Infinity, k_total: Infinity, flyable: false, reasons: ['Severe turbulence — structural/control risk — NO-GO'] };
+  }
+  if (k_turbulence > 1.0) {
+    reasons.push(`Turbulence (${conditions.turbulence}): ×${k_turbulence.toFixed(2)}`);
+  }
+
+  // Compound total
+  const k_total = k_wind * k_precip * k_temp * k_turbulence;
+  const flyable = k_total <= MAX_WEATHER_PENALTY;
+
+  if (!flyable) {
+    reasons.push(`Combined weather penalty ×${k_total.toFixed(2)} exceeds limit ×${MAX_WEATHER_PENALTY} — NO-GO`);
+  }
+
+  return {
+    k_wind: Math.round(k_wind * 1000) / 1000,
+    k_crosswind: Math.round(k_crosswind * 1000) / 1000,
+    k_precip: Math.round(k_precip * 1000) / 1000,
+    k_temp: Math.round(k_temp * 1000) / 1000,
+    k_turbulence: Math.round(k_turbulence * 1000) / 1000,
+    k_total: Math.round(k_total * 1000) / 1000,
+    flyable,
+    reasons,
+  };
+}
+
+// ===================================================================
+// Motor-out survivability
+// ===================================================================
+
+export interface ThrustFeasibility {
+  mtom_kg: number;
+  weight_n: number;
+  max_thrust_n: number;
+  twr: number;
+  feasible: boolean;
+  motorOutTwr: number;
+  motorOutSurvivable: boolean;
+  thrustMarginPct: number;
+}
+
+/**
+ * Check if drone can fly at given payload, including motor-out scenario.
+ * Hex loses 1 motor → remaining 5/6 thrust.
+ */
+export function checkThrustFeasibility(payloadKg: number): ThrustFeasibility {
+  const mtom = computeMTOM(payloadKg);
+  const weightN = mtom * DRONE.gravity;
+  const maxThrust = DRONE.numRotors * DRONE.maxThrustPerMotor;
+  const twr = maxThrust / weightN;
+  const motorOutThrust = maxThrust * (DRONE.numRotors - 1) / DRONE.numRotors;
+  const motorOutTwr = motorOutThrust / weightN;
+  const minTwr = 1.5;
+
+  return {
+    mtom_kg: Math.round(mtom * 100) / 100,
+    weight_n: Math.round(weightN * 10) / 10,
+    max_thrust_n: Math.round(maxThrust * 10) / 10,
+    twr: Math.round(twr * 100) / 100,
+    feasible: twr >= minTwr,
+    motorOutTwr: Math.round(motorOutTwr * 100) / 100,
+    motorOutSurvivable: motorOutTwr >= 1.0,
+    thrustMarginPct: Math.round((twr / minTwr - 1) * 1000) / 10,
+  };
+}
+
+// ===================================================================
+// Divert energy calculation
+// ===================================================================
+
+/**
+ * Energy needed to divert from current position to a safe landing point.
+ * Includes 1.3× safety margin matching backend/physics.py.
+ */
+export function computeDivertEnergy(
+  currentLat: number, currentLon: number,
+  safeLat: number, safeLon: number,
+  payloadKg: number, headwindMs: number = 0,
+): number {
+  const distM = haversineM(currentLat, currentLon, safeLat, safeLon);
+  const groundSpeed = Math.max(DRONE.cruiseSpeed - Math.abs(headwindMs), 1.0);
+  const ePerKm = computeEnergyPerKm(payloadKg, headwindMs);
+  const eCruise = ePerKm * (distM / 1000);
+
+  // One descent to land
+  const tDescend = DRONE.cruiseAltitude / DRONE.descentRate;
+  const eDescent = (computeDescentPower(payloadKg) * tDescend) / 3600;
+
+  const safetyMargin = 1.3;
+  return (eCruise + eDescent) * safetyMargin;
+}
+
+// ===================================================================
+// Hover cost per minute
+// ===================================================================
+
+/** Energy cost per minute of unplanned hovering (Wh). */
+export function computeHoverCostPerMinute(payloadKg: number): number {
+  return (computeHoverPower(payloadKg) * 60) / 3600;
+}
+
+// ===================================================================
+// Temperature-dependent effective battery capacity
+// ===================================================================
+
+/** Effective battery capacity accounting for temperature (Wh). */
+export function effectiveBatteryCapacity(temperatureC: number): number {
+  let factor = 1.0;
+  if (temperatureC < 0) factor = 0.75;
+  else if (temperatureC < 10) factor = 0.88;
+  else if (temperatureC < 20) factor = 0.95;
+  return DRONE.batteryCapacity * factor;
+}
+
+// ===================================================================
+// Enhanced stepPhysics with weather conditions
+// ===================================================================
+
+/**
+ * stepPhysics with full weather conditions applied.
+ * Multiplies power draw by weather penalties and caps flight time.
+ */
+export function stepPhysicsWithConditions(
+  state: DroneState,
+  target: { lat: number; lon: number; alt: number },
+  wind: WindVector,
+  conditions: FlightConditions,
+  dt: number,
+  elapsedFlightTimeS: number = 0,
+): DroneState {
+  // Hard cap — 40 min max flight time for LiPo health
+  if (elapsedFlightTimeS >= MAX_FLIGHT_TIME_S && state.phase !== 'landed' && state.phase !== 'preflight') {
+    // Force landing
+    return stepPhysics(state, { lat: state.lat, lon: state.lon, alt: 0 }, wind, dt);
+  }
+
+  // Compute base physics
+  const next = stepPhysics(state, target, wind, dt);
+
+  // Apply weather penalty to power draw
+  const penalty = computeWeatherPenalty(conditions);
+  const k_nonWind = penalty.k_precip * penalty.k_temp * penalty.k_turbulence;
+  const adjustedPower = next.power_w * k_nonWind;
+
+  // Recompute energy drain with adjusted power
+  const energyUsedWh = (adjustedPower * dt) / 3600;
+  const effCapacity = effectiveBatteryCapacity(conditions.temperature_c);
+  const newBatteryWh = Math.max(state.battery_wh - energyUsedWh, 0);
+  const newBatteryPct = (newBatteryWh / effCapacity) * 100;
+
+  return {
+    ...next,
+    battery_wh: newBatteryWh,
+    battery_pct: clamp(newBatteryPct, 0, 100),
+    power_w: adjustedPower,
+  };
+}

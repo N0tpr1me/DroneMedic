@@ -195,11 +195,25 @@ export function DroneMapOverlay({
           model.matrixAutoUpdate = false;
 
           // Animate propellers / rotors
-          if (drone.status === 'flying' || drone.status === 'idle') {
+          if (drone.status === 'flying') {
             model.traverse((child) => {
               const n = child.name.toLowerCase();
               if (n.includes('prop') || n.includes('rotor')) {
-                child.rotation.y += 0.3;
+                child.rotation.y += drone.status === 'flying' ? 0.3 : 0;
+              }
+            });
+          }
+
+          // Status-based emissive color
+          const emissiveColor =
+            drone.status === 'flying' ? new THREE.Color('#00daf3') :
+            drone.status === 'battery_low' ? new THREE.Color('#ffb020').multiplyScalar(0.5 + 0.5 * Math.sin(clockRef.current * 4)) :
+            drone.status === 'offline' ? new THREE.Color('#ff4444') :
+            null;
+          if (emissiveColor) {
+            model.traverse((child) => {
+              if (child instanceof THREE.Mesh && child.material && (child.material as THREE.MeshStandardMaterial).emissive) {
+                (child.material as THREE.MeshStandardMaterial).emissive.copy(emissiveColor);
               }
             });
           }
@@ -369,7 +383,7 @@ function createArcMesh(
   const midLat = (start.lat + end.lat) / 2;
   const midLng = (start.lng + end.lng) / 2;
   const dist = haversineKm(start, end);
-  const arcHeight = Math.min(dist * 100, 800);
+  const arcHeight = Math.min(dist * 20, 150);
 
   const startMatrix = transformer.fromLatLngAltitude({
     lat: start.lat,
@@ -415,8 +429,14 @@ function createArcMesh(
       uniform float progress;
       varying vec2 vUv;
       void main() {
+        float traveled = vUv.x < progress ? 0.9 : 0.0;
         float pulse = 0.5 + 0.5 * sin(time * 3.0 + vUv.x * 30.0);
-        float alpha = vUv.x < progress ? 0.9 : pulse * 0.6;
+        float remaining = vUv.x >= progress ? pulse * 0.4 : 0.0;
+        float particle = smoothstep(0.98, 1.0, fract(vUv.x * 20.0 - time * 2.0));
+        float particleAlpha = vUv.x < progress ? particle * 0.8 : particle * 0.3;
+        float alpha = max(traveled, max(remaining, particleAlpha));
+        float edge = 1.0 - abs(vUv.y - 0.5) * 2.0;
+        alpha *= smoothstep(0.0, 0.3, edge);
         gl_FragColor = vec4(color, alpha);
       }
     `,

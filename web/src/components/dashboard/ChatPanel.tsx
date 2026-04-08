@@ -50,6 +50,12 @@ function detectSuggestionChips(aiMessage: string, answered: Set<string>): string
 
 // ── Chat Panel Props ──
 
+interface PhysicsNarrationEntry {
+  message: string;
+  severity: string;
+  timestamp: number;
+}
+
 interface ChatPanelProps {
   onParseTask: (input: string) => Promise<Task | null>;
   onPlanRoute: () => Promise<RouteType | null>;
@@ -63,6 +69,7 @@ interface ChatPanelProps {
   flightLog: FlightLogEntry[];
   status: string;
   aiReasoningMessages?: AiReasoningMessage[];
+  physicsNarration?: PhysicsNarrationEntry[];
 }
 
 export function ChatPanel({
@@ -78,6 +85,7 @@ export function ChatPanel({
   flightLog,
   status,
   aiReasoningMessages = [],
+  physicsNarration = [],
 }: ChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -168,6 +176,24 @@ export function ChatPanel({
       })),
     ]);
   }, [aiReasoningMessages]);
+
+  // Watch physics narration events (phase transitions, battery milestones, wind changes)
+  const physicsNarrationCountRef = useRef(0);
+  useEffect(() => {
+    if (physicsNarration.length <= physicsNarrationCountRef.current) return;
+    const newEntries = physicsNarration.slice(physicsNarrationCountRef.current);
+    physicsNarrationCountRef.current = physicsNarration.length;
+
+    setMessages((prev) => [
+      ...prev,
+      ...newEntries.map((entry, idx) => ({
+        id: `physics-${Date.now()}-${idx}`,
+        type: 'system' as const,
+        content: entry.message,
+        timestamp: new Date(entry.timestamp),
+      })),
+    ]);
+  }, [physicsNarration]);
 
   const addMessage = (msg: Omit<ChatMessage, 'id' | 'timestamp'>) => {
     setMessages((prev) => [...prev, { ...msg, id: `msg-${Date.now()}`, timestamp: new Date() }]);

@@ -13,6 +13,7 @@ import { TransportComparison } from '../components/analytics/TransportComparison
 import { api } from '../lib/api';
 import type { Metrics } from '../lib/api';
 import { useLiveMission } from '../hooks/useLiveMission';
+import { useMissionContext } from '../context/MissionContext';
 
 // ── localStorage Key ──
 
@@ -166,13 +167,21 @@ export function Analytics() {
   const [storedMissions, setStoredMissions] = useState<StoredMission[]>([]);
 
   // Live mission hook to detect completed missions
+  const { completedMissions: contextMissions } = useMissionContext();
   const liveMission = useLiveMission();
 
-  // Load missions from localStorage on mount
+  // Load missions from localStorage on mount, merge with context missions
   useEffect(() => {
     const loaded = loadMissions();
-    setStoredMissions(loaded);
-  }, []);
+    // Context missions are the primary source; merge localStorage as backup
+    if (contextMissions.length > 0) {
+      const contextIds = new Set(contextMissions.map((m) => m.id));
+      const localOnly = loaded.filter((m) => !contextIds.has(m.id));
+      setStoredMissions([...contextMissions, ...localOnly]);
+    } else {
+      setStoredMissions(loaded);
+    }
+  }, [contextMissions]);
 
   // Auto-connect to watch for mission completion
   useEffect(() => {

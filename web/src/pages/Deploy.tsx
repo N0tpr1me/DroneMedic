@@ -63,11 +63,11 @@ export function Deploy() {
         try {
           await api.startDelivery(currentRoute.ordered_route);
           addMessage({ role: 'assistant', content: 'Drone deployed successfully! Redirecting to Live Ops...' });
-          setTimeout(() => navigate('/dashboard'), 2000);
+          setTimeout(() => navigate('/dashboard', { state: { task: currentTask, route: currentRoute } }), 2000);
         } catch (err) {
           console.error('startDelivery failed:', err);
           addMessage({ role: 'assistant', content: 'Drone deployed in demo mode. Redirecting to Live Ops...' });
-          setTimeout(() => navigate('/dashboard'), 2000);
+          setTimeout(() => navigate('/dashboard', { state: { task: currentTask, route: currentRoute } }), 2000);
         }
         setIsLoading(false);
         return;

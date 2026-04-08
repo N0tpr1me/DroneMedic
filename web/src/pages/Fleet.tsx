@@ -6,6 +6,7 @@ import { GlassPanel } from '../components/ui/GlassPanel';
 import { SideNav } from '../components/layout/SideNav';
 import { PageHeader } from '../components/layout/PageHeader';
 import { useDrones } from '../hooks/useSupabase';
+import { useMissionContext } from '../context/MissionContext';
 
 // ── Types ──
 
@@ -174,9 +175,54 @@ function DroneCard({ drone }: { drone: DroneData }) {
 // ── Fleet Page ──
 
 export function Fleet() {
+  const { fleetPhysics, droneAlerts, fleetSummary, completedMissions } = useMissionContext();
   const { drones: liveDrones, loading } = useDrones();
 
   const fleet: DroneData[] = useMemo(() => {
+    // Primary: build from physics simulation
+    const mapData = fleetPhysics.getDroneMapData();
+    if (mapData.length > 0) {
+      const physicsFleet: DroneData[] = mapData.map((d) => {
+        const telemetry = fleetPhysics.getTelemetry(d.id);
+        const droneCompletedMissions = completedMissions.filter((m) => m.droneId === d.id).length;
+        return {
+          id: d.id,
+          status: d.status === 'flying' ? 'en_route' : d.status,
+          battery: telemetry?.battery_pct ?? 100,
+          current_location: telemetry ? `${telemetry.lat.toFixed(4)}, ${telemetry.lon.toFixed(4)}` : 'Depot',
+          speed: Math.round((telemetry?.speed_ms ?? 0) * 3.6),
+          altitude: Math.round(telemetry?.alt ?? 0),
+          total_completed_missions: droneCompletedMissions,
+          total_failed_missions: 0,
+          maintenance_risk: telemetry?.battery_pct != null && telemetry.battery_pct < 30 ? 80 : 15,
+          active_mission_id: d.status === 'flying' ? `MSN-${d.id}` : undefined,
+        };
+      });
+
+      // Merge with Supabase data if available
+      if (liveDrones.length > 0) {
+        const physicsIds = new Set(physicsFleet.map((d) => d.id));
+        const supabaseOnly = liveDrones
+          .filter((d) => !physicsIds.has(d.id))
+          .map((d) => ({
+            id: d.id,
+            status: (d as Record<string, unknown>).status as string ?? 'idle',
+            battery: (d as Record<string, unknown>).battery as number ?? 100,
+            current_location: (d as Record<string, unknown>).current_location as string ?? 'Unknown',
+            speed: (d as Record<string, unknown>).speed as number ?? 0,
+            altitude: (d as Record<string, unknown>).altitude as number ?? 0,
+            total_completed_missions: (d as Record<string, unknown>).total_completed_missions as number ?? 0,
+            total_failed_missions: (d as Record<string, unknown>).total_failed_missions as number ?? 0,
+            maintenance_risk: (d as Record<string, unknown>).maintenance_risk as number | undefined,
+            active_mission_id: (d as Record<string, unknown>).active_mission_id as string | undefined,
+          }));
+        return [...physicsFleet, ...supabaseOnly];
+      }
+
+      return physicsFleet;
+    }
+
+    // Secondary: Supabase data
     if (liveDrones.length > 0) {
       return liveDrones.map((d) => ({
         id: d.id,
@@ -191,14 +237,16 @@ export function Fleet() {
         active_mission_id: (d as Record<string, unknown>).active_mission_id as string | undefined,
       }));
     }
-    return DEMO_FLEET;
-  }, [liveDrones]);
 
-  // Summary stats
-  const totalDrones = fleet.length;
-  const availableCount = fleet.filter((d) => d.status === 'idle' || d.status === 'charging').length;
-  const activeMissions = fleet.filter((d) => d.status === 'en_route' || d.status === 'returning' || d.status === 'emergency').length;
-  const avgBattery = fleet.length > 0 ? Math.round(fleet.reduce((sum, d) => sum + d.battery, 0) / fleet.length) : 0;
+    // Fallback: demo data
+    return DEMO_FLEET;
+  }, [fleetPhysics, liveDrones, completedMissions]);
+
+  // Summary stats — prefer fleetSummary from context, fall back to local computation
+  const totalDrones = fleetSummary.totalDrones > 0 ? fleetSummary.totalDrones : fleet.length;
+  const availableCount = fleetSummary.totalDrones > 0 ? fleetSummary.idleDrones : fleet.filter((d) => d.status === 'idle' || d.status === 'charging').length;
+  const activeMissions = fleetSummary.totalDrones > 0 ? fleetSummary.activeDrones : fleet.filter((d) => d.status === 'en_route' || d.status === 'returning' || d.status === 'emergency').length;
+  const avgBattery = fleetSummary.totalDrones > 0 ? Math.round(fleetSummary.avgBattery) : (fleet.length > 0 ? Math.round(fleet.reduce((sum, d) => sum + d.battery, 0) / fleet.length) : 0);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#0f1418' }}>
@@ -272,7 +320,18 @@ export function Fleet() {
           </div>
 
           <div className="flex flex-col gap-3 mb-8">
-            {DEMO_ALERTS.map((alert, i) => {
+            {/* Live alerts from context, then demo fallback */}
+            {[
+              ...droneAlerts
+                .filter((a) => !a.acknowledged)
+                .map((a) => ({
+                  droneId: a.droneId,
+                  severity: a.severity as 'critical' | 'warning' | 'info',
+                  message: a.message,
+                  ts: new Date(a.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+                })),
+              ...DEMO_ALERTS,
+            ].map((alert, i) => {
               const severityColors = {
                 critical: { bg: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.25)', text: '#ef4444' },
                 warning: { bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.25)', text: '#f59e0b' },

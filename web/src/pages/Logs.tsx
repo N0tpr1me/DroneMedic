@@ -25,6 +25,7 @@ import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { api } from '../lib/api';
 import { useLiveMission } from '../hooks/useLiveMission';
 import { usePX4Telemetry } from '../hooks/usePX4Telemetry';
+import { useMissionContext } from '../context/MissionContext';
 import type { FlightLogEntry } from '../lib/api';
 
 // ── Types ──
@@ -202,9 +203,11 @@ export function Logs() {
   const [liveEvents, setLiveEvents] = useState<LogEvent[]>([]);
 
   // Live data hooks
+  const { liveFlightLog, droneAlerts } = useMissionContext();
   const liveMission = useLiveMission();
   const px4 = usePX4Telemetry();
   const prevFlightLogLenRef = useRef(0);
+  const prevContextLogLenRef = useRef(0);
 
   // Auto-connect WebSocket on mount
   useEffect(() => {
@@ -227,6 +230,24 @@ export function Logs() {
     }
     prevFlightLogLenRef.current = currentLen;
   }, [liveMission.flightLog]);
+
+  // Merge liveFlightLog from MissionContext (physics + backend combined)
+  useEffect(() => {
+    const currentLen = liveFlightLog.length;
+    if (currentLen > prevContextLogLenRef.current) {
+      const newEntries = liveFlightLog.slice(prevContextLogLenRef.current);
+      const newLogEvents = newEntries.map((entry, i) =>
+        flightLogToLogEvent(entry, prevContextLogLenRef.current + i)
+      );
+      setLiveEvents((prev) => {
+        // Deduplicate by checking timestamps already present
+        const existingTimestamps = new Set(prev.map((e) => e.timestamp));
+        const unique = newLogEvents.filter((e) => !existingTimestamps.has(e.timestamp));
+        return unique.length > 0 ? [...unique, ...prev] : prev;
+      });
+    }
+    prevContextLogLenRef.current = currentLen;
+  }, [liveFlightLog]);
 
   // Also capture lastEvent for safety/weather/obstacle events not in flightLog
   useEffect(() => {
@@ -257,7 +278,9 @@ export function Logs() {
   }, [liveMission.lastEvent]);
 
   // Merge live events (prepended) with demo fallback
-  const allEvents: LogEvent[] = liveEvents.length > 0
+  // Use liveFlightLog from context as additional signal — fall back to DEMO only when no live data
+  const hasLiveData = liveEvents.length > 0 || liveFlightLog.length > 0;
+  const allEvents: LogEvent[] = hasLiveData
     ? [...liveEvents, ...DEMO_EVENTS]
     : DEMO_EVENTS;
 
