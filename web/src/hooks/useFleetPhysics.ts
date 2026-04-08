@@ -116,6 +116,10 @@ export interface DroneTelemetry {
   hover_power_w: number;
   cruise_power_w: number;
   motor_out_survivable: boolean;
+  currentWaypointIdx: number;
+  totalWaypoints: number;
+  missionProgress: number;
+  missionActive: boolean;
 }
 
 // ===================================================================
@@ -202,7 +206,7 @@ export function useFleetPhysics(
   }, [onEvent]);
 
   // ── Time scale (default 10) ────────────────────────────────────
-  const timeScaleRef = useRef(10);
+  const timeScaleRef = useRef(3); // 3x speed for demo — realistic battery drain
 
   // ── Wind state (ref-only, mutated in the rAF loop) ─────────────
   const windRef = useRef<WindVector>({ ...initialWind });
@@ -501,6 +505,25 @@ export function useFleetPhysics(
         hover_power_w: computeHoverPower(drone.payloadKg),
         cruise_power_w: computeCruisePower(drone.payloadKg),
         motor_out_survivable: feasibility.motorOutSurvivable,
+        currentWaypointIdx: drone.currentWaypointIdx,
+        totalWaypoints: drone.waypoints.length,
+        missionProgress: (() => {
+          if (drone.waypoints.length <= 1) return 0;
+          const totalSegments = drone.waypoints.length - 1;
+          const wpIdx = drone.currentWaypointIdx;
+          if (wpIdx >= totalSegments) return 100;
+          // Interpolate within current segment based on distance
+          const currentWp = drone.waypoints[wpIdx];
+          const distToWp = haversineM(state.lat, state.lon, currentWp.lat, currentWp.lon);
+          const prevWpIdx = Math.max(0, wpIdx - 1);
+          const prevWp = wpIdx === 0
+            ? { lat: drone.config.homeLat, lon: drone.config.homeLon }
+            : drone.waypoints[prevWpIdx];
+          const segmentDist = haversineM(prevWp.lat, prevWp.lon, currentWp.lat, currentWp.lon);
+          const segFraction = segmentDist > 0 ? Math.max(0, 1 - distToWp / segmentDist) : 0;
+          return Math.min(((wpIdx + segFraction) / totalSegments) * 100, 100);
+        })(),
+        missionActive: drone.missionActive,
       };
     },
     [hudStamp],

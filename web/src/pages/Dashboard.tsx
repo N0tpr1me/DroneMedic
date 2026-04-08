@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, LocateFixed, Layers, Siren, Thermometer, Brain, Box, X, Maximize2, Minimize2 } from 'lucide-react';
@@ -43,6 +43,8 @@ export function Dashboard() {
   const [_currentLocation, setCurrentLocation] = useState('Depot');
   const [droneProgress, setDroneProgress] = useState(0);
   const [missionProgress, setMissionProgress] = useState(0);
+  const [smoothSpeed, setSmoothSpeed] = useState(0);
+  const smoothSpeedRef = useRef(0);
   const [mapCommand, setMapCommand] = useState<MapCommand | null>(null);
   const [tileLayerIndex, setTileLayerIndex] = useState(1);
   const [isCentered, setIsCentered] = useState(true);
@@ -51,6 +53,7 @@ export function Dashboard() {
   const live = useLiveMission(route?.ordered_route);
   const { telemetry: px4Telemetry, connected: px4Connected, sendCommand: px4Command, source: telemetrySource } = usePX4Telemetry();
   const { events: naturalEvents, loading: eonetLoading, error: eonetError, refetch: refetchEonet } = useEONET({ limit: 30, days: 60 });
+  const [simPayload, setSimPayload] = useState<{temperature_c: number; integrity: string} | null>(null);
   const [showChat, setShowChat] = useState(false);
   const [show3dSim, setShow3dSim] = useState(false);
   const [sim3dExpanded, setSim3dExpanded] = useState(false);
@@ -169,6 +172,28 @@ export function Dashboard() {
     }
   }, [activeTask, activeRoute, ctxMissionStatus]);
 
+  // Simulated cold-chain payload temperature when no real WebSocket data
+  useEffect(() => {
+    if (live.payloadStatus) { setSimPayload(null); return; }
+    if (status === 'idle') { setSimPayload(null); return; }
+    // Start at 4.0°C (standard blood storage) with realistic fluctuation
+    const base = 4.0;
+    setSimPayload({ temperature_c: base, integrity: 'nominal' });
+    const iv = setInterval(() => {
+      setSimPayload(prev => {
+        if (!prev) return { temperature_c: base, integrity: 'nominal' };
+        // Random walk: slight upward drift (ambient warming) + noise
+        const drift = 0.008; // slow warming per tick
+        const noise = (Math.random() - 0.45) * 0.15; // slight upward bias
+        const next = Math.round((prev.temperature_c + drift + noise) * 100) / 100;
+        const clamped = Math.max(2.0, Math.min(7.5, next));
+        const integrity = clamped > 6.0 ? 'warning' : clamped > 7.0 ? 'critical' : 'nominal';
+        return { temperature_c: clamped, integrity };
+      });
+    }, 2000);
+    return () => clearInterval(iv);
+  }, [status, live.payloadStatus]);
+
   // Auto-dispatch from Deploy page handoff
   useEffect(() => {
     const state = routerLocation.state as { task?: Task; route?: Route } | null;
@@ -201,8 +226,25 @@ export function Dashboard() {
         const tel = fleetPhysics.getTelemetry(flyingDrone.id);
         if (tel) {
           setBattery(Math.round(tel.battery_pct));
+          setMissionProgress(Math.round(tel.missionProgress));
+          setDroneProgress(tel.totalWaypoints > 1
+            ? Math.min((tel.currentWaypointIdx + (tel.missionProgress / 100 * (tel.totalWaypoints - 1) - tel.currentWaypointIdx)) / (tel.totalWaypoints - 1), 1)
+            : 0);
+          // Exponential smoothing for speed — prevents flickering
+          const rawSpeed = Math.round(tel.speed_ms * 3.6);
+          const alpha = 0.15; // smoothing factor (lower = smoother)
+          smoothSpeedRef.current = smoothSpeedRef.current + alpha * (rawSpeed - smoothSpeedRef.current);
+          setSmoothSpeed(Math.round(smoothSpeedRef.current));
         }
-        if (status !== 'flying' && status !== 'completed') setStatus('flying');
+        if (status !== 'flying') setStatus('flying');
+      } else if (status === 'flying') {
+        // Check if any drone just completed
+        const anyCompleted = mapData.some(d => d.status === 'hover' || d.status === 'landed');
+        if (anyCompleted) {
+          setStatus('completed');
+          setDroneProgress(1);
+          setMissionProgress(100);
+        }
       }
     }, 100);
     return () => clearInterval(interval);
@@ -434,7 +476,7 @@ export function Dashboard() {
                 const droneIdMap: Record<string, string> = { Drone1: 'drone-1', Drone2: 'drone-2', Drone3: 'drone-3' };
                 const tel = fleetPhysics.getTelemetry(droneIdMap[selectedDrone] ?? 'drone-1');
                 const hudBattery = tel ? Math.round(tel.battery_pct) : (selectedDrone === 'Drone2' ? drone2Battery : battery);
-                const hudSpeed = tel ? Math.round(tel.speed_ms * 3.6) : (px4Telemetry ? Math.round(px4Telemetry.speed_m_s * 3.6) : status === 'flying' ? 54 : 0);
+                const hudSpeed = tel && tel.missionActive ? smoothSpeed : (px4Telemetry ? Math.round(px4Telemetry.speed_m_s * 3.6) : status === 'flying' ? 54 : 0);
                 const hudLink = (live.connected || px4Connected) ? (telemetrySource === 'unity' ? 'Unity 3D' : 'Live') : (tel && tel.phase !== 'preflight' ? 'SIM' : 'Idle');
                 const hudLinkColor = (live.connected || px4Connected) ? '#00daf3' : (tel && tel.phase !== 'preflight' ? '#8b5cf6' : '#8d90a0');
                 return (
@@ -547,11 +589,12 @@ export function Dashboard() {
             <div>
               <p style={{fontSize:9,textTransform:'uppercase',fontWeight:800,color:'#c3c6d6',letterSpacing:'0.08em',margin:'0 0 4px'}}>Internal Temp</p>
               <p style={{fontFamily:'Space Grotesk',fontSize:17,fontWeight:700,margin:0}}>
-                {live.payloadStatus ? (
-                  <>{live.payloadStatus.temperature_c.toFixed(1)}°C <span style={{color: live.payloadStatus.integrity === 'nominal' ? '#22c55e' : live.payloadStatus.integrity === 'warning' ? '#f5a623' : '#ff4444', fontSize:13}}>{live.payloadStatus.integrity.toUpperCase()}</span></>
-                ) : (
-                  <>—°C <span style={{color:'#8d90a0',fontSize:13}}>STANDBY</span></>
-                )}
+                {(() => {
+                  const ps = live.payloadStatus ?? simPayload;
+                  if (!ps) return <>—°C <span style={{color:'#8d90a0',fontSize:13}}>STANDBY</span></>;
+                  const color = ps.integrity === 'nominal' ? '#22c55e' : ps.integrity === 'warning' ? '#f5a623' : '#ff4444';
+                  return <>{ps.temperature_c.toFixed(1)}°C <span style={{color, fontSize:13}}>{ps.integrity.toUpperCase()}</span></>;
+                })()}
               </p>
             </div>
           </div>
