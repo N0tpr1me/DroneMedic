@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from config import OPENAI_API_KEY, OPENAI_BASE_URL
 from ai.prompts import (
     COORDINATOR_SYSTEM_PROMPT,
+    CHAT_SYSTEM_PROMPT,
     WHAT_IF_SYSTEM_PROMPT,
     REPLAN_SYSTEM_PROMPT,
     INTENT_CLASSIFICATION_PROMPT,
@@ -341,28 +342,32 @@ class MissionCoordinator:
         messages.append({"role": "user", "content": message})
 
         response = self._call_llm(
-            system=COORDINATOR_SYSTEM_PROMPT,
+            system=CHAT_SYSTEM_PROMPT,
             messages=messages,
         )
 
         self._conversation.add_user_message(message)
         self._conversation.add_assistant_message(response)
 
-        # Try to parse as JSON (might be a refined plan)
-        try:
-            data = self._extract_json(response)
-            self._conversation.current_plan = data
-            return {
-                "type": "plan",
-                "response": "Plan updated based on your feedback.",
-                "data": data,
-            }
-        except (ValueError, json.JSONDecodeError):
-            return {
-                "type": "info",
-                "response": response,
-                "data": None,
-            }
+        # Only attempt JSON extraction if the response looks like a JSON object
+        stripped = response.strip()
+        if stripped.startswith("{"):
+            try:
+                data = self._extract_json(response)
+                self._conversation.current_plan = data
+                return {
+                    "type": "plan",
+                    "response": "Plan updated based on your feedback.",
+                    "data": data,
+                }
+            except (ValueError, json.JSONDecodeError):
+                pass
+
+        return {
+            "type": "info",
+            "response": response,
+            "data": None,
+        }
 
 
 # --- Quick test ---

@@ -95,27 +95,64 @@ export function Deploy() {
       return;
     }
 
-    // Parse task from natural language
+    // Use conversational AI chat first — it handles typos, clarifying
+    // questions, and incomplete requests naturally. Only parse as a
+    // structured task when the AI returns a JSON block with locations.
     try {
-      const res = await api.parseTask(input);
-      setCurrentTask(res.task);
-      addMessage({
-        role: 'assistant',
-        content: `Parsed ${res.task.locations.length} delivery locations:\n\n${res.task.locations.map(loc => `• ${loc}${res.task.priorities[loc] === 'high' ? ' (URGENT)' : ''} — ${res.task.supplies[loc] || 'medical supplies'}`).join('\n')}\n\nSay "plan route" or I'll compute the optimal path now.`,
-        task: res.task,
-      });
-      // Auto-plan route
-      try {
-        const routeRes = await api.computeRoute(res.task.locations, res.task.priorities);
-        setCurrentRoute(routeRes.route);
-        addMessage({ role: 'assistant', content: `Route optimized: ${routeRes.route.ordered_route.join(' → ')}\n\nDistance: ${routeRes.route.total_distance}m | Time: ${routeRes.route.estimated_time}s | Battery: ${routeRes.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: routeRes.route });
-      } catch (err) {
-        console.error('auto computeRoute failed:', err);
-        addMessage({ role: 'assistant', content: 'Route computation failed. Please check the backend is running and try again.' });
+      const chatRes = await api.chat(input, { task: currentTask ?? undefined, route: currentRoute ?? undefined });
+      const reply = chatRes.reply;
+
+      // Check if the AI response contains a structured task (JSON block)
+      const jsonMatch = reply.match(/```json\s*([\s\S]*?)\s*```/);
+      if (jsonMatch) {
+        try {
+          const taskData = JSON.parse(jsonMatch[1]);
+          if (taskData.locations && taskData.locations.length > 0) {
+            // We got a structured task back — parse it properly
+            const res = await api.parseTask(input);
+            setCurrentTask(res.task);
+            addMessage({
+              role: 'assistant',
+              content: `Parsed ${res.task.locations.length} delivery locations:\n\n${res.task.locations.map((loc: string) => `• ${loc}${res.task.priorities[loc] === 'high' ? ' (URGENT)' : ''} — ${res.task.supplies[loc] || 'medical supplies'}`).join('\n')}\n\nSay "plan route" or I'll compute the optimal path now.`,
+              task: res.task,
+            });
+            // Auto-plan route
+            try {
+              const routeRes = await api.computeRoute(res.task.locations, res.task.priorities);
+              setCurrentRoute(routeRes.route);
+              addMessage({ role: 'assistant', content: `Route optimized: ${routeRes.route.ordered_route.join(' → ')}\n\nDistance: ${routeRes.route.total_distance}m | Time: ${routeRes.route.estimated_time}s | Battery: ${routeRes.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: routeRes.route });
+            } catch (err) {
+              console.error('auto computeRoute failed:', err);
+            }
+            setIsLoading(false);
+            return;
+          }
+        } catch { /* not valid JSON, show as conversational reply */ }
       }
-    } catch (err) {
-      console.error('parseTask failed:', err);
-      addMessage({ role: 'assistant', content: 'Failed to parse delivery request. Please check the backend is running and try again.' });
+
+      // Show as a normal conversational response (clarifying question, suggestion, etc.)
+      addMessage({ role: 'assistant', content: reply });
+    } catch {
+      // Chat failed — fall back to direct parse
+      try {
+        const res = await api.parseTask(input);
+        setCurrentTask(res.task);
+        addMessage({
+          role: 'assistant',
+          content: `Parsed ${res.task.locations.length} delivery locations:\n\n${res.task.locations.map((loc: string) => `• ${loc}${res.task.priorities[loc] === 'high' ? ' (URGENT)' : ''} — ${res.task.supplies[loc] || 'medical supplies'}`).join('\n')}\n\nSay "plan route" or I'll compute the optimal path now.`,
+          task: res.task,
+        });
+        try {
+          const routeRes = await api.computeRoute(res.task.locations, res.task.priorities);
+          setCurrentRoute(routeRes.route);
+          addMessage({ role: 'assistant', content: `Route optimized: ${routeRes.route.ordered_route.join(' → ')}\n\nDistance: ${routeRes.route.total_distance}m | Time: ${routeRes.route.estimated_time}s | Battery: ${routeRes.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: routeRes.route });
+        } catch (err) {
+          console.error('auto computeRoute failed:', err);
+        }
+      } catch (err) {
+        console.error('parseTask failed:', err);
+        addMessage({ role: 'assistant', content: 'I\'m having trouble understanding that request. Could you try rephrasing? For example: "Deliver blood to Royal London urgently"' });
+      }
     }
 
     setIsLoading(false);

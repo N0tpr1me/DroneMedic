@@ -17,6 +17,7 @@ from backend.services.scenario_service import ScenarioService
 from backend.adapters.simulator_adapter import SimulatorAdapter
 from backend.adapters.ai_adapter import AIAdapter
 from backend.services.tts_service import TTSService
+from backend.services.delivery_coordinator import DeliveryCoordinator
 
 # Populated by app.py lifespan
 _event_service: EventService | None = None
@@ -30,6 +31,7 @@ _metrics_service: MetricsService | None = None
 _scenario_service: ScenarioService | None = None
 _ai_adapter: AIAdapter | None = None
 _tts_service: TTSService | None = None
+_delivery_coordinator: DeliveryCoordinator | None = None
 
 
 def init_services(
@@ -44,12 +46,13 @@ def init_services(
     scenario_service: ScenarioService,
     ai_adapter: AIAdapter,
     tts_service: TTSService | None = None,
+    delivery_coordinator: DeliveryCoordinator | None = None,
 ) -> None:
     """Store service singletons for dependency injection."""
     global _event_service, _drone_service, _telemetry_service
     global _simulator_adapter, _mission_service, _scheduler_service
     global _route_service, _metrics_service, _scenario_service, _ai_adapter
-    global _tts_service
+    global _tts_service, _delivery_coordinator
     _event_service = event_service
     _drone_service = drone_service
     _telemetry_service = telemetry_service
@@ -61,6 +64,7 @@ def init_services(
     _scenario_service = scenario_service
     _ai_adapter = ai_adapter
     _tts_service = tts_service
+    _delivery_coordinator = delivery_coordinator
 
 
 # FastAPI Depends() functions
@@ -75,3 +79,4 @@ def get_metrics() -> MetricsService: return _metrics_service  # type: ignore
 def get_scenarios() -> ScenarioService: return _scenario_service  # type: ignore
 def get_ai() -> AIAdapter: return _ai_adapter  # type: ignore
 def get_tts() -> TTSService | None: return _tts_service
+def get_coordinator() -> DeliveryCoordinator: return _delivery_coordinator  # type: ignore

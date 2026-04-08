@@ -106,7 +106,7 @@ python3 simulation/telemetry_bridge.py
 ```bash
 # Backend
 pip install -r requirements.txt
-PYTHONPATH=. uvicorn backend.api:app --reload --port 8000
+PYTHONPATH=. uvicorn backend.app:app --reload --port 8000
 
 # Frontend
 cd web && npm install && npm run dev

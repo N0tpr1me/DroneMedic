@@ -47,6 +47,7 @@ from backend.api.routes.embeddings import router as embeddings_router
 from backend.api.routes.agents import router as agents_router
 from backend.api.routes.physics import router as physics_router
 from backend.api.routes.disasters import router as disasters_router
+from backend.api.routes.coordination import router as coordination_router
 from backend.api.legacy_routes import router as legacy_router
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -81,6 +82,12 @@ async def lifespan(app: FastAPI):
     # Break circular dependency: mission needs scheduler for reassignment
     mission_service.set_scheduler(scheduler_service)
 
+    # Smart delivery coordinator (batching, repeat-request handling)
+    from backend.services.delivery_coordinator import DeliveryCoordinator
+    delivery_coordinator = DeliveryCoordinator(
+        mission_service, drone_service, scheduler_service, event_service,
+    )
+
     # Store singletons for dependency injection
     init_services(
         event_service=event_service,
@@ -94,6 +101,7 @@ async def lifespan(app: FastAPI):
         scenario_service=scenario_service,
         ai_adapter=ai_adapter,
         tts_service=tts_service,
+        delivery_coordinator=delivery_coordinator,
     )
 
     logger.info(f"DroneMedic backend ready — {len(DRONE_NAMES)} drones initialized")
@@ -144,6 +152,7 @@ app.include_router(embeddings_router)
 app.include_router(agents_router)
 app.include_router(physics_router)
 app.include_router(disasters_router)
+app.include_router(coordination_router)
 
 # Legacy routes for frontend backward compatibility
 app.include_router(legacy_router)

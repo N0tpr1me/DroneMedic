@@ -9,6 +9,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <style>
+      /* Hide Google Maps billing error dialog */
+      .gm-err-container, .gm-style-mot, .dismissButton,
+      .gm-err-autocomplete, .gm-err-title, .gm-err-message { display: none !important; }
+      .gm-style iframe + div { display: none !important; }
+      /* Google Maps injects a modal with inline styles — target it via parent */
+      .gm-style > div > div[style*="z-index"] > div[role="dialog"] { display: none !important; }
+    </style>
+    <script>window.gm_authFailure = function() {};</script>
   </head>
   <body>
     <div id="root"></div>
