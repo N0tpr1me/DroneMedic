@@ -21,6 +21,7 @@ import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useLiveMission } from '../hooks/useLiveMission';
 import { usePX4Telemetry } from '../hooks/usePX4Telemetry';
 import { useEONET } from '../hooks/useEONET';
+import { useMissionContext } from '../context/MissionContext';
 import { api } from '../lib/api';
 import type { Task, Route, Location, Weather, NoFlyZone, Metrics, FlightLogEntry } from '../lib/api';
 
@@ -28,6 +29,7 @@ type MissionStatus = 'idle' | 'planning' | 'flying' | 'rerouting' | 'completed';
 
 export function Dashboard() {
   const navigate = useNavigate();
+  const { fleetPhysics, liveFlightLog, dispatchDelivery, droneAlerts, fleetSummary } = useMissionContext();
   const [locations, setLocations] = useState<Record<string, Location>>({});
   const [task, setTask] = useState<Task | null>(null);
   const [route, setRoute] = useState<Route | null>(null);
@@ -55,7 +57,7 @@ export function Dashboard() {
   const [bootComplete, setBootComplete] = useState(false);
   const [locationsLoaded, setLocationsLoaded] = useState(false);
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
-  const [selectedDrone, setSelectedDrone] = useState<'Drone1' | 'Drone2' | 'Fleet'>('Drone1');
+  const [selectedDrone, setSelectedDrone] = useState<'Drone1' | 'Drone2' | 'Drone3' | 'Fleet'>('Drone1');
   const [drone2Battery, setDrone2Battery] = useState(95);
   const [drone2Status, setDrone2Status] = useState<'idle' | 'flying' | 'charging'>('idle');
   const [drone2Location] = useState<{lat: number; lon: number}>({ lat: 51.5176, lon: -0.0580 }); // Royal London depot
@@ -167,40 +169,33 @@ export function Dashboard() {
 
   const _handleStartDelivery = useCallback(async () => {
     if(!route || !task) return;
-    const stops = route.ordered_route;
 
     // 1. Zoom to depot
     const depot = locations['Depot'];
     if(depot) setMapCommand({type:'fly-to', lat:depot.lat, lon:depot.lon, zoom:15});
     await new Promise(r=>setTimeout(r,800));
 
-    // 2. Connect WebSocket for live updates
-    live.reset();
-    live.connect();
+    // 2. Sound + status
     playDeploy();
     setStatus('flying'); setDroneProgress(0); setMissionProgress(0);
-    setFlightLog([{event:'takeoff',location:'Depot',position:{x:0,y:0,z:-30},battery:100,timestamp:Date.now()/1000}]);
 
-    // 3. Deploy via backend (non-blocking — returns immediately, streams via WebSocket)
+    // 3. Dispatch via fleet physics context (finds closest idle drone)
     try {
-      const deliveryItems = task.locations.map(loc => ({
-        destination: loc,
-        supply: task.supplies?.[loc] || '',
-        priority: task.priorities?.[loc] || 'normal',
-      }));
-      await api.deploy(deliveryItems);
-      // Live updates now arrive via WebSocket → useLiveMission → useEffect sync above
-    } catch (err) {
-      // Fallback: try the blocking start-delivery endpoint
+      dispatchDelivery(task, route, userLocation ?? undefined);
+    } catch {
+      // Fallback: also try the backend deploy endpoint
       try {
-        const r = await api.startDelivery(route.ordered_route);
-        setFlightLog(r.flight_log); setBattery(r.battery); setStatus('completed'); setDroneProgress(1); setMissionProgress(100);
+        const deliveryItems = task.locations.map(loc => ({
+          destination: loc,
+          supply: task.supplies?.[loc] || '',
+          priority: task.priorities?.[loc] || 'normal',
+        }));
+        await api.deploy(deliveryItems);
       } catch {
-        console.error('Deploy failed:', err);
         setStatus('idle');
       }
     }
-  }, [route, task, reroute, locations, live]);
+  }, [route, task, locations, dispatchDelivery, userLocation]);
 
   const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(100);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(0);live.reset(); }, [live]);
 
@@ -266,7 +261,7 @@ export function Dashboard() {
             <span style={{fontSize:9,textTransform:'uppercase',letterSpacing:'-0.02em',color:'#8d90a0',fontWeight:700}}>Drone Location</span>
             <span style={{fontSize:14,fontFamily:'Space Grotesk',fontWeight:700,color:'#dfe3e9'}}>
               {_currentLocation}
-              {(live.connected || px4Connected) && <span style={{fontSize:10,color:'#00daf3',marginLeft:6}}>● {telemetrySource === 'unity' ? 'UNITY' : 'LIVE'}</span>}
+              <span style={{fontSize:10,color:'#00daf3',marginLeft:6}}>● {telemetrySource === 'unity' ? 'UNITY' : (live.connected || px4Connected) ? 'LIVE' : 'SIM'}</span>
             </span>
           </div>
           <div style={{height:32,width:1,background:'rgba(67,70,84,0.2)'}} />
@@ -292,69 +287,7 @@ export function Dashboard() {
           <MapView locations={status !== 'idle' ? locations : {}} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={status !== 'idle' ? noFlyZones : []} weather={status !== 'idle' ? weather : {}} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} onMapReady={setMapInstance} naturalEvents={naturalEvents} />
           <DroneMapOverlay
             map={mapInstance}
-            drones={(() => {
-              const depot = locations['Depot'];
-              const depotLat = depot?.lat ?? 51.5074;
-              const depotLng = depot?.lon ?? -0.1278;
-
-              // Drone 2 is always at Royal London depot
-              const drone2 = {
-                id: 'Drone2',
-                lat: drone2Location.lat,
-                lng: drone2Location.lon,
-                altitude: 0,
-                heading: 0,
-                color: 'amber',
-                status: drone2Status === 'charging' ? 'charging' : drone2Status,
-              };
-
-              // If PX4/Unity telemetry connected, use it for Drone 1
-              if (px4Connected && px4Telemetry) {
-                return [{
-                  id: 'Drone1',
-                  lat: px4Telemetry.lat,
-                  lng: px4Telemetry.lon,
-                  altitude: px4Telemetry.alt_m || 80,
-                  heading: px4Telemetry.heading_deg || 0,
-                  color: 'cyan',
-                  status: px4Telemetry.is_flying ? 'flying' : 'idle',
-                }, drone2];
-              }
-
-              // If Drone 1 flying with a route, interpolate position
-              if (status === 'flying' && route && droneProgress > 0) {
-                const coords = route.ordered_route
-                  .filter(n => locations[n])
-                  .map(n => ({ lat: locations[n].lat, lng: locations[n].lon }));
-                if (coords.length >= 2) {
-                  const totalSegments = coords.length - 1;
-                  const segIdx = Math.min(Math.floor(droneProgress * totalSegments), totalSegments - 1);
-                  const segProgress = (droneProgress * totalSegments) - segIdx;
-                  const from = coords[segIdx];
-                  const to = coords[segIdx + 1] || coords[segIdx];
-                  return [{
-                    id: 'Drone1',
-                    lat: from.lat + (to.lat - from.lat) * segProgress,
-                    lng: from.lng + (to.lng - from.lng) * segProgress,
-                    altitude: 80,
-                    heading: Math.atan2(to.lng - from.lng, to.lat - from.lat) * (180 / Math.PI),
-                    color: 'cyan',
-                    status: 'flying',
-                  }, drone2];
-                }
-              }
-
-              // Default: both drones idle at their depots
-              return [{
-                id: 'Drone1',
-                lat: depotLat,
-                lng: depotLng,
-                altitude: 0,
-                heading: 0,
-                color: 'cyan',
-                status: 'idle',
-              }, drone2];
-            })()}
+            drones={fleetPhysics.getDroneMapData()}
             routes={route ? [{
               droneId: 'Drone1',
               waypoints: route.ordered_route
@@ -384,15 +317,15 @@ export function Dashboard() {
           <section role="region" aria-label="Drone status" style={{background:'rgba(30,35,40,0.85)',backdropFilter:'blur(24px)',WebkitBackdropFilter:'blur(24px)',borderRadius:8,padding:20,border:'1px solid rgba(67,70,84,0.25)'}}>
             {/* Drone selector tabs */}
             <div style={{display:'flex',gap:4,marginBottom:12}}>
-              {(['Drone1', 'Drone2', 'Fleet'] as const).map((d) => (
+              {(['Drone1', 'Drone2', 'Drone3', 'Fleet'] as const).map((d) => (
                 <button
                   key={d}
                   onClick={() => setSelectedDrone(d)}
                   style={{
                     flex:1, padding:'4px 0', borderRadius:4, fontSize:10, fontWeight:700, textTransform:'uppercase',
                     letterSpacing:'0.05em', cursor:'pointer', transition:'all 0.2s', border:'none',
-                    background: selectedDrone === d ? (d === 'Drone1' ? 'rgba(0,218,243,0.2)' : d === 'Drone2' ? 'rgba(245,166,35,0.2)' : 'rgba(179,197,255,0.2)') : 'rgba(48,53,58,0.4)',
-                    color: selectedDrone === d ? (d === 'Drone1' ? '#00daf3' : d === 'Drone2' ? '#f5a623' : '#b3c5ff') : '#8d90a0',
+                    background: selectedDrone === d ? (d === 'Drone1' ? 'rgba(0,218,243,0.2)' : d === 'Drone2' ? 'rgba(245,166,35,0.2)' : d === 'Drone3' ? 'rgba(139,92,246,0.2)' : 'rgba(179,197,255,0.2)') : 'rgba(48,53,58,0.4)',
+                    color: selectedDrone === d ? (d === 'Drone1' ? '#00daf3' : d === 'Drone2' ? '#f5a623' : d === 'Drone3' ? '#8b5cf6' : '#b3c5ff') : '#8d90a0',
                   }}
                 >
                   {d === 'Fleet' ? 'Fleet' : d.replace('rone', '')}
@@ -400,11 +333,11 @@ export function Dashboard() {
               ))}
             </div>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:16}}>
-              <h3 style={{fontFamily:'Space Grotesk',fontSize:14,fontWeight:700,letterSpacing:'0.02em',color: selectedDrone === 'Drone2' ? '#f5a623' : '#b3c5ff',textTransform:'uppercase',margin:0}}>
-                {selectedDrone === 'Fleet' ? 'Fleet Overview' : selectedDrone === 'Drone2' ? 'Drone 2' : 'Drone 1'}
+              <h3 style={{fontFamily:'Space Grotesk',fontSize:14,fontWeight:700,letterSpacing:'0.02em',color: selectedDrone === 'Drone2' ? '#f5a623' : selectedDrone === 'Drone3' ? '#8b5cf6' : '#b3c5ff',textTransform:'uppercase',margin:0}}>
+                {selectedDrone === 'Fleet' ? 'Fleet Overview' : selectedDrone === 'Drone3' ? 'Drone 3' : selectedDrone === 'Drone2' ? 'Drone 2' : 'Drone 1'}
               </h3>
-              <span style={{fontSize:10,background: selectedDrone === 'Drone2' ? 'rgba(245,166,35,0.2)' : 'rgba(179,197,255,0.2)',color: selectedDrone === 'Drone2' ? '#f5a623' : '#b3c5ff',padding:'2px 8px',borderRadius:4}}>
-                {selectedDrone === 'Fleet' ? '2 DRONES' : selectedDrone === 'Drone2' ? (drone2Status === 'charging' ? 'CHARGING' : drone2Status.toUpperCase()) : 'AUTO-FLIGHT'}
+              <span style={{fontSize:10,background: selectedDrone === 'Drone2' ? 'rgba(245,166,35,0.2)' : selectedDrone === 'Drone3' ? 'rgba(139,92,246,0.2)' : 'rgba(179,197,255,0.2)',color: selectedDrone === 'Drone2' ? '#f5a623' : selectedDrone === 'Drone3' ? '#8b5cf6' : '#b3c5ff',padding:'2px 8px',borderRadius:4}}>
+                {selectedDrone === 'Fleet' ? '3 DRONES' : selectedDrone === 'Drone3' ? 'STANDBY' : selectedDrone === 'Drone2' ? (drone2Status === 'charging' ? 'CHARGING' : drone2Status.toUpperCase()) : 'AUTO-FLIGHT'}
               </span>
             </div>
             {selectedDrone === 'Fleet' ? (
@@ -420,28 +353,52 @@ export function Dashboard() {
                   <span style={{fontSize:11,fontWeight:700,color: drone2Battery > 50 ? '#22c55e' : '#f5a623'}}>{drone2Battery}%</span>
                   <span style={{fontSize:9,padding:'2px 6px',borderRadius:3,background:'rgba(245,166,35,0.15)',color:'#f5a623',textTransform:'uppercase',fontWeight:700}}>{drone2Status}</span>
                 </div>
+                {(() => {
+                  const d3Tel = fleetPhysics.getTelemetry('drone-3');
+                  const d3Bat = d3Tel ? Math.round(d3Tel.battery_pct) : 100;
+                  const d3Phase = d3Tel?.phase ?? 'idle';
+                  return (
+                    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 12px',borderRadius:6,background:'rgba(139,92,246,0.05)',border:'1px solid rgba(139,92,246,0.15)'}}>
+                      <span style={{fontSize:11,fontWeight:700,color:'#8b5cf6'}}>D3 — Homerton</span>
+                      <span style={{fontSize:11,fontWeight:700,color: d3Bat > 50 ? '#22c55e' : '#f5a623'}}>{d3Bat}%</span>
+                      <span style={{fontSize:9,padding:'2px 6px',borderRadius:3,background:'rgba(139,92,246,0.15)',color:'#8b5cf6',textTransform:'uppercase',fontWeight:700}}>{d3Phase}</span>
+                    </div>
+                  );
+                })()}
               </div>
             ) : (
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16}}>
-                <div role="meter" aria-valuenow={selectedDrone === 'Drone2' ? drone2Battery : battery} aria-valuemin={0} aria-valuemax={100} aria-label="Battery level">
-                  <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Battery</p>
-                  <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: (selectedDrone === 'Drone2' ? drone2Battery : battery) > 50 ? '#dfe3e9' : (selectedDrone === 'Drone2' ? drone2Battery : battery) > 20 ? '#f5a623' : '#ff4444',margin:0}}>
-                    {selectedDrone === 'Drone2' ? drone2Battery : battery}<span style={{fontSize:12,marginLeft:2,opacity:0.6}}>%</span>
-                  </p>
-                </div>
-                <div>
-                  <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Link</p>
-                  <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: selectedDrone === 'Drone2' ? '#f5a623' : (live.connected || px4Connected) ? '#00daf3' : '#8d90a0',margin:0}}>
-                    {selectedDrone === 'Drone2' ? (drone2Status === 'charging' ? 'Charging' : 'Standby') : (live.connected || px4Connected) ? (telemetrySource === 'unity' ? 'Unity 3D' : 'Live') : 'Idle'}
-                  </p>
-                </div>
-                <div>
-                  <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Speed</p>
-                  <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color:'#dfe3e9',margin:0}}>
-                    {selectedDrone === 'Drone2' ? 0 : (px4Telemetry ? Math.round(px4Telemetry.speed_m_s * 3.6) : status === 'flying' ? 54 : 0)}<span style={{fontSize:12,marginLeft:2,opacity:0.6}}>km/h</span>
-                  </p>
-                </div>
-              </div>
+              <>
+              {(() => {
+                const droneIdMap: Record<string, string> = { Drone1: 'drone-1', Drone2: 'drone-2', Drone3: 'drone-3' };
+                const tel = fleetPhysics.getTelemetry(droneIdMap[selectedDrone] ?? 'drone-1');
+                const hudBattery = tel ? Math.round(tel.battery_pct) : (selectedDrone === 'Drone2' ? drone2Battery : battery);
+                const hudSpeed = tel ? Math.round(tel.speed_ms * 3.6) : (px4Telemetry ? Math.round(px4Telemetry.speed_m_s * 3.6) : status === 'flying' ? 54 : 0);
+                const hudLink = (live.connected || px4Connected) ? (telemetrySource === 'unity' ? 'Unity 3D' : 'Live') : (tel && tel.phase !== 'preflight' ? 'SIM' : 'Idle');
+                const hudLinkColor = (live.connected || px4Connected) ? '#00daf3' : (tel && tel.phase !== 'preflight' ? '#8b5cf6' : '#8d90a0');
+                return (
+                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16}}>
+                    <div role="meter" aria-valuenow={hudBattery} aria-valuemin={0} aria-valuemax={100} aria-label="Battery level">
+                      <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Battery</p>
+                      <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: hudBattery > 50 ? '#dfe3e9' : hudBattery > 20 ? '#f5a623' : '#ff4444',margin:0}}>
+                        {hudBattery}<span style={{fontSize:12,marginLeft:2,opacity:0.6}}>%</span>
+                      </p>
+                    </div>
+                    <div>
+                      <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Link</p>
+                      <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color: hudLinkColor,margin:0}}>
+                        {hudLink}
+                      </p>
+                    </div>
+                    <div>
+                      <p style={{fontSize:9,color:'#c3c6d6',textTransform:'uppercase',fontWeight:700,letterSpacing:'0.1em',margin:'0 0 4px'}}>Speed</p>
+                      <p style={{fontFamily:'Space Grotesk',fontSize:18,fontWeight:700,color:'#dfe3e9',margin:0}}>
+                        {hudSpeed}<span style={{fontSize:12,marginLeft:2,opacity:0.6}}>km/h</span>
+                      </p>
+                    </div>
+                  </div>
+                );
+              })()}
+              </>
             )}
             <div style={{marginTop:16,paddingTop:16,borderTop:'1px solid rgba(67,70,84,0.1)'}}>
               <div role="status" aria-live="polite" style={{display:'flex',justifyContent:'space-between',fontSize:10,textTransform:'uppercase',fontWeight:700,color:'#c3c6d6',marginBottom:4}}>
@@ -455,18 +412,13 @@ export function Dashboard() {
             </div>
           </section>
 
-          {/* Flight Log — shows waypoint events in real-time */}
-          {flightLog.length > 0 && (
-            <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:0.3}}>
-              <FlightLog log={flightLog} />
-            </motion.div>
-          )}
+          {/* Flight Log removed from dashboard — available on Logs page */}
 
 
           {/* Chain of Custody Timeline */}
           {task && (
             <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:0.3,delay:0.15}}>
-              <CustodyTimeline task={task} route={route?.ordered_route} flightLog={flightLog} status={status} battery={battery} />
+              <CustodyTimeline task={task} route={route?.ordered_route} flightLog={liveFlightLog.length > 0 ? liveFlightLog : flightLog} status={status} battery={battery} />
             </motion.div>
           )}
 
@@ -627,7 +579,7 @@ export function Dashboard() {
           task={task}
           route={route}
           metrics={metrics}
-          flightLog={flightLog}
+          flightLog={liveFlightLog.length > 0 ? liveFlightLog : flightLog}
           status={status}
           aiReasoningMessages={live.aiReasoningMessages}
         />

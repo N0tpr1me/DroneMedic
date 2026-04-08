@@ -21,16 +21,21 @@ interface UsePX4TelemetryReturn {
   telemetry: PX4Telemetry | null;
   connected: boolean;
   sendCommand: (cmd: Record<string, unknown>) => void;
-  source: 'px4' | 'mock' | 'unity' | null;
+  source: 'px4' | 'mock' | 'unity' | 'physics' | null;
 }
 
-const WS_URL = import.meta.env.VITE_MAVLINK_WS_URL || 'ws://144.202.12.168:8080/ws/telemetry';
+const TELEMETRY_MODE = import.meta.env.VITE_TELEMETRY_MODE || 'physics';
+const WS_URL = TELEMETRY_MODE === 'mock'
+  ? 'ws://localhost:8765'
+  : (import.meta.env.VITE_MAVLINK_WS_URL || 'ws://144.202.12.168:8080/ws/telemetry');
 const MAX_RECONNECT_DELAY = 5000;
 
 export function usePX4Telemetry(): UsePX4TelemetryReturn {
   const [telemetry, setTelemetry] = useState<PX4Telemetry | null>(null);
   const [connected, setConnected] = useState(false);
-  const [source, setSource] = useState<'px4' | 'mock' | 'unity' | null>(null);
+  const [source, setSource] = useState<'px4' | 'mock' | 'unity' | 'physics' | null>(
+    TELEMETRY_MODE === 'physics' ? 'physics' : null
+  );
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectDelay = useRef(1000);
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -51,6 +56,12 @@ export function usePX4Telemetry(): UsePX4TelemetryReturn {
 
   const connect = useCallback(() => {
     if (!mountedRef.current) return;
+
+    if (TELEMETRY_MODE === 'physics') {
+      // Headless mode — browser physics engine is the simulator
+      // No WebSocket needed, all telemetry comes from useFleetPhysics via MissionContext
+      return;
+    }
 
     try {
       const ws = new WebSocket(WS_URL);

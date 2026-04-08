@@ -17,6 +17,7 @@ import { VerifyEmail } from './pages/VerifyEmail';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useSettings } from './hooks/useSettings';
 import { useTheme } from './hooks/useTheme';
+import { MissionProvider } from './context/MissionContext';
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   const { settings } = useSettings();
@@ -65,9 +66,11 @@ function App() {
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? ''} libraries={['marker']}>
       <BrowserRouter>
-        <ThemeProvider>
-          <AppRoutes />
-        </ThemeProvider>
+        <MissionProvider>
+          <ThemeProvider>
+            <AppRoutes />
+          </ThemeProvider>
+        </MissionProvider>
       </BrowserRouter>
     </APIProvider>
   );
