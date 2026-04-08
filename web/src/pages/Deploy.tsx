@@ -286,11 +286,12 @@ export function Deploy() {
       </div>
 
       {/* Prompt Input */}
-      <div style={{ padding: '16px 24px 24px', maxWidth: 720, margin: '0 auto', width: '100%' }}>
+      <div style={{ padding: '16px 24px 24px', maxWidth: 720, margin: '0 auto', width: '100%', position: 'relative', zIndex: 30 }}>
         {/* Demo scenario suggestion chip */}
         {!currentTask && !isLoading && (
-          <div style={{ display: 'flex', gap: 8, marginBottom: 10, position: 'relative', zIndex: 20 }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 10, position: 'relative', zIndex: 50 }}>
             <button
+              type="button"
               onClick={() => handleSend(DEMO_SCENARIO.request)}
               style={{
                 display: 'inline-flex',
@@ -304,7 +305,8 @@ export function Deploy() {
                 fontSize: 12,
                 fontWeight: 500,
                 cursor: 'pointer',
-                transition: 'all 0.2s',
+                transition: 'background 0.2s, border-color 0.2s',
+                pointerEvents: 'auto',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'rgba(0,218,243,0.15)';
