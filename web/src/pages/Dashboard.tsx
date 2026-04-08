@@ -336,7 +336,7 @@ export function Dashboard() {
       {/* ═══ MAIN MAP AREA ═══ */}
       <main onClick={() => { if (showChat) setShowChat(false); }} style={{marginLeft:0,paddingTop:0,height:'100vh',width:'100vw',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,zIndex:0}}>
-          <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={noFlyZones} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} onMapReady={setMapInstance} naturalEvents={naturalEvents} />
+          <MapView locations={locations} route={route?.ordered_route} reroute={reroute?.ordered_route} priorities={task?.priorities} noFlyZones={noFlyZones} weather={weather} droneProgress={droneProgress} isFlying={status==='flying'} mapCommand={mapCommand} onCommandHandled={()=>setMapCommand(null)} tileLayerIndex={tileLayerIndex} onCenteredChange={setIsCentered} onUserLocation={(lat,lon)=>setUserLocation({lat,lon})} onMapReady={setMapInstance} naturalEvents={naturalEvents} onLocationClick={(name, desc) => navigate('/deploy', { state: { prefill: `Deliver medical supplies to ${name} urgently` } })} />
           <DroneMapOverlay
             map={mapInstance}
             drones={fleetPhysics.getDroneMapData()}

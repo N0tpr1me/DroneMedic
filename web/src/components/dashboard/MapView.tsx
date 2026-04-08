@@ -53,13 +53,14 @@ interface MapViewProps {
   onUserLocation?: (lat: number, lon: number) => void;
   onMapReady?: (map: google.maps.Map) => void;
   naturalEvents?: EONETEvent[];
+  onLocationClick?: (name: string, description: string) => void;
 }
 
 export function MapView({
   locations, route, reroute, priorities = {}, noFlyZones = [], weather = {},
   droneProgress = 0, isFlying = false, mapCommand = null,
   onCommandHandled, tileLayerIndex = 0, onCenteredChange, onUserLocation,
-  onMapReady, naturalEvents = [],
+  onMapReady, naturalEvents = [], onLocationClick,
 }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -304,13 +305,26 @@ export function MapView({
         position: { lat: loc.lat, lng: loc.lon }, map, content: createDot(color, 12), zIndex: 20,
       });
       marker.addListener('click', () => {
-        let html = `<div style="color:#dfe3e9;background:#1b2024;padding:8px 12px;border-radius:8px;font-size:12px;min-width:140px">
+        const deployBtnId = `deploy-btn-${name.replace(/\s+/g, '-')}`;
+        let html = `<div style="color:#dfe3e9;background:#1b2024;padding:8px 12px;border-radius:8px;font-size:12px;min-width:160px">
           <div style="font-family:Space Grotesk;font-weight:700;font-size:13px;margin-bottom:4px">${name}</div>
           <div style="opacity:0.7;font-size:11px">${loc.description || ''}</div>`;
         if (locWeather) html += `<div style="margin-top:6px;font-size:10px;opacity:0.6">Wind: ${locWeather.wind_speed} m/s | ${locWeather.description}</div>`;
+        if (!isDepot) {
+          html += `<button id="${deployBtnId}" style="margin-top:8px;width:100%;padding:6px 12px;border:none;border-radius:6px;background:#00daf3;color:#0a0f13;font-size:11px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:0.05em">Deploy Here</button>`;
+        }
         html += '</div>';
         infoWindowRef.current?.setContent(html);
         infoWindowRef.current?.open(map, marker);
+        // Attach click handler after info window renders
+        if (!isDepot) {
+          setTimeout(() => {
+            document.getElementById(deployBtnId)?.addEventListener('click', () => {
+              infoWindowRef.current?.close();
+              onLocationClick?.(name, loc.description || '');
+            });
+          }, 100);
+        }
       });
       markersRef.current.push(marker);
 
