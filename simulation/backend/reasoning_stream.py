@@ -104,9 +104,9 @@ async def reasoning_stream(command: str) -> StreamingResponse:
                 if choice.finish_reason:
                     yield _sse_event({"type": "done", "finish_reason": choice.finish_reason})
 
-        except Exception as exc:
+        except Exception:
             logger.exception("Reasoning stream failed")
-            yield _sse_event({"type": "error", "message": str(exc)})
+            yield _sse_event({"type": "error", "message": "Internal error during reasoning"})
 
     return StreamingResponse(
         _generate(),

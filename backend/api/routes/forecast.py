@@ -75,9 +75,9 @@ async def evaluate_ai(
 
     try:
         report = await runner.run(categories=categories)
-    except Exception as exc:
-        logger.error("AI evaluation failed: %s", exc)
-        raise HTTPException(status_code=500, detail=f"Evaluation failed: {exc}")
+    except Exception:
+        logger.exception("AI evaluation failed")
+        raise HTTPException(status_code=500, detail="Evaluation failed")
 
     return report
 

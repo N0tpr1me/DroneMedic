@@ -225,13 +225,24 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
   );
 };
 
+/** Allow only safe image src schemes (data URIs and blob URLs). */
+const sanitizeImageUrl = (url: string): string | undefined => {
+  if (url.startsWith("data:image/") || url.startsWith("blob:")) return url;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") return url;
+  } catch { /* invalid URL */ }
+  return undefined;
+};
+
 // ImageViewDialog Component
 interface ImageViewDialogProps {
   imageUrl: string | null;
   onClose: () => void;
 }
 const ImageViewDialog: React.FC<ImageViewDialogProps> = ({ imageUrl, onClose }) => {
-  if (!imageUrl) return null;
+  const safeSrc = imageUrl ? sanitizeImageUrl(imageUrl) : null;
+  if (!safeSrc) return null;
   return (
     <Dialog open={!!imageUrl} onOpenChange={onClose}>
       <DialogContent className="p-0 border-none bg-transparent shadow-none max-w-[90vw] md:max-w-[800px]">
@@ -244,7 +255,7 @@ const ImageViewDialog: React.FC<ImageViewDialogProps> = ({ imageUrl, onClose }) 
           className="relative bg-[#1F2023] rounded-2xl overflow-hidden shadow-2xl"
         >
           <img
-            src={imageUrl}
+            src={safeSrc}
             alt="Full preview"
             className="w-full max-h-[80vh] object-contain rounded-2xl"
           />
@@ -581,7 +592,7 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
                     onClick={() => openImageModal(filePreviews[file.name])}
                   >
                     <img
-                      src={filePreviews[file.name]}
+                      src={sanitizeImageUrl(filePreviews[file.name]) ?? ""}
                       alt={file.name}
                       className="h-full w-full object-cover"
                     />
