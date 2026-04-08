@@ -54,7 +54,7 @@ export function Dashboard() {
   const [showChat, setShowChat] = useState(false);
   const [show3dSim, setShow3dSim] = useState(false);
   const [sim3dExpanded, setSim3dExpanded] = useState(false);
-  const [bootComplete, setBootComplete] = useState(false);
+  const [bootComplete, setBootComplete] = useState(ctxMissionStatus !== 'idle');
   const [locationsLoaded, setLocationsLoaded] = useState(false);
   const routerLocation = useLocation();
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -249,11 +249,11 @@ export function Dashboard() {
     }
   }, [route, task, locations, dispatchDelivery, userLocation]);
 
-  const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(100);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(0);live.reset(); }, [live]);
+  const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(100);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(0);live.reset();setActiveTask(null);setActiveRoute(null); }, [live, setActiveTask, setActiveRoute]);
 
-  const handleAiChat = useCallback(async (message: string): Promise<string> => {
+  const handleAiChat = useCallback(async (message: string, sessionId?: string): Promise<string> => {
     try {
-      const r = await api.chat(message, { task: task ?? undefined, route: route ?? undefined, weather, flightLog });
+      const r = await api.chat(message, { task: task ?? undefined, route: route ?? undefined, weather, flightLog }, sessionId);
       return r.reply;
     } catch {
       return 'I\'m having trouble connecting to the AI service. Please try again.';
