@@ -116,6 +116,10 @@ export interface DroneTelemetry {
   hover_power_w: number;
   cruise_power_w: number;
   motor_out_survivable: boolean;
+  currentWaypointIdx: number;
+  totalWaypoints: number;
+  missionProgress: number;
+  missionActive: boolean;
 }
 
 // ===================================================================
@@ -202,7 +206,7 @@ export function useFleetPhysics(
   }, [onEvent]);
 
   // ── Time scale (default 10) ────────────────────────────────────
-  const timeScaleRef = useRef(10);
+  const timeScaleRef = useRef(3); // 3x speed for demo — realistic battery drain
 
   // ── Wind state (ref-only, mutated in the rAF loop) ─────────────
   const windRef = useRef<WindVector>({ ...initialWind });
@@ -501,6 +505,12 @@ export function useFleetPhysics(
         hover_power_w: computeHoverPower(drone.payloadKg),
         cruise_power_w: computeCruisePower(drone.payloadKg),
         motor_out_survivable: feasibility.motorOutSurvivable,
+        currentWaypointIdx: drone.currentWaypointIdx,
+        totalWaypoints: drone.waypoints.length,
+        missionProgress: drone.waypoints.length > 1
+          ? (drone.currentWaypointIdx / (drone.waypoints.length - 1)) * 100
+          : 0,
+        missionActive: drone.missionActive,
       };
     },
     [hudStamp],

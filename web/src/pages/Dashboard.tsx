@@ -201,8 +201,18 @@ export function Dashboard() {
         const tel = fleetPhysics.getTelemetry(flyingDrone.id);
         if (tel) {
           setBattery(Math.round(tel.battery_pct));
+          setMissionProgress(Math.round(tel.missionProgress));
+          setDroneProgress(tel.totalWaypoints > 1 ? tel.currentWaypointIdx / (tel.totalWaypoints - 1) : 0);
         }
-        if (status !== 'flying' && status !== 'completed') setStatus('flying');
+        if (status !== 'flying') setStatus('flying');
+      } else if (status === 'flying') {
+        // Check if any drone just completed
+        const anyCompleted = mapData.some(d => d.status === 'hover' || d.status === 'landed');
+        if (anyCompleted) {
+          setStatus('completed');
+          setDroneProgress(1);
+          setMissionProgress(100);
+        }
       }
     }, 100);
     return () => clearInterval(interval);
