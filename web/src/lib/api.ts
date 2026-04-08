@@ -225,10 +225,10 @@ export const api = {
 
   health: () => request<{ status: string }>('/api/health'),
 
-  chat: (message: string, context: { task?: Task; route?: Route; weather?: Record<string, Weather>; flightLog?: FlightLogEntry[] } = {}) =>
+  chat: (message: string, context: { task?: Task; route?: Route; weather?: Record<string, Weather>; flightLog?: FlightLogEntry[] } = {}, sessionId?: string) =>
     request<{ reply: string }>('/api/chat', {
       method: 'POST',
-      body: JSON.stringify({ message, context }),
+      body: JSON.stringify({ message, context, sessionId }),
     }),
 
   generateReport: (metrics: Metrics, missionSummary: Record<string, unknown> = {}) =>
