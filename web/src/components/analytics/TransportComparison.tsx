@@ -173,77 +173,66 @@ export function TransportComparison() {
       {/* Charts Row */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 20 }}>
 
-        {/* Response Time Chart */}
+        {/* Response Time */}
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 14 }}>
             <Clock size={13} style={{ color: '#8d90a0' }} />
             <span style={{ fontSize: 11, fontWeight: 600, color: '#8d90a0', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Response Time (minutes)
             </span>
           </div>
-          <ResponsiveContainer width="100%" height={160}>
-            <BarChart data={timeChartData} layout="vertical" barCategoryGap="30%">
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(67,70,84,0.15)" horizontal={false} />
-              <XAxis
-                type="number"
-                tick={{ fill: '#8d90a0', fontSize: 10 }}
-                stroke="#434654"
-                domain={[0, 60]}
-                tickFormatter={(v: number) => `${v}m`}
-              />
-              <YAxis
-                type="category"
-                dataKey="name"
-                tick={{ fill: '#c3c6d6', fontSize: 12, fontWeight: 600 }}
-                stroke="none"
-                width={85}
-              />
-              <Tooltip content={<TimeTooltip />} cursor={false} />
-              <Bar dataKey="time" radius={[0, 6, 6, 0]} maxBarSize={28}>
-                {timeChartData.map((entry, i) => (
-                  <Cell
-                    key={`time-${i}`}
-                    fill={entry.available ? entry.color : 'rgba(239,68,68,0.15)'}
-                  />
-                ))}
-                <LabelList content={<GroundedLabel />} />
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          {timeChartData.map((entry) => (
+            <div key={entry.name} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#c3c6d6', width: 80 }}>{entry.name}</span>
+              <div style={{ flex: 1, height: 24, background: 'rgba(48,53,58,0.6)', borderRadius: 6, overflow: 'hidden', position: 'relative' }}>
+                {entry.available && entry.time > 0 ? (
+                  <div style={{
+                    width: `${Math.min((entry.time / 60) * 100, 100)}%`,
+                    height: '100%',
+                    background: `linear-gradient(90deg, ${entry.color}, ${entry.color}dd)`,
+                    borderRadius: 6,
+                    minWidth: 4,
+                    transition: 'width 0.5s',
+                  }} />
+                ) : (
+                  <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 10, fontWeight: 700, color: '#ef4444', letterSpacing: '0.08em' }}>
+                    GROUNDED
+                  </span>
+                )}
+              </div>
+              <span style={{ fontSize: 13, fontWeight: 700, color: entry.color, width: 45, textAlign: 'right', fontFamily: 'Space Grotesk' }}>
+                {entry.available ? `${entry.time}m` : '—'}
+              </span>
+            </div>
+          ))}
         </div>
 
-        {/* Cost Chart */}
+        {/* Cost */}
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 14 }}>
             <DollarSign size={13} style={{ color: '#8d90a0' }} />
             <span style={{ fontSize: 11, fontWeight: 600, color: '#8d90a0', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Cost per Delivery ({'\u00a3'} GBP)
             </span>
           </div>
-          <ResponsiveContainer width="100%" height={160}>
-            <BarChart data={costChartData} layout="vertical" barCategoryGap="30%">
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(67,70,84,0.15)" horizontal={false} />
-              <XAxis
-                type="number"
-                tick={{ fill: '#8d90a0', fontSize: 10 }}
-                stroke="#434654"
-                tickFormatter={(v: number) => `\u00a3${v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}`}
-              />
-              <YAxis
-                type="category"
-                dataKey="name"
-                tick={{ fill: '#c3c6d6', fontSize: 12, fontWeight: 600 }}
-                stroke="none"
-                width={85}
-              />
-              <Tooltip content={<CostTooltip />} cursor={false} />
-              <Bar dataKey="cost" radius={[0, 6, 6, 0]} maxBarSize={28}>
-                {costChartData.map((entry, i) => (
-                  <Cell key={`cost-${i}`} fill={entry.color} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          {costChartData.map((entry) => (
+            <div key={entry.name} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#c3c6d6', width: 80 }}>{entry.name}</span>
+              <div style={{ flex: 1, height: 24, background: 'rgba(48,53,58,0.6)', borderRadius: 6, overflow: 'hidden' }}>
+                <div style={{
+                  width: `${Math.min((entry.cost / 8200) * 100, 100)}%`,
+                  height: '100%',
+                  background: `linear-gradient(90deg, ${entry.color}, ${entry.color}dd)`,
+                  borderRadius: 6,
+                  minWidth: 4,
+                  transition: 'width 0.5s',
+                }} />
+              </div>
+              <span style={{ fontSize: 13, fontWeight: 700, color: entry.color, width: 65, textAlign: 'right', fontFamily: 'Space Grotesk' }}>
+                {'\u00a3'}{entry.cost >= 1000 ? `${(entry.cost / 1000).toFixed(1)}k` : entry.cost}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
