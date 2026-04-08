@@ -103,6 +103,16 @@ class AIAdapter:
             logger.error(f"AI parse_task failed: {e}")
             raise
 
+    # Deterministic responses for greetings — avoids LLM tone-mirroring
+    _GREETINGS = {"hi", "hey", "hello", "yo", "sup", "hiya", "heya",
+                  "what's up", "whats up", "wassup", "ayo", "hola"}
+    _GREETING_RESPONSE = (
+        "DroneMedic Mission Control standing by. I can coordinate emergency "
+        "medical drone deliveries across our London network — Royal London, "
+        "Homerton, Newham General, Whipps Cross, and Clinics A through D.\n\n"
+        "What do you need delivered and where?"
+    )
+
     def chat(self, message: str, context: dict | None = None) -> str:
         """Chat with the mission coordinator using function calling.
 
@@ -110,6 +120,13 @@ class AIAdapter:
         (active task, route, weather, flight log) into the system prompt so the
         model stays grounded in the current mission state.
         """
+        # Fast-path: deterministic greeting response (no LLM call)
+        stripped = message.strip().lower().rstrip("!?.,")
+        if stripped in self._GREETINGS:
+            self._chat_history.append({"role": "user", "content": message})
+            self._chat_history.append({"role": "assistant", "content": self._GREETING_RESPONSE})
+            return self._GREETING_RESPONSE
+
         try:
             from config import OPENAI_API_KEY, OPENAI_BASE_URL
             from openai import OpenAI
@@ -182,6 +199,7 @@ class AIAdapter:
             # --- Build message list: system + history + new user message ---
             messages = [{"role": "system", "content": system_msg}]
             messages.extend(self._chat_history[-MAX_CHAT_HISTORY:])
+
             messages.append({"role": "user", "content": message})
 
             # Allow up to 5 rounds of tool calls before forcing a final answer

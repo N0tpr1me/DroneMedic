@@ -116,6 +116,19 @@ export function MapView({
       infoWindowRef.current = new google.maps.InfoWindow();
       onMapReady?.(map);
 
+      // Auto-dismiss Google Maps billing error dialog
+      const observer = new MutationObserver(() => {
+        const dismissBtn = document.querySelector('.dismissButton') as HTMLElement;
+        if (dismissBtn) { dismissBtn.click(); return; }
+        // Also catch the modal overlay Google injects
+        document.querySelectorAll('.gm-err-container, .gm-style-mot').forEach(el => el.remove());
+        // Remove "This page can't load Google Maps correctly" dialog
+        document.querySelectorAll('div[role="dialog"]').forEach(el => {
+          if (el.textContent?.includes("can't load Google Maps")) el.remove();
+        });
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+
       // Log rendering type when ready
       map.addListener('renderingtype_changed', () => {
         console.log('Google Maps rendering type:', map.getRenderingType());
