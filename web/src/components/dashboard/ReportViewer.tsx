@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { motion } from 'framer-motion';
 import { X, Download, FileJson, ClipboardCopy, FileText } from 'lucide-react';
 import { Skeleton } from '../ui/Skeleton';
+import DOMPurify from 'dompurify';
 
 interface ReportViewerProps {
   open: boolean;
@@ -173,7 +174,7 @@ export function ReportViewer({ open, onClose, missionId, report }: ReportViewerP
                   <Skeleton variant="text" width="50%" />
                 </div>
               ) : (
-                <div dangerouslySetInnerHTML={{ __html: renderMarkdown(report) }} />
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(renderMarkdown(report)) }} />
               )}
             </div>
 

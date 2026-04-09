@@ -22,10 +22,8 @@ export function Login() {
     try {
       await signIn(email, password);
       navigate('/dashboard');
-    } catch {
-      // Demo mode: bypass auth for smooth video recording
-      // Real auth will be integrated with backend later
-      navigate('/dashboard');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Invalid credentials. Use demo mode or create an account.');
     } finally {
       setLoading(false);
     }
