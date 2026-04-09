@@ -10,7 +10,7 @@ const fadeUp = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, delay: i * 0.08, ease: 'easeOut' },
+    transition: { duration: 0.5, delay: i * 0.08, ease: 'easeOut' as const },
   }),
 };
 
@@ -359,7 +359,7 @@ export function FleetInfo() {
                         initial={{ width: 0 }}
                         whileInView={{ width: `${dronePercent}%` }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.2 + i * 0.1, ease: 'easeOut' }}
+                        transition={{ duration: 0.8, delay: 0.2 + i * 0.1, ease: 'easeOut' as const }}
                         className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-300"
                       />
                     </div>
@@ -378,7 +378,7 @@ export function FleetInfo() {
                         initial={{ width: 0 }}
                         whileInView={{ width: `${traditionalPercent}%` }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.35 + i * 0.1, ease: 'easeOut' }}
+                        transition={{ duration: 0.8, delay: 0.35 + i * 0.1, ease: 'easeOut' as const }}
                         className="h-full rounded-full bg-red-500/60"
                       />
                     </div>
