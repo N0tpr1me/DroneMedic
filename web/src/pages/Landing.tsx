@@ -92,15 +92,15 @@ export function Landing() {
 
       <main className="flex-1">
         {/* ── Hero ── */}
-        <section className="relative flex min-h-screen items-center pt-20 overflow-hidden">
+        <section className="relative flex min-h-[100dvh] items-center pt-20 overflow-hidden">
           <Starfield />
-          <div className="relative z-10 mx-auto flex max-w-[1440px] 2xl:max-w-[1800px] w-full items-center px-6 lg:px-20 2xl:px-28">
-            {/* Text — left half */}
+          <div className="relative z-10 mx-auto flex flex-col lg:flex-row max-w-[1440px] 2xl:max-w-[1800px] w-full items-center px-6 lg:px-20 2xl:px-28 gap-8 lg:gap-0">
+            {/* Text — left half on desktop, full width + centered on mobile */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full lg:w-1/2 shrink-0 space-y-7 2xl:space-y-9"
+              className="w-full lg:w-1/2 shrink-0 space-y-7 2xl:space-y-9 text-center lg:text-left"
             >
               <motion.div
                 animate={{ y: [0, -6, 0] }}
@@ -110,13 +110,13 @@ export function Landing() {
                 <span className="flex h-2 w-2 2xl:h-2.5 2xl:w-2.5 rounded-full bg-tertiary animate-pulse" />
                 AeroRescue Control: Online
               </motion.div>
-              <h1 className="font-headline text-5xl font-black leading-[1.1] tracking-tight text-on-surface md:text-6xl lg:text-7xl 2xl:text-8xl">
+              <h1 className="font-headline text-4xl font-black leading-[1.1] tracking-tight text-on-surface sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">
                 The Future of<br /> <span className="text-blue-300">Medical</span> Logistics
               </h1>
-              <p className="max-w-xl 2xl:max-w-2xl text-base leading-relaxed text-on-surface-variant md:text-lg 2xl:text-xl">
+              <p className="mx-auto lg:mx-0 max-w-xl 2xl:max-w-2xl text-base leading-relaxed text-on-surface-variant md:text-lg 2xl:text-xl">
                 Autonomous UAV delivery systems for life-critical medical supplies. Engineered for precision, built for urgency.
               </p>
-              <div className="flex pt-2 2xl:pt-4">
+              <div className="flex justify-center lg:justify-start pt-2 2xl:pt-4">
                 <button
                   onClick={goToDashboard}
                   className="btn-primary-gradient h-12 lg:h-14 2xl:h-16 px-8 lg:px-10 2xl:px-12 rounded-lg text-sm lg:text-base 2xl:text-lg font-bold text-white transition-all hover:shadow-[0_0_30px_rgba(0,81,206,0.4)] cursor-pointer"
@@ -126,7 +126,20 @@ export function Landing() {
               </div>
             </motion.div>
 
-            {/* Globe — right half, never overlaps text */}
+            {/* Drone image — mobile/tablet fallback */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="block lg:hidden w-full max-w-sm mx-auto"
+            >
+              <div className="relative">
+                <img src={DRONE_IMG} alt="AeroRescue UAV" className="w-full rounded-xl border border-outline-variant/20 shadow-2xl shadow-primary/20" />
+                <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-white/10 pointer-events-none" />
+              </div>
+            </motion.div>
+
+            {/* Globe — desktop only */}
             <div className="hidden lg:block w-1/2 h-[500px] xl:h-[650px] 2xl:h-[900px]">
               <RotatingGlobe />
             </div>
