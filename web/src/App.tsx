@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { AnimatePresence } from 'framer-motion';
+import { Toaster } from 'sonner';
 import { Navbar } from './components/layout/Navbar';
+import { ScrollToTop } from './components/ScrollToTop';
 import { Landing } from './pages/Landing';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
@@ -14,10 +16,22 @@ import { Settings } from './pages/Settings';
 import { Simulation } from './pages/Simulation';
 import { Status } from './pages/Status';
 import { VerifyEmail } from './pages/VerifyEmail';
+import { MissionsInfo } from './pages/MissionsInfo';
+import { FleetInfo } from './pages/FleetInfo';
+import { Technology } from './pages/Technology';
+import { SafetyInfo } from './pages/SafetyInfo';
+import { Resources } from './pages/Resources';
+import { Contact } from './pages/Contact';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useSettings } from './hooks/useSettings';
 import { useTheme } from './hooks/useTheme';
 import { MissionProvider } from './context/MissionContext';
+
+const CUSTOM_HEADER_PATHS = new Set([
+  '/', '/login', '/signup', '/verify-email', '/status',
+  '/dashboard', '/deploy', '/fleet', '/logs', '/analytics', '/simulation', '/settings',
+  '/missions', '/fleet-info', '/technology', '/safety', '/resources', '/contact',
+]);
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   const { settings } = useSettings();
@@ -27,21 +41,11 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 function AppRoutes() {
   const location = useLocation();
-  const isLanding = location.pathname === '/';
-  const isAuth = location.pathname === '/login' || location.pathname === '/signup' || location.pathname === '/verify-email';
-  const isStatus = location.pathname === '/status';
-  const isDashboard = location.pathname === '/dashboard';
-  const isDeploy = location.pathname === '/deploy';
-  const isFleet = location.pathname === '/fleet';
-  const isAnalytics = location.pathname === '/analytics';
-  const isLogs = location.pathname === '/logs';
-  const isSimulation = location.pathname === '/simulation';
-  const isSettings = location.pathname === '/settings';
+  const hideNavbar = CUSTOM_HEADER_PATHS.has(location.pathname);
 
   return (
     <>
-      {/* Landing, login/signup, dashboard, deploy, fleet, logs, and settings have their own headers */}
-      {!isLanding && !isAuth && !isDashboard && !isDeploy && !isFleet && !isLogs && !isAnalytics && !isSimulation && !isSettings && !isStatus && <Navbar />}
+      {!hideNavbar && <Navbar />}
       <AnimatePresence mode="wait">
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -49,6 +53,14 @@ function AppRoutes() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/status" element={<Status />} />
+          {/* Public info pages */}
+          <Route path="/missions" element={<MissionsInfo />} />
+          <Route path="/fleet-info" element={<FleetInfo />} />
+          <Route path="/technology" element={<Technology />} />
+          <Route path="/safety" element={<SafetyInfo />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/contact" element={<Contact />} />
+          {/* Protected app pages */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/deploy" element={<ProtectedRoute><Deploy /></ProtectedRoute>} />
           <Route path="/fleet" element={<ProtectedRoute><Fleet /></ProtectedRoute>} />
@@ -68,7 +80,9 @@ function App() {
       <BrowserRouter>
         <MissionProvider>
           <ThemeProvider>
+            <ScrollToTop />
             <AppRoutes />
+            <Toaster theme="dark" richColors position="bottom-right" />
           </ThemeProvider>
         </MissionProvider>
       </BrowserRouter>

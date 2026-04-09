@@ -1,9 +1,33 @@
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { useNavigate, Link } from 'react-router-dom';
 import { MessageSquare, Brain, Globe, ShieldCheck, Shield, ArrowRight, Rocket, AtSign, Share2, Radio } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAuth } from '../hooks/useAuth';
 import RotatingGlobe from '../components/ui/wireframe-dotted-globe';
 import Starfield from '../components/ui/starfield';
+import { useRef, useEffect, useState } from 'react';
+
+function AnimatedCounter({ value, suffix = '', decimals = 0, duration = 2000 }: { value: number; suffix?: string; decimals?: number; duration?: number }) {
+  const [display, setDisplay] = useState('0');
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
+
+  useEffect(() => {
+    if (!isInView) return;
+    const startTime = Date.now();
+    const tick = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = eased * value;
+      setDisplay(decimals > 0 ? current.toFixed(decimals) : Math.round(current).toString());
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [isInView, value, duration, decimals]);
+
+  return <span ref={ref}>{display}{suffix}</span>;
+}
 
 const DRONE_IMG = '/drone-photo.png';
 
@@ -13,6 +37,27 @@ const DRONE_ICON_SVG = (
     <path clipRule="evenodd" d="M39.998 12.236C39.9944 12.2537 39.9875 12.2845 39.9748 12.3294C39.9436 12.4399 39.8949 12.5741 39.8346 12.7175C39.8168 12.7597 39.7989 12.8007 39.7813 12.8398C38.5103 13.7113 35.9788 14.9393 33.7095 15.4811C30.9875 16.131 27.6413 16.5217 24 16.5217C20.3587 16.5217 17.0125 16.131 14.2905 15.4811C12.0012 14.9346 9.44505 13.6897 8.18538 12.8168C8.17384 12.7925 8.16216 12.767 8.15052 12.7408C8.09919 12.6249 8.05721 12.5114 8.02977 12.411C8.00356 12.3152 8.00039 12.2667 8.00004 12.2612C8.00004 12.261 8 12.2607 8.00004 12.2612C8.00004 12.2359 8.0104 11.9233 8.68485 11.3686C9.34546 10.8254 10.4222 10.2469 11.9291 9.72276C14.9242 8.68098 19.1919 8 24 8C28.8081 8 33.0758 8.68098 36.0709 9.72276C37.5778 10.2469 38.6545 10.8254 39.3151 11.3686C39.9006 11.8501 39.9857 12.1489 39.998 12.236ZM4.95178 15.2312L21.4543 41.6973C22.6288 43.5809 25.3712 43.5809 26.5457 41.6973L43.0534 15.223C43.0709 15.1948 43.0878 15.1662 43.104 15.1371L41.3563 14.1648C43.104 15.1371 43.1038 15.1374 43.104 15.1371L43.1051 15.135L43.1065 15.1325L43.1101 15.1261L43.1199 15.1082C43.1276 15.094 43.1377 15.0754 43.1497 15.0527C43.1738 15.0075 43.2062 14.9455 43.244 14.8701C43.319 14.7208 43.4196 14.511 43.5217 14.2683C43.6901 13.8679 44 13.0689 44 12.2609C44 10.5573 43.003 9.22254 41.8558 8.2791C40.6947 7.32427 39.1354 6.55361 37.385 5.94477C33.8654 4.72057 29.133 4 24 4C18.867 4 14.1346 4.72057 10.615 5.94478C8.86463 6.55361 7.30529 7.32428 6.14419 8.27911C4.99695 9.22255 3.99999 10.5573 3.99999 12.2609C3.99999 13.1275 4.29264 13.9078 4.49321 14.3607C4.60375 14.6102 4.71348 14.8196 4.79687 14.9689C4.83898 15.0444 4.87547 15.1065 4.9035 15.1529C4.91754 15.1762 4.92954 15.1957 4.93916 15.2111L4.94662 15.223L4.95178 15.2312ZM35.9868 18.996L24 38.22L12.0131 18.996C12.4661 19.1391 12.9179 19.2658 13.3617 19.3718C16.4281 20.1039 20.0901 20.5217 24 20.5217C27.9099 20.5217 31.5719 20.1039 34.6383 19.3718C35.082 19.2658 35.5339 19.1391 35.9868 18.996Z" fill="currentColor" fillRule="evenodd" />
   </svg>
 );
+
+function CapabilityBanner() {
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: bannerRef,
+    offset: ['start end', 'end start'],
+  });
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.08, 1.15]);
+
+  return (
+    <div ref={bannerRef} className="relative mb-16 2xl:mb-20 w-full overflow-hidden rounded-xl h-[280px] lg:h-[360px] 2xl:h-[420px]">
+      <motion.img
+        src="/images/drone-flying.jpg"
+        alt="Drone in flight"
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ scale }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent" />
+    </div>
+  );
+}
 
 export function Landing() {
   const navigate = useNavigate();
@@ -30,10 +75,11 @@ export function Landing() {
             <h2 className="font-headline text-xl 2xl:text-2xl font-bold tracking-tight text-on-surface">DroneMedic</h2>
           </div>
           <nav className="hidden items-center gap-10 2xl:gap-14 md:flex">
-            <a className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" href="#capabilities">Missions</a>
-            <a className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" href="#drone">Fleet</a>
-            <a className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" href="#how-it-works">How It Works</a>
-            <a className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" href="#footer">Safety</a>
+            <Link className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" to="/">Home</Link>
+            <Link className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" to="/missions">Missions</Link>
+            <Link className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" to="/fleet-info">Fleet</Link>
+            <Link className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" to="/technology">How It Works</Link>
+            <Link className="text-sm 2xl:text-base font-medium text-on-surface-variant transition-colors hover:text-primary" to="/safety">Safety</Link>
           </nav>
           <button
             onClick={goToDashboard}
@@ -56,10 +102,14 @@ export function Landing() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="w-full lg:w-1/2 shrink-0 space-y-7 2xl:space-y-9"
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-tertiary/20 bg-tertiary/5 px-4 py-1.5 2xl:px-5 2xl:py-2 text-[11px] 2xl:text-[13px] font-bold uppercase tracking-[0.15em] text-tertiary">
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                className="inline-flex items-center gap-2 rounded-full border border-tertiary/20 bg-tertiary/5 px-4 py-1.5 2xl:px-5 2xl:py-2 text-[11px] 2xl:text-[13px] font-bold uppercase tracking-[0.15em] text-tertiary"
+              >
                 <span className="flex h-2 w-2 2xl:h-2.5 2xl:w-2.5 rounded-full bg-tertiary animate-pulse" />
                 AeroRescue Control: Online
-              </div>
+              </motion.div>
               <h1 className="font-headline text-5xl font-black leading-[1.1] tracking-tight text-on-surface md:text-6xl lg:text-7xl 2xl:text-8xl">
                 The Future of<br /> <span className="text-blue-300">Medical</span> Logistics
               </h1>
@@ -90,14 +140,14 @@ export function Landing() {
               <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
                 <span className="text-xs 2xl:text-sm font-bold uppercase tracking-widest text-on-surface-variant">Flight Stability</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300">99.9%</span>
+                  <span className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300"><AnimatedCounter value={99.9} suffix="%" decimals={1} duration={2000} /></span>
                   <span className="text-xs 2xl:text-sm font-medium text-tertiary">&#9650; 0.1%</span>
                 </div>
               </div>
               <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
                 <span className="text-xs 2xl:text-sm font-bold uppercase tracking-widest text-on-surface-variant">Avg. Response Time</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300">12m</span>
+                  <span className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300"><AnimatedCounter value={12} suffix="m" duration={1800} /></span>
                   <span className="text-xs 2xl:text-sm font-bold text-red-500">&#9660; 2m</span>
                 </div>
               </div>
@@ -119,6 +169,9 @@ export function Landing() {
               <h2 className="mb-6 font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl 2xl:text-6xl">Core Mission Capabilities</h2>
               <p className="text-lg 2xl:text-xl text-on-surface-variant">Advanced AI-driven logistics for life-critical operations. Our platform integrates state-of-the-art UAV technology with proprietary AI orchestration.</p>
             </div>
+            {/* Drone banner with zoom-on-scroll */}
+            <CapabilityBanner />
+
             <div className="grid grid-cols-1 gap-6 2xl:gap-8 lg:grid-cols-3">
               {[
                 {
@@ -127,7 +180,7 @@ export function Landing() {
                   title: 'AI Mission Coordinator',
                   desc: 'Interpreting natural language tasks for seamless mission planning. Our LLM-integrated core allows medical staff to initiate deliveries with simple verbal or text instructions.',
                   linkText: 'Learn More',
-                  linkHref: '#how-it-works',
+                  linkTo: '/missions',
                   accentColor: 'primary',
                 },
                 {
@@ -136,7 +189,7 @@ export function Landing() {
                   title: 'Real-time Telemetry',
                   desc: 'Dynamic day and night mapping with active flight path tracking. Monitor every vector of your fleet\'s journey with millisecond latency and high-fidelity 3D visualization.',
                   linkText: 'Live Dashboard',
-                  linkHref: '#drone',
+                  linkTo: '',
                   accentColor: 'tertiary',
                 },
                 {
@@ -145,11 +198,18 @@ export function Landing() {
                   title: 'Autonomous Detection',
                   desc: 'Computer vision-powered safety systems for complex environments. Our UAVs utilize neural networks to navigate dense urban areas and unpredictable weather patterns.',
                   linkText: 'Safety Protocols',
-                  linkHref: '#cta',
+                  linkTo: '/safety',
                   accentColor: 'secondary',
                 },
-              ].map((card) => (
-                <div key={card.title} className="group relative flex flex-col justify-between overflow-hidden rounded-xl bg-surface-container-low p-8 2xl:p-10 transition-all hover:bg-surface-container-high">
+              ].map((card, i) => (
+                <motion.div
+                  key={card.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.5, delay: i * 0.15 }}
+                  whileHover={{ scale: 1.03 }}
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-xl bg-surface-container-low p-8 2xl:p-10 transition-colors hover:bg-surface-container-high">
                   <div className={`absolute -right-4 -top-4 transition-transform duration-500 group-hover:scale-110 ${
                     card.accentColor === 'primary' ? 'text-primary/15 group-hover:text-primary/25' :
                     card.accentColor === 'tertiary' ? 'text-tertiary/15 group-hover:text-tertiary/25' :
@@ -168,23 +228,34 @@ export function Landing() {
                     <h3 className="font-headline text-2xl 2xl:text-3xl font-bold text-on-surface">{card.title}</h3>
                     <p className="text-on-surface-variant 2xl:text-lg">{card.desc}</p>
                   </div>
-                  <a href={card.linkHref} className={`mt-8 flex items-center text-sm 2xl:text-base font-bold ${
-                    card.accentColor === 'primary' ? 'text-primary' :
-                    card.accentColor === 'tertiary' ? 'text-tertiary' :
-                    'text-red-400'
-                  }`}>
+                  <button
+                    onClick={() => navigate(card.linkTo || (user ? '/dashboard' : '/login'))}
+                    className={`mt-8 flex items-center text-sm 2xl:text-base font-bold cursor-pointer bg-transparent border-0 p-0 ${
+                      card.accentColor === 'primary' ? 'text-primary' :
+                      card.accentColor === 'tertiary' ? 'text-tertiary' :
+                      'text-red-400'
+                    }`}
+                  >
                     <span>{card.linkText}</span>
                     <ArrowRight size={14} className="ml-2" />
-                  </a>
-                </div>
+                  </button>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
         {/* ── How It Works ── */}
-        <section id="how-it-works" className="bg-bg py-24 lg:py-32 2xl:py-40">
-          <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
+        <section id="how-it-works" className="relative py-24 lg:py-32 2xl:py-40 overflow-hidden">
+          {/* Parallax background */}
+          <div className="absolute inset-0 z-0">
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-fixed"
+              style={{ backgroundImage: 'url(/images/london-skyline.jpg)' }}
+            />
+            <div className="absolute inset-0 bg-black/75" />
+          </div>
+          <div className="relative z-10 mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
             <div className="mb-16 2xl:mb-20 text-center">
               <h2 className="mb-4 font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl 2xl:text-6xl">How It Works</h2>
               <p className="text-lg 2xl:text-xl text-on-surface-variant">From request to delivery in four steps</p>
@@ -202,7 +273,8 @@ export function Landing() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="relative rounded-xl bg-surface-container-low p-8 2xl:p-10 border border-outline-variant/10"
+                  whileHover={{ scale: 1.04 }}
+                  className="relative rounded-xl bg-surface-container-low/90 backdrop-blur-sm p-8 2xl:p-10 border border-outline-variant/10"
                 >
                   <div className="font-headline text-4xl 2xl:text-5xl font-bold text-blue-300 mb-3">{item.step}</div>
                   <h3 className="text-lg 2xl:text-xl font-bold text-on-surface uppercase tracking-wide mb-2">{item.name}</h3>
@@ -252,7 +324,10 @@ export function Landing() {
                   </div>
                 </div>
                 <div className="pt-4">
-                  <button className="h-12 2xl:h-14 border border-outline-variant bg-transparent px-8 2xl:px-10 text-sm 2xl:text-base font-bold tracking-wide text-on-surface transition-colors hover:bg-surface-container-high cursor-pointer">
+                  <button
+                    onClick={() => navigate('/fleet-info')}
+                    className="h-12 2xl:h-14 border border-outline-variant bg-transparent px-8 2xl:px-10 text-sm 2xl:text-base font-bold tracking-wide text-on-surface transition-colors hover:bg-surface-container-high cursor-pointer"
+                  >
                     View Fleet Specifications
                   </button>
                 </div>
@@ -262,9 +337,17 @@ export function Landing() {
         </section>
 
         {/* ── CTA Section ── */}
-        <section id="cta" className="relative overflow-hidden bg-bg py-32 2xl:py-40">
-          <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
-            <div className="glass-panel flex flex-col items-center rounded-2xl border border-outline-variant/15 p-12 text-center md:p-24 2xl:p-32">
+        <section id="cta" className="relative overflow-hidden py-32 2xl:py-40">
+          {/* CTA background image */}
+          <div className="absolute inset-0 z-0">
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: 'url(/images/city-aerial.jpg)' }}
+            />
+            <div className="absolute inset-0 bg-black/70" />
+          </div>
+          <div className="relative z-10 mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
+            <div className="glass-panel flex flex-col items-center rounded-2xl border border-outline-variant/15 bg-surface/60 backdrop-blur-xl p-12 text-center md:p-24 2xl:p-32">
               <div className="mb-8 rounded-full bg-[#b3c5ff]/10 p-4 2xl:p-5 text-[#b3c5ff]">
                 <Rocket size={36} />
               </div>
@@ -281,7 +364,10 @@ export function Landing() {
                 >
                   Get Started Now
                 </button>
-                <button className="h-14 2xl:h-16 px-10 2xl:px-12 rounded-lg border border-outline-variant text-base 2xl:text-lg font-bold text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer">
+                <button
+                  onClick={() => navigate('/contact')}
+                  className="h-14 2xl:h-16 px-10 2xl:px-12 rounded-lg border border-outline-variant text-base 2xl:text-lg font-bold text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer"
+                >
                   Talk to Sales
                 </button>
               </div>
@@ -305,35 +391,40 @@ export function Landing() {
               </div>
               <p className="text-sm 2xl:text-base text-on-surface-variant">Leading the global transition to autonomous, zero-emission medical logistics.</p>
               <div className="flex gap-4">
-                <a className="text-on-surface-variant transition-colors hover:text-primary" href="#"><AtSign size={20} /></a>
-                <a className="text-on-surface-variant transition-colors hover:text-primary" href="#"><Share2 size={20} /></a>
-                <a className="text-on-surface-variant transition-colors hover:text-primary" href="#"><Radio size={20} /></a>
+                <button aria-label="Email" className="text-on-surface-variant transition-colors hover:text-primary cursor-pointer bg-transparent border-0 p-0" onClick={() => toast('Social links coming soon')}><AtSign size={20} /></button>
+                <button aria-label="Share" className="text-on-surface-variant transition-colors hover:text-primary cursor-pointer bg-transparent border-0 p-0" onClick={() => toast('Social links coming soon')}><Share2 size={20} /></button>
+                <button aria-label="Updates" className="text-on-surface-variant transition-colors hover:text-primary cursor-pointer bg-transparent border-0 p-0" onClick={() => toast('Social links coming soon')}><Radio size={20} /></button>
               </div>
             </div>
             <div>
-              <h4 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Platform</h4>
+              <h3 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Platform</h3>
               <ul className="space-y-4 text-sm 2xl:text-base text-on-surface-variant">
-                <li><a className="hover:text-primary transition-colors" href="#capabilities">Mission Control</a></li>
-                <li><a className="hover:text-primary transition-colors" href="#drone">Fleet Management</a></li>
-                <li><a className="hover:text-primary transition-colors" href="#how-it-works">API Reference</a></li>
-                <li><a className="hover:text-primary transition-colors" href="#cta">Safety Systems</a></li>
+                <li><Link className="hover:text-primary transition-colors" to="/missions">Mission Control</Link></li>
+                <li><Link className="hover:text-primary transition-colors" to="/fleet-info">Fleet Management</Link></li>
+                <li><Link className="hover:text-primary transition-colors" to="/technology">API Reference</Link></li>
+                <li><Link className="hover:text-primary transition-colors" to="/safety">Safety Systems</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Resources</h4>
+              <h3 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Resources</h3>
               <ul className="space-y-4 text-sm 2xl:text-base text-on-surface-variant">
-                <li><a className="hover:text-primary transition-colors" href="#">Case Studies</a></li>
-                <li><a className="hover:text-primary transition-colors" href="#">Documentation</a></li>
-                <li><a className="hover:text-primary transition-colors" href="#">Support Center</a></li>
-                <li><a className="hover:text-primary transition-colors" href="#">Compliance</a></li>
+                <li><Link className="hover:text-primary transition-colors" to="/resources">Case Studies</Link></li>
+                <li><Link className="hover:text-primary transition-colors" to="/technology">Documentation</Link></li>
+                <li><Link className="hover:text-primary transition-colors" to="/resources">Support Center</Link></li>
+                <li><Link className="hover:text-primary transition-colors" to="/safety">Compliance</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Newsletter</h4>
+              <h3 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Newsletter</h3>
               <p className="mb-4 text-sm 2xl:text-base text-on-surface-variant">Get the latest mission reports and system updates.</p>
               <div className="flex flex-col gap-2">
                 <input className="h-11 2xl:h-13 rounded border-0 bg-surface-container-high text-sm 2xl:text-base text-on-surface focus:ring-2 focus:ring-primary px-4" placeholder="Email Address" type="email" />
-                <button className="btn-primary-gradient h-11 2xl:h-13 rounded text-sm 2xl:text-base font-bold text-white cursor-pointer">Subscribe</button>
+                <button
+                  onClick={() => toast.success('Subscribed! You\'ll receive mission reports and system updates.')}
+                  className="btn-primary-gradient h-11 2xl:h-13 rounded text-sm 2xl:text-base font-bold text-white cursor-pointer"
+                >
+                  Subscribe
+                </button>
               </div>
             </div>
           </div>

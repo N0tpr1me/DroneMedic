@@ -297,18 +297,24 @@ export function Analytics() {
     { name: 'Failed', value: statusCounts.failed, color: '#ff4444' },
   ];
 
-  const deliveryVsDeadlineData = missions.map((m) => ({
-    name: m.name.length > 14 ? m.name.slice(0, 14) + '...' : m.name,
-    deliveryTime: m.deliveryTime,
-    clinicalDeadline: m.clinicalDeadline,
-    onTime: m.deliveryTime < m.clinicalDeadline,
-  }));
+  const deliveryVsDeadlineData = missions
+    .filter((m) => m.deliveryTime > 0 && m.clinicalDeadline > 0)
+    .slice(-8)
+    .map((m) => ({
+      name: m.facility || (m.name.length > 10 ? m.name.slice(0, 10) + '...' : m.name),
+      deliveryTime: m.deliveryTime,
+      clinicalDeadline: Math.min(m.clinicalDeadline, 120),
+      onTime: m.deliveryTime < m.clinicalDeadline,
+    }));
 
-  const routeEfficiencyData = missions.map((m) => ({
-    name: m.name.length > 14 ? m.name.slice(0, 14) + '...' : m.name,
-    optimized: m.distance,
-    naive: m.naiveDistance,
-  }));
+  const routeEfficiencyData = missions
+    .filter((m) => m.distance > 0 && m.naiveDistance > 0)
+    .slice(-8)
+    .map((m) => ({
+      name: m.facility || (m.name.length > 10 ? m.name.slice(0, 10) + '...' : m.name),
+      optimized: m.distance,
+      naive: m.naiveDistance,
+    }));
 
   const batteryData = missions.map((m) => ({
     name: m.name.length > 10 ? m.name.slice(0, 10) + '...' : m.name,
@@ -533,35 +539,41 @@ export function Analytics() {
           {/* Mission Status Donut */}
           <div style={glassCard}>
             <div style={sectionTitle}>Mission Status</div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 32 }}>
-              <ResponsiveContainer width={200} height={200}>
-                <PieChart>
-                  <Pie
-                    data={statusData.filter(d => d.value > 0)}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={55}
-                    outerRadius={85}
-                    paddingAngle={3}
-                    dataKey="value"
-                    stroke="none"
-                  >
-                    {statusData.filter(d => d.value > 0).map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={tooltipStyle} />
-                </PieChart>
-              </ResponsiveContainer>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 32, fontWeight: 800, color: '#dfe3e9' }}>{totalMissions}</div>
-                  <div style={{ fontSize: 11, color: '#8d90a0' }}>missions</div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+              {/* Donut with centred count */}
+              <div style={{ position: 'relative', width: 200, height: 200 }}>
+                <ResponsiveContainer width={200} height={200}>
+                  <PieChart>
+                    <Pie
+                      data={statusData.filter(d => d.value > 0)}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={90}
+                      paddingAngle={4}
+                      dataKey="value"
+                      stroke="none"
+                      cornerRadius={4}
+                    >
+                      {statusData.filter(d => d.value > 0).map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={tooltipStyle} />
+                  </PieChart>
+                </ResponsiveContainer>
+                {/* Overlay count in the donut hole */}
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, color: '#dfe3e9', lineHeight: 1 }}>{totalMissions}</div>
+                  <div style={{ fontSize: 11, color: '#8d90a0', marginTop: 2 }}>missions</div>
                 </div>
+              </div>
+              {/* Horizontal legend */}
+              <div style={{ display: 'flex', gap: 20, justifyContent: 'center' }}>
                 {statusData.filter(d => d.value > 0).map(d => (
                   <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: d.color }} />
-                    <span style={{ fontSize: 11, color: '#c3c6d6' }}>{d.name}: {d.value}</span>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: d.color, boxShadow: `0 0 6px ${d.color}66` }} />
+                    <span style={{ fontSize: 12, color: '#c3c6d6', fontWeight: 500 }}>{d.name}: <span style={{ color: '#dfe3e9', fontWeight: 700 }}>{d.value}</span></span>
                   </div>
                 ))}
               </div>
@@ -578,31 +590,38 @@ export function Analytics() {
               <div style={sectionTitle}>Mission Cost Comparison</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
-              {costComparisonData.map((item) => (
-                <div key={item.method} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <span style={{ fontSize: 12, color: '#c3c6d6', width: 80 }}>{item.method}</span>
-                  <div style={{ flex: 1, height: 8, borderRadius: 4, background: 'rgba(67,70,84,0.2)', overflow: 'hidden' }}>
-                    <div style={{
-                      height: '100%',
-                      width: `${Math.min((item.cost / totalHelicopterCost) * 100, 100)}%`,
-                      borderRadius: 4,
-                      background: item.color,
-                      transition: 'width 0.6s ease',
-                    }} />
+              {costComparisonData.map((item) => {
+                // Use log scale so drone bar is visible alongside helicopter
+                const logWidth = totalHelicopterCost > 0
+                  ? (Math.log10(Math.max(item.cost, 1)) / Math.log10(totalHelicopterCost)) * 100
+                  : 0;
+                return (
+                  <div key={item.method} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span style={{ fontSize: 12, color: '#c3c6d6', width: 80 }}>{item.method}</span>
+                    <div style={{ flex: 1, height: 8, borderRadius: 4, background: 'rgba(67,70,84,0.2)', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${Math.min(logWidth, 100)}%`,
+                        minWidth: 4,
+                        borderRadius: 4,
+                        background: item.color,
+                        transition: 'width 0.6s ease',
+                      }} />
+                    </div>
+                    <span style={{ fontSize: 12, fontFamily: 'monospace', color: item.color, minWidth: 80, textAlign: 'right' }}>
+                      £{item.cost.toLocaleString()}
+                    </span>
                   </div>
-                  <span style={{ fontSize: 12, fontFamily: 'monospace', color: item.color, minWidth: 80, textAlign: 'right' }}>
-                    ${item.cost.toLocaleString()}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div style={{ display: 'flex', gap: 16, borderTop: '1px solid rgba(67,70,84,0.15)', paddingTop: 12 }}>
               <div style={{ flex: 1 }}>
                 <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7a7e8c' }}>Per Delivery</span>
                 <div style={{ display: 'flex', gap: 12, fontSize: 12, marginTop: 4 }}>
-                  <span style={{ color: '#00daf3' }}>Drone: ${COST_PER_DRONE_DELIVERY}</span>
-                  <span style={{ color: '#6b7280' }}>Ambulance: ${COST_PER_AMBULANCE_TRIP.toLocaleString()}</span>
-                  <span style={{ color: '#434654' }}>Heli: ${COST_PER_HELICOPTER_TRIP.toLocaleString()}</span>
+                  <span style={{ color: '#00daf3' }}>Drone: £{COST_PER_DRONE_DELIVERY}</span>
+                  <span style={{ color: '#6b7280' }}>Ambulance: £{COST_PER_AMBULANCE_TRIP.toLocaleString()}</span>
+                  <span style={{ color: '#434654' }}>Heli: £{COST_PER_HELICOPTER_TRIP.toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -618,13 +637,13 @@ export function Analytics() {
               <div style={{ padding: '8px 14px', borderRadius: 8, background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.15)' }}>
                 <div style={{ fontSize: 10, textTransform: 'uppercase', color: '#7a7e8c', marginBottom: 2 }}>vs Ambulance</div>
                 <div style={{ fontSize: 20, fontFamily: 'Space Grotesk', fontWeight: 700, color: '#4ade80' }}>
-                  ${ambulanceSavings.toLocaleString()}
+                  £{ambulanceSavings.toLocaleString()}
                 </div>
               </div>
               <div style={{ padding: '8px 14px', borderRadius: 8, background: 'rgba(0,218,243,0.08)', border: '1px solid rgba(0,218,243,0.15)' }}>
                 <div style={{ fontSize: 10, textTransform: 'uppercase', color: '#7a7e8c', marginBottom: 2 }}>vs Helicopter</div>
                 <div style={{ fontSize: 20, fontFamily: 'Space Grotesk', fontWeight: 700, color: '#00daf3' }}>
-                  ${helicopterSavings.toLocaleString()}
+                  £{helicopterSavings.toLocaleString()}
                 </div>
               </div>
             </div>
@@ -643,7 +662,7 @@ export function Analytics() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(67,70,84,0.2)" />
                 <XAxis dataKey="name" tick={{ fill: '#c3c6d6', fontSize: 9 }} stroke="#434654" />
                 <YAxis tick={{ fill: '#c3c6d6', fontSize: 9 }} stroke="#434654" />
-                <Tooltip contentStyle={tooltipStyle} formatter={(value: unknown) => `$${Number(value ?? 0).toLocaleString()}`} />
+                <Tooltip contentStyle={tooltipStyle} formatter={(value: unknown) => `£${Number(value ?? 0).toLocaleString()}`} />
                 <Area type="monotone" dataKey="vsAmbulance" name="vs Ambulance" stroke="#4ade80" strokeWidth={2} fill="url(#savingsGreen)" />
                 <Area type="monotone" dataKey="vsHelicopter" name="vs Helicopter" stroke="#00daf3" strokeWidth={2} fill="url(#savingsCyan)" />
               </AreaChart>
@@ -657,17 +676,14 @@ export function Analytics() {
           <div style={glassCard}>
             <div style={sectionTitle}>Delivery vs Deadline</div>
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={deliveryVsDeadlineData}>
+              <BarChart data={deliveryVsDeadlineData} barSize={20} barGap={4}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(67,70,84,0.2)" />
-                <XAxis dataKey="name" tick={{ fill: '#c3c6d6', fontSize: 9 }} stroke="#434654" angle={-30} textAnchor="end" height={60} />
-                <YAxis tick={{ fill: '#c3c6d6', fontSize: 11 }} stroke="#434654" label={{ value: 'minutes', angle: -90, position: 'insideLeft', fill: '#8d90a0', fontSize: 10 }} />
+                <XAxis dataKey="name" tick={{ fill: '#c3c6d6', fontSize: 10 }} stroke="#434654" angle={-25} textAnchor="end" height={55} />
+                <YAxis tick={{ fill: '#c3c6d6', fontSize: 11 }} stroke="#434654" domain={[0, 'auto']} label={{ value: 'minutes', angle: -90, position: 'insideLeft', fill: '#8d90a0', fontSize: 10 }} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Bar dataKey="deliveryTime" name="Delivery Time" radius={[4, 4, 0, 0]}>
-                  {deliveryVsDeadlineData.map((entry, index) => (
-                    <Cell key={`bar-${index}`} fill={entry.onTime ? '#4ade80' : '#ff4444'} />
-                  ))}
-                </Bar>
-                <Bar dataKey="clinicalDeadline" name="Clinical Deadline" fill="rgba(141,144,160,0.3)" radius={[4, 4, 0, 0]} />
+                <Legend wrapperStyle={{ fontSize: 11, color: '#c3c6d6' }} />
+                <Bar dataKey="clinicalDeadline" name="Clinical Deadline" fill="rgba(251,191,36,0.5)" />
+                <Bar dataKey="deliveryTime" name="Delivery Time" fill="#4ade80" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -676,14 +692,14 @@ export function Analytics() {
           <div style={glassCard}>
             <div style={sectionTitle}>Route Efficiency</div>
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={routeEfficiencyData}>
+              <BarChart data={routeEfficiencyData} barSize={20} barGap={4}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(67,70,84,0.2)" />
-                <XAxis dataKey="name" tick={{ fill: '#c3c6d6', fontSize: 9 }} stroke="#434654" angle={-30} textAnchor="end" height={60} />
-                <YAxis tick={{ fill: '#c3c6d6', fontSize: 11 }} stroke="#434654" label={{ value: 'meters', angle: -90, position: 'insideLeft', fill: '#8d90a0', fontSize: 10 }} />
+                <XAxis dataKey="name" tick={{ fill: '#c3c6d6', fontSize: 10 }} stroke="#434654" angle={-25} textAnchor="end" height={55} />
+                <YAxis tick={{ fill: '#c3c6d6', fontSize: 11 }} stroke="#434654" domain={[0, 'auto']} label={{ value: 'metres', angle: -90, position: 'insideLeft', fill: '#8d90a0', fontSize: 10 }} />
                 <Tooltip contentStyle={tooltipStyle} />
                 <Legend wrapperStyle={{ fontSize: 11, color: '#c3c6d6' }} />
-                <Bar dataKey="optimized" name="Optimised" fill="#00daf3" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="naive" name="Naive" fill="#434654" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="naive" name="Naive" fill="rgba(141,144,160,0.5)" />
+                <Bar dataKey="optimized" name="Optimised" fill="#00daf3" />
               </BarChart>
             </ResponsiveContainer>
           </div>
