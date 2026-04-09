@@ -134,6 +134,12 @@ export interface MissionContextValue {
 
   // Derived fleet summary for Status/Fleet pages
   fleetSummary: FleetSummary;
+
+  // Live mission telemetry — lifted from Dashboard so it survives page navigation
+  droneProgress: number;                                                     // 0..1 along route
+  missionProgress: number;                                                   // 0..100
+  liveBattery: number;                                                       // 0..100 — authoritative battery for active drone
+  simPayload: { temperature_c: number; integrity: 'nominal' | 'warning' | 'critical' } | null;
 }
 
 // ── Context ────────────────────────────────────────────────────────
@@ -241,6 +247,19 @@ export function MissionProvider({
   // Location cache for building waypoints from route names
   const locationsCache = useRef<Record<string, Location>>({});
 
+  // ── Live mission state (lifted from Dashboard so it survives page navigation)
+  const [droneProgress, setDroneProgress] = useState(0);
+  const [missionProgress, setMissionProgress] = useState(0);
+  const [liveBattery, setLiveBattery] = useState(100);
+  const [simPayload, setSimPayload] = useState<{
+    temperature_c: number;
+    integrity: 'nominal' | 'warning' | 'critical';
+  } | null>(null);
+  const flightStartRef = useRef<number | null>(null);
+
+  // Last-known battery per drone — fallback when fleet events lack battery_pct
+  const batteryByDroneRef = useRef<Record<string, number>>({});
+
   // ── Persist completed missions ───────────────────────────────────
   useEffect(() => {
     saveCompletedMissions(completedMissions);
@@ -249,6 +268,19 @@ export function MissionProvider({
   // ── Fleet event handler (physics -> logs + alerts) ───────────────
   const handleFleetEvent = useCallback((evt: FleetEvent) => {
     const ts = evt.timestamp / 1000;
+
+    // Skip noisy events that spam the chat/flight log
+    if (evt.type === 'wind_change' || evt.type === 'phase_change') return;
+
+    // Resolve battery: prefer event's battery_pct, else use last-known battery for this
+    // drone (monotonically decreasing), else 0. Never fall back to 100 — that produces
+    // fake "Battery 100% on arrival" entries in the chain-of-custody timeline.
+    const rawBat = (evt.data as Record<string, unknown>).battery_pct;
+    const prevBat = batteryByDroneRef.current[evt.droneId];
+    const batteryVal = rawBat != null ? Number(rawBat) : (prevBat ?? 0);
+    if (rawBat != null) {
+      batteryByDroneRef.current[evt.droneId] = Number(rawBat);
+    }
 
     // Convert to FlightLogEntry
     const logEntry: FlightLogEntry = {
@@ -269,7 +301,7 @@ export function MissionProvider({
         y: Number((evt.data as Record<string, unknown>).lon ?? 0),
         z: 0,
       },
-      battery: Number((evt.data as Record<string, unknown>).battery_pct ?? 100),
+      battery: batteryVal,
       timestamp: ts,
     };
     setLiveFlightLog((prev) => [...prev, logEntry]);
@@ -407,6 +439,80 @@ export function MissionProvider({
     else if (backendStatus === 'failed') setMissionStatus('idle');
   }, [live.missionStatus]);
 
+  // ── Live progress loop (10 Hz) ───────────────────────────────────
+  // Runs continuously in the provider so progress keeps advancing even when
+  // the user navigates away from /dashboard. Reads primary values from the
+  // physics simulation; falls back to elapsed-time / estimated_time when the
+  // physics sim has no flying drone (e.g. all waypoints collapsed to depot).
+  useEffect(() => {
+    if (missionStatus !== 'flying') return;
+    const interval = setInterval(() => {
+      const mapData = fleetPhysics.getDroneMapData();
+      const flying = mapData.find((d) => d.status !== 'idle' && d.status !== 'preflight');
+      if (flying) {
+        const tel = fleetPhysics.getTelemetry(flying.id);
+        if (tel) {
+          setLiveBattery(Math.round(tel.battery_pct));
+          setMissionProgress(Math.round(tel.missionProgress));
+          setDroneProgress(
+            tel.totalWaypoints > 1 ? Math.min(tel.missionProgress / 100, 1) : 0,
+          );
+          if (tel.missionProgress >= 100) {
+            setMissionStatus('completed');
+            flightStartRef.current = null;
+          }
+        }
+      } else if (activeRoute?.estimated_time && flightStartRef.current != null) {
+        // Time-based fallback
+        const elapsed = (performance.now() - flightStartRef.current) / 1000;
+        const p = Math.min(elapsed / activeRoute.estimated_time, 1);
+        setDroneProgress(p);
+        setMissionProgress(Math.round(p * 100));
+        // Simulate gradual battery drain during fallback flight (~30% per mission)
+        setLiveBattery((prev) => Math.max(0, Math.round(100 - p * 30)));
+        if (p >= 1) {
+          setMissionStatus('completed');
+          flightStartRef.current = null;
+        }
+      }
+    }, 100);
+    return () => clearInterval(interval);
+    // fleetPhysics is referenced via closure; its methods read from refs internally
+    // so stale closures don't matter. Keying on missionStatus + activeRoute keeps
+    // the interval in sync with the active mission without restarting every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [missionStatus, activeRoute]);
+
+  // ── Cold-chain payload temperature simulation (mean-reverting) ───
+  // Runs in the provider so temperature keeps fluctuating during page navigation.
+  useEffect(() => {
+    if (live.payloadStatus) { setSimPayload(null); return; }
+    if (missionStatus === 'idle') { setSimPayload(null); return; }
+    const base = 4.0; // standard blood storage target (°C)
+    setSimPayload({ temperature_c: base, integrity: 'nominal' });
+    const iv = setInterval(() => {
+      setSimPayload((prev) => {
+        if (!prev) return { temperature_c: base, integrity: 'nominal' };
+        const reversion = 0.15; // pull strength back toward base each tick
+        const noise = (Math.random() - 0.5) * 0.18; // zero-mean wiggle ±0.09°C
+        const delta = reversion * (base - prev.temperature_c) + noise;
+        const next = Math.round((prev.temperature_c + delta) * 100) / 100;
+        const clamped = Math.max(3.2, Math.min(4.8, next));
+        const integrity: 'nominal' | 'warning' | 'critical' =
+          clamped > 6.0 ? 'critical' : clamped > 5.0 ? 'warning' : 'nominal';
+        return { temperature_c: clamped, integrity };
+      });
+    }, 2000);
+    return () => clearInterval(iv);
+  }, [missionStatus, live.payloadStatus]);
+
+  // Null flightStartRef when mission completes/resets
+  useEffect(() => {
+    if (missionStatus === 'idle' || missionStatus === 'completed') {
+      flightStartRef.current = null;
+    }
+  }, [missionStatus]);
+
   // ── acknowledgeAlert ─────────────────────────────────────────────
   const acknowledgeAlert = useCallback((alertId: string) => {
     setDroneAlerts((prev) =>
@@ -456,6 +562,17 @@ export function MissionProvider({
         };
       });
 
+      // ── Reset all live state for a clean new mission (prevents stale events
+      //    from previous missions leaking into the chain-of-custody timeline)
+      live.reset();                              // clears backend-sourced flightLog
+      setLiveFlightLog([]);                      // clears merged log
+      batteryByDroneRef.current = {};            // clears per-drone battery memory
+      setDroneProgress(0);
+      setMissionProgress(0);
+      setLiveBattery(100);
+      setSimPayload(null);                       // temp effect will re-initialize
+      flightStartRef.current = performance.now(); // start of mission for time-fallback
+
       // Dispatch
       fleetPhysics.dispatchDrone(closestId, waypoints, payloadKg);
       setMissionStatus('flying');
@@ -465,7 +582,7 @@ export function MissionProvider({
 
       return closestId;
     },
-    [fleetPhysics, fleetConfigs],
+    [fleetPhysics, fleetConfigs, live],
   );
 
   // ── Fetch locations once and cache ───────────────────────────────
@@ -577,6 +694,10 @@ export function MissionProvider({
       droneAlerts,
       acknowledgeAlert,
       fleetSummary,
+      droneProgress,
+      missionProgress,
+      liveBattery,
+      simPayload,
     }),
     [
       fleetPhysics,
@@ -593,6 +714,10 @@ export function MissionProvider({
       droneAlerts,
       acknowledgeAlert,
       fleetSummary,
+      droneProgress,
+      missionProgress,
+      liveBattery,
+      simPayload,
     ],
   );
 

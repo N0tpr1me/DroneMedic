@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
 import {
-  Cpu, Globe, Database, Radio, Code2, BarChart3,
-  ArrowRight, Zap, Brain, Route, Server, Wifi,
-  Terminal, Plug, Wrench,
+  ShieldCheck, Lock, MessageSquare, Map, HeartPulse, BadgeCheck,
+  Clock, Route, ArrowRight, Stethoscope,
 } from 'lucide-react';
 import { InfoPageLayout } from '../components/layout/InfoPageLayout';
 
@@ -30,23 +29,6 @@ const fadeInUp = {
   },
 };
 
-const staggerFromLeft = {
-  hidden: { opacity: 0, x: -40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.45, delay: i * 0.1, ease: 'easeOut' as const },
-  }),
-};
-
-const codeBlockFade = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.8, delay: 0.3, ease: 'easeOut' as const },
-  },
-};
-
 const pulseNode = {
   hidden: { opacity: 0, scale: 0.95 },
   visible: (i: number) => ({
@@ -58,83 +40,98 @@ const pulseNode = {
 
 // ── Data ──
 
-interface TechCard {
+interface CapabilityCard {
   category: string;
   icon: React.ReactNode;
   techs: string[];
 }
 
-const TECH_STACK: TechCard[] = [
+const CAPABILITIES: CapabilityCard[] = [
   {
-    category: 'Frontend',
-    icon: <Globe size={22} className="text-blue-300" />,
-    techs: ['React 19', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Google Maps API'],
+    category: 'Certified Airframe',
+    icon: <ShieldCheck size={22} className="text-blue-300" />,
+    techs: ['Carbon-fiber body', 'Redundant flight controllers', 'Failsafe parachute', 'Weather-rated to 45 km/h winds'],
   },
   {
-    category: 'Backend',
-    icon: <Server size={22} className="text-blue-300" />,
-    techs: ['FastAPI (Python)', 'WebSocket streaming', 'REST API'],
+    category: 'Secure Payload',
+    icon: <Lock size={22} className="text-blue-300" />,
+    techs: ['Tamper-evident locking', 'Cold-chain capable bay', '15 kg capacity', 'Temperature + humidity logging'],
   },
   {
-    category: 'AI Engine',
-    icon: <Brain size={22} className="text-blue-300" />,
-    techs: ['Claude API (NLP)', 'Google OR-Tools (VRP optimization)'],
+    category: 'AI Dispatch',
+    icon: <MessageSquare size={22} className="text-blue-300" />,
+    techs: ['Plain-language requests', 'Priority-based scheduling', 'Automatic re-routing', 'Multi-drone coordination'],
   },
   {
-    category: 'Simulation',
-    icon: <Radio size={22} className="text-blue-300" />,
-    techs: ['PX4 SITL', 'Gazebo Harmonic', 'MAVSDK', 'MAVLink MCP'],
+    category: 'Live Tracking',
+    icon: <Map size={22} className="text-blue-300" />,
+    techs: ['Web + mobile dashboard', 'ETA updates every second', 'Audible mission alerts', 'Delivery photo confirmation'],
   },
   {
-    category: 'Data',
-    icon: <Database size={22} className="text-blue-300" />,
-    techs: ['Supabase (auth + database)', 'Real-time subscriptions'],
+    category: 'Clinical Integration',
+    icon: <HeartPulse size={22} className="text-blue-300" />,
+    techs: ['Works with existing dispatch workflow', 'Secure hospital login', 'Role-based access', 'Audit-ready activity logs'],
   },
   {
-    category: 'Visualization',
-    icon: <BarChart3 size={22} className="text-blue-300" />,
-    techs: ['Deck.gl', 'Three.js', 'Plotly', 'Recharts'],
+    category: 'Safety & Compliance',
+    icon: <BadgeCheck size={22} className="text-blue-300" />,
+    techs: ['GDPR & HIPAA aligned', 'CAA-approved flight corridors', 'Public safety monitoring', '24/7 human oversight'],
   },
 ];
 
-interface Endpoint {
-  method: string;
-  path: string;
-  description: string;
+interface FaqItem {
+  question: string;
+  answer: string;
 }
 
-const ENDPOINTS: Endpoint[] = [
-  { method: 'POST', path: '/api/missions', description: 'Create a new mission' },
-  { method: 'GET', path: '/api/missions/:id', description: 'Get mission status' },
-  { method: 'GET', path: '/api/fleet', description: 'List all drones and status' },
-  { method: 'GET', path: '/api/telemetry/:droneId', description: 'Stream telemetry data' },
-  { method: 'POST', path: '/api/route/optimize', description: 'Run VRP optimization' },
+const FAQ: FaqItem[] = [
+  {
+    question: 'How long does an emergency delivery take?',
+    answer: 'Most urban deliveries arrive in 8–15 minutes from request to touchdown.',
+  },
+  {
+    question: 'What happens if the weather changes mid-flight?',
+    answer: 'The system monitors wind, rain, and visibility continuously and re-routes or safely lands if conditions exceed limits.',
+  },
+  {
+    question: 'Can we carry temperature-sensitive payloads?',
+    answer: 'Yes. Payload bays are insulated and temperature-logged for blood, biologics, and vaccines.',
+  },
+  {
+    question: 'Who is in control of the drone?',
+    answer: 'A certified human dispatcher authorizes every flight. The drone flies autonomously but a trained operator can intervene at any moment.',
+  },
+  {
+    question: 'Is patient data shared with DroneMedic?',
+    answer: 'No. We receive only the destination and payload description. Patient records stay inside your hospital systems.',
+  },
+  {
+    question: 'How do you handle restricted airspace?',
+    answer: 'All routes are pre-cleared against UK CAA flight corridors and no-fly zones. Violations are impossible by design.',
+  },
 ];
 
-interface IntegrationCard {
+interface WorkflowCard {
   title: string;
   icon: React.ReactNode;
   description: string;
 }
 
-const INTEGRATIONS: IntegrationCard[] = [
+const WORKFLOW: WorkflowCard[] = [
   {
-    title: 'REST API',
-    icon: <Terminal size={22} className="text-blue-300" />,
-    description:
-      'Standard HTTP endpoints with JSON payloads for mission management, fleet monitoring, and route optimization. Full OpenAPI documentation available.',
+    title: 'Works With Your Dispatch Desk',
+    icon: <Stethoscope size={22} className="text-blue-300" />,
+    description: 'Staff request deliveries from a web dashboard or mobile device — no new hardware, no specialist training.',
   },
   {
-    title: 'WebSocket Events',
-    icon: <Plug size={22} className="text-blue-300" />,
-    description:
-      'Real-time bidirectional channel for live telemetry, mission state changes, and safety alerts. Subscribe to specific drone or mission streams.',
+    title: 'Role-Based Access',
+    icon: <Lock size={22} className="text-blue-300" />,
+    description: 'Doctors, nurses, pharmacy, and admin each get the right level of access. Audit logs for every action.',
   },
   {
-    title: 'MCP Tools',
-    icon: <Wrench size={22} className="text-blue-300" />,
-    description:
-      'MAVLink MCP exposes drone control as AI-callable tools: arm, takeoff, goto, land, and return-to-launch. Build autonomous agents that fly drones via natural language.',
+    title: 'Onboarding in a Week',
+    icon: <Clock size={22} className="text-blue-300" />,
+    description: 'Our team handles site surveys, landing pad setup, and staff training. First mission within seven days of go-live.',
   },
 ];
 
@@ -194,14 +191,13 @@ export function Technology() {
 
       {/* ── 1. Hero ── */}
       <section className="relative overflow-hidden bg-bg py-24 lg:py-32 2xl:py-40">
-        {/* Background image with dark gradient overlay */}
         <div
           className="pointer-events-none absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(to right, var(--color-bg) 40%, transparent 100%), url(/images/server-room.jpg)`,
+            backgroundImage: `linear-gradient(to right, var(--color-bg) 40%, transparent 100%), url(/images/hospital.jpg)`,
             backgroundSize: 'cover',
-            backgroundPosition: 'right bottom',
-            opacity: 0.2,
+            backgroundPosition: 'right center',
+            opacity: 0.25,
           }}
         />
         <div className="relative mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
@@ -217,8 +213,8 @@ export function Technology() {
               custom={0}
               className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/5 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-blue-300"
             >
-              <Cpu size={14} />
-              Engineering
+              <Stethoscope size={14} />
+              How It Works
             </motion.div>
 
             <motion.h1
@@ -226,8 +222,8 @@ export function Technology() {
               custom={1}
               className="font-headline text-4xl font-black leading-[1.1] tracking-tight text-on-surface md:text-5xl lg:text-6xl 2xl:text-7xl"
             >
-              The Technology Behind{' '}
-              <span className="text-blue-300">DroneMedic</span>
+              Minutes That{' '}
+              <span className="text-blue-300">Save Lives</span>
             </motion.h1>
 
             <motion.p
@@ -235,16 +231,15 @@ export function Technology() {
               custom={2}
               className="mt-6 max-w-2xl text-lg leading-relaxed text-on-surface-variant 2xl:text-xl"
             >
-              An integrated platform combining AI-powered coordination, autonomous
-              robotics simulation, and real-time telemetry systems to deliver
-              life-critical medical supplies when every second counts.
+              From the moment your staff describes a delivery, our platform plans,
+              flies, and tracks it for you. Here&apos;s what happens end-to-end —
+              no engineering background required.
             </motion.p>
           </motion.div>
         </div>
       </section>
 
-      {/* ── 2. Architecture Overview ── */}
-
+      {/* ── 2. Delivery Workflow ── */}
       <section className="bg-surface py-24 lg:py-32 2xl:py-40">
         <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
           <motion.div
@@ -258,7 +253,7 @@ export function Technology() {
               custom={0}
               className="font-headline text-3xl font-bold tracking-tight text-on-surface md:text-4xl 2xl:text-5xl"
             >
-              System Architecture
+              From Request to Delivery
             </motion.h2>
 
             <motion.p
@@ -266,62 +261,38 @@ export function Technology() {
               custom={1}
               className="mt-4 max-w-2xl text-base leading-relaxed text-on-surface-variant 2xl:text-lg"
             >
-              DroneMedic uses a layered architecture where each module operates
-              independently. Natural language flows through AI coordination into
-              deterministic route optimization, then into simulation and live
-              monitoring — all connected by event-driven messaging.
+              Every mission follows the same simple path. You describe what&apos;s
+              needed; we handle everything from routing to landing, with human
+              oversight at every step.
             </motion.p>
 
-            {/* Primary pipeline */}
             <motion.div
               variants={fadeUp}
               custom={2}
               className="mt-12 rounded-xl border border-outline-variant/10 bg-surface-container-low p-8 2xl:p-10"
             >
               <div className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-on-surface-variant">
-                Primary Pipeline
+                Delivery Workflow
               </div>
               <div className="flex flex-wrap items-center gap-3">
-                <FlowNode label="User Input" sub="Natural language" accent index={0} />
+                <FlowNode label="Request" sub="Plain English" accent index={0} />
                 <FlowArrow />
-                <FlowNode label="Claude LLM" sub="Task parsing" accent index={1} />
+                <FlowNode label="Understand" sub="AI interprets need" accent index={1} />
                 <FlowArrow />
-                <FlowNode label="OR-Tools VRP" sub="Route optimization" index={2} />
+                <FlowNode label="Plan" sub="Safest fastest route" index={2} />
                 <FlowArrow />
-                <FlowNode label="FastAPI" sub="Backend API" index={3} />
+                <FlowNode label="Prepare" sub="Payload & pre-flight" index={3} />
                 <FlowArrow />
-                <FlowNode label="WebSocket" sub="Telemetry stream" index={4} />
+                <FlowNode label="Fly" sub="Autonomous flight" index={4} />
                 <FlowArrow />
-                <FlowNode label="React Dashboard" sub="Live monitoring" accent index={5} />
-              </div>
-            </motion.div>
-
-            {/* Simulation pipeline */}
-            <motion.div
-              variants={fadeUp}
-              custom={3}
-              className="mt-6 rounded-xl border border-outline-variant/10 bg-surface-container-low p-8 2xl:p-10"
-            >
-              <div className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-on-surface-variant">
-                Simulation Pipeline
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <FlowNode label="MAVLink MCP" sub="AI tool interface" accent index={0} />
-                <FlowArrow />
-                <FlowNode label="PX4 SITL" sub="Autopilot firmware" index={1} />
-                <FlowArrow />
-                <FlowNode label="Gazebo Harmonic" sub="Physics engine" index={2} />
-                <FlowArrow />
-                <FlowNode label="MAVSDK" sub="Telemetry bridge" index={3} />
-                <FlowArrow />
-                <FlowNode label="WebSocket" sub="ws://localhost:8765" index={4} />
+                <FlowNode label="Deliver" sub="Confirmed drop" accent index={5} />
               </div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── 3. Tech Stack ── */}
+      {/* ── 3. Every Flight, Fully Equipped ── */}
       <section className="bg-bg py-24 lg:py-32 2xl:py-40">
         <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
           <motion.div
@@ -335,11 +306,11 @@ export function Technology() {
               custom={0}
               className="font-headline text-3xl font-bold tracking-tight text-on-surface md:text-4xl 2xl:text-5xl"
             >
-              Built with Best-in-Class Tools
+              Every Flight, Fully Equipped
             </motion.h2>
 
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {TECH_STACK.map((card, i) => (
+              {CAPABILITIES.map((card, i) => (
                 <motion.div
                   key={card.category}
                   variants={fadeUp}
@@ -376,7 +347,7 @@ export function Technology() {
         </div>
       </section>
 
-      {/* ── 4. AI Engine ── */}
+      {/* ── 4. Smart Dispatch, Human Oversight ── */}
       <section className="bg-surface-container-low py-24 lg:py-32 2xl:py-40">
         <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
           <motion.div
@@ -390,50 +361,45 @@ export function Technology() {
               custom={0}
               className="font-headline text-3xl font-bold tracking-tight text-on-surface md:text-4xl 2xl:text-5xl"
             >
-              AI-Powered Intelligence
+              Smart Dispatch, Human Oversight
             </motion.h2>
 
             <div className="mt-12 grid gap-8 lg:grid-cols-2">
-              {/* NLP */}
+              {/* Understands Your Request */}
               <motion.div
                 variants={fadeUp}
                 custom={1}
                 className="rounded-xl bg-surface p-8 2xl:p-10 border border-outline-variant/10"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <Brain size={22} className="text-blue-300" />
+                  <MessageSquare size={22} className="text-blue-300" />
                   <h3 className="font-headline text-lg font-bold text-on-surface">
-                    Natural Language Processing
+                    Understands Your Request
                   </h3>
                 </div>
                 <p className="text-sm leading-relaxed text-on-surface-variant">
-                  Claude AI parses free-text mission requests into structured JSON
-                  with locations, supplies, priorities, and constraints. The task
-                  parser extracts intent from natural language like{' '}
-                  <span className="text-blue-300">
-                    &quot;Send insulin to St. Mary&apos;s Hospital urgently&quot;
-                  </span>{' '}
-                  and maps it to actionable mission parameters with validated
-                  coordinates and supply manifests.
+                  Type or speak requests the way your staff already communicate:
+                  &quot;Insulin to St. Mary&apos;s, urgent.&quot; The system identifies
+                  the destination, supplies, and urgency, then drafts a mission for
+                  a dispatcher to confirm — no code, no forms, no training.
                 </p>
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={codeBlockFade}
-                  className="mt-6 rounded-lg bg-surface-container-low p-4 font-mono text-xs text-on-surface-variant border border-outline-variant/10"
-                >
-                  <div className="text-blue-300">// Parsed output</div>
-                  <div>{'{'}</div>
-                  <div className="pl-4">&quot;destination&quot;: &quot;st_marys_hospital&quot;,</div>
-                  <div className="pl-4">&quot;supplies&quot;: [&quot;insulin&quot;, &quot;syringes&quot;],</div>
-                  <div className="pl-4">&quot;priority&quot;: &quot;urgent&quot;,</div>
-                  <div className="pl-4">&quot;constraints&quot;: {'{'} &quot;avoid_no_fly&quot;: true {'}'}</div>
-                  <div>{'}'}</div>
-                </motion.div>
+                <div className="mt-6 space-y-3">
+                  <div className="rounded-lg border border-outline-variant/10 bg-surface-container-low p-4 text-sm text-on-surface-variant">
+                    <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70">
+                      Staff
+                    </div>
+                    Send 4 units of O-neg to King&apos;s ICU, high priority.
+                  </div>
+                  <div className="rounded-lg border border-blue-400/20 bg-blue-400/5 p-4 text-sm text-blue-300">
+                    <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-blue-300/80">
+                      DroneMedic
+                    </div>
+                    Dispatching to King&apos;s College ICU — ETA 8 min.
+                  </div>
+                </div>
               </motion.div>
 
-              {/* Route Optimization */}
+              {/* Always the Safest Route */}
               <motion.div
                 variants={fadeUp}
                 custom={2}
@@ -442,23 +408,20 @@ export function Technology() {
                 <div className="flex items-center gap-3 mb-4">
                   <Route size={22} className="text-blue-300" />
                   <h3 className="font-headline text-lg font-bold text-on-surface">
-                    Route Optimization
+                    Always the Safest Route
                   </h3>
                 </div>
                 <p className="text-sm leading-relaxed text-on-surface-variant">
-                  Google OR-Tools solves the Vehicle Routing Problem with time
-                  windows, capacity constraints, and priority weighting. High-priority
-                  destinations appear 70% closer to the solver, ensuring urgent
-                  deliveries are always dispatched first. The engine accounts for
-                  battery drain rates, no-fly zone penalties, and weather adjustments
-                  to produce optimal multi-drone routes.
+                  Every flight automatically avoids restricted airspace, unsafe
+                  weather, and other active missions. Urgent deliveries take
+                  priority and are dispatched first.
                 </p>
                 <div className="mt-6 space-y-3">
                   {[
-                    { label: 'Priority weighting', value: '0.3 (70% closer)' },
-                    { label: 'Battery constraint', value: '0.08%/m drain rate' },
-                    { label: 'Max drones', value: '2 (VRP multi-vehicle)' },
-                    { label: 'No-fly penalties', value: 'Polygon exclusion zones' },
+                    { label: 'Average dispatch time', value: '< 30 seconds' },
+                    { label: 'Weather re-routes handled', value: 'Automatic' },
+                    { label: 'Urgent missions prioritized', value: 'Always first' },
+                    { label: 'Simultaneous flights supported', value: 'Multi-drone' },
                   ].map((item) => (
                     <div
                       key={item.label}
@@ -475,7 +438,7 @@ export function Technology() {
         </div>
       </section>
 
-      {/* ── 5. Real-time Telemetry ── */}
+      {/* ── 5. Live Tracking for Your Team ── */}
       <section className="bg-bg py-24 lg:py-32 2xl:py-40">
         <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
           <motion.div
@@ -489,29 +452,27 @@ export function Technology() {
               custom={0}
               className="font-headline text-3xl font-bold tracking-tight text-on-surface md:text-4xl 2xl:text-5xl"
             >
-              Live Telemetry Pipeline
+              Live Tracking for Your Team
             </motion.h2>
 
-            {/* Flow diagram */}
             <motion.div
               variants={fadeUp}
               custom={1}
               className="mt-12 rounded-xl border border-outline-variant/10 bg-surface-container-low p-8 2xl:p-10"
             >
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <FlowNode label="PX4 Sensors" sub="GPS, IMU, Baro" index={0} />
+                <FlowNode label="Active Flight" sub="Mission underway" index={0} />
                 <FlowArrow />
-                <FlowNode label="MAVLink UDP" sub="Port 14540" index={1} />
+                <FlowNode label="Live Position" sub="Updated every second" index={1} />
                 <FlowArrow />
-                <FlowNode label="MAVSDK Python" sub="Async wrapper" index={2} />
+                <FlowNode label="Secure Uplink" sub="Encrypted channel" index={2} />
                 <FlowArrow />
-                <FlowNode label="WebSocket Bridge" sub="ws://localhost:8765" accent index={3} />
+                <FlowNode label="Dispatch Screen" sub="Your control center" accent index={3} />
                 <FlowArrow />
-                <FlowNode label="React Dashboard" sub="Google Maps + 3D" accent index={4} />
+                <FlowNode label="Delivery Alert" sub="Confirmed to ward" accent index={4} />
               </div>
             </motion.div>
 
-            {/* Control room image */}
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -519,28 +480,40 @@ export function Technology() {
               variants={fadeInUp}
               className="mt-10"
             >
-              <img
-                src="/images/control-room.jpg"
-                alt="Live telemetry control room dashboard"
-                className="w-full rounded-xl border border-outline-variant/10 object-cover"
-              />
+              <div className="relative overflow-hidden rounded-xl border border-outline-variant/10">
+                <img
+                  src="/images/emergency-medical.jpg"
+                  alt="Emergency medical supplies ready for drone dispatch"
+                  className="h-[320px] 2xl:h-[420px] w-full object-cover"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg via-bg/30 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-bg/60 via-transparent to-transparent" />
+                <div className="absolute bottom-6 left-6 2xl:bottom-8 2xl:left-8 max-w-sm">
+                  <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-blue-300">
+                    <span className="flex h-1.5 w-1.5 rounded-full bg-blue-300 animate-pulse" />
+                    Live Mission
+                  </div>
+                  <p className="text-sm 2xl:text-base text-on-surface-variant">
+                    Staff track every delivery in real time — from liftoff on the helipad to touchdown at the receiving ward.
+                  </p>
+                </div>
+              </div>
             </motion.div>
 
-            {/* Stats */}
             <motion.div
               variants={fadeUp}
               custom={2}
               className="mt-8 flex flex-wrap items-center justify-center gap-12 lg:gap-20"
             >
-              <TelemetryStat value="<50ms" label="End-to-end latency" />
-              <TelemetryStat value="10 Hz" label="Update rate" />
-              <TelemetryStat value="TLS" label="Encrypted transport" />
+              <TelemetryStat value="1s" label="Position refresh" />
+              <TelemetryStat value="24/7" label="Mission monitoring" />
+              <TelemetryStat value="End-to-end" label="Encrypted" />
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── 6. API Reference ── */}
+      {/* ── 6. What Hospitals Ask First ── */}
       <section className="bg-surface py-24 lg:py-32 2xl:py-40">
         <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
           <motion.div
@@ -554,114 +527,40 @@ export function Technology() {
               custom={0}
               className="font-headline text-3xl font-bold tracking-tight text-on-surface md:text-4xl 2xl:text-5xl"
             >
-              REST API Endpoints
+              What Hospitals Ask First
             </motion.h2>
 
-            {/* Endpoints table */}
-            <motion.div
+            <motion.p
               variants={fadeUp}
               custom={1}
-              className="mt-12 overflow-x-auto rounded-xl border border-outline-variant/10 bg-surface-container-low"
+              className="mt-4 max-w-2xl text-base leading-relaxed text-on-surface-variant 2xl:text-lg"
             >
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-outline-variant/10 text-xs font-bold uppercase tracking-[0.1em] text-on-surface-variant">
-                    <th className="px-6 py-4">Method</th>
-                    <th className="px-6 py-4">Endpoint</th>
-                    <th className="px-6 py-4">Description</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ENDPOINTS.map((ep, i) => (
-                    <motion.tr
-                      key={`${ep.method}-${ep.path}`}
-                      variants={staggerFromLeft}
-                      custom={i}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true }}
-                      className="border-b border-outline-variant/5 last:border-0"
-                    >
-                      <td className="px-6 py-4">
-                        <span
-                          className={`inline-block rounded px-2 py-0.5 font-mono text-xs font-bold ${
-                            ep.method === 'POST'
-                              ? 'bg-green-500/10 text-green-400'
-                              : 'bg-blue-400/10 text-blue-300'
-                          }`}
-                        >
-                          {ep.method}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 font-mono text-on-surface">
-                        {ep.path}
-                      </td>
-                      <td className="px-6 py-4 text-on-surface-variant">
-                        {ep.description}
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </motion.div>
+              The questions we hear most from clinical leadership, compliance, and
+              dispatch teams — answered plainly.
+            </motion.p>
 
-            {/* Example request */}
-            <motion.div variants={fadeUp} custom={2} className="mt-8">
-              <div className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-on-surface-variant">
-                Example Request
-              </div>
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={codeBlockFade}
-                className="bg-surface-container-low rounded-lg p-6 font-mono text-sm text-on-surface-variant border border-outline-variant/10"
-              >
-                <div className="text-blue-300">POST /api/missions</div>
-                <div className="mt-2">{'{'}</div>
-                <div className="pl-4">
-                  &quot;description&quot;: &quot;Send insulin to St. Mary&apos;s Hospital&quot;,
-                </div>
-                <div className="pl-4">&quot;priority&quot;: &quot;urgent&quot;,</div>
-                <div className="pl-4">
-                  &quot;supplies&quot;: [&quot;insulin&quot;, &quot;syringes&quot;],
-                </div>
-                <div className="pl-4">
-                  &quot;destination&quot;: &quot;st_marys_hospital&quot;
-                </div>
-                <div>{'}'}</div>
-              </motion.div>
-            </motion.div>
-
-            {/* Example response */}
-            <motion.div variants={fadeUp} custom={3} className="mt-6">
-              <div className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-on-surface-variant">
-                Example Response
-              </div>
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={codeBlockFade}
-                className="bg-surface-container-low rounded-lg p-6 font-mono text-sm text-on-surface-variant border border-outline-variant/10"
-              >
-                <div>{'{'}</div>
-                <div className="pl-4">&quot;success&quot;: <span className="text-green-400">true</span>,</div>
-                <div className="pl-4">&quot;data&quot;: {'{'}</div>
-                <div className="pl-8">&quot;mission_id&quot;: &quot;MSN-0087&quot;,</div>
-                <div className="pl-8">&quot;status&quot;: &quot;dispatched&quot;,</div>
-                <div className="pl-8">&quot;drone_id&quot;: &quot;Drone1&quot;,</div>
-                <div className="pl-8">&quot;eta_seconds&quot;: 142</div>
-                <div className="pl-4">{'}'},</div>
-                <div className="pl-4">&quot;error&quot;: <span className="text-on-surface-variant">null</span></div>
-                <div>{'}'}</div>
-              </motion.div>
-            </motion.div>
+            <div className="mt-12 grid gap-4 2xl:gap-6 md:grid-cols-2">
+              {FAQ.map((item, i) => (
+                <motion.div
+                  key={item.question}
+                  variants={fadeUp}
+                  custom={i + 2}
+                  className="rounded-xl bg-surface-container-low p-6 2xl:p-8 border border-outline-variant/10"
+                >
+                  <h3 className="mb-3 font-headline text-base 2xl:text-lg font-bold text-on-surface">
+                    {item.question}
+                  </h3>
+                  <p className="text-sm 2xl:text-base leading-relaxed text-on-surface-variant">
+                    {item.answer}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── 7. Developer Integration ── */}
+      {/* ── 7. Fits Your Existing Workflow ── */}
       <section className="bg-bg py-24 lg:py-32 2xl:py-40">
         <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
           <motion.div
@@ -675,11 +574,11 @@ export function Technology() {
               custom={0}
               className="font-headline text-3xl font-bold tracking-tight text-on-surface md:text-4xl 2xl:text-5xl"
             >
-              Developer-Friendly Integration
+              Fits Your Existing Workflow
             </motion.h2>
 
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {INTEGRATIONS.map((card, i) => (
+              {WORKFLOW.map((card, i) => (
                 <motion.div
                   key={card.title}
                   variants={fadeUp}

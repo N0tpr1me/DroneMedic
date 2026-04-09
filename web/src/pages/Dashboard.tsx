@@ -29,7 +29,14 @@ type MissionStatus = 'idle' | 'planning' | 'flying' | 'rerouting' | 'completed';
 
 export function Dashboard() {
   const navigate = useNavigate();
-  const { fleetPhysics, liveFlightLog, dispatchDelivery, droneAlerts, fleetSummary, activeTask, activeRoute, setActiveTask, setActiveRoute, activeDroneId, missionStatus: ctxMissionStatus } = useMissionContext();
+  const {
+    fleetPhysics, liveFlightLog, dispatchDelivery, droneAlerts, fleetSummary,
+    activeTask, activeRoute, setActiveTask, setActiveRoute, activeDroneId,
+    missionStatus: ctxMissionStatus,
+    // Live mission telemetry lifted from Dashboard into context so it survives
+    // page navigation. These replace the local useState declarations.
+    droneProgress, missionProgress, liveBattery, simPayload,
+  } = useMissionContext();
   const [locations, setLocations] = useState<Record<string, Location>>({});
   const [task, setTask] = useState<Task | null>(null);
   const [route, setRoute] = useState<Route | null>(null);
@@ -39,10 +46,7 @@ export function Dashboard() {
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [flightLog, setFlightLog] = useState<FlightLogEntry[]>([]);
   const [status, setStatus] = useState<MissionStatus>('idle');
-  const [battery, setBattery] = useState(100);
   const [_currentLocation, setCurrentLocation] = useState('Depot');
-  const [droneProgress, setDroneProgress] = useState(0);
-  const [missionProgress, setMissionProgress] = useState(0);
   const [smoothSpeed, setSmoothSpeed] = useState(0);
   const smoothSpeedRef = useRef(0);
   const [mapCommand, setMapCommand] = useState<MapCommand | null>(null);
@@ -53,7 +57,8 @@ export function Dashboard() {
   const live = useLiveMission(route?.ordered_route);
   const { telemetry: px4Telemetry, connected: px4Connected, sendCommand: px4Command, source: telemetrySource } = usePX4Telemetry();
   const { events: naturalEvents, loading: eonetLoading, error: eonetError, refetch: refetchEonet } = useEONET({ limit: 30, days: 60 });
-  const [simPayload, setSimPayload] = useState<{temperature_c: number; integrity: string} | null>(null);
+  // Alias for JSX references that still use `battery` — comes from context now
+  const battery = liveBattery;
   const [showChat, setShowChat] = useState(false);
   const [show3dSim, setShow3dSim] = useState(false);
   const [sim3dExpanded, setSim3dExpanded] = useState(false);
@@ -116,15 +121,14 @@ export function Dashboard() {
   }, [live.safetyDecisions]);
 
   // Sync live WebSocket state into dashboard state
+  // droneProgress / missionProgress / battery / simPayload now live in MissionContext
+  // (they survive page navigation). We only sync flight log + status + audio cues here.
   useEffect(() => {
     if (live.missionStatus === 'flying' || live.missionStatus === 'completed' || live.missionStatus === 'paused') {
       setStatus(live.missionStatus === 'flying' ? 'flying' : live.missionStatus as MissionStatus);
-      setDroneProgress(live.droneProgress);
-      setMissionProgress(live.missionProgress);
       if (live.flightLog.length > 0) {
         setFlightLog(live.flightLog);
         const lastEntry = live.flightLog[live.flightLog.length - 1];
-        setBattery(Math.round(lastEntry.battery));
         setCurrentLocation(lastEntry.location);
       }
       if (live.flightLog.length > 0) {
@@ -133,12 +137,11 @@ export function Dashboard() {
         if (last.event === 'landed') playComplete();
       }
     }
-  }, [live.missionStatus, live.droneProgress, live.missionProgress, live.flightLog]);
+  }, [live.missionStatus, live.flightLog]);
 
   // Sync PX4/Unity telemetry into dashboard state (overrides live mission when connected)
   useEffect(() => {
     if (!px4Connected || !px4Telemetry) return;
-    setBattery(Math.round(px4Telemetry.battery_pct));
     if (px4Telemetry.current_location) setCurrentLocation(px4Telemetry.current_location);
     if (px4Telemetry.is_flying && status !== 'flying') setStatus('flying');
     if (!px4Telemetry.is_flying && px4Telemetry.flight_mode === 'Idle' && status === 'flying') setStatus('completed');
@@ -179,35 +182,9 @@ export function Dashboard() {
   useEffect(() => {
     if (activeTask && !task) setTask(activeTask);
     if (activeRoute && !route) setRoute(activeRoute);
-    if (ctxMissionStatus === 'flying' && status === 'idle') setStatus('flying');
-    if (ctxMissionStatus === 'completed' && status !== 'completed') {
-      setStatus('completed');
-      setDroneProgress(1);
-      setMissionProgress(100);
-    }
+    if (ctxMissionStatus === 'flying' && status !== 'flying') setStatus('flying');
+    if (ctxMissionStatus === 'completed' && status !== 'completed') setStatus('completed');
   }, [activeTask, activeRoute, ctxMissionStatus]);
-
-  // Simulated cold-chain payload temperature when no real WebSocket data
-  useEffect(() => {
-    if (live.payloadStatus) { setSimPayload(null); return; }
-    if (status === 'idle') { setSimPayload(null); return; }
-    // Start at 4.0°C (standard blood storage) with realistic fluctuation
-    const base = 4.0;
-    setSimPayload({ temperature_c: base, integrity: 'nominal' });
-    const iv = setInterval(() => {
-      setSimPayload(prev => {
-        if (!prev) return { temperature_c: base, integrity: 'nominal' };
-        // Random walk: slight upward drift (ambient warming) + noise
-        const drift = 0.008; // slow warming per tick
-        const noise = (Math.random() - 0.45) * 0.15; // slight upward bias
-        const next = Math.round((prev.temperature_c + drift + noise) * 100) / 100;
-        const clamped = Math.max(2.0, Math.min(7.5, next));
-        const integrity = clamped > 6.0 ? 'warning' : clamped > 7.0 ? 'critical' : 'nominal';
-        return { temperature_c: clamped, integrity };
-      });
-    }, 2000);
-    return () => clearInterval(iv);
-  }, [status, live.payloadStatus]);
 
   // Auto-dispatch from Deploy page handoff
   useEffect(() => {
@@ -221,9 +198,8 @@ export function Dashboard() {
       setTimeout(() => {
         playDeploy();
         setStatus('flying');
-        setDroneProgress(0);
-        setMissionProgress(0);
         try {
+          // dispatchDelivery resets droneProgress/missionProgress/battery/flightStartRef in context
           dispatchDelivery(state.task!, state.route!, userLocation ?? undefined);
         } catch { /* fallback handled by dispatchDelivery */ }
       }, 1000);
@@ -232,7 +208,8 @@ export function Dashboard() {
     }
   }, [routerLocation.state, locations, status]);
 
-  // Sync drone progress from fleet physics at ~10Hz
+  // Smooth speed readout — computed locally from fleet physics at 10 Hz.
+  // (droneProgress/missionProgress/battery are now maintained in MissionContext.)
   useEffect(() => {
     const interval = setInterval(() => {
       const mapData = fleetPhysics.getDroneMapData();
@@ -240,26 +217,15 @@ export function Dashboard() {
       if (flyingDrone) {
         const tel = fleetPhysics.getTelemetry(flyingDrone.id);
         if (tel) {
-          setBattery(Math.round(tel.battery_pct));
-          setMissionProgress(Math.round(tel.missionProgress));
-          setDroneProgress(tel.totalWaypoints > 1
-            ? Math.min((tel.currentWaypointIdx + (tel.missionProgress / 100 * (tel.totalWaypoints - 1) - tel.currentWaypointIdx)) / (tel.totalWaypoints - 1), 1)
-            : 0);
-          // Exponential smoothing for speed — prevents flickering
           const rawSpeed = Math.round(tel.speed_ms * 3.6);
-          const alpha = 0.15; // smoothing factor (lower = smoother)
+          const alpha = 0.15;
           smoothSpeedRef.current = smoothSpeedRef.current + alpha * (rawSpeed - smoothSpeedRef.current);
           setSmoothSpeed(Math.round(smoothSpeedRef.current));
         }
         if (status !== 'flying') setStatus('flying');
       } else if (status === 'flying') {
-        // Check if any drone just completed
         const anyCompleted = mapData.some(d => d.status === 'hover' || d.status === 'landed');
-        if (anyCompleted) {
-          setStatus('completed');
-          setDroneProgress(1);
-          setMissionProgress(100);
-        }
+        if (anyCompleted) setStatus('completed');
       }
     }, 100);
     return () => clearInterval(interval);
@@ -286,7 +252,8 @@ export function Dashboard() {
 
     // 2. Sound + status
     playDeploy();
-    setStatus('flying'); setDroneProgress(0); setMissionProgress(0);
+    setStatus('flying');
+    // droneProgress/missionProgress reset inside dispatchDelivery (context)
 
     // 3. Dispatch via fleet physics context (finds closest idle drone)
     try {
@@ -306,7 +273,7 @@ export function Dashboard() {
     }
   }, [route, task, locations, dispatchDelivery, userLocation]);
 
-  const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setBattery(100);setCurrentLocation('Depot');setDroneProgress(0);setMissionProgress(0);live.reset();setActiveTask(null);setActiveRoute(null); }, [live, setActiveTask, setActiveRoute]);
+  const _handleReset = useCallback(() => { setTask(null);setRoute(null);setReroute(null);setMetrics(null);setFlightLog([]);setStatus('idle');setCurrentLocation('Depot');live.reset();setActiveTask(null);setActiveRoute(null); }, [live, setActiveTask, setActiveRoute]);
 
   const handleAiChat = useCallback(async (message: string, sessionId?: string): Promise<string> => {
     try {
@@ -527,7 +494,12 @@ export function Dashboard() {
               <div role="meter" aria-valuenow={missionProgress} aria-valuemin={0} aria-valuemax={100} aria-label="Mission progress" style={{height:4,width:'100%',background:'#30353a',borderRadius:9999,overflow:'hidden'}}>
                 <div style={{height:'100%',background:'#b3c5ff',width:`${missionProgress}%`,borderRadius:9999,transition:'width 0.5s'}} />
               </div>
-              <p style={{marginTop:8,fontSize:10,color:'rgba(223,227,233,0.7)'}}>Est. Arrival: <span style={{color:'#b3c5ff',fontWeight:700}}>{route ? `${Math.ceil(route.estimated_time / 60)}m ${route.estimated_time % 60}s` : '—'}</span></p>
+              <p style={{marginTop:8,fontSize:10,color:'rgba(223,227,233,0.7)'}}>Est. Arrival: <span style={{color:'#b3c5ff',fontWeight:700}}>{route ? (() => {
+                const remaining = Math.max(0, Math.round(route.estimated_time * (1 - missionProgress / 100)));
+                const m = Math.floor(remaining / 60);
+                const s = remaining % 60;
+                return `${m}m ${s}s`;
+              })() : '—'}</span></p>
             </div>
           </section>
 

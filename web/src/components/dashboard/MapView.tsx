@@ -496,15 +496,15 @@ export function MapView({
 
     if (!droneMarkerRef.current) {
       const el = document.createElement('div');
-      el.style.cssText = 'position:relative;width:48px;height:48px;';
+      el.style.cssText = 'position:relative;width:56px;height:56px;';
       // Pulsing outer ring
       const pulse = document.createElement('div');
-      pulse.style.cssText = 'position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(0,218,243,0.4);animation:dronePulse 2s ease-in-out infinite;';
+      pulse.style.cssText = 'position:absolute;inset:-10px;border-radius:50%;border:2px solid rgba(255,176,32,0.55);animation:dronePulse 2s ease-in-out infinite;';
       // Heading arrow
       const arrow = document.createElement('div');
       arrow.className = 'drone-heading';
       arrow.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease;';
-      arrow.innerHTML = '<svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="14" fill="rgba(0,218,243,0.15)" stroke="#00daf3" stroke-width="2"/><circle cx="24" cy="24" r="6" fill="#00daf3" filter="url(#glow)"/><polygon points="24,6 28,16 20,16" fill="#00daf3" opacity="0.9"/><defs><filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg>';
+      arrow.innerHTML = '<svg width="56" height="56" viewBox="0 0 56 56"><defs><filter id="droneGlow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="28" cy="28" r="18" fill="#0f1418" stroke="#ffb020" stroke-width="2.5"/><rect x="24" y="24" width="8" height="8" fill="#ffb020" rx="1.5"/><line x1="18" y1="18" x2="24" y2="24" stroke="#ffb020" stroke-width="1.5" stroke-linecap="round"/><line x1="38" y1="18" x2="32" y2="24" stroke="#ffb020" stroke-width="1.5" stroke-linecap="round"/><line x1="18" y1="38" x2="24" y2="32" stroke="#ffb020" stroke-width="1.5" stroke-linecap="round"/><line x1="38" y1="38" x2="32" y2="32" stroke="#ffb020" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="18" r="4" fill="#ffffff" stroke="#ffb020" stroke-width="1" opacity="0.95"/><circle cx="38" cy="18" r="4" fill="#ffffff" stroke="#ffb020" stroke-width="1" opacity="0.95"/><circle cx="18" cy="38" r="4" fill="#ffffff" stroke="#ffb020" stroke-width="1" opacity="0.95"/><circle cx="38" cy="38" r="4" fill="#ffffff" stroke="#ffb020" stroke-width="1" opacity="0.95"/><polygon points="28,10 31,16 25,16" fill="#ffb020" filter="url(#droneGlow)"/></svg>';
       el.appendChild(pulse);
       el.appendChild(arrow);
       // Inject keyframes
@@ -530,7 +530,7 @@ export function MapView({
 
     if (!trailMarkerRef.current) {
       const el = document.createElement('div');
-      el.style.cssText = 'width:32px;height:32px;border-radius:50%;background:radial-gradient(circle,rgba(0,218,243,0.3),transparent 70%);filter:blur(3px);';
+      el.style.cssText = 'width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,rgba(255,176,32,0.4),transparent 70%);filter:blur(3px);';
       trailMarkerRef.current = new google.maps.marker.AdvancedMarkerElement({ position: trail, map, content: el, zIndex: 99 });
     } else { trailMarkerRef.current.position = trail; }
 

@@ -1,76 +1,113 @@
-# DroneMedic: AI-Controlled Medical Delivery Drone
+# DroneMedic — AI-Controlled Medical Delivery Drones
 
-DroneMedic is an AI-powered autonomous drone delivery system for medical supplies in London. It uses **PX4 SITL + Gazebo Harmonic** for realistic drone simulation, **MAVLink MCP** for AI-controlled flight, **Google OR-Tools** for multi-stop route optimisation, and a **React + FastAPI** dashboard for real-time monitoring. The system adapts mid-flight to weather changes, no-fly zones, and emergency deliveries.
+DroneMedic is an AI-powered autonomous drone delivery platform for medical supplies in London. A Claude-driven mission coordinator turns natural-language requests into optimised multi-stop flight plans, dispatches drones across a simulated Central London fleet, and monitors every mission in real time from a live-ops dashboard. The system handles dynamic re-routing around weather, no-fly zones, and mid-flight emergencies.
 
-## Key Features
+Built for the **AR26 HackXelerator** university hackathon.
 
-- **AI Mission Coordinator** -- Claude-powered agent that interprets natural language delivery requests and directly controls drones via MAVLink MCP
-- **Realistic Drone Simulation** -- PX4 autopilot firmware running in SITL mode with Gazebo Harmonic physics, GPS, and sensor models
-- **Multi-Stop Route Optimisation** -- Google OR-Tools VRP solver computes optimal routes across multiple drones with battery and time constraints
-- **Dynamic Re-Routing** -- Real-time adaptation to weather changes, no-fly zone updates, and new high-priority deliveries mid-flight
-- **Real-Time Telemetry Dashboard** -- React dashboard with Google Maps, live drone tracking, and WebSocket telemetry streaming
-- **MAVLink MCP Integration** -- AI models can arm, takeoff, navigate, and land drones through MCP tool calls
+---
+
+## Highlights
+
+- **Natural-language mission planning** — describe a delivery in plain English, Claude parses it into structured tasks, and OR-Tools computes the optimal multi-stop route.
+- **Deterministic routing, AI coordination** — OR-Tools VRP solver owns the math; the LLM owns the conversation, reasoning, and mid-flight decisions.
+- **Full-physics drone simulation** — PX4 SITL + Gazebo Harmonic run a real x500 quadcopter with GPS, IMU, and aerodynamic drag on a Central London SDF world. A mock telemetry mode runs without the simulator for local dev.
+- **Live-ops dashboard** — React + TypeScript dashboard with Google Maps satellite layer, animated drone marker, chain-of-custody timeline, cold-chain payload temperature, and a 10 Hz physics-driven HUD. Mission state persists across page navigation.
+- **Dynamic re-routing** — real-time adaptation to weather changes (OpenWeatherMap or simulated), no-fly zone updates, and new high-priority requests mid-flight.
+- **MAVLink MCP integration** — Claude can arm, takeoff, goto, and land drones through Model Context Protocol tool calls, bridging LLM reasoning to real autopilot commands.
+- **NASA EONET integration** — natural-hazard overlays (wildfires, storms, floods) rendered as map markers to illustrate real-world adaptability.
+- **Multi-drone fleet** — configurable fleet with per-drone battery physics, payload weight tracking, and VRP-based load balancing.
+
+---
 
 ## Tech Stack
 
-| Component | Technology |
-|-----------|-----------|
-| Flight Simulator | PX4 SITL + Gazebo Harmonic |
-| Flight Control | MAVSDK (Python) / MAVLink protocol |
-| AI Drone Control | MAVLink MCP (MCP server for LLM tool use) |
-| Route Planning | Google OR-Tools (VRP/TSP solver) |
-| LLM Coordinator | Claude API |
-| Maps & Visualisation | Google Maps API, React |
-| Weather Data | OpenWeatherMap API |
-| No-Fly Zones | Custom geofence polygons (ray-casting) |
-| Frontend | React, TypeScript, Tailwind CSS, Framer Motion |
-| Backend | FastAPI (Python), WebSocket telemetry |
-| Auth & Database | Supabase |
-| Simulation Server | Ubuntu 22.04, NVIDIA A40 GPU, ROS 2 Humble |
+| Layer | Technology |
+|---|---|
+| **Flight simulator** | PX4 SITL + Gazebo Harmonic (GPS-accurate SDF world) |
+| **Flight control** | MAVSDK (Python async), MAVLink protocol |
+| **AI drone control** | MAVLink MCP server (LLM tool use) |
+| **Route optimisation** | Google OR-Tools VRP/TSP solver with priority weighting, battery constraints, no-fly-zone penalties |
+| **LLM coordinator** | Anthropic Claude API (with tool use) |
+| **Vision / CV** | YOLOv8 obstacle detection (optional) |
+| **Backend** | FastAPI, WebSocket telemetry streaming, Pydantic schemas |
+| **Frontend** | React 19 + TypeScript, Vite, Tailwind CSS, Framer Motion, Google Maps JS API, Three.js / React Three Fiber, deck.gl, Recharts |
+| **State** | MissionContext (React Context) with provider-level physics + temperature loops so state survives page navigation |
+| **Auth + persistence** | Supabase (auth, chat history, mission logs) |
+| **Weather** | OpenWeatherMap API (with mock fallback) |
+| **Natural events** | NASA EONET API |
+| **No-fly zones** | Custom polygon geofence (ray-casting, no external deps) |
+| **Simulation server** | Ubuntu 22.04 + ROS 2 Humble, NVIDIA A40 GPU |
 
-## System Architecture
+---
+
+## Architecture
 
 ```
-User Input (natural language)
-        |
-        v
-  Claude LLM Coordinator ──MCP──► MAVLinkMCP Server
-        |                              |
-        v                          MAVLink UDP:14540
-  OR-Tools VRP Solver                  |
-        |                              v
-        v                         PX4 SITL Autopilot
-  FastAPI Backend                      |
-        |                         Gazebo Harmonic
-        v                     (dronemedic_world.sdf)
-  WebSocket Telemetry                  |
-  (ws://localhost:8765)                v
-        |                     9 London locations
-        v                     2 no-fly zones
-  React Dashboard              GPS-accurate physics
-  (Google Maps)
+┌─────────────────────────────────────────────────────────────────────┐
+│                   USER (natural language + dashboard)               │
+└──────────────┬───────────────────────────────────┬──────────────────┘
+               │                                   │
+               ▼                                   ▼
+      ┌─────────────────┐                 ┌───────────────────┐
+      │  Claude LLM     │                 │  React Dashboard  │
+      │  Coordinator    │                 │  (Vite + TS)      │
+      └────────┬────────┘                 └─────────┬─────────┘
+               │                                    │
+      ┌────────┴────────┐                           │ WebSocket +
+      │                 │                           │ REST
+      ▼                 ▼                           ▼
+┌───────────┐    ┌──────────────┐           ┌───────────────────┐
+│ OR-Tools  │    │ MAVLink MCP  │◄──────────┤ FastAPI Backend   │
+│ VRP / TSP │    │ Tool server  │           │ (backend/api.py)  │
+└─────┬─────┘    └──────┬───────┘           └─────────┬─────────┘
+      │                 │                             │
+      └────────┬────────┘                             │
+               ▼                                      │
+      ┌─────────────────┐                             │
+      │  MAVSDK Python  │                             │
+      │  async wrapper  │                             │
+      └────────┬────────┘                             │
+               │  MAVLink UDP :14540                  │
+               ▼                                      │
+      ┌─────────────────┐                             │
+      │  PX4 SITL       │◄────────────────────────────┘
+      │  Autopilot      │     telemetry bridge
+      └────────┬────────┘     (ws://:8765)
+               │
+               ▼
+      ┌─────────────────┐
+      │ Gazebo Harmonic │
+      │ Central London  │
+      │ SDF world       │
+      └─────────────────┘
 ```
+
+Modules are intentionally decoupled — parsing, routing, simulation, and UI each live behind their own interface. All shared constants (locations, no-fly zones, drone specs) live in [`config.py`](config.py).
+
+---
 
 ## Simulation Environment
 
-The Gazebo world (`simulation/gazebo/dronemedic_world.sdf`) models Central London with:
+The Gazebo world ([`simulation/gazebo/dronemedic_world.sdf`](simulation/gazebo/dronemedic_world.sdf)) models Central London with:
 
-- **9 delivery locations** -- 1 depot, 4 clinics, 4 hospitals with GPS-accurate positions
-- **2 no-fly zones** -- Military Zone Alpha and Airport Exclusion (visual red overlays)
-- **PX4 x500 quadcopter** -- spawned automatically with full sensor suite (IMU, GPS, barometer, magnetometer)
-- **Spherical coordinates** -- world origin at Depot (51.5074 N, 0.1278 W) for GPS-accurate simulation
+- **9 GPS-accurate locations** — 1 depot, 4 clinics, 4 hospitals
+- **2 no-fly zones** — Military Zone Alpha, Airport Exclusion (visualised as red polygons on the map)
+- **PX4 x500 quadcopter** — auto-spawned with full sensor suite (IMU, GPS, barometer, magnetometer)
+- **Spherical coordinates** — world origin at Depot (51.5074 N, −0.1278 W) so PX4 publishes real lat/lon
 
 | Location | GPS Coordinates | Type |
-|----------|----------------|------|
-| Depot | 51.5074, -0.1278 | Base station |
-| Clinic A | 51.5124, -0.1200 | General medical |
-| Clinic B | 51.5174, -0.1350 | Emergency care |
-| Clinic C | 51.5044, -0.1100 | Rural outpost |
-| Clinic D | 51.5000, -0.1400 | Relief camp |
-| Royal London | 51.5185, -0.0590 | Major trauma centre |
-| Homerton | 51.5468, -0.0456 | Urgent care |
+|---|---|---|
+| Depot | 51.5074, −0.1278 | Base station |
+| Clinic A | 51.5124, −0.1200 | General medical |
+| Clinic B | 51.5174, −0.1350 | Emergency care |
+| Clinic C | 51.5044, −0.1100 | Rural outpost |
+| Clinic D | 51.5000, −0.1400 | Relief camp |
+| Royal London | 51.5185, −0.0590 | Major trauma centre |
+| Homerton | 51.5468, −0.0456 | Urgent care |
 | Newham General | 51.5155, 0.0285 | Trauma resupply |
 | Whipps Cross | 51.5690, 0.0066 | Cardiac unit |
+
+---
 
 ## Getting Started
 
@@ -78,104 +115,229 @@ The Gazebo world (`simulation/gazebo/dronemedic_world.sdf`) models Central Londo
 
 - Python 3.10+
 - Node.js 18+
-- For simulation: Ubuntu 22.04 VM with GPU (or use remote server at 144.202.12.168)
+- (Optional for full simulation) Ubuntu 22.04 VM with GPU, or use the remote server at `144.202.12.168`
 
-### Installation
+### 1. Clone + environment
 
 ```bash
-# Clone the repository
 git clone https://github.com/N0tpr1me/DroneMedic.git
 cd DroneMedic
-
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Install frontend dependencies
-cd web && npm install
-
-# Start the backend
-PYTHONPATH=. uvicorn backend.api:app --reload --port 8000
-
-# Start the frontend (separate terminal)
-cd web && npm run dev
+cp .env.example .env
+# Fill in ANTHROPIC_API_KEY, GOOGLE_MAPS_API_KEY, (optional) OPENWEATHER_API_KEY,
+# and VITE_SUPABASE_* if you want auth + chat persistence.
 ```
 
-### Running the Simulation
+### 2. Backend
 
 ```bash
-# SSH into the simulation server
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+PYTHONPATH=. uvicorn backend.api:app --reload --port 8000
+```
+
+### 3. Frontend
+
+```bash
+cd web
+npm install
+npm run dev    # http://localhost:5173
+```
+
+### 4. CLI demos (no simulator needed)
+
+```bash
+PYTHONPATH=. python3 main.py --skip-ai         # Basic route demo
+PYTHONPATH=. python3 main.py --demo-weather    # Weather re-routing
+PYTHONPATH=. python3 main.py --demo-full       # All scenarios
+PYTHONPATH=. python3 main.py --multi-drone     # 2-drone VRP
+```
+
+### 5. Full simulation (optional)
+
+```bash
+# SSH into the simulation server (or your local Ubuntu 22.04 VM)
 ssh -i ~/.ssh/id_ed25519_vultr root@144.202.12.168
 
-# Launch PX4 + Gazebo
+# Launch PX4 + Gazebo (headless)
 source /opt/ros/humble/setup.bash
 export PX4_HOME_LAT=51.5074 PX4_HOME_LON=-0.1278 PX4_GZ_WORLD=dronemedic HEADLESS=1
 cd ~/PX4-Autopilot && make px4_sitl gz_x500
 
-# Start MAVLink MCP server (separate terminal)
+# In another terminal: MAVLink MCP server
 bash simulation/scripts/launch_mavlinkmcp.sh
 
-# Start telemetry bridge (separate terminal)
+# In another terminal: telemetry bridge (PX4 → browser WebSocket)
 python3 simulation/telemetry_bridge.py
 ```
 
-### CLI Demos (no simulation needed)
+Set `PX4_ENABLED=true` in `.env` to switch the backend from mock telemetry to real PX4 MAVLink on `udp://:14540`.
 
-```bash
-PYTHONPATH=. python3 main.py --skip-ai         # Basic route demo
-PYTHONPATH=. python3 main.py --demo-weather     # Weather re-routing
-PYTHONPATH=. python3 main.py --demo-full        # All scenarios
-PYTHONPATH=. python3 main.py --multi-drone      # 2-drone VRP
-```
+---
+
+## Using the Dashboard
+
+1. **Deploy page** (`/deploy`) — describe a mission in plain English, e.g. *"Deliver blood urgently to Royal London and Newham General"*. Claude parses locations, priorities, and supplies, then OR-Tools computes the optimal route with distance, ETA, and battery cost.
+2. Click **Deploy Drone** → redirects to the live-ops dashboard.
+3. **Dashboard** (`/dashboard`) — watch the amber quadcopter icon glide the cyan flight path, mission progress bar and ETA count down in real time, chain-of-custody timeline advances step-by-step, cold-chain payload temperature fluctuates realistically around 4 °C.
+4. Navigate to **Logs**, **Analytics**, **Fleet**, or **Status** — mission state persists; come back to the dashboard and everything is still progressing.
+5. **Simulation** (`/simulation`) — 3D scene with Three.js drone models and a London globe overlay.
+
+---
 
 ## Project Structure
 
 ```
 DroneMedic/
-├── ai/                         # LLM coordination and AI agents
-│   ├── task_parser.py          # NL → structured delivery tasks
-│   ├── coordinator.py          # Mission orchestration with Claude
-│   └── flight_agent.py         # AI flight agent with tool use
-├── backend/                    # FastAPI backend
-│   ├── api.py                  # REST endpoints + WebSocket streaming
-│   ├── route_planner.py        # OR-Tools VRP solver
-│   ├── scheduler.py            # Multi-drone mission scheduler
-│   ├── geofence.py             # No-fly zone management
-│   ├── weather_service.py      # Weather API integration
-│   ├── physics.py              # Aerospace physics engine
-│   └── safety.py               # Real-time safety monitor
-├── simulation/                 # Drone simulation layer
-│   ├── drone_control.py        # DroneController (PX4 / Mock)
-│   ├── px4_adapter.py          # MAVSDK wrapper for PX4 SITL
-│   ├── telemetry_bridge.py     # WebSocket telemetry bridge
-│   ├── mock_telemetry.py       # Synthetic flight simulator
-│   ├── MAVLinkMCP/             # MCP server for AI drone control
-│   ├── gazebo/                 # Gazebo world + ROS 2 launch
-│   └── scripts/                # Launch & VM setup scripts
-├── web/                        # React frontend (Vite + TypeScript)
+├── ai/                              # LLM coordination + AI agents
+│   ├── task_parser.py               # NL → structured delivery tasks
+│   ├── coordinator.py               # Mission orchestration with Claude
+│   ├── flight_agent.py              # AI flight agent with MCP tool use
+│   ├── agent_orchestrator.py        # Multi-agent coordination
+│   ├── vision_analyzer.py           # YOLOv8 obstacle analysis
+│   ├── demand_forecast.py           # Historical demand modelling
+│   ├── predictive_maintenance.py    # Drone health prediction
+│   └── prompts.py / schemas.py      # Claude prompt templates + Pydantic
+├── backend/                         # FastAPI backend
+│   ├── api.py                       # REST endpoints + WebSocket streaming
+│   ├── app.py                       # FastAPI app factory
+│   ├── route_planner.py             # OR-Tools VRP solver
+│   ├── scheduler.py                 # Multi-drone mission scheduler
+│   ├── mission_controller.py        # Mission lifecycle state machine
+│   ├── geofence.py                  # No-fly zone ray-casting
+│   ├── weather_service.py           # OpenWeatherMap + mock
+│   ├── physics.py                   # Aerospace physics (energy, thrust, wind)
+│   ├── safety.py                    # Real-time safety monitor
+│   └── metrics.py                   # Evaluation metrics
+├── simulation/                      # Drone simulation layer
+│   ├── drone_control.py             # DroneController (PX4 / Mock) + fleet
+│   ├── px4_adapter.py               # MAVSDK async wrapper
+│   ├── telemetry_bridge.py          # PX4 telemetry → browser WebSocket
+│   ├── mock_telemetry.py            # Synthetic flight simulator
+│   ├── cv_obstacle_detector.py      # YOLOv8 obstacle detection
+│   ├── MAVLinkMCP/                  # MCP server for AI drone control
+│   ├── gazebo/                      # Gazebo world + ROS 2 launch files
+│   ├── unity/                       # Unity MCP integration (experimental)
+│   └── scripts/                     # Launch + VM setup scripts
+├── web/                             # React frontend (Vite + TS)
 │   └── src/
-│       ├── pages/              # Landing, Login, Dashboard, Deploy
-│       ├── components/         # Map, drone status, mission panels
-│       └── hooks/              # Live mission & physics hooks
-├── config.py                   # Central configuration
-├── main.py                     # CLI orchestrator
-└── requirements.txt            # Python dependencies
+│       ├── pages/                   # Landing, Login, Dashboard, Deploy,
+│       │                            # Analytics, Fleet, Logs, Status,
+│       │                            # Simulation, Technology, Settings, ...
+│       ├── components/
+│       │   ├── dashboard/           # MapView, CustodyTimeline, ChatPanel,
+│       │   │                        # FlightLog, WeatherPanel, MetricsPanel,
+│       │   │                        # PayloadMonitor, NotificationCenter, ...
+│       │   ├── layout/              # SideNav, PageHeader
+│       │   ├── three/               # 3D drone scene (Three.js / R3F)
+│       │   └── ui/                  # shadcn-style primitives
+│       ├── hooks/                   # useFleetPhysics, useLiveMission,
+│       │                            # usePhysicsSimulation, usePX4Telemetry,
+│       │                            # useEONET, useAuth, useSoundEffects, ...
+│       ├── context/
+│       │   └── MissionContext.tsx   # Provider-level live mission state
+│       │                            # (survives page navigation)
+│       └── lib/                     # api.ts, physics-engine.ts, utils
+├── tests/                           # pytest suite + Playwright E2E
+├── docs/                            # ARCHITECTURE.md, DEMO_SCRIPT.md, ...
+├── data/                            # Demand datasets, flight logs
+├── config.py                        # Central config — locations, drones
+├── main.py                          # CLI orchestrator with demo modes
+├── requirements.txt
+└── Dockerfile / docker-compose.yml  # Containerised backend
 ```
+
+---
+
+## Frontend Architecture Notes
+
+The live-ops dashboard is built around a single source of truth: [`web/src/context/MissionContext.tsx`](web/src/context/MissionContext.tsx). This provider wraps the Router and owns:
+
+- **Fleet physics simulation** (`useFleetPhysics`) — a 60 FPS `requestAnimationFrame` loop that steps a multi-drone physics model (drag, climb, cruise, descent, battery drain, payload weight).
+- **Live mission telemetry** — `droneProgress`, `missionProgress`, `liveBattery`, `simPayload` (cold-chain temperature), and a 10 Hz progress interval with a time-based fallback when the physics sim stalls.
+- **Mean-reverting temperature simulation** — runs at 2 Hz, clamped to a realistic cold-chain band around 4 °C.
+- **Per-drone battery memory** — persists across events so the chain-of-custody timeline never shows fake 100 % on arrival.
+- **Mission reset on dispatch** — `dispatchDelivery` wipes `liveFlightLog`, per-drone battery cache, and resets progress state so back-to-back missions start clean.
+
+Because all of this lives in the provider (not the Dashboard page), mission state **survives page navigation** — click `Logs` mid-flight, come back to `Dashboard`, and everything is still progressing.
+
+Map rendering uses the raw Google Maps JS API with `AdvancedMarkerElement` for drones + locations, layered polylines for animated dashed flight paths, and a Three.js overlay for optional 3D drone models.
+
+---
+
+## Configuration
+
+Key constants in [`config.py`](config.py):
+
+- `LOCATIONS` — 9 London facilities with GPS coordinates
+- `NO_FLY_ZONES` — polygon definitions for Military Zone Alpha and Airport Exclusion
+- `PX4_CONNECTION = "udp://:14540"` — PX4 SITL MAVLink endpoint
+- `BATTERY_DRAIN_RATE = 0.08` — percent per metre (max range ~1250 m)
+- `PRIORITY_WEIGHT = 0.3` — high-priority locations pulled 70 % closer to the solver
+- `NUM_DRONES = 2` — multi-drone VRP fleet size
+
+Environment variables (`.env`):
+
+```
+ANTHROPIC_API_KEY=              # Claude — required for AI coordination
+OPENAI_API_KEY=                 # Optional, alternative LLM
+OPENWEATHER_API_KEY=            # Optional — mock works without it
+WEATHER_ENABLED=false
+
+GOOGLE_MAPS_API_KEY=            # Required for dashboard map
+GOOGLE_MAPS_SIGNING_SECRET=
+
+VITE_SUPABASE_URL=              # Optional — auth + chat history
+VITE_SUPABASE_ANON_KEY=
+VITE_API_URL=                   # Frontend → backend base URL
+
+PX4_ENABLED=false               # Set true to use real PX4 SITL
+PX4_CONNECTION=udp://:14540
+
+UNITY_MCP_TOKEN=                # Optional Unity bridge
+```
+
+---
 
 ## Evaluation Metrics
 
-- **Delivery Time Reduction** -- Optimised multi-stop plan vs naive sequential approach
-- **Throughput** -- Deliveries completed per simulation run
-- **Re-routing Success Rate** -- Percentage of disrupted deliveries completed after re-routing
-- **Robustness** -- Safety system response to no-fly zone violations and weather events
-- **Coverage** -- Patient-km of medicine delivery achieved
+Tracked in [`backend/metrics.py`](backend/metrics.py):
 
-## Authors
+- **Delivery-time reduction** — optimised multi-stop vs naive sequential
+- **Throughput** — deliveries completed per simulation run
+- **Re-routing success rate** — percentage of disrupted deliveries completed after re-routing
+- **Robustness** — safety response time for no-fly zone violations and weather events
+- **Coverage** — patient-km of medicine delivered
 
-- **Zain Ali** -- Project Lead, Full Stack Engineering, Systems Integration
-- **Haseeb Janjua** -- AI Engineering, LLM Orchestration, Prompt Design
-- **Usman Hakimi** -- Backend Engineering, Route Optimisation, OR-Tools
-- **Karim Khalifa** -- Simulation Engineering, PX4 Autopilot, Gazebo
+---
+
+## Testing
+
+```bash
+# Backend unit + integration
+pytest tests/
+
+# Frontend typecheck + build
+cd web && npx tsc --noEmit && npm run build
+
+# E2E (Playwright)
+cd web && npx playwright test
+```
+
+---
+
+## Team
+
+| | |
+|---|---|
+| **Zain Ali** | Project Lead · Full-Stack · Systems Integration · Frontend |
+| **Haseeb Janjua** | AI Engineering · LLM Orchestration · Prompt Design |
+| **Usman Hakimi** | Backend Engineering · Route Optimisation · OR-Tools |
+| **Karim Khalifa** | Simulation Engineering · PX4 Autopilot · Gazebo |
+
+---
 
 ## License
 
-This project was built for the AR26 HackXelerator university hackathon.
+MIT — built for the **AR26 HackXelerator** university hackathon.
+
+See [`LICENSE`](LICENSE) for details.

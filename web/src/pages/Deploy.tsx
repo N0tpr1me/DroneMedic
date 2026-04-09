@@ -141,18 +141,22 @@ export function Deploy() {
       }
     }
 
-    // If we have a task but no route, plan the route
+    // If we have a task but no route, only auto-route if the user explicitly asks for it
     if (currentTask && !currentRoute) {
-      try {
-        const res = await api.computeRoute(currentTask.locations, currentTask.priorities);
-        setCurrentRoute(res.route);
-        addMessage({ role: 'assistant', content: `Route optimized: ${res.route.ordered_route.join(' → ')}\n\nDistance: ${res.route.total_distance}m | Time: ${res.route.estimated_time}s | Battery: ${res.route.battery_usage}%`, route: res.route });
-      } catch (err) {
-        console.error('computeRoute failed:', err);
-        addMessage({ role: 'assistant', content: 'Route computation failed. Please check the backend is running and try again.' });
+      const lower = input.toLowerCase();
+      if (lower.includes('plan') || lower.includes('route') || lower.includes('compute') || lower.includes('optimize') || lower.includes('yes') || lower.includes('go')) {
+        try {
+          const res = await api.computeRoute(currentTask.locations, currentTask.priorities);
+          setCurrentRoute(res.route);
+          addMessage({ role: 'assistant', content: `Route optimized: ${res.route.ordered_route.join(' → ')}\n\nDistance: ${res.route.total_distance}m | Time: ${res.route.estimated_time}s | Battery: ${res.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: res.route });
+        } catch (err) {
+          console.error('computeRoute failed:', err);
+          addMessage({ role: 'assistant', content: 'Route computation failed. Please check the backend is running and try again.' });
+        }
+        setIsLoading(false);
+        return;
       }
-      setIsLoading(false);
-      return;
+      // Otherwise fall through to chat/parse to handle new instructions
     }
 
     // Use conversational AI chat first — it handles typos, clarifying
