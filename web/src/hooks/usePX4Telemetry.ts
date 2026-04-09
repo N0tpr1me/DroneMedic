@@ -27,7 +27,7 @@ interface UsePX4TelemetryReturn {
 const TELEMETRY_MODE = import.meta.env.VITE_TELEMETRY_MODE || 'physics';
 const WS_URL = TELEMETRY_MODE === 'mock'
   ? 'ws://localhost:8765'
-  : (import.meta.env.VITE_MAVLINK_WS_URL || 'ws://144.202.12.168:8080/ws/telemetry');
+  : (import.meta.env.VITE_MAVLINK_WS_URL || '');
 const MAX_RECONNECT_DELAY = 5000;
 
 export function usePX4Telemetry(): UsePX4TelemetryReturn {
