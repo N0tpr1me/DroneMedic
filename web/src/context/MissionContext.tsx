@@ -72,6 +72,13 @@ export interface StoredMission {
   droneId?: string;
 }
 
+export interface ChatSession {
+  id: string;
+  title: string;
+  messages: Array<{ id: string; role: string; content: string; timestamp: string }>;
+  createdAt: string;
+}
+
 type UseFleetPhysicsReturn = ReturnType<typeof useFleetPhysics>;
 
 export interface MissionContextValue {
@@ -113,9 +120,13 @@ export interface MissionContextValue {
   setActiveRoute: (route: Route | null) => void;
   activeDroneId: string | null;
 
-  // Deploy page chat history — persists across navigation
-  deployChatHistory: Array<{ id: string; role: string; content: string; timestamp: string }>;
-  setDeployChatHistory: (msgs: Array<{ id: string; role: string; content: string; timestamp: string }>) => void;
+  // Deploy page multi-session chat history
+  chatSessions: ChatSession[];
+  activeChatId: string | null;
+  setActiveChatId: (id: string | null) => void;
+  createChatSession: () => string; // returns new session id
+  deleteChatSession: (id: string) => void;
+  updateChatMessages: (sessionId: string, msgs: Array<{ id: string; role: string; content: string; timestamp: string }>) => void;
 
   // Cross-page reactive alerts
   droneAlerts: DroneAlert[];
@@ -179,7 +190,53 @@ export function MissionProvider({
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [activeRoute, setActiveRoute] = useState<Route | null>(null);
   const [activeDroneId, setActiveDroneId] = useState<string | null>(null);
-  const [deployChatHistory, setDeployChatHistory] = useState<MissionContextValue['deployChatHistory']>([]);
+
+  // Multi-session chat history
+  const [chatSessions, setChatSessions] = useState<ChatSession[]>(() => {
+    try {
+      const stored = localStorage.getItem('dronemedic_chat_sessions');
+      if (stored) return JSON.parse(stored);
+    } catch { /* ignore */ }
+    return [];
+  });
+  const [activeChatId, setActiveChatId] = useState<string | null>(() => {
+    try {
+      const stored = localStorage.getItem('dronemedic_active_chat');
+      if (stored) return stored;
+    } catch { /* ignore */ }
+    return null;
+  });
+
+  // Persist chat sessions to localStorage
+  useEffect(() => {
+    try { localStorage.setItem('dronemedic_chat_sessions', JSON.stringify(chatSessions)); } catch { /* ignore */ }
+  }, [chatSessions]);
+  useEffect(() => {
+    try { localStorage.setItem('dronemedic_active_chat', activeChatId ?? ''); } catch { /* ignore */ }
+  }, [activeChatId]);
+
+  const createChatSession = useCallback(() => {
+    const id = `chat-${Date.now()}`;
+    const session: ChatSession = { id, title: 'New Mission', messages: [], createdAt: new Date().toISOString() };
+    setChatSessions(prev => [session, ...prev]);
+    setActiveChatId(id);
+    return id;
+  }, []);
+
+  const deleteChatSession = useCallback((id: string) => {
+    setChatSessions(prev => prev.filter(s => s.id !== id));
+    setActiveChatId(prev => prev === id ? null : prev);
+  }, []);
+
+  const updateChatMessages = useCallback((sessionId: string, msgs: ChatSession['messages']) => {
+    setChatSessions(prev => prev.map(s => {
+      if (s.id !== sessionId) return s;
+      // Auto-title from first user message
+      const firstUser = msgs.find(m => m.role === 'user');
+      const title = firstUser ? firstUser.content.slice(0, 40) + (firstUser.content.length > 40 ? '...' : '') : s.title;
+      return { ...s, messages: msgs, title };
+    }));
+  }, []);
 
   // Location cache for building waypoints from route names
   const locationsCache = useRef<Record<string, Location>>({});
@@ -511,8 +568,12 @@ export function MissionProvider({
       setActiveTask,
       setActiveRoute,
       activeDroneId,
-      deployChatHistory,
-      setDeployChatHistory,
+      chatSessions,
+      activeChatId,
+      setActiveChatId,
+      createChatSession,
+      deleteChatSession,
+      updateChatMessages,
       droneAlerts,
       acknowledgeAlert,
       fleetSummary,
@@ -527,7 +588,8 @@ export function MissionProvider({
       activeTask,
       activeRoute,
       activeDroneId,
-      deployChatHistory,
+      chatSessions,
+      activeChatId,
       droneAlerts,
       acknowledgeAlert,
       fleetSummary,
