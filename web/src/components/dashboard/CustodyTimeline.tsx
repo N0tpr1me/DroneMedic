@@ -26,9 +26,17 @@ export function CustodyTimeline({ task, route, flightLog, status, battery }: Cus
   const supplyType = task ? Object.values(task.supplies || {})[0] || 'Medical Supplies' : 'None';
   const isHighPriority = task?.priorities && Object.values(task.priorities).includes('high');
 
-  const takeoffLog = flightLog.find(e => e.event === 'takeoff');
-  const arrivalLog = flightLog.find(e => e.event === `arrived:${destination}`);
-  const landedLog = flightLog.find(e => e.event === 'landed');
+  // Scope log lookups to only events from the current mission (last takeoff onward)
+  // so stale events from previous missions don't leak into the timeline.
+  const lastTakeoffIdx = flightLog.map(e => e.event).lastIndexOf('takeoff');
+  const currentMissionLog = lastTakeoffIdx >= 0 ? flightLog.slice(lastTakeoffIdx) : [];
+
+  const takeoffLog = currentMissionLog.find(e => e.event === 'takeoff');
+  const arrivalLog = currentMissionLog.find(e => e.event === `arrived:${destination}`);
+  const landedLog = currentMissionLog.find(e => e.event === 'landed');
+
+  const isFlying = status === 'flying' || status === 'rerouting';
+  const hasArrived = Boolean(arrivalLog) && !isFlying;
 
   const steps: TimelineStep[] = [
     {
@@ -63,17 +71,19 @@ export function CustodyTimeline({ task, route, flightLog, status, battery }: Cus
     },
     {
       label: 'In Transit',
-      detail: status === 'flying' || status === 'rerouting'
+      detail: isFlying
         ? `En route to ${destination} — Battery ${battery}%`
-        : arrivalLog ? `Delivered to ${destination}` : 'Awaiting departure',
-      status: status === 'flying' || status === 'rerouting' ? 'active' : arrivalLog ? 'complete' : 'pending',
-      timestamp: status === 'flying' ? Date.now() / 1000 : undefined,
+        : hasArrived ? `Delivered to ${destination}` : 'Awaiting departure',
+      status: hasArrived ? 'complete' : isFlying ? 'active' : 'pending',
+      timestamp: hasArrived ? arrivalLog!.timestamp : undefined,
     },
     {
       label: `Arrival at ${destination}`,
-      detail: arrivalLog ? `Battery ${arrivalLog.battery.toFixed(0)}%` : 'Awaiting arrival',
-      status: arrivalLog ? 'complete' : 'pending',
-      timestamp: arrivalLog?.timestamp,
+      detail: hasArrived
+        ? `Battery ${Math.min(arrivalLog!.battery, battery).toFixed(0)}%`
+        : 'Awaiting arrival',
+      status: hasArrived ? 'complete' : 'pending',
+      timestamp: hasArrived ? arrivalLog!.timestamp : undefined,
     },
     {
       label: 'Payload Received',

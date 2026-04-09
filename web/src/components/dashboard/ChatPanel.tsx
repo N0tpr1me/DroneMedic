@@ -222,7 +222,7 @@ export function ChatPanel({
             try {
               const taskData = JSON.parse(jsonMatch[1]);
               if (taskData.locations) {
-                onParseTask(reply).then((parsedTask) => {
+                onParseTask(fakeInput).then((parsedTask) => {
                   if (parsedTask) {
                     addMessage({
                       type: 'ai',
@@ -312,7 +312,7 @@ export function ChatPanel({
       }
     } catch {
       setIsTyping(false);
-      addMessage({ type: 'ai', content: 'Using demo data — API not connected.' });
+      addMessage({ type: 'ai', content: 'I couldn\'t process that request. Try describing a delivery like: "Deliver O- blood to Royal London urgently"' });
     }
   };
 
@@ -541,7 +541,7 @@ export function ChatPanel({
               'Describe your delivery mission...'
             }
             disabled={false}
-            className="flex-1 bg-transparent text-sm text-on-surface placeholder:text-on-surface-variant/40 resize-none border-none focus:outline-none focus:ring-0 min-h-[40px] max-h-[120px] py-2 px-2"
+            className="flex-1 bg-transparent text-sm text-on-surface placeholder:text-on-surface-variant/40 resize-none border-none focus:outline-none focus:ring-0 min-h-[56px] max-h-[120px] py-2 px-2 overflow-hidden [&:not(:placeholder-shown)]:overflow-y-auto"
             rows={1}
           />
           <button

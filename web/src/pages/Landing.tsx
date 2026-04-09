@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import { MessageSquare, Brain, Globe, ShieldCheck, Shield, ArrowRight, Rocket, AtSign, Share2, Radio } from 'lucide-react';
+import { MessageSquare, Brain, Globe, ShieldCheck, Shield, ArrowRight, Rocket, AtSign, Share2, Radio, Thermometer, Lock, HeartPulse, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../hooks/useAuth';
 import RotatingGlobe from '../components/ui/wireframe-dotted-globe';
@@ -175,12 +175,51 @@ export function Landing() {
           </div>
         </div>
 
+        {/* ── Built for Clinical Trust ── */}
+        <section id="trust" className="bg-bg py-20 lg:py-28 2xl:py-32 border-t border-outline-variant/10">
+          <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
+            <div className="mb-12 2xl:mb-16 text-center">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-tertiary/20 bg-tertiary/5 px-4 py-1.5 text-[11px] 2xl:text-[13px] font-bold uppercase tracking-[0.15em] text-tertiary">
+                <ShieldCheck size={14} />
+                Built for Clinical Trust
+              </div>
+              <h2 className="font-headline text-3xl font-bold tracking-tight text-on-surface md:text-4xl 2xl:text-5xl">
+                Engineered for the people who can&apos;t afford guesswork
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 gap-6 2xl:gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { icon: <Thermometer size={24} />, title: 'Cold-chain verified', desc: 'Temperature-logged payload bays for blood, vaccines, and biologics.' },
+                { icon: <Lock size={24} />, title: 'GDPR & HIPAA aligned', desc: 'Patient data stays on your network. End-to-end encrypted telemetry.' },
+                { icon: <Clock size={24} />, title: '24/7 dispatch', desc: 'On-call mission control around the clock, every day of the year.' },
+                { icon: <HeartPulse size={24} />, title: 'Chain of custody', desc: 'Signed delivery confirmation and audit trail for every drop.' },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  whileHover={{ scale: 1.03 }}
+                  className="rounded-xl bg-surface-container-low p-6 2xl:p-8 border border-outline-variant/10 transition-colors hover:bg-surface-container-high"
+                >
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-blue-300/10 text-blue-300">
+                    {item.icon}
+                  </div>
+                  <h3 className="mb-2 font-headline text-lg 2xl:text-xl font-bold text-on-surface">{item.title}</h3>
+                  <p className="text-sm 2xl:text-base text-on-surface-variant leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── Core Mission Capabilities ── */}
         <section id="capabilities" className="bg-surface py-24 lg:py-40 2xl:py-48">
           <div className="mx-auto max-w-[1440px] 2xl:max-w-[1800px] px-6 lg:px-20 2xl:px-28">
             <div className="mb-16 max-w-2xl 2xl:max-w-3xl lg:mb-24 2xl:mb-32">
               <h2 className="mb-6 font-headline text-4xl font-bold tracking-tight text-on-surface md:text-5xl 2xl:text-6xl">Core Mission Capabilities</h2>
-              <p className="text-lg 2xl:text-xl text-on-surface-variant">Advanced AI-driven logistics for life-critical operations. Our platform integrates state-of-the-art UAV technology with proprietary AI orchestration.</p>
+              <p className="text-lg 2xl:text-xl text-on-surface-variant">Life-critical logistics, delivered in minutes. Purpose-built for hospitals that can&apos;t afford delays — insulin, blood products, transplant tissue, emergency pharmaceuticals.</p>
             </div>
             {/* Drone banner with zoom-on-scroll */}
             <CapabilityBanner />
@@ -190,8 +229,8 @@ export function Landing() {
                 {
                   icon: <MessageSquare size={24} />,
                   bgIcon: <Brain size={120} />,
-                  title: 'AI Mission Coordinator',
-                  desc: 'Interpreting natural language tasks for seamless mission planning. Our LLM-integrated core allows medical staff to initiate deliveries with simple verbal or text instructions.',
+                  title: 'Plain-Language Dispatch',
+                  desc: "Request a delivery the way you'd tell a colleague — 'Send 2 units of O-neg to St. Thomas, urgent.' Your AI dispatcher handles the rest — routing, scheduling, and safety checks.",
                   linkText: 'Learn More',
                   linkTo: '/missions',
                   accentColor: 'primary',
@@ -199,8 +238,8 @@ export function Landing() {
                 {
                   icon: <Globe size={24} />,
                   bgIcon: <Globe size={120} />,
-                  title: 'Real-time Telemetry',
-                  desc: 'Dynamic day and night mapping with active flight path tracking. Monitor every vector of your fleet\'s journey with millisecond latency and high-fidelity 3D visualization.',
+                  title: 'Live Mission Tracking',
+                  desc: "Watch every delivery from liftoff to landing on a live map. Staff see ETA, altitude, and cargo status without leaving the ward.",
                   linkText: 'Live Dashboard',
                   linkTo: '',
                   accentColor: 'tertiary',
@@ -208,8 +247,8 @@ export function Landing() {
                 {
                   icon: <ShieldCheck size={24} />,
                   bgIcon: <Shield size={120} />,
-                  title: 'Autonomous Detection',
-                  desc: 'Computer vision-powered safety systems for complex environments. Our UAVs utilize neural networks to navigate dense urban areas and unpredictable weather patterns.',
+                  title: 'Safer by Design',
+                  desc: "Every mission is continuously monitored for weather shifts, no-fly zones, and unsafe conditions. Flights re-route or abort automatically — no guesswork, no risk to the public.",
                   linkText: 'Safety Protocols',
                   linkTo: '/safety',
                   accentColor: 'secondary',
@@ -275,8 +314,8 @@ export function Landing() {
             </div>
             <div className="grid grid-cols-1 gap-6 2xl:gap-8 md:grid-cols-2 lg:grid-cols-4">
               {[
-                { step: '01', name: 'Describe', desc: 'Tell us what you need in plain language. Our AI parses locations, supplies, and urgency.' },
-                { step: '02', name: 'Plan', desc: 'AI optimizes the route in seconds, accounting for weather, no-fly zones, and priorities.' },
+                { step: '01', name: 'Describe', desc: 'Tell us what you need, where, and how urgent it is — in plain English.' },
+                { step: '02', name: 'Plan', desc: 'We calculate the fastest safe route in seconds — around weather, restricted airspace, and other active missions.' },
                 { step: '03', name: 'Deploy', desc: 'Drone launches autonomously from the nearest depot with your medical payload.' },
                 { step: '04', name: 'Monitor', desc: 'Track every meter in real-time. Live telemetry, ETA, and delivery confirmation.' },
               ].map((item, i) => (
@@ -368,7 +407,7 @@ export function Landing() {
                 Ready to revolutionize your medical logistics?
               </h2>
               <p className="mb-10 max-w-2xl 2xl:max-w-3xl text-lg 2xl:text-xl text-on-surface-variant">
-                Join the global network of autonomous UAV delivery. Start your first mission in under 15 minutes with our rapid integration kits.
+                Partner with us to bring autonomous medical delivery to your facility. First flight in under 15 minutes once your team is onboarded.
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
                 <button
@@ -414,7 +453,7 @@ export function Landing() {
               <ul className="space-y-4 text-sm 2xl:text-base text-on-surface-variant">
                 <li><Link className="hover:text-primary transition-colors" to="/missions">Mission Control</Link></li>
                 <li><Link className="hover:text-primary transition-colors" to="/fleet-info">Fleet Management</Link></li>
-                <li><Link className="hover:text-primary transition-colors" to="/technology">API Reference</Link></li>
+                <li><Link className="hover:text-primary transition-colors" to="/contact">Contact</Link></li>
                 <li><Link className="hover:text-primary transition-colors" to="/safety">Safety Systems</Link></li>
               </ul>
             </div>
@@ -422,7 +461,7 @@ export function Landing() {
               <h3 className="mb-6 text-sm 2xl:text-base font-bold uppercase tracking-widest text-on-surface">Resources</h3>
               <ul className="space-y-4 text-sm 2xl:text-base text-on-surface-variant">
                 <li><Link className="hover:text-primary transition-colors" to="/resources">Case Studies</Link></li>
-                <li><Link className="hover:text-primary transition-colors" to="/technology">Documentation</Link></li>
+                <li><Link className="hover:text-primary transition-colors" to="/resources">FAQ</Link></li>
                 <li><Link className="hover:text-primary transition-colors" to="/resources">Support Center</Link></li>
                 <li><Link className="hover:text-primary transition-colors" to="/safety">Compliance</Link></li>
               </ul>

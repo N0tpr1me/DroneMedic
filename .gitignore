@@ -238,3 +238,6 @@ simulation/unity/DroneMedic/.claude/
 
 # Virtual environments
 simulation/px4-env/
+
+# Local Netlify folder
+.netlify
