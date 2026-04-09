@@ -9,6 +9,7 @@ import { PageHeader } from '../components/layout/PageHeader';
 import { api } from '../lib/api';
 import type { Task, Route } from '../lib/api';
 import { DEMO_SCENARIO } from '../data/demo-scenario';
+import { useMissionContext } from '../context/MissionContext';
 
 interface ChatMessage {
   id: string;
@@ -19,28 +20,67 @@ interface ChatMessage {
   route?: Route;
 }
 
+const WELCOME_MSG: ChatMessage = {
+  id: 'welcome',
+  role: 'assistant',
+  content: 'Welcome to DroneMedic Mission Planning. Describe your delivery mission in natural language — I\'ll parse the locations, priorities, and supplies, then compute the optimal route.',
+  timestamp: new Date(),
+};
+
 export function Deploy() {
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'welcome',
-      role: 'assistant',
-      content: 'Welcome to DroneMedic Mission Planning. Describe your delivery mission in natural language — I\'ll parse the locations, priorities, and supplies, then compute the optimal route.',
-      timestamp: new Date(),
-    },
-    {
-      id: 'example',
-      role: 'system',
-      content: 'Try: "Deliver O- plasma to Royal London urgently, insulin to Homerton, and defibrillator pads to Whipps Cross"',
-      timestamp: new Date(),
-    },
-  ]);
+  const { chatSessions, activeChatId, setActiveChatId, createChatSession, deleteChatSession, updateChatMessages } = useMissionContext();
+
+  const activeSession = chatSessions.find(s => s.id === activeChatId);
+
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    if (activeSession && activeSession.messages.length > 0) {
+      return activeSession.messages.map(m => ({
+        ...m,
+        role: m.role as ChatMessage['role'],
+        timestamp: new Date(m.timestamp),
+      }));
+    }
+    return [WELCOME_MSG];
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [currentRoute, setCurrentRoute] = useState<Route | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const deployLocation = useLocation();
   const prefillHandled = useRef(false);
+
+  // Track activeChatId in a ref for use in handleSend (avoids stale closure)
+  const activeChatIdRef = useRef(activeChatId);
+  useEffect(() => { activeChatIdRef.current = activeChatId; }, [activeChatId]);
+
+  // Persist chat history to context whenever messages change
+  useEffect(() => {
+    if (activeChatId && messages.length > 1) {
+      updateChatMessages(activeChatId, messages.map(m => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+        timestamp: m.timestamp.toISOString(),
+      })));
+    }
+  }, [messages, activeChatId, updateChatMessages]);
+
+  // Sync messages when switching sessions
+  useEffect(() => {
+    const session = chatSessions.find(s => s.id === activeChatId);
+    if (session && session.messages.length > 0) {
+      setMessages(session.messages.map(m => ({
+        ...m,
+        role: m.role as ChatMessage['role'],
+        timestamp: new Date(m.timestamp),
+      })));
+    } else {
+      setMessages([WELCOME_MSG]);
+    }
+    setCurrentTask(null);
+    setCurrentRoute(null);
+  }, [activeChatId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-fill from Dashboard location click
   useEffect(() => {
@@ -66,6 +106,12 @@ export function Deploy() {
 
   const handleSend = async (input: string) => {
     if (!input.trim()) return;
+
+    // Auto-create a chat session on first message
+    if (!activeChatIdRef.current) {
+      const newId = createChatSession();
+      activeChatIdRef.current = newId;
+    }
 
     addMessage({ role: 'user', content: input });
     setIsLoading(true);
@@ -201,6 +247,80 @@ export function Deploy() {
       {/* ═══ LEFT NAV ═══ */}
       <SideNav currentPage="deploy" />
 
+      {/* Chat History Sidebar */}
+      <div style={{
+        position: 'fixed', right: 0, top: 64, bottom: 0, width: 220,
+        background: 'rgba(15,20,24,0.95)', borderLeft: '1px solid rgba(67,70,84,0.15)',
+        display: 'flex', flexDirection: 'column', zIndex: 30,
+        backdropFilter: 'blur(16px)',
+      }}>
+        {/* New Chat button */}
+        <button
+          onClick={() => {
+            const newId = createChatSession();
+            setMessages([WELCOME_MSG]);
+            setCurrentTask(null);
+            setCurrentRoute(null);
+          }}
+          style={{
+            margin: '12px 12px 8px', padding: '8px 12px', border: '1px solid rgba(0,218,243,0.3)',
+            borderRadius: 8, background: 'rgba(0,218,243,0.08)', color: '#00daf3',
+            fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex',
+            alignItems: 'center', gap: 6,
+          }}
+        >
+          <PlaneTakeoff size={14} /> New Mission Chat
+        </button>
+
+        {/* Session list */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '0 8px' }}>
+          {chatSessions.map(session => (
+            <div
+              key={session.id}
+              onClick={() => setActiveChatId(session.id)}
+              style={{
+                padding: '8px 10px', borderRadius: 6, marginBottom: 4, cursor: 'pointer',
+                background: session.id === activeChatId ? 'rgba(0,218,243,0.12)' : 'transparent',
+                border: session.id === activeChatId ? '1px solid rgba(0,218,243,0.2)' : '1px solid transparent',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                gap: 4,
+              }}
+            >
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{
+                  fontSize: 11, fontWeight: 600, color: session.id === activeChatId ? '#00daf3' : '#c3c6d6',
+                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                }}>
+                  {session.title}
+                </div>
+                <div style={{ fontSize: 9, color: '#6b7280', marginTop: 2 }}>
+                  {new Date(session.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                </div>
+              </div>
+              <button
+                onClick={(e) => { e.stopPropagation(); deleteChatSession(session.id); }}
+                style={{
+                  background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer',
+                  padding: 2, fontSize: 14, lineHeight: 1, opacity: 0.5,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.color = '#ff4444'; }}
+                onMouseLeave={e => { e.currentTarget.style.opacity = '0.5'; e.currentTarget.style.color = '#6b7280'; }}
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          {chatSessions.length === 0 && (
+            <div style={{ padding: '20px 10px', textAlign: 'center', fontSize: 11, color: '#6b7280' }}>
+              No chat history yet
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Chat content area — offset for sidebar */}
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, marginRight: 220, minHeight: 0 }}>
+
       {/* Chat Messages */}
       <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: '24px 0' }}>
         <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -328,6 +448,8 @@ export function Deploy() {
           placeholder="Describe your delivery mission..."
         />
       </div>
+
+      </div>{/* end chat content area wrapper */}
     </div>
   );
 }

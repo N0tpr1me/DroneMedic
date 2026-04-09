@@ -253,6 +253,11 @@ html, body, #root {
   to { transform: rotate(360deg); }
 }
 
+@keyframes glowPulse {
+  0%, 100% { text-shadow: 0 0 4px rgba(147, 197, 253, 0.3); }
+  50% { text-shadow: 0 0 12px rgba(147, 197, 253, 0.6), 0 0 24px rgba(96, 165, 250, 0.3); }
+}
+
 @theme inline {
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

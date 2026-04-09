@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dronemedic.aero/sitemap.xml
