@@ -286,7 +286,6 @@ export function useFleetPhysics(
         const newSpeed = randomWalk(prev.speed, 2, 0, 12);
         const newDir = wrapDegrees(randomWalk(prev.direction, 15, -Infinity, Infinity));
         windRef.current = { speed: newSpeed, direction: newDir };
-        emit('wind_change', '*', { speed: newSpeed, direction: newDir });
       }
 
       const wind = windRef.current;

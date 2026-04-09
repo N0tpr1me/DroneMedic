@@ -86,12 +86,18 @@ export function MapView({
   const center: google.maps.LatLngLiteral = depot ? { lat: depot.lat, lng: depot.lon } : { lat: 51.5074, lng: -0.1278 };
   const hasReroute = Boolean(reroute && rerouteCoords.length >= 2);
 
-  // ── Initialize map ONCE with native constructor ──
+  // ── Initialize map — reinitializes on remount ──
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    if (!containerRef.current) return;
+
+    // If map already exists for this container, skip
+    if (mapRef.current) return;
+
+    let observer: MutationObserver | null = null;
 
     // Wait for Google Maps to be loaded
     const init = () => {
+      if (!containerRef.current) return;
       if (!google?.maps?.Map) {
         setTimeout(init, 100);
         return;
@@ -118,7 +124,7 @@ export function MapView({
       onMapReady?.(map);
 
       // Auto-dismiss Google Maps billing error dialog
-      const observer = new MutationObserver(() => {
+      observer = new MutationObserver(() => {
         const dismissBtn = document.querySelector('.dismissButton') as HTMLElement;
         if (dismissBtn) { dismissBtn.click(); return; }
         // Also catch the modal overlay Google injects
@@ -140,11 +146,19 @@ export function MapView({
 
     return () => {
       // Cleanup on unmount
+      observer?.disconnect();
       markersRef.current.forEach((m) => m.remove());
+      markersRef.current = [];
       polylinesRef.current.forEach((p) => p.setMap(null));
+      polylinesRef.current = [];
       polygonsRef.current.forEach((p) => p.setMap(null));
+      polygonsRef.current = [];
+      eonetMarkersRef.current.forEach((m) => m.remove());
+      eonetMarkersRef.current = [];
       droneMarkerRef.current?.remove();
+      droneMarkerRef.current = null;
       trailMarkerRef.current?.remove();
+      trailMarkerRef.current = null;
       mapRef.current = null;
     };
   }, []);
