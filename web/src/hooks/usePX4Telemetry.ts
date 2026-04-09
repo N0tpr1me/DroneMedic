@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { backendWsUrl } from '../lib/backendUrls';
 
 export interface PX4Telemetry {
   lat: number;
@@ -25,9 +26,14 @@ interface UsePX4TelemetryReturn {
 }
 
 const TELEMETRY_MODE = import.meta.env.VITE_TELEMETRY_MODE || 'physics';
-const WS_URL = TELEMETRY_MODE === 'mock'
-  ? 'ws://localhost:8765'
-  : (import.meta.env.VITE_MAVLINK_WS_URL || '');
+// `px4_vm` resolves via backendWsUrl(): dev uses the Vite proxy, Netlify prod
+// uses VITE_API_URL (→ http://144.202.12.168:8000 → ws://…/ws/px4).
+const WS_URL =
+  TELEMETRY_MODE === 'mock'
+    ? 'ws://localhost:8765'
+    : TELEMETRY_MODE === 'px4_vm'
+      ? backendWsUrl('/ws/px4')
+      : (import.meta.env.VITE_MAVLINK_WS_URL || '');
 const MAX_RECONNECT_DELAY = 5000;
 
 export function usePX4Telemetry(): UsePX4TelemetryReturn {
@@ -75,15 +81,19 @@ export function usePX4Telemetry(): UsePX4TelemetryReturn {
       ws.onmessage = (event) => {
         try {
           const raw = JSON.parse(event.data);
-          if (raw.type === 'telemetry' && raw.data) {
+          if (raw.type !== 'telemetry') return;
+          let mapped: PX4Telemetry | null = null;
+
+          // Nested format (legacy MAVLink MCP bridge — `raw.data.position.*`)
+          if (raw.data && typeof raw.data === 'object') {
             const d = raw.data;
             const vel = d.velocity || {};
             const speed = Math.sqrt(
               (vel.north_m_s || 0) ** 2 +
               (vel.east_m_s || 0) ** 2 +
-              (vel.down_m_s || 0) ** 2
+              (vel.down_m_s || 0) ** 2,
             );
-            const mapped: PX4Telemetry = {
+            mapped = {
               lat: d.position?.lat ?? 0,
               lon: d.position?.lon ?? 0,
               alt_m: d.position?.abs_alt_m ?? 0,
@@ -96,9 +106,32 @@ export function usePX4Telemetry(): UsePX4TelemetryReturn {
               speed_m_s: speed,
               timestamp: raw.ts ?? Date.now() / 1000,
               source: 'px4',
+              drone_id: d.drone_id,
             };
+          } else if (typeof raw.lat === 'number' && typeof raw.lon === 'number') {
+            // Flat format (telemetry_bridge.py → PX4TelemetrySource / MockTelemetrySource)
+            mapped = {
+              lat: raw.lat,
+              lon: raw.lon,
+              alt_m: raw.alt_m ?? 0,
+              relative_alt_m: raw.relative_alt_m ?? 0,
+              battery_pct: raw.battery_pct ?? 0,
+              flight_mode: raw.flight_mode ?? 'UNKNOWN',
+              is_armed: !!raw.is_armed,
+              is_flying: !!raw.is_flying,
+              heading_deg: raw.heading_deg ?? 0,
+              speed_m_s: raw.speed_m_s ?? 0,
+              timestamp: raw.timestamp ?? Date.now() / 1000,
+              source: raw.source === 'mock' ? 'mock' : 'px4',
+              drone_id: raw.drone_id,
+              current_location: raw.current_location,
+            };
+          }
+
+          if (mapped) {
             latestData.current = mapped;
-            if (source !== 'px4') setSource('px4');
+            const nextSource = mapped.source;
+            if (source !== nextSource) setSource(nextSource);
             scheduleUpdate();
           }
         } catch {

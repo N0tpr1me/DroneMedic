@@ -13,10 +13,13 @@ import { MetricsPanel } from '../components/dashboard/MetricsPanel';
 import { NaturalEventsPanel } from '../components/dashboard/NaturalEventsPanel';
 import { BootSequence } from '../components/dashboard/BootSequence';
 import { CVDetectionPanel } from '../components/dashboard/CVDetectionPanel';
+import { DecisionStream } from '../components/dashboard/DecisionStream';
+import { RaceTimer } from '../components/dashboard/RaceTimer';
 import { HudStatus } from '../components/ui/hud-status';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { SideNav } from '../components/layout/SideNav';
 import { DroneScene } from '../components/three/DroneScene';
+import { SimCockpit } from '../components/three/sim/SimCockpit';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useLiveMission } from '../hooks/useLiveMission';
 import { usePX4Telemetry } from '../hooks/usePX4Telemetry';
@@ -529,6 +532,20 @@ export function Dashboard() {
             )}
           </AnimatePresence>
 
+          {/* Race Timer — drone vs ambulance live countdown */}
+          {status === 'flying' && route && route.ordered_route.length >= 2 && (
+            <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:0.3,delay:0.25}}>
+              <RaceTimer
+                locations={route.ordered_route.filter((s) => s !== 'Depot').slice(0, 2)}
+              />
+            </motion.div>
+          )}
+
+          {/* Decision Stream — live Claude reasoning feed */}
+          <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:0.3,delay:0.35}}>
+            <DecisionStream />
+          </motion.div>
+
         </div>
 
         {/* ── BOTTOM LEFT CARDS ── */}
@@ -621,10 +638,11 @@ export function Dashboard() {
                   <X size={14} />
                 </button>
               </div>
-              <div style={{ position: 'absolute', top: 8, left: 12, zIndex: 10, fontSize: 10, fontWeight: 700, color: '#b3c5ff', textTransform: 'uppercase', letterSpacing: '0.08em', background: 'rgba(0,0,0,0.7)', padding: '4px 8px', borderRadius: 4 }}>
-                3D Simulation {px4Connected && <span style={{ color: '#22c55e', marginLeft: 4 }}>● LIVE</span>}
-              </div>
-              <DroneScene scene="sim" telemetry={px4Telemetry} />
+              <SimCockpit
+                expanded={sim3dExpanded}
+                onClose={() => { setShow3dSim(false); setSim3dExpanded(false); }}
+                onToggleFullscreen={() => setSim3dExpanded(prev => !prev)}
+              />
             </motion.div>
           )}
         </AnimatePresence>

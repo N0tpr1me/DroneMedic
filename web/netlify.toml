@@ -2,6 +2,16 @@
   command = "npm run build"
   publish = "dist"
 
+# ── Backend API proxy ──
+# Netlify cannot proxy WebSockets, so /ws/* routes must use VITE_API_URL on
+# the client side (full ws://host:port URL). HTTP /api/* is proxied here so
+# calls like /api/vision/evaluate and /api/facilities work without CORS.
+[[redirects]]
+  from = "/api/*"
+  to = "http://144.202.12.168:8000/api/:splat"
+  status = 200
+  force = true
+
 # ── SPA client-side routing ──
 [[redirects]]
   from = "/*"
@@ -28,7 +38,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com blob:; worker-src 'self' blob:; connect-src 'self' blob: https://chat.kxsb.org http://144.202.12.168:8000 https://*.supabase.co wss://*.supabase.co https://maps.googleapis.com https://*.googleapis.com https://*.gstatic.com https://eonet.gsfc.nasa.gov; img-src 'self' data: https: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-ancestors 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com https://*.googleapis.com blob:; worker-src 'self' blob:; connect-src 'self' blob: data: https://chat.kxsb.org http://144.202.12.168:8000 ws://144.202.12.168:8000 ws://144.202.12.168:8765 ws://144.202.12.168:8766 ws://144.202.12.168:8767 https://*.supabase.co wss://*.supabase.co https://maps.googleapis.com https://tile.googleapis.com https://*.googleapis.com https://*.gstatic.com https://eonet.gsfc.nasa.gov; img-src 'self' data: https: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-ancestors 'none'"
 
 # ── Prerendering for SEO (free on Netlify) ──
 [build.processing]
