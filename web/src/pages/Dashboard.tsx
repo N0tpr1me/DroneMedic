@@ -146,6 +146,21 @@ export function Dashboard() {
   }, [px4Telemetry, px4Connected]);
 
   useEffect(() => {
+    const FALLBACK_LOCATIONS: Record<string, Location> = {
+      "Depot": { x: 0, y: 0, z: -30, lat: 51.5074, lon: -0.1278, description: "Main drone depot / base station" },
+      "Clinic A": { x: 100, y: 50, z: -30, lat: 51.5124, lon: -0.1200, description: "General medical clinic" },
+      "Clinic B": { x: -50, y: 150, z: -30, lat: 51.5174, lon: -0.1350, description: "Emergency care facility" },
+      "Clinic C": { x: 200, y: -30, z: -30, lat: 51.5044, lon: -0.1100, description: "Rural health outpost" },
+      "Clinic D": { x: -100, y: -80, z: -30, lat: 51.5000, lon: -0.1400, description: "Disaster relief camp" },
+      "Royal London": { x: 100, y: 50, z: -30, lat: 51.5185, lon: -0.0590, description: "Royal London Hospital - Major trauma centre" },
+      "Homerton": { x: -50, y: 150, z: -30, lat: 51.5468, lon: -0.0456, description: "Homerton Hospital - Urgent care facility" },
+      "Newham General": { x: 200, y: -30, z: -30, lat: 51.5155, lon: 0.0285, description: "Newham General Hospital - Trauma kit resupply" },
+      "Whipps Cross": { x: -100, y: -80, z: -30, lat: 51.5690, lon: 0.0066, description: "Whipps Cross Hospital - Cardiac unit" },
+    };
+    const FALLBACK_NO_FLY: NoFlyZone[] = [
+      { name: "Military Zone Alpha", polygon: [[-20,80],[-20,120],[30,120],[30,80]], lat_lon: [[51.513,-0.132],[51.516,-0.132],[51.516,-0.126],[51.513,-0.126]] },
+      { name: "Airport Exclusion", polygon: [[120,-60],[120,-20],[180,-20],[180,-60]], lat_lon: [[51.503,-0.115],[51.506,-0.115],[51.506,-0.108],[51.503,-0.108]] },
+    ];
     (async () => {
       try {
         const [l, w, n] = await Promise.all([api.getLocations(), api.getWeather(), api.getNoFlyZones()]);
@@ -153,9 +168,9 @@ export function Dashboard() {
         setWeather(w.weather); setWeatherLoaded(true);
         setNoFlyZones(n.zones); setNoFlyLoaded(true);
       } catch {
-        setLocationsLoaded(true);
+        setLocations(FALLBACK_LOCATIONS); setLocationsLoaded(true);
+        setNoFlyZones(FALLBACK_NO_FLY); setNoFlyLoaded(true);
         setWeatherLoaded(true);
-        setNoFlyLoaded(true);
       }
     })();
   }, []);
