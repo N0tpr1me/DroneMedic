@@ -9,6 +9,7 @@ import { PageHeader } from '../components/layout/PageHeader';
 import { api } from '../lib/api';
 import type { Task, Route } from '../lib/api';
 import { DEMO_SCENARIO } from '../data/demo-scenario';
+import { useMissionContext } from '../context/MissionContext';
 
 interface ChatMessage {
   id: string;
@@ -19,28 +20,46 @@ interface ChatMessage {
   route?: Route;
 }
 
+const WELCOME_MSG: ChatMessage = {
+  id: 'welcome',
+  role: 'assistant',
+  content: 'Welcome to DroneMedic Mission Planning. Describe your delivery mission in natural language — I\'ll parse the locations, priorities, and supplies, then compute the optimal route.',
+  timestamp: new Date(),
+};
+
 export function Deploy() {
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'welcome',
-      role: 'assistant',
-      content: 'Welcome to DroneMedic Mission Planning. Describe your delivery mission in natural language — I\'ll parse the locations, priorities, and supplies, then compute the optimal route.',
-      timestamp: new Date(),
-    },
-    {
-      id: 'example',
-      role: 'system',
-      content: 'Try: "Deliver O- plasma to Royal London urgently, insulin to Homerton, and defibrillator pads to Whipps Cross"',
-      timestamp: new Date(),
-    },
-  ]);
+  const { deployChatHistory, setDeployChatHistory } = useMissionContext();
+
+  // Restore chat history from context, or start fresh
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    if (deployChatHistory.length > 0) {
+      return deployChatHistory.map(m => ({
+        ...m,
+        role: m.role as ChatMessage['role'],
+        timestamp: new Date(m.timestamp),
+      }));
+    }
+    return [WELCOME_MSG];
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [currentRoute, setCurrentRoute] = useState<Route | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const deployLocation = useLocation();
   const prefillHandled = useRef(false);
+
+  // Persist chat history to context whenever messages change
+  useEffect(() => {
+    if (messages.length > 1) {
+      setDeployChatHistory(messages.map(m => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+        timestamp: m.timestamp.toISOString(),
+      })));
+    }
+  }, [messages, setDeployChatHistory]);
 
   // Auto-fill from Dashboard location click
   useEffect(() => {

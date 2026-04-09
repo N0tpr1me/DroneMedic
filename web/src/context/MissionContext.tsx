@@ -113,6 +113,10 @@ export interface MissionContextValue {
   setActiveRoute: (route: Route | null) => void;
   activeDroneId: string | null;
 
+  // Deploy page chat history — persists across navigation
+  deployChatHistory: Array<{ id: string; role: string; content: string; timestamp: string }>;
+  setDeployChatHistory: (msgs: Array<{ id: string; role: string; content: string; timestamp: string }>) => void;
+
   // Cross-page reactive alerts
   droneAlerts: DroneAlert[];
   acknowledgeAlert: (alertId: string) => void;
@@ -175,6 +179,7 @@ export function MissionProvider({
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [activeRoute, setActiveRoute] = useState<Route | null>(null);
   const [activeDroneId, setActiveDroneId] = useState<string | null>(null);
+  const [deployChatHistory, setDeployChatHistory] = useState<MissionContextValue['deployChatHistory']>([]);
 
   // Location cache for building waypoints from route names
   const locationsCache = useRef<Record<string, Location>>({});
@@ -506,6 +511,8 @@ export function MissionProvider({
       setActiveTask,
       setActiveRoute,
       activeDroneId,
+      deployChatHistory,
+      setDeployChatHistory,
       droneAlerts,
       acknowledgeAlert,
       fleetSummary,
@@ -520,6 +527,7 @@ export function MissionProvider({
       activeTask,
       activeRoute,
       activeDroneId,
+      deployChatHistory,
       droneAlerts,
       acknowledgeAlert,
       fleetSummary,
