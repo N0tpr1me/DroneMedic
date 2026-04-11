@@ -110,6 +110,12 @@ export interface MissionContextValue {
   // Dispatch a delivery -- finds closest idle drone automatically
   dispatchDelivery: (task: Task, route: Route, userLocation?: { lat: number; lon: number }) => string;
 
+  // Dispatch multiple drones simultaneously with separate routes
+  dispatchFleetDelivery: (
+    task: Task,
+    fleetRoutes: Record<string, { ordered_route: string[]; total_distance: number; estimated_time: number; battery_usage: number }>,
+  ) => string[];
+
   // Current overall mission status
   missionStatus: 'idle' | 'planning' | 'flying' | 'rerouting' | 'completed';
 
@@ -444,32 +450,69 @@ export function MissionProvider({
   // the user navigates away from /dashboard. Reads primary values from the
   // physics simulation; falls back to elapsed-time / estimated_time when the
   // physics sim has no flying drone (e.g. all waypoints collapsed to depot).
+  const missionProgressRef = useRef(missionProgress);
+  missionProgressRef.current = missionProgress;
+
   useEffect(() => {
     if (missionStatus !== 'flying') return;
     const interval = setInterval(() => {
       const mapData = fleetPhysics.getDroneMapData();
-      const flying = mapData.find((d) => d.status !== 'idle' && d.status !== 'preflight');
-      if (flying) {
-        const tel = fleetPhysics.getTelemetry(flying.id);
-        if (tel) {
-          setLiveBattery(Math.round(tel.battery_pct));
-          setMissionProgress(Math.round(tel.missionProgress));
-          setDroneProgress(
-            tel.totalWaypoints > 1 ? Math.min(tel.missionProgress / 100, 1) : 0,
-          );
-          if (tel.missionProgress >= 100) {
-            setMissionStatus('completed');
-            flightStartRef.current = null;
+      const flyingDrones = mapData.filter((d) => d.status !== 'idle' && d.status !== 'preflight');
+
+      // If no drone is flying but we're in 'flying' status, the mission completed.
+      // Read from ref to avoid stale closure over missionProgress state.
+      if (flyingDrones.length === 0 && missionProgressRef.current > 5) {
+        setMissionProgress(100);
+        setDroneProgress(1);
+        setMissionStatus('completed');
+        flightStartRef.current = null;
+        return;
+      }
+
+      if (flyingDrones.length > 0) {
+        // Collect telemetry from all flying drones
+        let minProgress = 100;
+        let minBattery = 100;
+        let allComplete = true;
+
+        for (const drone of flyingDrones) {
+          const tel = fleetPhysics.getTelemetry(drone.id);
+          if (tel) {
+            if (tel.missionProgress < minProgress) minProgress = tel.missionProgress;
+            if (tel.battery_pct < minBattery) minBattery = tel.battery_pct;
+            if (tel.missionProgress < 100) allComplete = false;
+          } else {
+            allComplete = false;
           }
+        }
+
+        setLiveBattery(Math.round(minBattery));
+        setMissionProgress(prev => {
+          const target = Math.round(minProgress);
+          if (target >= 100) return 100;
+          if (prev === 0 && target > 0) return Math.min(target, 5);
+          return Math.round(prev + (target - prev) * 0.3);
+        });
+        setDroneProgress(prev => {
+          const target = Math.min(minProgress / 100, 1);
+          if (target >= 1) return 1;
+          return prev + (target - prev) * 0.3;
+        });
+        if (allComplete) {
+          setMissionStatus('completed');
+          flightStartRef.current = null;
         }
       } else if (activeRoute?.estimated_time && flightStartRef.current != null) {
         // Time-based fallback
         const elapsed = (performance.now() - flightStartRef.current) / 1000;
         const p = Math.min(elapsed / activeRoute.estimated_time, 1);
-        setDroneProgress(p);
-        setMissionProgress(Math.round(p * 100));
+        setDroneProgress(prev => prev + (p - prev) * 0.3);
+        setMissionProgress(prev => {
+          if (p >= 1) return 100;
+          return Math.round(prev + (p * 100 - prev) * 0.3);
+        });
         // Simulate gradual battery drain during fallback flight (~30% per mission)
-        setLiveBattery((prev) => Math.max(0, Math.round(100 - p * 30)));
+        setLiveBattery(() => Math.max(0, Math.round(100 - p * 30)));
         if (p >= 1) {
           setMissionStatus('completed');
           flightStartRef.current = null;
@@ -552,8 +595,15 @@ export function MissionProvider({
         return sum + (SUPPLY_WEIGHTS[key] ?? 1.0);
       }, 0) || 1.0;
 
-      // Build waypoints from route.ordered_route
-      const waypoints = route.ordered_route.map((name) => {
+      // Build waypoints from route.ordered_route, skipping the leading
+      // "Depot" entry because the drone already starts at its home position.
+      // Keeping it causes the drone to "arrive" at waypoint 0 instantly,
+      // which makes progress jump to ~50% and triggers a spurious event.
+      const rawNames = route.ordered_route;
+      const trimmedNames = rawNames.length > 1 && rawNames[0] === 'Depot'
+        ? rawNames.slice(1)
+        : rawNames;
+      const waypoints = trimmedNames.map((name) => {
         const loc = locationsCache.current[name];
         return {
           lat: loc?.lat ?? depotLat,
@@ -585,18 +635,120 @@ export function MissionProvider({
     [fleetPhysics, fleetConfigs, live],
   );
 
+  // ── dispatchFleetDelivery ─────────────────────────────────────────
+  const dispatchFleetDelivery = useCallback(
+    (
+      task: Task,
+      fleetRoutes: Record<string, { ordered_route: string[]; total_distance: number; estimated_time: number; battery_usage: number }>,
+    ): string[] => {
+      const depotLat = 51.5074;
+      const depotLon = -0.1278;
+
+      // Reset all live state for a clean mission
+      live.reset();
+      setLiveFlightLog([]);
+      batteryByDroneRef.current = {};
+      setDroneProgress(0);
+      setMissionProgress(0);
+      setLiveBattery(100);
+      setSimPayload(null);
+      flightStartRef.current = performance.now();
+
+      const dispatchedIds: string[] = [];
+
+      for (const [droneId, droneRoute] of Object.entries(fleetRoutes)) {
+        // Build waypoints, skipping leading "Depot"
+        const rawNames = droneRoute.ordered_route;
+        const trimmedNames = rawNames.length > 1 && rawNames[0] === 'Depot'
+          ? rawNames.slice(1)
+          : rawNames;
+
+        const waypoints = trimmedNames.map((name) => {
+          const loc = locationsCache.current[name];
+          return {
+            lat: loc?.lat ?? depotLat,
+            lon: loc?.lon ?? depotLon,
+            name,
+          };
+        });
+
+        // Determine payload weight from supplies for this drone's destination
+        const destinations = rawNames.filter(n => n !== 'Depot');
+        const payloadKg = destinations.reduce((sum, dest) => {
+          const supply = task.supplies[dest];
+          if (!supply) return sum + 1.0;
+          const key = supply.toLowerCase().replace(/\s+/g, '_');
+          return sum + (SUPPLY_WEIGHTS[key] ?? 1.0);
+        }, 0) || 1.0;
+
+        fleetPhysics.dispatchDrone(droneId, waypoints, payloadKg);
+        dispatchedIds.push(droneId);
+      }
+
+      // Build a combined route for display
+      const allStops = Object.values(fleetRoutes).flatMap(r => r.ordered_route);
+      const uniqueStops = ['Depot', ...new Set(allStops.filter(s => s !== 'Depot')), 'Depot'];
+      const combinedRoute: Route = {
+        ordered_route: uniqueStops,
+        ordered_routes: Object.fromEntries(
+          Object.entries(fleetRoutes).map(([id, r]) => [id, r.ordered_route]),
+        ),
+        total_distance: Object.values(fleetRoutes).reduce((s, r) => s + r.total_distance, 0),
+        estimated_time: Math.max(...Object.values(fleetRoutes).map(r => r.estimated_time)),
+        battery_usage: Math.max(...Object.values(fleetRoutes).map(r => r.battery_usage)),
+        no_fly_violations: [],
+      };
+
+      setMissionStatus('flying');
+      setActiveTask(task);
+      setActiveRoute(combinedRoute);
+      setActiveDroneId(dispatchedIds[0]);
+
+      return dispatchedIds;
+    },
+    [fleetPhysics, live],
+  );
+
   // ── Fetch locations once and cache ───────────────────────────────
+  // Hardcoded fallback so the physics engine always has real lat/lons
+  // even when the backend is down. Without this, every waypoint fell
+  // back to the depot coordinates and the drone "flew" from depot to
+  // depot — completing instantly while the map polyline showed the
+  // real multi-km route, causing a visible sync mismatch between the
+  // progress bar, drone marker position, and the route line.
   useEffect(() => {
+    // Seed with config.py locations as a baseline
+    const loc = (lat: number, lon: number, desc: string): Location => ({
+      x: 0, y: 0, z: 0, lat, lon, description: desc,
+    });
+    const fallback: Record<string, Location> = {
+      'Depot': loc(51.5074, -0.1278, 'Central depot'),
+      'Clinic West': loc(51.5124, -0.1200, 'General medical clinic'),
+      'Clinic North': loc(51.5174, -0.1350, 'General medical clinic'),
+      'Clinic South': loc(51.5044, -0.1100, 'General medical clinic'),
+      'Clinic East': loc(51.5000, -0.1400, 'General medical clinic'),
+      'Hospital Central': loc(51.5185, -0.0590, 'Hospital Central'),
+      'Hospital North': loc(51.5468, -0.0456, 'Hospital North'),
+      'Hospital East': loc(51.5155, 0.0285, 'Hospital East'),
+      'Royal London': loc(51.5185, -0.0590, 'Royal London Hospital'),
+      'Homerton': loc(51.5468, -0.0456, 'Homerton University Hospital'),
+      'Newham General': loc(51.5155, 0.0285, 'Newham University Hospital'),
+      'Whipps Cross': loc(51.5690, 0.0066, 'Whipps Cross University Hospital'),
+      'Hospital Far East': loc(51.5690, 0.0066, 'Hospital Far East'),
+    };
+    locationsCache.current = { ...fallback };
+
     const fetchLocations = async () => {
       try {
         const apiBase = import.meta.env.VITE_API_URL || '';
         const res = await fetch(`${apiBase}/api/locations`);
         if (res.ok) {
           const data = await res.json();
-          locationsCache.current = data.locations ?? {};
+          // Merge API results over fallback so any new locations are picked up
+          locationsCache.current = { ...fallback, ...(data.locations ?? {}) };
         }
       } catch {
-        // API unavailable -- waypoints will use depot fallback
+        // API unavailable — fallback locations already seeded above
       }
     };
     fetchLocations();
@@ -679,6 +831,7 @@ export function MissionProvider({
       liveFlightLog,
       completedMissions,
       dispatchDelivery,
+      dispatchFleetDelivery,
       missionStatus,
       activeTask,
       activeRoute,
@@ -705,6 +858,7 @@ export function MissionProvider({
       liveFlightLog,
       completedMissions,
       dispatchDelivery,
+      dispatchFleetDelivery,
       missionStatus,
       activeTask,
       activeRoute,

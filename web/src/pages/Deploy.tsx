@@ -1,14 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PlaneTakeoff, Route as RouteIcon, Zap } from 'lucide-react';
+import { PlaneTakeoff, Route as RouteIcon, Zap, Siren, Clock, MapPin } from 'lucide-react';
 import { PromptInputBox } from '@/components/ui/ai-prompt-box';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { SideNav } from '../components/layout/SideNav';
 import { PageHeader } from '../components/layout/PageHeader';
 import { api } from '../lib/api';
 import type { Task, Route } from '../lib/api';
-import { DEMO_SCENARIO } from '../data/demo-scenario';
+import { DEMO_SCENARIO, DEMO_SCENARIOS } from '../data/demo-scenario';
+import type { DemoScenarioEntry } from '../data/demo-scenario';
 import { useMissionContext } from '../context/MissionContext';
 
 interface ChatMessage {
@@ -29,7 +30,7 @@ const WELCOME_MSG: ChatMessage = {
 
 export function Deploy() {
   const navigate = useNavigate();
-  const { chatSessions, activeChatId, setActiveChatId, createChatSession, deleteChatSession, updateChatMessages } = useMissionContext();
+  const { chatSessions, activeChatId, setActiveChatId, createChatSession, deleteChatSession, updateChatMessages, missionStatus } = useMissionContext();
 
   const activeSession = chatSessions.find(s => s.id === activeChatId);
 
@@ -66,8 +67,16 @@ export function Deploy() {
     }
   }, [messages, activeChatId, updateChatMessages]);
 
+  // Track whether we just created a session internally (via handleSend) so the
+  // sync effect doesn't wipe the messages we're about to add.
+  const justCreatedSessionRef = useRef(false);
+
   // Sync messages when switching sessions
   useEffect(() => {
+    if (justCreatedSessionRef.current) {
+      justCreatedSessionRef.current = false;
+      return;
+    }
     const session = chatSessions.find(s => s.id === activeChatId);
     if (session && session.messages.length > 0) {
       setMessages(session.messages.map(m => ({
@@ -109,6 +118,7 @@ export function Deploy() {
 
     // Auto-create a chat session on first message
     if (!activeChatIdRef.current) {
+      justCreatedSessionRef.current = true;
       const newId = createChatSession();
       activeChatIdRef.current = newId;
     }
@@ -119,15 +129,25 @@ export function Deploy() {
     // If we already have a route, handle follow-up commands
     if (currentRoute) {
       if (input.toLowerCase().includes('deploy') || input.toLowerCase().includes('start') || input.toLowerCase().includes('go')) {
-        addMessage({ role: 'system', content: 'Initiating drone deployment sequence...' });
+        const fleetData = pendingFleetRef.current;
+        const droneCount = fleetData?.fleetRoutes ? Object.keys(fleetData.fleetRoutes).length : 1;
+        addMessage({ role: 'system', content: fleetData ? `Initiating ${droneCount}-drone fleet deployment...` : 'Initiating drone deployment sequence...' });
         try {
           await api.startDelivery(currentRoute.ordered_route);
-          addMessage({ role: 'assistant', content: 'Drone deployed successfully! Redirecting to Live Ops...' });
-          setTimeout(() => navigate('/dashboard', { state: { task: currentTask, route: currentRoute } }), 2000);
+          addMessage({ role: 'assistant', content: fleetData ? `${droneCount} drones deployed! Redirecting to Live Ops...` : 'Drone deployed successfully! Redirecting to Live Ops...' });
+          const rr = pendingRerouteRef.current;
+          pendingRerouteRef.current = null;
+          const fr = pendingFleetRef.current;
+          pendingFleetRef.current = null;
+          setTimeout(() => navigate('/dashboard', { state: { task: currentTask, route: currentRoute, ...(rr ? { demoReroute: rr } : {}), ...(fr ? { fleetMode: true, fleetRoutes: fr.fleetRoutes } : {}) } }), 2000);
         } catch (err) {
           console.error('startDelivery failed:', err);
-          addMessage({ role: 'assistant', content: 'Drone deployed in demo mode. Redirecting to Live Ops...' });
-          setTimeout(() => navigate('/dashboard', { state: { task: currentTask, route: currentRoute } }), 2000);
+          addMessage({ role: 'assistant', content: fleetData ? `${droneCount} drones deployed in demo mode. Redirecting to Live Ops...` : 'Drone deployed in demo mode. Redirecting to Live Ops...' });
+          const rr = pendingRerouteRef.current;
+          pendingRerouteRef.current = null;
+          const fr = pendingFleetRef.current;
+          pendingFleetRef.current = null;
+          setTimeout(() => navigate('/dashboard', { state: { task: currentTask, route: currentRoute, ...(rr ? { demoReroute: rr } : {}), ...(fr ? { fleetMode: true, fleetRoutes: fr.fleetRoutes } : {}) } }), 2000);
         }
         setIsLoading(false);
         return;
@@ -144,11 +164,56 @@ export function Deploy() {
     // If we have a task but no route, only auto-route if the user explicitly asks for it
     if (currentTask && !currentRoute) {
       const lower = input.toLowerCase();
-      if (lower.includes('plan') || lower.includes('route') || lower.includes('compute') || lower.includes('optimize') || lower.includes('yes') || lower.includes('go')) {
+      if (lower.includes('plan') || lower.includes('route') || lower.includes('compute') || lower.includes('optimize') || lower.includes('yes') || lower.includes('go') || lower.includes('deploy')) {
         try {
           const res = await api.computeRoute(currentTask.locations, currentTask.priorities);
-          setCurrentRoute(res.route);
-          addMessage({ role: 'assistant', content: `Route optimized: ${res.route.ordered_route.join(' → ')}\n\nDistance: ${res.route.total_distance}m | Time: ${res.route.estimated_time}s | Battery: ${res.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: res.route });
+          const computedRoute = res.route;
+
+          // If 2+ destinations, auto-generate fleet routes (1 drone per destination)
+          if (currentTask.locations.length >= 2 && currentTask.locations.length <= 3) {
+            const droneIds = ['drone-1', 'drone-2', 'drone-3'];
+            const fleetRouteEntries: Record<string, { ordered_route: string[]; total_distance: number; estimated_time: number; battery_usage: number }> = {};
+            const orderedRoutesMap: Record<string, string[]> = {};
+
+            currentTask.locations.forEach((loc, i) => {
+              const droneId = droneIds[i];
+              const droneRoute = ['Depot', loc, 'Depot'];
+              fleetRouteEntries[droneId] = {
+                ordered_route: droneRoute,
+                total_distance: Math.round(computedRoute.total_distance / currentTask.locations.length),
+                estimated_time: Math.round(computedRoute.estimated_time * 0.8),
+                battery_usage: Math.round(computedRoute.battery_usage / currentTask.locations.length),
+              };
+              orderedRoutesMap[droneId] = droneRoute;
+            });
+
+            const fleetRoute: Route = {
+              ...computedRoute,
+              ordered_routes: orderedRoutesMap,
+            };
+            setCurrentRoute(fleetRoute);
+            pendingFleetRef.current = { fleetRoutes: fleetRouteEntries };
+
+            const droneCount = currentTask.locations.length;
+            const routeSummary = Object.entries(fleetRouteEntries)
+              .map(([id, r], i) => {
+                const dest = r.ordered_route.filter(s => s !== 'Depot').join(' → ');
+                const supply = currentTask.supplies[currentTask.locations[i]] ?? 'medical supplies';
+                const priority = currentTask.priorities[currentTask.locations[i]] === 'high' ? ' [URGENT]' : '';
+                return `Drone ${i + 1}: ${dest}${priority} — ${supply} (~${Math.round(r.estimated_time / 60)} min)`;
+              })
+              .join('\n');
+
+            addMessage({
+              role: 'assistant',
+              content: `Fleet mission planned — ${droneCount} drones deploying simultaneously:\n\n${routeSummary}\n\nTotal distance: ${computedRoute.total_distance}m | Longest ETA: ${Math.round(computedRoute.estimated_time / 60)} min\n\nSay **"deploy"** to launch all ${droneCount} drones.`,
+              route: fleetRoute,
+            });
+          } else {
+            // Single destination — standard single-drone route
+            setCurrentRoute(computedRoute);
+            addMessage({ role: 'assistant', content: `Route optimized: ${computedRoute.ordered_route.join(' → ')}\n\nDistance: ${computedRoute.total_distance}m | Time: ${computedRoute.estimated_time}s | Battery: ${computedRoute.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: computedRoute });
+          }
         } catch (err) {
           console.error('computeRoute failed:', err);
           addMessage({ role: 'assistant', content: 'Route computation failed. Please check the backend is running and try again.' });
@@ -177,17 +242,9 @@ export function Deploy() {
             setCurrentTask(res.task);
             addMessage({
               role: 'assistant',
-              content: `Parsed ${res.task.locations.length} delivery locations:\n\n${res.task.locations.map((loc: string) => `• ${loc}${res.task.priorities[loc] === 'high' ? ' (URGENT)' : ''} — ${res.task.supplies[loc] || 'medical supplies'}`).join('\n')}\n\nSay "plan route" or I'll compute the optimal path now.`,
+              content: `I've identified ${res.task.locations.length} delivery locations:\n\n${res.task.locations.map((loc: string) => `• ${loc}${res.task.priorities[loc] === 'high' ? ' (URGENT)' : ''} — ${res.task.supplies[loc] || 'medical supplies'}`).join('\n')}\n\n✅ Say **"plan route"** to compute the optimal delivery path, or provide more details about supplies and priorities.`,
               task: res.task,
             });
-            // Auto-plan route
-            try {
-              const routeRes = await api.computeRoute(res.task.locations, res.task.priorities);
-              setCurrentRoute(routeRes.route);
-              addMessage({ role: 'assistant', content: `Route optimized: ${routeRes.route.ordered_route.join(' → ')}\n\nDistance: ${routeRes.route.total_distance}m | Time: ${routeRes.route.estimated_time}s | Battery: ${routeRes.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: routeRes.route });
-            } catch (err) {
-              console.error('auto computeRoute failed:', err);
-            }
             setIsLoading(false);
             return;
           }
@@ -203,14 +260,6 @@ export function Deploy() {
           const res = await api.parseTask(input);
           if (res.task && res.task.locations.length > 0) {
             setCurrentTask(res.task);
-            // Auto-compute route
-            try {
-              const routeRes = await api.computeRoute(res.task.locations, res.task.priorities);
-              setCurrentRoute(routeRes.route);
-              addMessage({ role: 'assistant', content: `Route optimized: ${routeRes.route.ordered_route.join(' → ')}\n\nDistance: ${routeRes.route.total_distance}m | Time: ${routeRes.route.estimated_time}s | Battery: ${routeRes.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: routeRes.route });
-            } catch {
-              // Route failed — task is set, user can retry
-            }
           }
         } catch {
           // Parse failed — that's fine, AI already responded conversationally
@@ -223,16 +272,9 @@ export function Deploy() {
         setCurrentTask(res.task);
         addMessage({
           role: 'assistant',
-          content: `Parsed ${res.task.locations.length} delivery locations:\n\n${res.task.locations.map((loc: string) => `• ${loc}${res.task.priorities[loc] === 'high' ? ' (URGENT)' : ''} — ${res.task.supplies[loc] || 'medical supplies'}`).join('\n')}\n\nSay "plan route" or I'll compute the optimal path now.`,
+          content: `I've identified ${res.task.locations.length} delivery locations:\n\n${res.task.locations.map((loc: string) => `• ${loc}${res.task.priorities[loc] === 'high' ? ' (URGENT)' : ''} — ${res.task.supplies[loc] || 'medical supplies'}`).join('\n')}\n\n✅ Say **"plan route"** to compute the optimal delivery path, or provide more details about supplies and priorities.`,
           task: res.task,
         });
-        try {
-          const routeRes = await api.computeRoute(res.task.locations, res.task.priorities);
-          setCurrentRoute(routeRes.route);
-          addMessage({ role: 'assistant', content: `Route optimized: ${routeRes.route.ordered_route.join(' → ')}\n\nDistance: ${routeRes.route.total_distance}m | Time: ${routeRes.route.estimated_time}s | Battery: ${routeRes.route.battery_usage}%\n\nSay "deploy" to launch the drone.`, route: routeRes.route });
-        } catch (err) {
-          console.error('auto computeRoute failed:', err);
-        }
       } catch (err) {
         console.error('parseTask failed:', err);
         addMessage({ role: 'assistant', content: 'I\'m having trouble understanding that request. Could you try rephrasing? For example: "Deliver blood to Royal London urgently"' });
@@ -240,6 +282,58 @@ export function Deploy() {
     }
 
     setIsLoading(false);
+  };
+
+  const demoIconMap = { siren: Siren, route: RouteIcon, zap: Zap } as const;
+
+  // Store reroute metadata for Demo 3 so it's available when deploy is clicked
+  const pendingRerouteRef = useRef<DemoScenarioEntry['reroute'] | null>(null);
+  // Store fleet routes for multi-drone demos
+  const pendingFleetRef = useRef<{ fleetRoutes: DemoScenarioEntry['fleetRoutes'] } | null>(null);
+  const [demoPrefill, setDemoPrefill] = useState('');
+
+  const handleDemoLaunch = (scenario: DemoScenarioEntry) => {
+    if (missionStatus !== 'idle') return;
+    // Stash reroute payload for when the user eventually clicks "Deploy"
+    pendingRerouteRef.current = scenario.reroute ?? null;
+    // Stash fleet routes for multi-drone demos
+    pendingFleetRef.current = scenario.fleetMode && scenario.fleetRoutes
+      ? { fleetRoutes: scenario.fleetRoutes }
+      : null;
+
+    // For fleet demos, skip the chat flow entirely — set task + route directly
+    if (scenario.fleetMode && scenario.fleetRoutes) {
+      // Auto-create a chat session if needed
+      if (!activeChatIdRef.current) {
+        justCreatedSessionRef.current = true;
+        const newId = createChatSession();
+        activeChatIdRef.current = newId;
+      }
+
+      const droneCount = Object.keys(scenario.fleetRoutes).length;
+      addMessage({ role: 'user', content: scenario.request });
+      setCurrentTask(scenario.task as Task);
+      setCurrentRoute(scenario.route as Route);
+
+      // Build per-drone route summary
+      const routeSummary = Object.entries(scenario.fleetRoutes)
+        .map(([id, r], i) => {
+          const dest = r.ordered_route.filter(s => s !== 'Depot').join(' → ');
+          const supply = scenario.task.supplies[r.ordered_route.find(s => s !== 'Depot') ?? ''] ?? 'medical supplies';
+          return `🛸 Drone ${i + 1}: ${dest} — ${supply} (${r.total_distance}m, ~${Math.round(r.estimated_time / 60)} min)`;
+        })
+        .join('\n');
+
+      addMessage({
+        role: 'assistant',
+        content: `Fleet mission planned — ${droneCount} drones deploying simultaneously:\n\n${routeSummary}\n\nTotal distance: ${scenario.route.total_distance}m | Longest ETA: ${Math.round(scenario.route.estimated_time / 60)} min\n\nSay **"deploy"** to launch all ${droneCount} drones.`,
+        route: scenario.route as Route,
+      });
+      return;
+    }
+
+    // Non-fleet demos: prefill the input box so the user sees the message and clicks send
+    setDemoPrefill(scenario.request);
   };
 
   return (
@@ -372,7 +466,7 @@ export function Deploy() {
                           style={{ color: '#00daf3', padding: '8px 16px', height: 'auto', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}
                         >
                           <PlaneTakeoff size={16} />
-                          Deploy Drone
+                          {pendingFleetRef.current ? `Deploy ${Object.keys(pendingFleetRef.current.fleetRoutes ?? {}).length} Drones` : 'Deploy Drone'}
                         </LiquidButton>
                         <LiquidButton
                           size="sm"
@@ -411,45 +505,63 @@ export function Deploy() {
 
       {/* Prompt Input */}
       <div style={{ padding: '16px 24px 24px', maxWidth: 720, margin: '0 auto', width: '100%', position: 'relative', zIndex: 30 }}>
-        {/* Demo scenario suggestion chip */}
+        {/* Demo launch cards */}
         {!currentTask && !isLoading && (
-          <div style={{ display: 'flex', gap: 8, marginBottom: 10, position: 'relative', zIndex: 50 }}>
-            <button
-              type="button"
-              onClick={() => handleSend(DEMO_SCENARIO.request)}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '6px 14px',
-                borderRadius: 9999,
-                background: 'rgba(0,218,243,0.08)',
-                border: '1px solid rgba(0,218,243,0.25)',
-                color: '#00daf3',
-                fontSize: 12,
-                fontWeight: 500,
-                cursor: 'pointer',
-                transition: 'background 0.2s, border-color 0.2s',
-                pointerEvents: 'auto',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(0,218,243,0.15)';
-                e.currentTarget.style.borderColor = 'rgba(0,218,243,0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(0,218,243,0.08)';
-                e.currentTarget.style.borderColor = 'rgba(0,218,243,0.25)';
-              }}
-            >
-              <Zap size={13} />
-              Demo: Emergency Blood Delivery
-            </button>
+          <div style={{ display: 'flex', gap: 10, marginBottom: 14, position: 'relative', zIndex: 50, flexWrap: 'wrap' }}>
+            {DEMO_SCENARIOS.map((scenario) => {
+              const Icon = demoIconMap[scenario.icon];
+              const busy = missionStatus !== 'idle';
+              return (
+                <motion.button
+                  key={scenario.id}
+                  type="button"
+                  onClick={() => handleDemoLaunch(scenario)}
+                  disabled={busy}
+                  whileHover={busy ? undefined : { scale: 1.02 }}
+                  whileTap={busy ? undefined : { scale: 0.98 }}
+                  style={{
+                    flex: '1 1 200px',
+                    minWidth: 180,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 6,
+                    padding: '14px 16px',
+                    borderRadius: 12,
+                    background: 'rgba(30,35,40,0.85)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    border: `1px solid ${scenario.accentBorder}`,
+                    color: '#dfe3e9',
+                    cursor: busy ? 'not-allowed' : 'pointer',
+                    textAlign: 'left',
+                    transition: 'border-color 0.2s, background 0.2s',
+                    opacity: busy ? 0.5 : 1,
+                    pointerEvents: 'auto',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Icon size={16} style={{ color: scenario.color, flexShrink: 0 }} />
+                    <span style={{ fontSize: 13, fontWeight: 700, color: scenario.color }}>{scenario.title}</span>
+                  </div>
+                  <p style={{ fontSize: 11, color: '#8d90a0', margin: 0, lineHeight: 1.4 }}>{scenario.subtitle}</p>
+                  <div style={{ display: 'flex', gap: 12, marginTop: 2 }}>
+                    <span style={{ fontSize: 10, color: '#6b7280', display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <Clock size={10} /> ~{scenario.estMinutes} min
+                    </span>
+                    <span style={{ fontSize: 10, color: '#6b7280', display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <MapPin size={10} /> {scenario.stops} {scenario.stops === 1 ? 'stop' : 'stops'}
+                    </span>
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
         )}
         <PromptInputBox
-          onSend={(msg) => handleSend(msg)}
+          onSend={(msg) => { setDemoPrefill(''); handleSend(msg); }}
           isLoading={isLoading}
           placeholder="Describe your delivery mission..."
+          prefillValue={demoPrefill}
         />
       </div>
 

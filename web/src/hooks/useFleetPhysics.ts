@@ -154,7 +154,7 @@ export const DEFAULT_FLEET_CONFIG: readonly FleetConfig[] = [
 // Internal helpers
 // ===================================================================
 
-const HUD_INTERVAL_MS = 1000 / 15; // ~15 Hz
+const HUD_INTERVAL_MS = 1000 / 30; // ~30 Hz
 
 /** Battery milestone thresholds that fire events exactly once per crossing. */
 const BATTERY_MILESTONES = [75, 50, 25, 10] as const;
@@ -332,7 +332,7 @@ export function useFleetPhysics(
             (prevPhase === 'preflight' || prevPhase === 'landed') &&
             nextState.phase === 'climb'
           ) {
-            emit('takeoff', drone.id, { waypointIdx: wpIdx });
+            emit('takeoff', drone.id, { waypointIdx: wpIdx, battery_pct: nextState.battery_pct });
           }
 
           // Landed detection
@@ -370,14 +370,21 @@ export function useFleetPhysics(
           if (wpIdx < drone.waypoints.length - 1) {
             drone.currentWaypointIdx = wpIdx + 1;
           } else {
-            // Final waypoint → mission complete
+            // Final waypoint → emit landed + mission complete, then deactivate
+            emit('landed', drone.id, {
+              lat: nextState.lat,
+              lon: nextState.lon,
+              name: wp.name,
+              battery_pct: nextState.battery_pct,
+            });
             drone.missionActive = false;
             drone.payloadKg = 0;
-            drone.state = { ...nextState, payloadKg: 0 };
+            drone.state = { ...nextState, payloadKg: 0, phase: 'landed' as const };
             emit('mission_complete', drone.id, {
               missionId: drone.missionId,
               elapsedTimeS: drone.elapsedFlightTimeS,
               battery_pct: nextState.battery_pct,
+              name: wp.name,
             });
           }
         }
@@ -528,6 +535,29 @@ export function useFleetPhysics(
     [hudStamp],
   );
 
+  // ── landDrone() — force-land at current position ───────────────
+  const landDrone = useCallback((droneId: string) => {
+    const drone = fleetRef.current.get(droneId);
+    if (!drone || !drone.missionActive) return;
+
+    // Replace remaining waypoints with a single waypoint at the drone's
+    // current lat/lon so the physics engine descends and lands there.
+    const { state } = drone;
+    drone.waypoints = [{ lat: state.lat, lon: state.lon, name: 'LandingZone' }];
+    drone.currentWaypointIdx = 0;
+  }, []);
+
+  // ── rerouteDrone() — replace waypoints mid-flight ──────────────
+  const rerouteDrone = useCallback(
+    (droneId: string, newWaypoints: ReadonlyArray<{ lat: number; lon: number; name: string }>) => {
+      const drone = fleetRef.current.get(droneId);
+      if (!drone || !drone.missionActive) return;
+      drone.waypoints = newWaypoints;
+      drone.currentWaypointIdx = 0;
+    },
+    [],
+  );
+
   // ── setTimeScale() ─────────────────────────────────────────────
   const setTimeScale = useCallback((scale: number) => {
     timeScaleRef.current = scale;
@@ -546,6 +576,8 @@ export function useFleetPhysics(
   return {
     getDroneMapData,
     dispatchDrone,
+    landDrone,
+    rerouteDrone,
     getTelemetry,
     setTimeScale,
     setConditions,

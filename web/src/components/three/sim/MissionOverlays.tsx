@@ -2,8 +2,9 @@
 // for the 3D simulation view. Pure visual layer that reads from
 // useMissionGeography; no side effects.
 
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 import { Line, Text, Billboard } from '@react-three/drei';
 import { useSimCockpit } from './SimCockpitContext';
 import { enuFromLatLon, threePosFromLatLon } from './enuFrame';
@@ -100,6 +101,34 @@ function RouteCurves({ locs }: { locs: MissionLocation[] }) {
 
 // ── No-fly zone extruded volumes ──────────────────────────────────────
 
+function PulsingNoFlyMesh({ geom, name }: { geom: THREE.ExtrudeGeometry; name: string }) {
+  const matRef = useRef<THREE.MeshStandardMaterial>(null);
+
+  useFrame(({ clock }) => {
+    if (matRef.current) {
+      // Sine wave oscillation: 0.08 → 0.2, period ~3s
+      matRef.current.emissiveIntensity =
+        0.14 + 0.06 * Math.sin(clock.getElapsedTime() * ((2 * Math.PI) / 3));
+    }
+  });
+
+  return (
+    <mesh key={name} geometry={geom}>
+      <meshStandardMaterial
+        ref={matRef}
+        color={NOFLY_COLOR}
+        transparent
+        opacity={0.08}
+        emissive={NOFLY_COLOR}
+        emissiveIntensity={0.15}
+        wireframe
+        depthWrite={false}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
+}
+
 function NoFlyVolumes({ zones }: { zones: MissionNoFlyZone[] }) {
   const shapes = useMemo(() => {
     return zones
@@ -124,20 +153,40 @@ function NoFlyVolumes({ zones }: { zones: MissionNoFlyZone[] }) {
       .filter(Boolean) as { name: string; geom: THREE.ExtrudeGeometry }[];
   }, [zones]);
 
+  // Build ground-level border points for each zone (closed loop)
+  const borderLines = useMemo(() => {
+    return zones
+      .map((zone) => {
+        const coords = zone.lat_lon ?? [];
+        if (coords.length < 3) return null;
+        const pts = coords.map(([lat, lon]) => {
+          const { east, north } = enuFromLatLon(lat, lon, 0);
+          return new THREE.Vector3(east, 0.5, -north);
+        });
+        // Close the loop by repeating the first point
+        pts.push(pts[0].clone());
+        return { name: zone.name, points: pts };
+      })
+      .filter(Boolean) as { name: string; points: THREE.Vector3[] }[];
+  }, [zones]);
+
   return (
     <>
       {shapes.map(({ name, geom }) => (
-        <mesh key={name} geometry={geom}>
-          <meshStandardMaterial
-            color={NOFLY_COLOR}
-            transparent
-            opacity={0.22}
-            emissive={NOFLY_COLOR}
-            emissiveIntensity={0.4}
-            depthWrite={false}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
+        <PulsingNoFlyMesh key={name} geom={geom} name={name} />
+      ))}
+      {borderLines.map(({ name, points }) => (
+        <Line
+          key={`border-${name}`}
+          points={points}
+          color={NOFLY_COLOR}
+          lineWidth={2}
+          transparent
+          opacity={0.5}
+          dashed
+          dashSize={15}
+          gapSize={10}
+        />
       ))}
     </>
   );
@@ -155,7 +204,7 @@ export function MissionOverlays() {
         <ClinicMarker key={loc.name} loc={loc} />
       ))}
       <RouteCurves locs={locations} />
-      <NoFlyVolumes zones={noFlyZones} />
+      {/* NoFlyVolumes disabled — wireframe walls too visually dominant */}
     </group>
   );
 }

@@ -1,37 +1,16 @@
-// GoogleTilesScene — the photorealistic London canvas used by the 3D
-// simulator panel.
+// GoogleTilesScene — the 3D simulator canvas.
 //
-//   Data flow:
-//     PX4 SITL + Gazebo Harmonic (VM)
-//       → telemetry_bridge.py (ws :8765)
-//       → FastAPI /ws/px4 proxy
-//       → Vite dev proxy → browser → usePX4Telemetry → SimCockpitContext
+// Procedural London (sky, fog, ground, buildings, river, depot beacon,
+// hexacopter, mission overlays, 5-preset camera rig, cinematic intro,
+// clouds, postprocessing). No tiles dependency, no GLB dependency.
 //
-//   Visual stack:
-//     Canvas (logarithmicDepthBuffer)
-//      └── Suspense
-//           ├── TilesRenderer (Google Photorealistic 3D Tiles)
-//           │    └── EastNorthUpFrame @ London depot
-//           │         ├── VMDrone (telemetry ref-driven)
-//           │         ├── BreadcrumbTrail
-//           │         ├── MissionOverlays (clinics, routes, no-fly volumes)
-//           │         └── WindField / DeliveryFx
-//           ├── SkyAndSun, Clouds
-//           ├── CameraRig (5 presets)
-//           ├── CinematicIntro
-//           └── PostFxStack
-//
-// Falls back to ProceduralFallbackScene when tiles are disabled or errored.
+// Wrapped in a WebGL capability probe + error boundary so that a browser
+// without GPU acceleration gets an explicit diagnostic instead of a black
+// void. Auto-retries once on `webglcontextrestored`.
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import {
-  TilesRenderer,
-  TilesPlugin,
-  TilesAttributionOverlay,
-  EastNorthUpFrame,
-} from '3d-tiles-renderer/r3f';
-import { GoogleCloudAuthPlugin } from '3d-tiles-renderer/plugins';
+import { Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
 import { VMDrone } from './VMDrone';
@@ -39,118 +18,193 @@ import { BreadcrumbTrail } from './BreadcrumbTrail';
 import { MissionOverlays } from './MissionOverlays';
 import { CameraRig } from './CameraRig';
 import { ProceduralFallbackScene } from './ProceduralFallbackScene';
-import { SkyAndSun } from './fx/SkyAndSun';
+import { SimRenderTargetCapture } from './SimRenderTargetCapture';
+import { SyntheticLidar } from './SyntheticLidar';
+import { LidarField } from './LidarField';
+import { SkyAndSun, getSunState } from './fx/SkyAndSun';
 import { Clouds } from './fx/Clouds';
 import { CinematicIntro } from './fx/CinematicIntro';
 import { PostFxStack } from './fx/PostFxStack';
-import { useSimCockpit } from './SimCockpitContext';
-import { DEPOT_LAT_RAD, DEPOT_LON_RAD } from './enuFrame';
+import { WeatherFx } from './fx/WeatherFx';
+import { AmbientParticles } from './fx/AmbientParticles';
+import { ProximityRing } from './fx/ProximityRing';
+import {
+  WebGLErrorBoundary,
+  WebGLDiagnostic,
+  detectWebGL,
+} from './WebGLProbe';
 
-const TILES_API_KEY =
-  import.meta.env.VITE_GOOGLE_TILES_API_KEY ||
-  import.meta.env.VITE_GOOGLE_MAPS_API_KEY ||
-  '';
+export function GoogleTilesScene() {
+  const support = useMemo(() => detectWebGL(), []);
+  const [renderError, setRenderError] = useState<string | null>(null);
+  const [canvasKey, setCanvasKey] = useState(0);
+  const autoRetryTimer = useRef<number | null>(null);
 
-const TILES_ENABLED =
-  (import.meta.env.VITE_ENABLE_3D_TILES ?? 'true') !== 'false' && !!TILES_API_KEY;
+  // Sync directional light with the drei <Sky> sun so scene lighting matches
+  // the sky color/direction. Computed once per mount — the time-of-day is
+  // effectively fixed for the session.
+  const sun = useMemo(() => getSunState(), []);
+  const sunColorHex = useMemo(() => `#${sun.color.getHexString()}`, [sun.color]);
 
-function TilesLayer() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const tilesProps: any = { errorTarget: 14 };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pluginProps: any = {
-    plugin: GoogleCloudAuthPlugin,
-    args: { apiToken: TILES_API_KEY, autoRefreshToken: true },
+  // When a restored context fires, clear the error; when a fresh error fires,
+  // schedule a single auto-retry.
+  const retryNow = () => {
+    if (autoRetryTimer.current != null) {
+      window.clearTimeout(autoRetryTimer.current);
+      autoRetryTimer.current = null;
+    }
+    setRenderError(null);
+    setCanvasKey((n) => n + 1);
   };
-  return (
-    <TilesRenderer {...tilesProps}>
-      <TilesPlugin {...pluginProps} />
-      <TilesAttributionOverlay />
-      <EastNorthUpFrame lat={DEPOT_LAT_RAD} lon={DEPOT_LON_RAD} height={0}>
-        <SceneContents />
-      </EastNorthUpFrame>
-    </TilesRenderer>
-  );
-}
 
-function SceneContents() {
-  return (
-    <group>
-      <VMDrone />
-      <BreadcrumbTrail />
-      <MissionOverlays />
-    </group>
-  );
-}
-
-function FallbackInsideFrame() {
-  return (
-    <EastNorthUpFrame lat={DEPOT_LAT_RAD} lon={DEPOT_LON_RAD} height={0}>
-      <ProceduralFallbackScene />
-      <VMDrone />
-      <BreadcrumbTrail />
-    </EastNorthUpFrame>
-  );
-}
-
-interface GoogleTilesSceneProps {
-  /** Called whenever the live tile availability flips (for HUD badging). */
-  onTilesAvailabilityChange?: (available: boolean) => void;
-}
-
-export function GoogleTilesScene({ onTilesAvailabilityChange }: GoogleTilesSceneProps) {
-  const { setTilesAvailable, tilesAvailable } = useSimCockpit();
-  const [failureReason] = useState<string | null>(null);
+  const scheduleAutoRetry = () => {
+    if (autoRetryTimer.current != null) return;
+    autoRetryTimer.current = window.setTimeout(() => {
+      autoRetryTimer.current = null;
+      retryNow();
+    }, 3000);
+  };
 
   useEffect(() => {
-    if (!TILES_ENABLED) {
-      setTilesAvailable(false);
-      onTilesAvailabilityChange?.(false);
-    } else {
-      setTilesAvailable(true);
-      onTilesAvailabilityChange?.(true);
-    }
-  }, [setTilesAvailable, onTilesAvailabilityChange]);
+    return () => {
+      if (autoRetryTimer.current != null) {
+        window.clearTimeout(autoRetryTimer.current);
+      }
+    };
+  }, []);
 
-  const useTiles = TILES_ENABLED && tilesAvailable && !failureReason;
+  if (!support.supported) {
+    return <WebGLDiagnostic support={support} onRetry={retryNow} />;
+  }
+
+  if (renderError) {
+    return (
+      <WebGLDiagnostic
+        support={support}
+        errorMessage={renderError}
+        onRetry={retryNow}
+        autoRetrying
+      />
+    );
+  }
 
   return (
-    <Canvas
-      shadows
-      dpr={[1, 2]}
-      camera={{ fov: 55, near: 1, far: 1.6e7, position: [60, 120, 60] }}
-      gl={{
-        logarithmicDepthBuffer: true,
-        antialias: true,
-        toneMapping: THREE.ACESFilmicToneMapping,
-        outputColorSpace: THREE.SRGBColorSpace,
+    <WebGLErrorBoundary
+      fallback={(err) => {
+        scheduleAutoRetry();
+        return (
+          <WebGLDiagnostic
+            support={support}
+            errorMessage={err.message}
+            onRetry={retryNow}
+            autoRetrying
+          />
+        );
       }}
-      frameloop="always"
-      style={{ width: '100%', height: '100%', background: '#06070d' }}
     >
-      {/* Base lighting (applies to both tile + procedural branches). */}
-      <ambientLight intensity={0.55} />
-      <directionalLight
-        position={[400, 800, 200]}
-        intensity={1.6}
-        color="#fff1d8"
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-      />
-      <hemisphereLight args={['#b9d5ff', '#151824', 0.35]} />
+      <Canvas
+        key={canvasKey}
+        shadows
+        dpr={[1, 2]}
+        camera={{ fov: 52, near: 0.5, far: 50_000, position: [80, 120, 140] }}
+        gl={{
+          antialias: true,
+          alpha: false,
+          depth: true,
+          stencil: false,
+          powerPreference: 'default',
+          failIfMajorPerformanceCaveat: false,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.15,
+          outputColorSpace: THREE.SRGBColorSpace,
+        }}
+        onCreated={({ gl }) => {
+          const canvas = gl.domElement;
+          canvas.addEventListener('webglcontextlost', (ev) => {
+            ev.preventDefault();
+            setRenderError('WebGL context lost — auto-retrying in 3s…');
+            scheduleAutoRetry();
+          });
+          canvas.addEventListener('webglcontextrestored', () => {
+            setRenderError(null);
+            setCanvasKey((n) => n + 1);
+          });
+        }}
+        onError={(err) => {
+          setRenderError(err instanceof Error ? err.message : String(err));
+          scheduleAutoRetry();
+        }}
+        frameloop="always"
+        style={{ width: '100%', height: '100%', background: '#0c1524' }}
+      >
+        {/* Lighting — bright enough to read every surface at a glance.
+            Directional light direction + color come from <SkyAndSun> so the
+            scene's sun matches the sky's sun. */}
+        <ambientLight intensity={0.85} />
+        <directionalLight
+          position={[
+            sun.direction.x * 900,
+            Math.max(sun.direction.y, 0.25) * 900,
+            sun.direction.z * 900,
+          ]}
+          intensity={Math.max(sun.intensity, 2.2)}
+          color={sunColorHex}
+          castShadow
+          shadow-mapSize-width={2048}
+          shadow-mapSize-height={2048}
+          shadow-camera-near={10}
+          shadow-camera-far={2500}
+          shadow-camera-left={-400}
+          shadow-camera-right={400}
+          shadow-camera-top={400}
+          shadow-camera-bottom={-400}
+          shadow-bias={-0.0005}
+        />
+        <hemisphereLight args={['#b9d5ff', '#1a2540', 0.7]} />
 
-      <SkyAndSun />
-      <Clouds />
-      <fog attach="fog" args={['#78a2c4', 800, 6500]} />
+        {/* Atmosphere — fog far bumped to 18km so the expanded procedural
+            city (which spans ~12km × 14km to cover the full mission envelope)
+            remains visible as the drone approaches distant waypoints. */}
+        <SkyAndSun />
+        <Clouds />
+        <fog attach="fog" args={['#8fb2d4', 2500, 18000]} />
 
-      <Suspense fallback={null}>
-        {useTiles ? <TilesLayer /> : <FallbackInsideFrame />}
-      </Suspense>
+        {/* HDRI environment map — gives all metallic/glass surfaces free
+            reflections and makes the water come alive. */}
+        <Suspense fallback={null}>
+          <Environment preset="city" background={false} />
+        </Suspense>
 
-      <CameraRig />
-      <CinematicIntro />
-      <PostFxStack />
-    </Canvas>
+        {/* World */}
+        <Suspense fallback={null}>
+          <ProceduralFallbackScene />
+        </Suspense>
+        <VMDrone />
+        <BreadcrumbTrail />
+        <MissionOverlays />
+
+        {/* Weather, proximity, and ambient particles */}
+        <WeatherFx />
+        <AmbientParticles />
+        <ProximityRing />
+
+        {/* Browser-side synthetic LiDAR — raycasts the procedural scene at
+            10 Hz and publishes frames to the shared lidar bus. LidarField
+            renders the resulting point cloud; HUD widgets subscribe via
+            useLidarStream. */}
+        <SyntheticLidar />
+        <LidarField />
+
+        {/* Camera + Intro */}
+        <CameraRig />
+        <CinematicIntro />
+
+        {/* Browser-side POV capture for the vision agent */}
+        <SimRenderTargetCapture />
+
+        {/* Postprocessing (quality-tier gated internally) */}
+        <PostFxStack />
+      </Canvas>
+    </WebGLErrorBoundary>
   );
 }

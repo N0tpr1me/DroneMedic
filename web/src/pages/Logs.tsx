@@ -400,11 +400,19 @@ export function Logs() {
     return '#4ade80'; // GREEN
   };
 
+  // ── Live mission data from context ──
+  const { missionStatus, missionProgress, liveBattery, simPayload, activeTask, activeRoute, droneProgress } = useMissionContext();
+  const liveTempValue = simPayload?.temperature_c ?? 4.0;
+  const liveIntegrity = simPayload?.integrity ?? 'nominal';
+  const livePayloadName = activeTask ? Object.values(activeTask.supplies).join(', ') : 'O- Blood, 2 units';
+  const liveEtaMin = activeRoute?.estimated_time ? Math.max(0, Math.ceil((activeRoute.estimated_time * (1 - droneProgress)) / 60)) : 0;
+  const liveDeadlineMin = activeRoute?.estimated_time ? Math.ceil(activeRoute.estimated_time / 60) : 90;
+
   // ── Temp bar position ──
-  const tempValue = 4.6;
+  const tempValue = liveTempValue;
   const tempMin = 2;
   const tempMax = 6;
-  const tempPercent = ((tempValue - tempMin) / (tempMax - tempMin)) * 100;
+  const tempPercent = Math.max(0, Math.min(100, ((tempValue - tempMin) / (tempMax - tempMin)) * 100));
 
   // Connection status indicator
   const isLiveConnected = liveMission.connected || px4.connected;
@@ -505,12 +513,22 @@ export function Logs() {
           >
             {/* ETA */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 120 }}>
-              <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#7a7e8c' }}>ETA</span>
+              <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#7a7e8c' }}>
+                {missionStatus === 'completed' ? 'STATUS' : 'ETA'}
+              </span>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                <span style={{ fontSize: 36, fontFamily: 'Space Grotesk', fontWeight: 900, color: '#00daf3', lineHeight: 1 }}>
-                  <SlidingNumber value={52} />
-                </span>
-                <span style={{ fontSize: 14, fontWeight: 600, color: '#00daf3', opacity: 0.7 }}>MIN</span>
+                {missionStatus === 'completed' ? (
+                  <span style={{ fontSize: 20, fontFamily: 'Space Grotesk', fontWeight: 900, color: '#22c55e', lineHeight: 1 }}>ARRIVED</span>
+                ) : missionStatus === 'flying' ? (
+                  <>
+                    <span style={{ fontSize: 36, fontFamily: 'Space Grotesk', fontWeight: 900, color: '#00daf3', lineHeight: 1 }}>
+                      <SlidingNumber value={liveEtaMin} />
+                    </span>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: '#00daf3', opacity: 0.7 }}>MIN</span>
+                  </>
+                ) : (
+                  <span style={{ fontSize: 20, fontFamily: 'Space Grotesk', fontWeight: 900, color: '#7a7e8c', lineHeight: 1 }}>IDLE</span>
+                )}
               </div>
             </div>
 
@@ -518,13 +536,15 @@ export function Logs() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 200 }}>
               <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#7a7e8c' }}>Payload</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14 }}>
-                <span style={{ fontWeight: 600 }}>O- Blood, 2 units</span>
+                <span style={{ fontWeight: 600 }}>{livePayloadName}</span>
                 <span style={{ color: '#7a7e8c' }}>|</span>
-                <span>4.6&deg;C</span>
+                <span>{liveTempValue.toFixed(1)}&deg;C</span>
                 <span style={{ color: '#7a7e8c' }}>|</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#4ade80' }} />
-                  <span style={{ color: '#4ade80', fontWeight: 600 }}>Nominal</span>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: liveIntegrity === 'critical' ? '#ff4444' : liveIntegrity === 'warning' ? '#fbbf24' : '#4ade80' }} />
+                  <span style={{ color: liveIntegrity === 'critical' ? '#ff4444' : liveIntegrity === 'warning' ? '#fbbf24' : '#4ade80', fontWeight: 600 }}>
+                    {liveIntegrity === 'critical' ? 'Critical' : liveIntegrity === 'warning' ? 'Warning' : 'Nominal'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -547,13 +567,13 @@ export function Logs() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 260 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#7a7e8c' }}>
                 <span>Clinical Deadline</span>
-                <span>52 / 90 min</span>
+                <span>{liveEtaMin} / {liveDeadlineMin} min</span>
               </div>
               <div style={{ height: 6, borderRadius: 3, background: 'rgba(67,70,84,0.3)', overflow: 'hidden' }}>
                 <div
                   style={{
                     height: '100%',
-                    width: `${Math.round((52 / 90) * 100)}%`,
+                    width: `${liveDeadlineMin > 0 ? Math.round(((liveDeadlineMin - liveEtaMin) / liveDeadlineMin) * 100) : 0}%`,
                     borderRadius: 3,
                     background: 'linear-gradient(90deg, #4ade80, #22c55e)',
                     transition: 'width 0.6s ease',
@@ -637,7 +657,7 @@ export function Logs() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13, flex: 1, minWidth: 200 }}>
               <span style={{ fontWeight: 600 }}>Payload: O- Blood</span>
               <span style={{ color: '#7a7e8c' }}>|</span>
-              <span>Temp: <span style={{ color: '#4ade80', fontWeight: 600 }}>4.6&deg;C</span></span>
+              <span>Temp: <span style={{ color: liveIntegrity === 'critical' ? '#ff4444' : liveIntegrity === 'warning' ? '#fbbf24' : '#4ade80', fontWeight: 600 }}>{liveTempValue.toFixed(1)}&deg;C</span></span>
               <span style={{ color: '#7a7e8c' }}>|</span>
               <span>Integrity: <span style={{ color: '#4ade80', fontWeight: 600 }}>Nominal</span></span>
             </div>

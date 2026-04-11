@@ -18,11 +18,11 @@ import * as THREE from 'three';
 import { useSimCockpit } from './SimCockpitContext';
 import { enuFromLatLon } from './enuFrame';
 
-const CHASE_OFFSET = new THREE.Vector3(-25, 18, 25);
+const CHASE_OFFSET = new THREE.Vector3(-55, 38, 55);
 const COCKPIT_OFFSET = new THREE.Vector3(0, 1.2, 0);
-const TOPDOWN_OFFSET = new THREE.Vector3(0, 280, 0);
-const CINEMATIC_RADIUS = 40;
-const CINEMATIC_HEIGHT = 18;
+const TOPDOWN_OFFSET = new THREE.Vector3(0, 420, 0);
+const CINEMATIC_RADIUS = 75;
+const CINEMATIC_HEIGHT = 32;
 
 export function CameraRig() {
   const { camera } = useThree();
@@ -42,9 +42,21 @@ export function CameraRig() {
     time.current += delta;
     const t = telemetryRef.current;
     const dronePos = tmpTarget;
-    if (t) {
-      const { east, north, up } = enuFromLatLon(t.lat, t.lon, Math.max(t.relative_alt_m, 2));
-      dronePos.set(east, up, -north);
+    // Only trust telemetry with real lat/lon near the depot. Physics mode or
+    // bogus (0,0) samples fall back to hovering over the depot.
+    const latOk =
+      t != null &&
+      Number.isFinite(t.lat) &&
+      Number.isFinite(t.lon) &&
+      Math.abs(t.lat) > 0.1 &&
+      Math.abs(t.lon) > 0.001;
+    if (latOk && t) {
+      const { east, north, up } = enuFromLatLon(
+        t.lat,
+        t.lon,
+        Math.max(t.relative_alt_m, 2),
+      );
+      dronePos.set(east, Math.max(up, 10), -north);
     } else {
       dronePos.set(0, 30, 0);
     }

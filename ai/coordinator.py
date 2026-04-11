@@ -8,6 +8,7 @@ conversation support.
 
 import json
 import re
+import time
 from openai import OpenAI
 from pydantic import BaseModel
 
@@ -56,12 +57,14 @@ class MissionCoordinator:
         if len(user_input) > 2000:
             user_input = user_input[:2000]
 
+        _started = time.perf_counter()
         response = self._call_llm(
             system=COORDINATOR_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": user_input}],
             schema=ParsedDeliveryTask,
             temperature=0.1,
         )
+        _latency_ms = (time.perf_counter() - _started) * 1000.0
 
         # With structured output the response is guaranteed valid JSON
         task = json.loads(response)
@@ -70,6 +73,15 @@ class MissionCoordinator:
         self._conversation.add_user_message(user_input)
         self._conversation.add_assistant_message(json.dumps(task))
         self._conversation.current_plan = task
+
+        self._log_decision_safe(
+            intent="parse_request",
+            input_text=user_input,
+            response_text=response,
+            decision=task,
+            latency_ms=_latency_ms,
+            severity="success",
+        )
 
         return task
 
@@ -94,16 +106,26 @@ class MissionCoordinator:
 
         user_message = "\n".join(context_parts)
 
+        _started = time.perf_counter()
         response = self._call_llm(
             system=WHAT_IF_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": user_message}],
         )
+        _latency_ms = (time.perf_counter() - _started) * 1000.0
 
         result = self._extract_json(response)
 
         # Update conversation
         self._conversation.add_user_message(scenario)
         self._conversation.add_assistant_message(json.dumps(result))
+
+        self._log_decision_safe(
+            intent="what_if",
+            input_text=scenario,
+            response_text=response,
+            decision=result,
+            latency_ms=_latency_ms,
+        )
 
         return result
 
@@ -139,16 +161,29 @@ class MissionCoordinator:
 
         user_message = "\n".join(context_parts)
 
+        _started = time.perf_counter()
         response = self._call_llm(
             system=REPLAN_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": user_message}],
         )
+        _latency_ms = (time.perf_counter() - _started) * 1000.0
 
         result = self._extract_json(response)
 
         # Update conversation state with the re-plan
         self._conversation.add_user_message(f"[EVENT] {json.dumps(event)}")
         self._conversation.add_assistant_message(json.dumps(result))
+
+        _action = (result.get("action") or "").lower() if isinstance(result, dict) else ""
+        _severity = "warning" if _action in ("reroute", "add_stop") else "info"
+        self._log_decision_safe(
+            intent="replan",
+            input_text=user_message,
+            response_text=response,
+            decision=result,
+            latency_ms=_latency_ms,
+            severity=_severity,
+        )
 
         # Update current plan if rerouting
         if result.get("action") in ("reroute", "add_stop"):
@@ -267,12 +302,53 @@ class MissionCoordinator:
             return response.choices[0].message.content.strip()
 
         try:
-            return _do_call()
+            result = _do_call()
         except Exception as e:
             from ai.error_analysis import log_error, ErrorType
             input_text = messages[-1]["content"] if messages else ""
             log_error(ErrorType.API_ERROR, str(e), input_text)
+            try:
+                from backend.services.ops_metrics_service import get_ops_metrics
+                get_ops_metrics().record_llm_call("error")
+            except Exception:
+                pass
             raise
+
+        try:
+            from backend.services.ops_metrics_service import get_ops_metrics
+            get_ops_metrics().record_llm_call("success")
+        except Exception:
+            pass
+        return result
+
+    def _log_decision_safe(
+        self,
+        *,
+        intent: str,
+        input_text: str,
+        response_text: str,
+        decision: dict,
+        latency_ms: float | None = None,
+        severity: str = "info",
+    ) -> None:
+        """Record a decision in the AI decision log — never raises."""
+        try:
+            from backend.services.ai_decision_log import (
+                extract_reasoning,
+                get_ai_decision_log,
+            )
+            get_ai_decision_log().log_decision(
+                intent=intent,
+                input_text=input_text,
+                reasoning=extract_reasoning(response_text or ""),
+                decision=decision if isinstance(decision, dict) else {"value": decision},
+                latency_ms=latency_ms,
+                model=self._model,
+                severity=severity,
+            )
+        except Exception:
+            # Decision logging must never break the coordinator.
+            pass
 
     def _extract_json(self, response_text: str) -> dict:
         """

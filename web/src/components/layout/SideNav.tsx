@@ -223,7 +223,7 @@ export function SideNav({ currentPage }: SideNavProps) {
     <nav
       role="navigation"
       aria-label="Main navigation"
-      style={{ position: 'fixed', left: 16, top: '50%', transform: 'translateY(-50%)', zIndex: 40, display: 'flex', flexDirection: 'column', gap: 6 }}
+      style={{ position: 'fixed', left: 16, top: '50%', transform: 'translateY(-50%)', zIndex: 40, display: 'flex', flexDirection: 'column', gap: 6, background: 'rgba(10,15,19,0.65)', backdropFilter: 'blur(12px)', borderRadius: 14, padding: '10px 6px', border: '1px solid rgba(255,255,255,0.08)' }}
     >
       {NAV_ITEMS.map(item => {
         const isActive = activePage === item.page;
@@ -242,7 +242,7 @@ export function SideNav({ currentPage }: SideNavProps) {
             }}
           >
             <Icon size={22} fill={isActive ? 'currentColor' : 'none'} />
-            <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: isActive ? 1 : 0.7 }}>{item.label}</span>
+            <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: isActive ? 1 : 0.85 }}>{item.label}</span>
           </LiquidButton>
         );
       })}
@@ -254,7 +254,7 @@ export function SideNav({ currentPage }: SideNavProps) {
         style={{ color: currentPage === 'settings' ? '#b3c5ff' : '#c3c6d6', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '10px 14px', height: 'auto', minWidth: 64 }}
       >
         <Settings size={22} />
-        <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: currentPage === 'settings' ? 1 : 0.7 }}>Settings</span>
+        <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: currentPage === 'settings' ? 1 : 0.85 }}>Settings</span>
       </LiquidButton>
     </nav>
   );

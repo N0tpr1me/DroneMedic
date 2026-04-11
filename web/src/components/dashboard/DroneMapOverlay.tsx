@@ -112,6 +112,9 @@ export function DroneMapOverlay({
       scene.add(ambientLight, directionalLight);
     };
 
+    const prevPositions = new Map<string, { lat: number; lng: number; ts: number }>();
+    const targetPositions = new Map<string, { lat: number; lng: number; ts: number }>();
+
     overlay.onContextRestored = ({ gl }: { gl: WebGLRenderingContext }) => {
       renderer = new THREE.WebGLRenderer({
         canvas: gl.canvas,
@@ -184,9 +187,30 @@ export function DroneMapOverlay({
         const model = droneModels.get(drone.id);
         if (!model) continue;
 
+        const now = performance.now();
+        const target = targetPositions.get(drone.id);
+
+        // Detect position change → update target
+        if (!target || Math.abs(target.lat - drone.lat) > 1e-8 || Math.abs(target.lng - drone.lng) > 1e-8) {
+          if (target) prevPositions.set(drone.id, { ...target });
+          targetPositions.set(drone.id, { lat: drone.lat, lng: drone.lng, ts: now });
+        }
+
+        // Lerp between previous and target
+        let displayLat = drone.lat;
+        let displayLng = drone.lng;
+        const prev = prevPositions.get(drone.id);
+        const tgt = targetPositions.get(drone.id);
+        if (prev && tgt && tgt.ts > prev.ts) {
+          const duration = Math.max(tgt.ts - prev.ts, 33); // ~30Hz
+          const alpha = Math.min((now - tgt.ts) / duration + 1, 1);
+          displayLat = prev.lat + (tgt.lat - prev.lat) * alpha;
+          displayLng = prev.lng + (tgt.lng - prev.lng) * alpha;
+        }
+
         const matrix = transformer.fromLatLngAltitude({
-          lat: drone.lat,
-          lng: drone.lng,
+          lat: displayLat,
+          lng: displayLng,
           altitude: drone.altitude,
         });
 

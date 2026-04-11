@@ -80,6 +80,7 @@ def get_events_history(
 PX4_BRIDGE_WS_URL = os.getenv("PX4_BRIDGE_WS_URL", "ws://localhost:8765")
 POV_BRIDGE_WS_URL = os.getenv("POV_BRIDGE_WS_URL", "ws://localhost:8766")
 VISION_BRIDGE_WS_URL = os.getenv("VISION_BRIDGE_WS_URL", "ws://localhost:8767")
+LIDAR_BRIDGE_WS_URL = os.getenv("LIDAR_BRIDGE_WS_URL", "ws://localhost:8768")
 
 _PROXY_RECONNECT_DELAY_SEC = 2.0
 _PROXY_IDLE_TIMEOUT_SEC = 30.0
@@ -191,3 +192,15 @@ async def websocket_pov(websocket: WebSocket) -> None:
 async def websocket_vision(websocket: WebSocket) -> None:
     """Proxy structured vision reasoning events to the browser."""
     await _proxy_bidirectional(websocket, VISION_BRIDGE_WS_URL, "vision")
+
+
+@router.websocket("/ws/lidar")
+async def websocket_lidar(websocket: WebSocket) -> None:
+    """Proxy upstream LiDAR point-cloud frames (from the VM gpu_lidar
+    sensor bridge, see ``simulation/lidar_bridge.py``) to the browser.
+
+    When the VM-side bridge is not running the proxy sends periodic
+    ``lidar_status`` messages with ``connected: False`` so the frontend can
+    cleanly fall back to the synthetic browser-side raycaster.
+    """
+    await _proxy_bidirectional(websocket, LIDAR_BRIDGE_WS_URL, "lidar")

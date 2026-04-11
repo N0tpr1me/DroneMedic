@@ -11,7 +11,7 @@ export function SelfCritiquePanel() {
   if (!latest && events.length === 0) return null;
 
   return (
-    <div className="pointer-events-auto absolute right-4 top-32 w-80 rounded-lg border border-white/10 bg-black/55 p-3 text-[11px] text-white/85 backdrop-blur-md">
+    <div className="pointer-events-auto absolute right-4 top-[280px] w-80 rounded-lg border border-white/10 bg-black/55 p-3 text-[11px] text-white/85 backdrop-blur-md">
       <div className="mb-1 flex items-center justify-between">
         <span className="text-[9px] uppercase tracking-[0.25em] text-cyan-200">
           Self critique

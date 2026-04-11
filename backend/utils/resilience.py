@@ -1,9 +1,11 @@
-"""Backend resilience: retry, circuit breaker, rate limiting, timeouts."""
+"""Backend resilience: retry, circuit breaker, rate limiting, timeouts, metrics."""
 
 import time
 import logging
 import functools
 from collections import defaultdict
+
+from backend.services.ops_metrics_service import get_ops_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -129,3 +131,35 @@ class RateLimiterMiddleware:
                 return
             self.requests[client_ip].append(now)
         await self.app(scope, receive, send)
+
+
+# ── Ops Metrics Middleware ─────────────────────────────────────
+
+class OpsMetricsMiddleware:
+    """Record per-request latency and status code into OpsMetricsService."""
+
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+
+        start = time.perf_counter()
+        status_holder: dict[str, int] = {"code": 500}
+
+        async def send_wrapper(message):
+            if message["type"] == "http.response.start":
+                status_holder["code"] = int(message.get("status", 500))
+            await send(message)
+
+        try:
+            await self.app(scope, receive, send_wrapper)
+        finally:
+            latency_ms = (time.perf_counter() - start) * 1000.0
+            try:
+                get_ops_metrics().record_request(latency_ms, status_holder["code"])
+            except Exception:
+                # Never let metrics recording break request handling
+                logger.debug("ops metrics recording failed", exc_info=True)

@@ -32,11 +32,20 @@ export function CustodyTimeline({ task, route, flightLog, status, battery }: Cus
   const currentMissionLog = lastTakeoffIdx >= 0 ? flightLog.slice(lastTakeoffIdx) : [];
 
   const takeoffLog = currentMissionLog.find(e => e.event === 'takeoff');
-  const arrivalLog = currentMissionLog.find(e => e.event === `arrived:${destination}`);
+  // Match both "arrived:Royal London" and "waypoint_reached" style events
+  const arrivalLog = currentMissionLog.find(e =>
+    e.event === `arrived:${destination}` ||
+    (e.event.startsWith('arrived:') && e.location === destination) ||
+    (e.event === 'waypoint_reached' && e.location === destination)
+  );
   const landedLog = currentMissionLog.find(e => e.event === 'landed');
 
   const isFlying = status === 'flying' || status === 'rerouting';
-  const hasArrived = Boolean(arrivalLog) && !isFlying;
+  const isCompleted = status === 'completed';
+  // Arrival is confirmed once the flight log records the drone reaching the
+  // destination — we no longer gate on !isFlying because the status transition
+  // can lag behind the actual arrival event.
+  const hasArrived = Boolean(arrivalLog) || isCompleted;
 
   const steps: TimelineStep[] = [
     {
@@ -71,25 +80,25 @@ export function CustodyTimeline({ task, route, flightLog, status, battery }: Cus
     },
     {
       label: 'In Transit',
-      detail: isFlying
+      detail: isFlying && !hasArrived
         ? `En route to ${destination} — Battery ${battery}%`
         : hasArrived ? `Delivered to ${destination}` : 'Awaiting departure',
       status: hasArrived ? 'complete' : isFlying ? 'active' : 'pending',
-      timestamp: hasArrived ? arrivalLog!.timestamp : undefined,
+      timestamp: arrivalLog?.timestamp,
     },
     {
       label: `Arrival at ${destination}`,
       detail: hasArrived
-        ? `Battery ${Math.min(arrivalLog!.battery, battery).toFixed(0)}%`
+        ? `Battery ${arrivalLog ? Math.min(arrivalLog.battery, battery).toFixed(0) : battery.toFixed(0)}%`
         : 'Awaiting arrival',
       status: hasArrived ? 'complete' : 'pending',
-      timestamp: hasArrived ? arrivalLog!.timestamp : undefined,
+      timestamp: arrivalLog?.timestamp,
     },
     {
       label: 'Payload Received',
-      detail: landedLog ? 'Received — Contents verified intact' : 'Awaiting confirmation',
-      status: landedLog ? 'complete' : 'pending',
-      timestamp: landedLog?.timestamp,
+      detail: (landedLog || isCompleted) ? 'Received — Contents verified intact' : 'Awaiting confirmation',
+      status: (landedLog || isCompleted) ? 'complete' : 'pending',
+      timestamp: landedLog?.timestamp ?? (isCompleted ? arrivalLog?.timestamp : undefined),
     },
   ];
 

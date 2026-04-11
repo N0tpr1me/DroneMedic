@@ -1,11 +1,14 @@
-// POVFeed — drone-camera picture-in-picture widget. Subscribes to /ws/pov
-// and paints JPEG frames into an <img> via blob URLs. Falls back to an
-// "offline" state when the upstream is down.
+// POVFeed — drone-camera picture-in-picture widget. Primary source is the
+// backend /ws/pov stream (JPEG frames from a Gazebo camera plugin). When
+// that's offline it falls back to the browser-side POV captured by
+// SimRenderTargetCapture — same visual vocabulary, still shows the drone's
+// front-sensor viewpoint so judges never see an empty box.
 
 import { useEffect, useRef, useState } from 'react';
 import { VisionOverlay } from './VisionOverlay';
 import { useVisionStream } from '../useVisionStream';
 import { backendWsUrl } from '../../../../lib/backendUrls';
+import { subscribeBrowserPov } from '../SimRenderTargetCapture';
 
 interface Status {
   connected: boolean;
@@ -21,11 +24,20 @@ export function POVFeed() {
     lastFrame: null,
     fps: 0,
   });
+  const [browserFrameUrl, setBrowserFrameUrl] = useState<string | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const frameCount = useRef(0);
   const lastFpsSample = useRef<number>(0);
   const lastUrl = useRef<string | null>(null);
   const vision = useVisionStream();
+
+  // Browser-side POV fallback: SimRenderTargetCapture publishes jpeg data
+  // URLs every ~2.5s. We use them whenever /ws/pov isn't delivering frames.
+  useEffect(() => {
+    return subscribeBrowserPov((dataUrl) => {
+      setBrowserFrameUrl(dataUrl);
+    });
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -89,15 +101,22 @@ export function POVFeed() {
   }, []);
 
   return (
-    <div className="pointer-events-none absolute right-4 bottom-16 w-[320px] overflow-hidden rounded-lg border border-white/15 bg-black/60 backdrop-blur-md">
+    <div className="pointer-events-none absolute right-4 bottom-24 w-[360px] overflow-hidden rounded-lg border border-white/15 bg-black/60 backdrop-blur-md">
       <div className="flex items-center justify-between px-2 py-1 text-[9px] uppercase tracking-[0.25em] text-cyan-200/80">
         <span className="flex items-center gap-1.5">
           <span
             className={`inline-block h-1.5 w-1.5 rounded-full ${
-              status.connected ? 'animate-pulse bg-emerald-300' : 'bg-red-400'
+              status.connected
+                ? 'animate-pulse bg-emerald-300'
+                : browserFrameUrl
+                  ? 'animate-pulse bg-cyan-300'
+                  : 'bg-red-400'
             }`}
           />
           AI Vision
+          {!status.connected && browserFrameUrl && (
+            <span className="ml-1 text-white/40">· sim</span>
+          )}
         </span>
         <span className="text-white/50">{status.fps} fps</span>
       </div>
@@ -114,6 +133,15 @@ export function POVFeed() {
               filter: 'contrast(1.1) saturate(1.05)',
             }}
           />
+        ) : browserFrameUrl ? (
+          <img
+            src={browserFrameUrl}
+            alt="drone point of view (sim render target)"
+            className="h-full w-full object-cover"
+            style={{
+              filter: 'contrast(1.08) brightness(1.02)',
+            }}
+          />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-[11px] uppercase tracking-[0.25em] text-white/40">
             {status.connected ? 'waiting for frame' : 'pov feed offline'}
@@ -122,7 +150,7 @@ export function POVFeed() {
         {/* CRT scanline overlay for "camera feed" texture */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-40"
+          className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-15"
           style={{
             background:
               'repeating-linear-gradient(to bottom, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 3px)',

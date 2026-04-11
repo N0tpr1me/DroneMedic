@@ -286,7 +286,16 @@ export function ChatPanel({
         const chips = detectSuggestionChips(reply, answeredChipTypes.current);
         setSuggestionChips(chips);
 
-        addMessage({ type: 'ai', content: reply });
+        // Try to parse a task from the user input, then auto-plan the route
+        const parsedFromReply = await onParseTask(userInput).catch(() => null);
+        if (parsedFromReply) {
+          addMessage({ type: 'ai', content: reply, task: parsedFromReply });
+          // Small delay so Dashboard state updates with the new task
+          await new Promise(r => setTimeout(r, 300));
+          await handlePlanRoute();
+        } else {
+          addMessage({ type: 'ai', content: reply });
+        }
         return;
       } catch {
         // AI chat failed, fall back to direct parsing

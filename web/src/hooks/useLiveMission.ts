@@ -205,6 +205,7 @@ export function useLiveMission(routeStops?: string[]) {
         break;
 
       case 'mission_completed':
+      case 'mission_complete':   // physics sim emits this variant
         setMissionStatus('completed');
         setDroneProgress(1);
         setMissionProgress(100);
