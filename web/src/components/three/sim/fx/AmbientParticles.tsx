@@ -125,9 +125,7 @@ export function AmbientParticles() {
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            array={dustPositions}
-            count={DUST_COUNT}
-            itemSize={3}
+            args={[dustPositions, 3]}
           />
         </bufferGeometry>
         <pointsMaterial
@@ -145,9 +143,7 @@ export function AmbientParticles() {
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            array={birdPositions}
-            count={BIRD_COUNT}
-            itemSize={3}
+            args={[birdPositions, 3]}
           />
         </bufferGeometry>
         <pointsMaterial
