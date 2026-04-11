@@ -15,10 +15,23 @@ function hashStringToAngle(str: string): number {
   return Math.abs(hash) % 360;
 }
 
-function createDot(color: string, size: number): HTMLDivElement {
-  const el = document.createElement('div');
-  el.style.cssText = `width:${size}px;height:${size}px;background:${color};border-radius:50%;border:2px solid rgba(255,255,255,0.3);box-shadow:0 0 10px ${color};`;
-  return el;
+function createLabelMarker(color: string, name: string, isDepot: boolean): HTMLDivElement {
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:2px;';
+
+  // Label chip
+  const lbl = document.createElement('div');
+  lbl.style.cssText = `font-family:Space Grotesk,system-ui,sans-serif;font-size:10px;font-weight:600;color:#fff;white-space:nowrap;letter-spacing:0.02em;padding:3px 8px;background:rgba(15,20,24,0.85);border-radius:6px;border:1px solid ${color}66;backdrop-filter:blur(4px);`;
+  lbl.textContent = name;
+  wrapper.appendChild(lbl);
+
+  // Pin icon
+  const pin = document.createElement('div');
+  const sz = isDepot ? 14 : 10;
+  pin.style.cssText = `width:${sz}px;height:${sz}px;background:${color};border-radius:50%;border:2px solid rgba(255,255,255,0.5);box-shadow:0 0 6px ${color};`;
+  wrapper.appendChild(pin);
+
+  return wrapper;
 }
 
 // ── Map command types ──
@@ -64,11 +77,14 @@ export function MapView({
 }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
+  const [mapReady, setMapReady] = useState(false);
+  const markerClickTimeRef = useRef(0);
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
   const polylinesRef = useRef<google.maps.Polyline[]>([]);
   const polygonsRef = useRef<google.maps.Polygon[]>([]);
   const eonetMarkersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
+  const infoClickLockedRef = useRef(false);
   const droneMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
   const trailMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
   const prevDronePosRef = useRef<google.maps.LatLngLiteral | null>(null);
@@ -94,11 +110,12 @@ export function MapView({
     if (mapRef.current) return;
 
     let observer: MutationObserver | null = null;
+    let cancelled = false;
 
     // Wait for Google Maps to be loaded
     const init = () => {
-      if (!containerRef.current) return;
-      if (!google?.maps?.Map) {
+      if (cancelled || !containerRef.current) return;
+      if (typeof google === 'undefined' || !google?.maps?.Map) {
         setTimeout(init, 100);
         return;
       }
@@ -121,6 +138,7 @@ export function MapView({
 
       mapRef.current = map;
       infoWindowRef.current = new google.maps.InfoWindow();
+      setMapReady(true);
       onMapReady?.(map);
 
       // Auto-dismiss Google Maps billing error dialog
@@ -146,6 +164,7 @@ export function MapView({
 
     return () => {
       // Cleanup on unmount
+      cancelled = true;
       observer?.disconnect();
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
@@ -160,7 +179,9 @@ export function MapView({
       trailMarkerRef.current?.remove();
       trailMarkerRef.current = null;
       mapRef.current = null;
+      setMapReady(false);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── Map type switching ──
@@ -243,8 +264,8 @@ export function MapView({
       const pos = { lat, lng };
 
       if (!userMarker) {
-        const el = createDot('#4285F4', 14);
-        el.style.border = '3px solid white';
+        const el = document.createElement('div');
+        el.style.cssText = 'width:16px;height:16px;background:#4285F4;border-radius:50%;border:3px solid white;box-shadow:0 0 8px rgba(66,133,244,0.6);';
         userMarker = new google.maps.marker.AdvancedMarkerElement({
           position: pos, map, content: el, zIndex: 1000,
         });
@@ -296,12 +317,13 @@ export function MapView({
         userCircle?.setMap(null);
       };
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapReady]);
 
-  // ── Location markers + wind arrows ──
+  // ── Location markers ──
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !google.maps.marker?.AdvancedMarkerElement) return;
+    if (!map || !mapReady || !google.maps.marker?.AdvancedMarkerElement) return;
 
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
@@ -316,59 +338,59 @@ export function MapView({
       if (isBadWeather) color = '#ff4444';
 
       const marker = new google.maps.marker.AdvancedMarkerElement({
-        position: { lat: loc.lat, lng: loc.lon }, map, content: createDot(color, 12), zIndex: 20,
+        position: { lat: loc.lat, lng: loc.lon }, map,
+        content: createLabelMarker(color, name, isDepot),
+        zIndex: isDepot ? 25 : 20,
       });
-      marker.addListener('click', () => {
-        // Build info window content with a Deploy button using a container div
-        const container = document.createElement('div');
-        container.style.cssText = 'color:#dfe3e9;background:#1b2024;padding:8px 12px;border-radius:8px;font-size:12px;min-width:160px';
 
-        const title = document.createElement('div');
-        title.style.cssText = 'font-family:Space Grotesk;font-weight:700;font-size:13px;margin-bottom:4px';
-        title.textContent = name;
-        container.appendChild(title);
-
-        const desc = document.createElement('div');
-        desc.style.cssText = 'opacity:0.7;font-size:11px';
-        desc.textContent = loc.description || '';
-        container.appendChild(desc);
-
-        if (locWeather) {
-          const weatherDiv = document.createElement('div');
-          weatherDiv.style.cssText = 'margin-top:6px;font-size:10px;opacity:0.6';
-          weatherDiv.textContent = `Wind: ${locWeather.wind_speed} m/s | ${locWeather.description}`;
-          container.appendChild(weatherDiv);
-        }
-
-        if (!isDepot) {
-          const btn = document.createElement('button');
-          btn.textContent = 'Deploy Here';
-          btn.style.cssText = 'margin-top:8px;width:100%;padding:8px 12px;border:none;border-radius:6px;background:#00daf3;color:#0a0f13;font-size:11px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:0.05em';
-          btn.addEventListener('click', () => {
-            infoWindowRef.current?.close();
-            onLocationClick?.(name, loc.description || '');
-          });
-          container.appendChild(btn);
-        }
-
-        infoWindowRef.current?.setContent(container);
-        infoWindowRef.current?.open(map, marker);
-      });
       markersRef.current.push(marker);
 
-      if (locWeather) {
-        const angle = hashStringToAngle(name);
-        const arrowEl = document.createElement('div');
-        arrowEl.style.cssText = `transform:rotate(${angle}deg);pointer-events:none;`;
-        arrowEl.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 2 L12 10 L8 8 L4 10 Z" fill="${locWeather.flyable ? '#4ade80' : '#ff4444'}" opacity="0.8"/></svg>`;
-        markersRef.current.push(new google.maps.marker.AdvancedMarkerElement({
-          position: { lat: loc.lat, lng: loc.lon }, map, content: arrowEl, zIndex: 15,
-        }));
-      }
+      // Click: show location info popup
+      marker.addEventListener('gmp-click', () => {
+        if (!infoWindowRef.current) infoWindowRef.current = new google.maps.InfoWindow();
+        markerClickTimeRef.current = Date.now();
+
+        const isHosp = name.toLowerCase().includes('hospital') || ['Royal London','Homerton','Newham General','Whipps Cross'].includes(name);
+        const typeLabel = isDepot ? 'DEPOT' : isHosp ? 'HOSPITAL' : 'CLINIC';
+        const typeColor = isDepot ? '#b3c5ff' : isHosp ? '#ff8a80' : '#00daf3';
+        const coords = `${loc.lat.toFixed(4)}°N, ${Math.abs(loc.lon).toFixed(4)}°${loc.lon < 0 ? 'W' : 'E'}`;
+
+        let distHTML = '';
+        const dl = locations['Depot'];
+        if (dl && !isDepot) {
+          const R = 6371000, dLa = (loc.lat-dl.lat)*Math.PI/180, dLo = (loc.lon-dl.lon)*Math.PI/180;
+          const a2 = Math.sin(dLa/2)**2+Math.cos(dl.lat*Math.PI/180)*Math.cos(loc.lat*Math.PI/180)*Math.sin(dLo/2)**2;
+          const d = R*2*Math.atan2(Math.sqrt(a2),Math.sqrt(1-a2));
+          distHTML = `<tr><td style="color:#999;padding:3px 10px 3px 0;font-size:10px;text-transform:uppercase">DISTANCE</td><td style="font-weight:600">${d<1000?Math.round(d)+'m':(d/1000).toFixed(1)+'km'}</td></tr><tr><td style="color:#999;padding:3px 10px 3px 0;font-size:10px;text-transform:uppercase">EST. FLIGHT</td><td style="font-weight:600;color:#0a8a5a">~${Math.ceil(d/12/60)} min</td></tr>`;
+        }
+
+        const deployBtn = !isDepot ? `<button id="dm-deploy-${name.replace(/\\s/g,'')}" style="margin-top:8px;width:100%;padding:8px;border:none;border-radius:6px;background:linear-gradient(135deg,#00daf3,#0088cc);color:#fff;font-size:11px;font-weight:700;cursor:pointer;text-transform:uppercase">DEPLOY HERE</button>` : '';
+
+        infoWindowRef.current.setContent(`<div style="font-family:system-ui,sans-serif;width:220px"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:0.08em;background:${typeColor}22;color:${typeColor};border:1px solid ${typeColor}44">${typeLabel}</span><div style="font-weight:700;font-size:14px;margin:4px 0 2px;color:#222">${name}</div>${loc.description ? `<div style="color:#666;font-size:11px;margin-bottom:6px">${loc.description}</div>` : ''}<hr style="border:none;border-top:1px solid #e0e0e0;margin:4px 0"><table style="width:100%;font-size:11px;color:#333"><tr><td style="color:#999;padding:3px 10px 3px 0;font-size:10px;text-transform:uppercase">COORDS</td><td style="font-weight:600">${coords}</td></tr>${distHTML}<tr><td style="color:#999;padding:3px 10px 3px 0;font-size:10px;text-transform:uppercase">PRIORITY</td><td style="font-weight:600;color:${isHighPriority?'#d32f2f':'#0a8a5a'}">${isHighPriority?'HIGH':'Normal'}</td></tr></table>${deployBtn}</div>`);
+        infoWindowRef.current.open({ anchor: marker, map });
+
+        if (!isDepot) {
+          setTimeout(() => {
+            const btn = document.getElementById(`dm-deploy-${name.replace(/\\s/g,'')}`);
+            btn?.addEventListener('click', () => {
+              infoWindowRef.current?.close();
+              onLocationClick?.(name, loc.description || '');
+            });
+          }, 50);
+        }
+      });
     });
 
-    return () => { markersRef.current.forEach((m) => m.remove()); markersRef.current = []; };
-  }, [locations, weather, priorities]);
+    const mapClickListener = map.addListener('click', () => {
+      if (Date.now() - markerClickTimeRef.current > 300) infoWindowRef.current?.close();
+    });
+
+    return () => {
+      google.maps.event.removeListener(mapClickListener);
+      markersRef.current.forEach((m) => m.remove());
+      markersRef.current = [];
+    };
+  }, [locations, weather, priorities, mapReady]);
 
 
   // ── No-fly zones ──
@@ -458,7 +480,7 @@ export function MapView({
     }
 
     return () => { polylinesRef.current.forEach((p) => p.setMap(null)); polylinesRef.current = []; };
-  }, [routeCoords, rerouteCoords, droneProgress, isFlying, hasReroute]);
+  }, [routeCoords, rerouteCoords, droneProgress, isFlying, hasReroute, mapReady]);
 
   // Dash animation
   useEffect(() => {
@@ -474,71 +496,114 @@ export function MapView({
     return () => clearInterval(id);
   }, [routeCoords, rerouteCoords, droneProgress, isFlying, hasReroute]);
 
-  // ── Animated drone ──
+  // ── Drone marker LIFECYCLE ──────────────────────────────────────────
+  // Create exactly ONE drone + trail marker when a flight starts, destroy
+  // them when the flight ends. Position updates live in a separate effect
+  // below so telemetry ticks (~30 Hz) never recreate DOM nodes.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !google.maps.marker?.AdvancedMarkerElement) return;
-    if (!isFlying || routeCoords.length < 2) {
-      droneMarkerRef.current?.remove(); trailMarkerRef.current?.remove();
-      droneMarkerRef.current = null; trailMarkerRef.current = null; prevDronePosRef.current = null;
-      return;
+    if (!isFlying || routeCoords.length < 2) return;
+
+    // Drone marker — dark body + cyan accent quadcopter
+    const el = document.createElement('div');
+    el.style.cssText = 'position:relative;width:64px;height:64px;';
+    const pulse = document.createElement('div');
+    pulse.style.cssText = 'position:absolute;inset:-10px;border-radius:50%;border:2px solid rgba(0,218,243,0.55);animation:dronePulse 2s ease-in-out infinite;';
+    const arrow = document.createElement('div');
+    arrow.className = 'drone-heading';
+    arrow.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease;';
+    arrow.innerHTML = '<svg width="64" height="64" viewBox="0 0 64 64"><defs><filter id="droneGlow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="32" cy="32" r="12" fill="#0d1117" stroke="#00daf3" stroke-width="2"/><circle cx="32" cy="32" r="4" fill="#00daf3" opacity="0.9"/><line x1="22" y1="22" x2="12" y2="12" stroke="#1a2030" stroke-width="3" stroke-linecap="round"/><line x1="42" y1="22" x2="52" y2="12" stroke="#1a2030" stroke-width="3" stroke-linecap="round"/><line x1="22" y1="42" x2="12" y2="52" stroke="#1a2030" stroke-width="3" stroke-linecap="round"/><line x1="42" y1="42" x2="52" y2="52" stroke="#1a2030" stroke-width="3" stroke-linecap="round"/><circle cx="12" cy="12" r="8" fill="none" stroke="#00daf3" stroke-width="1.5" opacity="0.6"/><circle cx="52" cy="12" r="8" fill="none" stroke="#00daf3" stroke-width="1.5" opacity="0.6"/><circle cx="12" cy="52" r="8" fill="none" stroke="#00daf3" stroke-width="1.5" opacity="0.6"/><circle cx="52" cy="52" r="8" fill="none" stroke="#00daf3" stroke-width="1.5" opacity="0.6"/><circle cx="12" cy="12" r="3" fill="#0d1117" stroke="#00daf3" stroke-width="1"/><circle cx="52" cy="12" r="3" fill="#0d1117" stroke="#00daf3" stroke-width="1"/><circle cx="12" cy="52" r="3" fill="#0d1117" stroke="#00daf3" stroke-width="1"/><circle cx="52" cy="52" r="3" fill="#0d1117" stroke="#00daf3" stroke-width="1"/><polygon points="32,4 35,12 29,12" fill="#00daf3" filter="url(#droneGlow)"/></svg>';
+    el.appendChild(pulse);
+    el.appendChild(arrow);
+    if (!document.getElementById('drone-pulse-style')) {
+      const style = document.createElement('style');
+      style.id = 'drone-pulse-style';
+      style.textContent = '@keyframes dronePulse{0%,100%{transform:scale(1);opacity:0.4}50%{transform:scale(1.5);opacity:0}}';
+      document.head.appendChild(style);
     }
+
+    const startPos: google.maps.LatLngLiteral = {
+      lat: routeCoords[0][0],
+      lng: routeCoords[0][1],
+    };
+
+    const droneMarker = new google.maps.marker.AdvancedMarkerElement({
+      position: startPos,
+      map,
+      content: el,
+      zIndex: 100,
+    });
+
+    // Soft trail glow marker
+    const trailEl = document.createElement('div');
+    trailEl.style.cssText = 'width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,rgba(0,218,243,0.4),transparent 70%);filter:blur(3px);';
+    const trailMarker = new google.maps.marker.AdvancedMarkerElement({
+      position: startPos,
+      map,
+      content: trailEl,
+      zIndex: 99,
+    });
+
+    droneMarkerRef.current = droneMarker;
+    trailMarkerRef.current = trailMarker;
+    prevDronePosRef.current = null;
+
+    return () => {
+      // Hard teardown: unset map AND clear the ref so the update effect
+      // below can't write to a stale marker. Unsetting `.map` on an
+      // AdvancedMarkerElement is the documented way to remove it.
+      droneMarker.map = null;
+      trailMarker.map = null;
+      if (droneMarkerRef.current === droneMarker) droneMarkerRef.current = null;
+      if (trailMarkerRef.current === trailMarker) trailMarkerRef.current = null;
+      prevDronePosRef.current = null;
+    };
+    // Intentionally NOT depending on droneProgress — recreating the marker
+    // on every telemetry tick was leaving ghost drones along the path.
+    // mapReady ensures the map is initialized before creating markers.
+  }, [isFlying, routeCoords, mapReady]);
+
+  // ── Drone marker POSITION UPDATE ────────────────────────────────────
+  // Cheap: just mutates the position of the single marker created above.
+  // No DOM creation, no teardown, no effect cleanup.
+  useEffect(() => {
+    const droneMarker = droneMarkerRef.current;
+    const trailMarker = trailMarkerRef.current;
+    if (!droneMarker || !trailMarker) return;
+    if (!isFlying || routeCoords.length < 2) return;
 
     const ts = routeCoords.length - 1;
     const si = Math.min(Math.floor(droneProgress * ts), ts - 1);
-    const sp = (droneProgress * ts) - si;
-    const f = routeCoords[si], t = routeCoords[Math.min(si + 1, routeCoords.length - 1)];
-    const pos = { lat: f[0] + (t[0] - f[0]) * sp, lng: f[1] + (t[1] - f[1]) * sp };
-    const trail = prevDronePosRef.current
-      ? { lat: prevDronePosRef.current.lat + (pos.lat - prevDronePosRef.current.lat) * 0.9, lng: prevDronePosRef.current.lng + (pos.lng - prevDronePosRef.current.lng) * 0.9 }
-      : pos;
-    prevDronePosRef.current = pos;
-
-    if (!droneMarkerRef.current) {
-      const el = document.createElement('div');
-      el.style.cssText = 'position:relative;width:56px;height:56px;';
-      // Pulsing outer ring
-      const pulse = document.createElement('div');
-      pulse.style.cssText = 'position:absolute;inset:-10px;border-radius:50%;border:2px solid rgba(255,176,32,0.55);animation:dronePulse 2s ease-in-out infinite;';
-      // Heading arrow
-      const arrow = document.createElement('div');
-      arrow.className = 'drone-heading';
-      arrow.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease;';
-      arrow.innerHTML = '<svg width="56" height="56" viewBox="0 0 56 56"><defs><filter id="droneGlow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="28" cy="28" r="18" fill="#0f1418" stroke="#ffb020" stroke-width="2.5"/><rect x="24" y="24" width="8" height="8" fill="#ffb020" rx="1.5"/><line x1="18" y1="18" x2="24" y2="24" stroke="#ffb020" stroke-width="1.5" stroke-linecap="round"/><line x1="38" y1="18" x2="32" y2="24" stroke="#ffb020" stroke-width="1.5" stroke-linecap="round"/><line x1="18" y1="38" x2="24" y2="32" stroke="#ffb020" stroke-width="1.5" stroke-linecap="round"/><line x1="38" y1="38" x2="32" y2="32" stroke="#ffb020" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="18" r="4" fill="#ffffff" stroke="#ffb020" stroke-width="1" opacity="0.95"/><circle cx="38" cy="18" r="4" fill="#ffffff" stroke="#ffb020" stroke-width="1" opacity="0.95"/><circle cx="18" cy="38" r="4" fill="#ffffff" stroke="#ffb020" stroke-width="1" opacity="0.95"/><circle cx="38" cy="38" r="4" fill="#ffffff" stroke="#ffb020" stroke-width="1" opacity="0.95"/><polygon points="28,10 31,16 25,16" fill="#ffb020" filter="url(#droneGlow)"/></svg>';
-      el.appendChild(pulse);
-      el.appendChild(arrow);
-      // Inject keyframes
-      if (!document.getElementById('drone-pulse-style')) {
-        const style = document.createElement('style');
-        style.id = 'drone-pulse-style';
-        style.textContent = '@keyframes dronePulse{0%,100%{transform:scale(1);opacity:0.4}50%{transform:scale(1.5);opacity:0}}';
-        document.head.appendChild(style);
-      }
-      droneMarkerRef.current = new google.maps.marker.AdvancedMarkerElement({ position: pos, map, content: el, zIndex: 100 });
-    } else {
-      droneMarkerRef.current.position = pos;
-      // Update heading rotation
-      const headingEl = (droneMarkerRef.current.content as HTMLElement)?.querySelector('.drone-heading') as HTMLElement;
-      if (headingEl) {
-        const prevPos = prevDronePosRef.current;
-        if (prevPos) {
-          const angle = Math.atan2(pos.lng - prevPos.lng, pos.lat - prevPos.lat) * (180 / Math.PI);
-          headingEl.style.transform = `rotate(${angle}deg)`;
+    const sp = droneProgress * ts - si;
+    const f = routeCoords[si];
+    const t = routeCoords[Math.min(si + 1, routeCoords.length - 1)];
+    const pos: google.maps.LatLngLiteral = {
+      lat: f[0] + (t[0] - f[0]) * sp,
+      lng: f[1] + (t[1] - f[1]) * sp,
+    };
+    const prevPos = prevDronePosRef.current;
+    const trail: google.maps.LatLngLiteral = prevPos
+      ? {
+          lat: prevPos.lat + (pos.lat - prevPos.lat) * 0.9,
+          lng: prevPos.lng + (pos.lng - prevPos.lng) * 0.9,
         }
-      }
+      : pos;
+
+    droneMarker.position = pos;
+    trailMarker.position = trail;
+
+    const headingEl = (droneMarker.content as HTMLElement | null)?.querySelector(
+      '.drone-heading',
+    ) as HTMLElement | null;
+    if (headingEl && prevPos) {
+      const angle =
+        Math.atan2(pos.lng - prevPos.lng, pos.lat - prevPos.lat) * (180 / Math.PI);
+      headingEl.style.transform = `rotate(${angle}deg)`;
     }
 
-    if (!trailMarkerRef.current) {
-      const el = document.createElement('div');
-      el.style.cssText = 'width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,rgba(255,176,32,0.4),transparent 70%);filter:blur(3px);';
-      trailMarkerRef.current = new google.maps.marker.AdvancedMarkerElement({ position: trail, map, content: el, zIndex: 99 });
-    } else { trailMarkerRef.current.position = trail; }
-
-    return () => {
-      droneMarkerRef.current?.remove(); trailMarkerRef.current?.remove();
-      droneMarkerRef.current = null; trailMarkerRef.current = null; prevDronePosRef.current = null;
-    };
-  }, [routeCoords, droneProgress, isFlying]);
+    prevDronePosRef.current = pos;
+  }, [droneProgress, isFlying, routeCoords]);
 
   // ── EONET natural disaster markers ──
   useEffect(() => {
@@ -614,7 +679,7 @@ export function MapView({
 
       eonetMarkersRef.current.push(marker);
     }
-  }, [naturalEvents]);
+  }, [naturalEvents, mapReady]);
 
 
   return <div ref={containerRef} style={{ width: '100%', height: '100%' }} />;

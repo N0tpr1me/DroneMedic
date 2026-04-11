@@ -451,10 +451,16 @@ interface PromptInputBoxProps {
   isLoading?: boolean;
   placeholder?: string;
   className?: string;
+  prefillValue?: string;
 }
 export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref: React.Ref<HTMLDivElement>) => {
-  const { onSend = () => {}, isLoading = false, placeholder = "Type your message here...", className } = props;
+  const { onSend = () => {}, isLoading = false, placeholder = "Type your message here...", className, prefillValue } = props;
   const [input, setInput] = React.useState("");
+
+  // Accept prefill from parent (demo card click)
+  React.useEffect(() => {
+    if (prefillValue) setInput(prefillValue);
+  }, [prefillValue]);
   const [files, setFiles] = React.useState<File[]>([]);
   const [filePreviews, setFilePreviews] = React.useState<{ [key: string]: string }>({});
   const [selectedImage, setSelectedImage] = React.useState<string | null>(null);

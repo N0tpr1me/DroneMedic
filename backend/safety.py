@@ -121,11 +121,13 @@ class SafetyAssessment:
 @dataclass
 class DisasterEvent:
     """Represents an in-flight emergency event."""
-    event_type: str               # "new_p1_delivery", "lz_blocked", "new_nfz", "comms_lost", "infrastructure_damage"
+    event_type: str               # "new_p1_delivery", "lz_blocked", "new_nfz", "comms_lost", "payload_temp_excursion", "infrastructure_damage"
     severity: DisasterSeverity
     affected_location: str = ""
-    new_delivery: Optional[dict] = None  # for new delivery requests
+    new_delivery: Optional[dict] = None  # for new delivery requests / payload context
     description: str = ""
+    payload_type: Optional[str] = None        # e.g. "blood", "insulin", "vaccine"
+    temp_window_remaining_s: Optional[float] = None
 
 
 @dataclass
@@ -528,7 +530,40 @@ def handle_disaster_event(
     2. MAJOR → drop P3 stops, recalculate with P1+P2
     3. MINOR → attempt route adjustment, accept if still GREEN
     4. Always preserve divert energy
+
+    Emits an ``ai_reasoning`` event via the AI decision log whenever the
+    policy outcome is not ``CONTINUE`` so operators see every policy fire.
     """
+    response = _handle_disaster_event_inner(
+        event=event,
+        current_position=current_position,
+        remaining_route=remaining_route,
+        battery_remaining_wh=battery_remaining_wh,
+        payload_kg=payload_kg,
+        supplies=supplies,
+        priorities=priorities,
+        spec=spec,
+        conditions=conditions,
+    )
+
+    if response.action != MissionAction.CONTINUE:
+        _log_policy_fire(event, response)
+
+    return response
+
+
+def _handle_disaster_event_inner(
+    event: DisasterEvent,
+    current_position: dict,
+    remaining_route: list[str],
+    battery_remaining_wh: float,
+    payload_kg: float,
+    supplies: dict[str, str] = None,
+    priorities: dict[str, str] = None,
+    spec: DroneSpec = None,
+    conditions: FlightConditions = None,
+) -> DisasterResponse:
+    """Core disaster-event policy — returns the response without side effects."""
     if spec is None:
         spec = DroneSpec()
     if conditions is None:
@@ -596,6 +631,17 @@ def handle_disaster_event(
                         energy_feasible=False,
                     )
 
+    # ── PAYLOAD TEMPERATURE EXCURSION ──
+    if event.event_type == "payload_temp_excursion":
+        return _handle_payload_temp_excursion(
+            event=event,
+            current_position=current_position,
+            payload_kg=payload_kg,
+            battery_remaining_wh=battery_remaining_wh,
+            spec=spec,
+            conditions=conditions,
+        )
+
     # ── LANDING ZONE BLOCKED ──
     if event.event_type == "lz_blocked":
         new_route = [s for s in remaining_route if s != event.affected_location]
@@ -661,6 +707,158 @@ def handle_disaster_event(
         reasoning=f"MINOR event: {event.description} — continuing mission",
         energy_feasible=True,
     )
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# Payload temperature excursion policy
+# ═══════════════════════════════════════════════════════════════════════
+
+# Names in LOCATIONS that are actual hospitals (divert targets for temp-sensitive payloads).
+_HOSPITAL_NAMES = frozenset({
+    "Royal London",
+    "Homerton",
+    "Newham General",
+    "Whipps Cross",
+})
+
+
+def _find_nearest_hospital(current_position: dict) -> tuple[str, dict]:
+    """
+    Return the nearest hospital in LOCATIONS to the given position.
+
+    Falls back to ``find_nearest_safe_point`` if no hospital entries exist
+    (keeps the code resilient when the location registry is pared down in
+    tests).
+    """
+    best_name: str | None = None
+    best_loc: dict | None = None
+    best_dist = float("inf")
+
+    for name in _HOSPITAL_NAMES:
+        loc = LOCATIONS.get(name)
+        if loc is None:
+            continue
+        dist = haversine_m(current_position, loc)
+        if dist < best_dist:
+            best_dist = dist
+            best_name = name
+            best_loc = loc
+
+    if best_name is None or best_loc is None:
+        return find_nearest_safe_point(current_position)
+
+    return best_name, dict(best_loc)
+
+
+def _handle_payload_temp_excursion(
+    event: DisasterEvent,
+    current_position: dict,
+    payload_kg: float,
+    battery_remaining_wh: float,
+    spec: DroneSpec,
+    conditions: FlightConditions,
+) -> DisasterResponse:
+    """
+    Handle a payload temperature excursion.
+
+    Blood / insulin / vaccines have short temperature windows. If a payload
+    temp sensor reports a breach, divert to the nearest hospital if the
+    diversion is energy-feasible.
+    """
+    hospital_name, hospital_loc = _find_nearest_hospital(current_position)
+
+    # Energy required to reach the hospital (single-leg divert).
+    divert_energy_wh = compute_divert_energy(
+        spec, payload_kg, current_position, hospital_loc, conditions
+    )
+    energy_feasible = battery_remaining_wh >= divert_energy_wh
+
+    # Rough ETA: straight-line distance ÷ cruise speed.
+    distance_m = haversine_m(current_position, hospital_loc)
+    cruise_speed = getattr(spec, "cruise_speed_ms", 15.0) or 15.0
+    eta_minutes = (distance_m / cruise_speed) / 60.0 if cruise_speed > 0 else 0.0
+
+    # Context pulled off the event (either top-level or legacy new_delivery dict).
+    ctx: dict = dict(event.new_delivery) if isinstance(event.new_delivery, dict) else {}
+    payload_type = event.payload_type or ctx.get("payload_type") or "payload"
+    temp_window_s = event.temp_window_remaining_s
+    if temp_window_s is None:
+        temp_window_s = ctx.get("temp_window_remaining_s")
+
+    if temp_window_s is not None:
+        temp_window_min = float(temp_window_s) / 60.0
+        temp_window_text = f"{temp_window_min:.1f}m"
+    else:
+        temp_window_text = "unknown"
+
+    reasoning = (
+        f"Payload temperature excursion ({payload_type}) — "
+        f"diverting to {hospital_name}. "
+        f"ETA {eta_minutes:.1f}m, remaining temp window {temp_window_text}."
+    )
+
+    if not energy_feasible:
+        reasoning += " Warning: divert energy budget is tight."
+
+    return DisasterResponse(
+        action=MissionAction.DIVERT,
+        new_route=[hospital_name],
+        reasoning=reasoning,
+        energy_feasible=energy_feasible,
+    )
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# Policy decision log bridge
+# ═══════════════════════════════════════════════════════════════════════
+
+def _log_policy_fire(event: DisasterEvent, response: DisasterResponse) -> None:
+    """
+    Record a non-CONTINUE safety policy outcome in the AI decision log.
+
+    Always safe to call — any failure is swallowed so the safety engine
+    cannot be broken by an observability glitch.
+    """
+    try:
+        from backend.services.ai_decision_log import get_ai_decision_log
+
+        action_name = (
+            response.action.value
+            if isinstance(response.action, MissionAction)
+            else str(response.action)
+        )
+        severity_map = {
+            MissionAction.CONTINUE: "info",
+            MissionAction.CONSERVE: "warning",
+            MissionAction.REROUTE: "warning",
+            MissionAction.DIVERT: "warning",
+            MissionAction.RETURN_TO_BASE: "warning",
+            MissionAction.ABORT: "error",
+            MissionAction.NO_GO: "error",
+            MissionAction.LAUNCH: "info",
+        }
+        severity = severity_map.get(response.action, "info")
+
+        decision = {
+            "event_type": event.event_type,
+            "severity": event.severity.value if isinstance(event.severity, DisasterSeverity) else str(event.severity),
+            "affected_location": event.affected_location,
+            "action": action_name,
+            "new_route": list(response.new_route) if response.new_route else [],
+            "dropped_stops": list(response.dropped_stops),
+            "added_stops": list(response.added_stops),
+            "energy_feasible": response.energy_feasible,
+        }
+
+        get_ai_decision_log().log_decision(
+            intent="policy_fire",
+            input_text=f"{event.event_type}: {event.description or event.affected_location}",
+            reasoning=response.reasoning,
+            decision=decision,
+            severity=severity,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("Policy-fire decision log skipped: %s", exc)
 
 
 # ═══════════════════════════════════════════════════════════════════════

@@ -48,6 +48,9 @@ from backend.api.routes.agents import router as agents_router
 from backend.api.routes.physics import router as physics_router
 from backend.api.routes.disasters import router as disasters_router
 from backend.api.routes.coordination import router as coordination_router
+from backend.api.routes.ops import router as ops_router
+from backend.api.routes.ai import router as ai_router
+from backend.api.routes.race import router as race_router
 from backend.api.legacy_routes import router as legacy_router
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -61,6 +64,14 @@ async def lifespan(app: FastAPI):
 
     # Build dependency graph
     event_service = EventService()
+
+    # Wire the AI decision log into the event bus so coordinator + safety
+    # reasoning is broadcast as ai_reasoning events to subscribers.
+    from backend.services.ai_decision_log import get_ai_decision_log
+    get_ai_decision_log().set_event_publisher(
+        lambda et, data: event_service.publish(et, data)
+    )
+
     drone_service = DroneService(DRONE_NAMES, event_service)
     telemetry_service = TelemetryService(drone_service, event_service)
     simulator_adapter = SimulatorAdapter(DRONE_NAMES, telemetry_service)
@@ -129,8 +140,13 @@ app.add_middleware(
 )
 
 # Rate limiter — 120 requests/min per client IP
-from backend.utils.resilience import RateLimiterMiddleware  # noqa: E402
+from backend.utils.resilience import (  # noqa: E402
+    RateLimiterMiddleware,
+    OpsMetricsMiddleware,
+)
 app.add_middleware(RateLimiterMiddleware, requests_per_minute=120)
+# Ops metrics: record per-request latency + status code
+app.add_middleware(OpsMetricsMiddleware)
 
 # New structured routes
 app.include_router(deliveries_router)
@@ -139,6 +155,9 @@ app.include_router(drones_router)
 app.include_router(weather_router)
 app.include_router(geofence_router)
 app.include_router(simulation_router)
+# race_router must be registered BEFORE metrics_router: its /api/metrics/race-comparison
+# path would otherwise be shadowed by metrics_router's dynamic /api/metrics/{mission_id}.
+app.include_router(race_router)
 app.include_router(metrics_router)
 app.include_router(facilities_router)
 app.include_router(streaming_router)
@@ -153,6 +172,8 @@ app.include_router(agents_router)
 app.include_router(physics_router)
 app.include_router(disasters_router)
 app.include_router(coordination_router)
+app.include_router(ops_router)
+app.include_router(ai_router)
 
 # Legacy routes for frontend backward compatibility
 app.include_router(legacy_router)

@@ -325,6 +325,76 @@ cd web && npx playwright test
 
 ---
 
+## Observability
+
+The backend exposes a runtime metrics endpoint for latency and LLM
+reliability tracking:
+
+- `GET /ops/health` — liveness probe
+- `GET /ops/metrics` — rolling-window stats:
+  - `request_latency_ms.{p50, p95, p99, max, samples}` — computed over the
+    last 1000 requests via an ASGI middleware
+  - `counters.{requests_total, requests_2xx, requests_4xx, requests_5xx}`
+  - `counters.{llm_calls_total, llm_calls_success, llm_calls_error}` —
+    recorded inside the mission coordinator's LLM call path
+  - `llm_error_rate` — derived ratio
+  - `uptime_seconds`
+
+Implementation:
+- [`backend/services/ops_metrics_service.py`](backend/services/ops_metrics_service.py) — thread-safe collector
+- [`backend/utils/resilience.py`](backend/utils/resilience.py) — `OpsMetricsMiddleware`
+- [`backend/api/routes/ops.py`](backend/api/routes/ops.py) — HTTP surface
+
+---
+
+## Production Readiness & Known Limitations
+
+DroneMedic is a **hackathon prototype**. It intentionally prioritises
+technical depth (real PX4/Gazebo simulation, OR-Tools VRP, physics-based
+energy modelling, live MAVLink control) over full production hardening.
+This section is an honest account of what is and isn't ready for real
+deployment, so judges and contributors can see the delta at a glance.
+
+### Already implemented for safer operation
+- **Retry + circuit breaker** around external LLM and weather calls
+  ([`backend/utils/resilience.py`](backend/utils/resilience.py))
+- **Rate limiting** — 120 requests/minute per client IP on every HTTP
+  route, via an ASGI middleware
+- **Observability** — request-latency percentiles (p50/p95/p99/max) and
+  LLM success/error counters exposed at `/ops/metrics`
+- **Strict LLM output contracts** — the mission coordinator uses a
+  Pydantic `json_schema` strict response format, so the model cannot
+  return invalid JSON
+- **Deterministic fallback for routing** — all routing decisions come
+  from OR-Tools. The LLM never hallucinates a route; it only parses
+  natural language into the VRP solver's input schema
+- **Geofence safety** — point-in-polygon + segment-intersection checks
+  against London no-fly zones before and during flight
+- **Energy-aware planning** — aerospace physics model (thrust, drag,
+  headwind) gates route feasibility, not just straight-line distance
+
+### Still required for real-world deployment
+- **Hardware-in-the-loop validation** at scale with multiple physical
+  airframes
+- **AuthN/AuthZ** — the API currently has no authentication. Endpoints
+  are open to any client on the rate-limited network
+- **Encryption at rest and in transit** for mission state and telemetry
+- **Durable state** — mission state lives in process memory. A
+  restart loses in-flight missions. Needs Postgres or similar
+- **Distributed queueing + retries** for background scheduling under
+  load, plus dead-letter handling
+- **Complete audit trail** — every drone command should be logged
+  immutably with operator identity for post-incident review
+- **Regulatory certification** — CAA (UK) clearance, BVLOS approval,
+  airworthiness certification, formal incident response runbooks
+- **Chaos / soak testing** — SLO definitions, long-run stability tests,
+  failure-injection tests for each external dependency
+
+If you're evaluating DroneMedic for anything beyond a demo, assume the
+"Still required" list is a hard prerequisite.
+
+---
+
 ## Team
 
 | | |

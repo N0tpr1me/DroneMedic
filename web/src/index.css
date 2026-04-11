@@ -73,6 +73,11 @@
   display: none !important;
 }
 
+/* InfoWindow popup renders above all markers */
+.gm-style-iw-a {
+  z-index: 99999 !important;
+}
+
 /* ── Theme CSS variables (dark = default, .light overrides) ── */
 :root {
   --dm-bg-primary: #0f1418;

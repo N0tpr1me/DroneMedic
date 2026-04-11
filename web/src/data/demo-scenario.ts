@@ -79,6 +79,232 @@ export const DEMO_SCENARIO = {
 } as const;
 
 // ---------------------------------------------------------------------------
+// 3 Instant-Launch Demo Scenarios (Deploy page buttons)
+// ---------------------------------------------------------------------------
+
+export interface DemoReroutePayload {
+  delayMs: number;
+  newRoute: {
+    ordered_route: string[];
+    ordered_routes: Record<string, string[]>;
+    total_distance: number;
+    estimated_time: number;
+    battery_usage: number;
+    no_fly_violations: never[];
+  };
+  rerouteWaypoints: Array<{ lat: number; lon: number; name: string }>;
+  emergencyLocation: string;
+  emergencySupply: string;
+}
+
+export interface DemoScenarioEntry {
+  id: string;
+  title: string;
+  subtitle: string;
+  request: string;
+  icon: 'siren' | 'route' | 'zap';
+  color: string;
+  accentBorder: string;
+  estMinutes: number;
+  stops: number;
+  /** When true, dispatches multiple drones simultaneously */
+  fleetMode?: boolean;
+  task: {
+    locations: string[];
+    priorities: Record<string, string>;
+    supplies: Record<string, string>;
+    constraints: { avoid_zones: string[]; weather_concern: string; time_sensitive: boolean };
+  };
+  route: {
+    ordered_route: string[];
+    ordered_routes: Record<string, string[]>;
+    total_distance: number;
+    estimated_time: number;
+    battery_usage: number;
+    no_fly_violations: never[];
+  };
+  /** Per-drone route data for fleet dispatch demos */
+  fleetRoutes?: Record<string, {
+    ordered_route: string[];
+    total_distance: number;
+    estimated_time: number;
+    battery_usage: number;
+  }>;
+  reroute?: DemoReroutePayload;
+}
+
+export const DEMO_SCENARIOS: DemoScenarioEntry[] = [
+  // ── Demo 1: Emergency Blood Delivery ──────────────────────────────
+  {
+    id: 'emergency-blood',
+    title: 'Emergency Blood Delivery',
+    subtitle: 'O-negative blood to Royal London — 6-year-old trauma patient',
+    request: 'Emergency: O-negative blood needed at Royal London Hospital urgently. 2 units. Patient is a 6-year-old with ruptured spleen, 90 minute clinical window.',
+    icon: 'siren',
+    color: '#ff4444',
+    accentBorder: 'rgba(255,68,68,0.3)',
+    estMinutes: 9,
+    stops: 1,
+    task: {
+      locations: ['Royal London'],
+      priorities: { 'Royal London': 'high' },
+      supplies: { 'Royal London': 'O- blood (2 units)' },
+      constraints: { avoid_zones: [], weather_concern: 'none', time_sensitive: true },
+    },
+    route: {
+      ordered_route: ['Depot', 'Royal London', 'Depot'],
+      ordered_routes: { Drone1: ['Depot', 'Royal London', 'Depot'] },
+      total_distance: 8400,
+      estimated_time: 560,
+      battery_usage: 42,
+      no_fly_violations: [],
+    },
+  },
+
+  // ── Demo 2: 3-Drone Fleet Dispatch ────────────────────────────────
+  {
+    id: 'fleet-dispatch',
+    title: '3-Drone Fleet Dispatch',
+    subtitle: '3 drones, 3 hospitals — simultaneous delivery blitz',
+    request: 'Fleet dispatch: O-negative blood to Royal London urgently, surgical kit to Homerton, and insulin to Newham General. Deploy all 3 drones simultaneously.',
+    icon: 'route',
+    color: '#00daf3',
+    accentBorder: 'rgba(0,218,243,0.3)',
+    estMinutes: 12,
+    stops: 3,
+    fleetMode: true,
+    task: {
+      locations: ['Royal London', 'Homerton', 'Newham General'],
+      priorities: { 'Royal London': 'high', 'Homerton': 'normal', 'Newham General': 'normal' },
+      supplies: { 'Royal London': 'O- blood (2 units)', 'Homerton': 'surgical_kit', 'Newham General': 'insulin' },
+      constraints: { avoid_zones: [], weather_concern: 'none', time_sensitive: true },
+    },
+    route: {
+      ordered_route: ['Depot', 'Royal London', 'Homerton', 'Newham General', 'Depot'],
+      ordered_routes: {
+        'drone-1': ['Depot', 'Royal London', 'Depot'],
+        'drone-2': ['Depot', 'Homerton', 'Depot'],
+        'drone-3': ['Depot', 'Newham General', 'Depot'],
+      },
+      total_distance: 28400,
+      estimated_time: 560,
+      battery_usage: 48,
+      no_fly_violations: [],
+    },
+    fleetRoutes: {
+      'drone-1': {
+        ordered_route: ['Depot', 'Royal London', 'Depot'],
+        total_distance: 8400,
+        estimated_time: 560,
+        battery_usage: 42,
+      },
+      'drone-2': {
+        ordered_route: ['Depot', 'Homerton', 'Depot'],
+        total_distance: 9800,
+        estimated_time: 520,
+        battery_usage: 38,
+      },
+      'drone-3': {
+        ordered_route: ['Depot', 'Newham General', 'Depot'],
+        total_distance: 10200,
+        estimated_time: 540,
+        battery_usage: 44,
+      },
+    },
+  },
+
+  // ── Demo 3: 2-Drone Split Delivery ────────────────────────────────
+  {
+    id: 'dual-dispatch',
+    title: '2-Drone Split Delivery',
+    subtitle: '2 drones split urgent blood & vaccine — parallel routes',
+    request: 'Split delivery: O-negative blood to Royal London urgently, and a vaccine kit to Newham General. Deploy 2 drones simultaneously.',
+    icon: 'zap',
+    color: '#4ade80',
+    accentBorder: 'rgba(74,222,128,0.3)',
+    estMinutes: 10,
+    stops: 2,
+    fleetMode: true,
+    task: {
+      locations: ['Royal London', 'Newham General'],
+      priorities: { 'Royal London': 'high', 'Newham General': 'normal' },
+      supplies: { 'Royal London': 'O- blood (2 units)', 'Newham General': 'vaccine_kit' },
+      constraints: { avoid_zones: [], weather_concern: 'none', time_sensitive: true },
+    },
+    route: {
+      ordered_route: ['Depot', 'Royal London', 'Newham General', 'Depot'],
+      ordered_routes: {
+        'drone-1': ['Depot', 'Royal London', 'Depot'],
+        'drone-2': ['Depot', 'Newham General', 'Depot'],
+      },
+      total_distance: 18600,
+      estimated_time: 560,
+      battery_usage: 43,
+      no_fly_violations: [],
+    },
+    fleetRoutes: {
+      'drone-1': {
+        ordered_route: ['Depot', 'Royal London', 'Depot'],
+        total_distance: 8400,
+        estimated_time: 560,
+        battery_usage: 42,
+      },
+      'drone-2': {
+        ordered_route: ['Depot', 'Newham General', 'Depot'],
+        total_distance: 10200,
+        estimated_time: 540,
+        battery_usage: 44,
+      },
+    },
+  },
+
+  // ── Demo 4: Dynamic Emergency Reroute ─────────────────────────────
+  {
+    id: 'dynamic-reroute',
+    title: 'Dynamic Reroute',
+    subtitle: 'Routine delivery interrupted by P1 emergency — live replanning',
+    request: 'Deliver a vaccine kit to Newham General Hospital. Standard priority, no rush.',
+    icon: 'zap',
+    color: '#ffb020',
+    accentBorder: 'rgba(255,176,32,0.3)',
+    estMinutes: 13,
+    stops: 2,
+    task: {
+      locations: ['Newham General'],
+      priorities: { 'Newham General': 'normal' },
+      supplies: { 'Newham General': 'vaccine_kit' },
+      constraints: { avoid_zones: [], weather_concern: 'none', time_sensitive: false },
+    },
+    route: {
+      ordered_route: ['Depot', 'Newham General', 'Depot'],
+      ordered_routes: { Drone1: ['Depot', 'Newham General', 'Depot'] },
+      total_distance: 12200,
+      estimated_time: 640,
+      battery_usage: 38,
+      no_fly_violations: [],
+    },
+    reroute: {
+      delayMs: 12000,
+      newRoute: {
+        ordered_route: ['Depot', 'Homerton', 'Newham General', 'Depot'],
+        ordered_routes: { Drone1: ['Depot', 'Homerton', 'Newham General', 'Depot'] },
+        total_distance: 22800,
+        estimated_time: 780,
+        battery_usage: 58,
+        no_fly_violations: [],
+      },
+      rerouteWaypoints: [
+        { lat: 51.5468, lon: -0.0456, name: 'Homerton' },
+        { lat: 51.5155, lon: 0.0285, name: 'Newham General' },
+        { lat: 51.5074, lon: -0.1278, name: 'Depot' },
+      ],
+      emergencyLocation: 'Homerton',
+      emergencySupply: 'O- blood (emergency)',
+    },
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Fleet Management Demo Data
 // ---------------------------------------------------------------------------
 export const DEMO_FLEET = {

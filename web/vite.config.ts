@@ -20,6 +20,28 @@ export default defineConfig({
         target: 'http://localhost:8000',
         changeOrigin: true
       },
+      // PX4 telemetry, drone POV feed, and vision events all proxy through
+      // the FastAPI backend, which in turn multiplexes from the VM.
+      '/ws/px4': {
+        target: 'ws://localhost:8000',
+        ws: true,
+        changeOrigin: true
+      },
+      '/ws/pov': {
+        target: 'ws://localhost:8000',
+        ws: true,
+        changeOrigin: true
+      },
+      '/ws/vision': {
+        target: 'ws://localhost:8000',
+        ws: true,
+        changeOrigin: true
+      },
+      '/ws/live': {
+        target: 'ws://localhost:8000',
+        ws: true,
+        changeOrigin: true
+      },
       '/ws': {
         target: 'ws://localhost:8765',
         ws: true
