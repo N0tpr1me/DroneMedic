@@ -299,7 +299,11 @@ export function Dashboard() {
               distance_reduction: Math.round(Math.random() * 15 + 20), // 20-35%
               battery_used: batteryUsed,
               robustness_score: Math.round(85 + Math.random() * 10),
-              reroute_success: 100,
+              reroute_success_rate: 100,
+              total_distance_optimized: route.total_distance,
+              total_distance_naive: Math.round(route.total_distance * 1.3),
+              actual_flight_time_seconds: actualTime,
+              estimated_time_seconds: route.estimated_time,
               throughput: 1,
             });
           }

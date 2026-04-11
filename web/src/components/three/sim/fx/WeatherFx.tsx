@@ -133,9 +133,7 @@ export function WeatherFx() {
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            array={rainPositions}
-            count={RAIN_COUNT}
-            itemSize={3}
+            args={[rainPositions, 3]}
           />
         </bufferGeometry>
         <pointsMaterial
@@ -153,9 +151,7 @@ export function WeatherFx() {
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            array={windPositions}
-            count={WIND_COUNT}
-            itemSize={3}
+            args={[windPositions, 3]}
           />
         </bufferGeometry>
         <pointsMaterial
