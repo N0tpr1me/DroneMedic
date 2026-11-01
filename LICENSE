@@ -1,21 +1,27 @@
-MIT License
+Copyright (c) 2026 N0tpr1me. All rights reserved.
 
-Copyright (c) 2026 N0tpr1me
+This repository and all of its contents, including source code, models,
+documentation, designs, images and other assets (the "Software"), are the
+proprietary work of the copyright holder.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+NO LICENSE IS GRANTED. You may not, in whole or in part, copy, reproduce,
+modify, merge, publish, distribute, sublicense, sell, rent, create derivative
+works from, or otherwise use the Software for any purpose without the prior
+written permission of the copyright holder.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Viewing the Software on GitHub, and forking it within GitHub as permitted by
+the GitHub Terms of Service, does not grant any right to use, copy, modify or
+distribute it outside of those terms.
+
+Third-party components included in this repository remain subject to their
+own licenses, which are provided alongside those components.
+
+To request permission, contact the copyright holder through GitHub:
+https://github.com/N0tpr1me
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
