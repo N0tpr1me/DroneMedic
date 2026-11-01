@@ -408,6 +408,6 @@ If you're evaluating DroneMedic for anything beyond a demo, assume the
 
 ## License
 
-MIT — built for the **AR26 HackXelerator** university hackathon.
+**All rights reserved.** Built for the **AR26 HackXelerator** university hackathon.
 
-See [`LICENSE`](LICENSE) for details.
+This code is proprietary. You may not copy, modify, distribute or reuse any part of it without written permission. See [`LICENSE`](LICENSE) for details.
